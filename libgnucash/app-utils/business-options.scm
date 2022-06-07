@@ -1,17 +1,17 @@
 ;; Scheme code for supporting options for the business modules
 ;;
-;; Created by:	Derek Atkins <derek@ihtfp.com>
+;; Created by:  Derek Atkins <derek@ihtfp.com>
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -94,12 +94,12 @@
  (gnc:option-get-value book gnc:*business-label* (list gnc:*fancy-date-label* key)))
 
 (define (gnc:make-invoice-option
-	 section
-	 name
-	 sort-tag
-	 documentation-string
-	 default-getter
-	 value-validator)
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator)
 
   (define (convert-to-guid item)
     (if (string? item)
@@ -114,9 +114,9 @@
   (let* ((option (convert-to-guid (default-getter)))
          (option-set #f)
          (getter (lambda () (convert-to-invoice
-			     (if option-set
-				 option
-				 (default-getter)))))
+                             (if option-set
+                                 option
+                                 (default-getter)))))
          (value->string (lambda ()
                           (string-append
                            "'" (gnc:value->string (if option-set option #f)))))
@@ -131,22 +131,22 @@
        (if (null? invoice) (set! invoice (default-getter)))
        (set! invoice (convert-to-invoice invoice))
        (let* ((result (validator invoice))
-	      (valid (car result))
-	      (value (cadr result)))
-	 (if valid
-	     (begin
-	       (set! option (convert-to-guid value))
-	       (set! option-set #t))
-	     (gnc:error "Illegal invoice value set"))))
+              (valid (car result))
+              (value (cadr result)))
+         (if valid
+             (begin
+               (set! option (convert-to-guid value))
+               (set! option-set #t))
+             (gnc:error "Illegal invoice value set"))))
      (lambda () (convert-to-invoice (default-getter)))
      (gnc:restore-form-generator value->string)
      (lambda (b p) (qof-book-set-option b option p))
      (lambda (b p)
        (let ((v (qof-book-get-option b p)))
-	 (if (and v (string? v))
-	     (begin
-	       (set! option v)
-	       (set! option-set #t)))))
+         (if (and v (string? v))
+             (begin
+               (set! option v)
+               (set! option-set #t)))))
      validator
      #f #f #f #f)))
 
@@ -154,102 +154,108 @@
 ;; customer pointers may be used to set the value of the option. The
 ;; option always returns a single customer pointer.
 (define (gnc:make-owner-option
-	 section
-	 name
-	 sort-tag
-	 documentation-string
-	 default-getter
-	 value-validator
-	 owner-type)
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator
+         owner-type)
 
   (let ((option-value (gncOwnerNew)))
 
     (define (convert-to-pair item)
       (if (pair? item)
-	  item
-	  (cons (gncOwnerGetType item)
-		(gncOwnerReturnGUID item))))
+          item
+          (cons (gncOwnerGetType item)
+                (gncOwnerReturnGUID item))))
 
     (define (convert-to-owner pair)
       (if (pair? pair)
-	  (let ((type (car pair)))
-	    (cond
-	      ((eqv? type GNC-OWNER-CUSTOMER)
-	       (gncOwnerInitCustomer
-		option-value
-		(gncCustomerLookupFlip (cdr pair) (gnc-get-current-book)))
-	       option-value)
+          (let ((type (car pair)))
+            (cond
+                 ((eqv? type GNC-OWNER-COOWNER)
+                  (gncOwnerInitCoOwner
+                option-value
+                   (gncCoOwnerLookupFlip (cdr pair) (gnc-get-current-book)))
+               option-value)
 
-	       ((eqv? type GNC-OWNER-VENDOR)
-		(gncOwnerInitVendor
-		 option-value
-		 (gncVendorLookupFlip (cdr pair) (gnc-get-current-book)))
-		option-value)
+                ((eqv? type GNC-OWNER-CUSTOMER)
+                 (gncOwnerInitCustomer
+                 option-value
+                  (gncCustomerLookupFlip (cdr pair) (gnc-get-current-book)))
+                option-value)
 
-	       ((eqv? type GNC-OWNER-EMPLOYEE)
-		(gncOwnerInitEmployee
-		 option-value
-		 (gncEmployeeLookupFlip (cdr pair) (gnc-get-current-book)))
-		option-value)
+               ((eqv? type GNC-OWNER-EMPLOYEE)
+                (gncOwnerInitEmployee
+                 option-value
+                 (gncEmployeeLookupFlip (cdr pair) (gnc-get-current-book)))
+                option-value)
 
-	       ((eqv? type GNC-OWNER-JOB)
-		(gncOwnerInitJob
-		 option-value
-		 (gncJobLookupFlip (cdr pair) (gnc-get-current-book)))
-		option-value)
+               ((eqv? type GNC-OWNER-JOB)
+                (gncOwnerInitJob
+                 option-value
+                 (gncJobLookupFlip (cdr pair) (gnc-get-current-book)))
+                option-value)
 
-	       (else '())))
-	  pair))
+               ((eqv? type GNC-OWNER-VENDOR)
+                (gncOwnerInitVendor
+                 option-value
+                 (gncVendorLookupFlip (cdr pair) (gnc-get-current-book)))
+                option-value)
+
+               (else '())))
+          pair))
 
     (let* ((option (convert-to-pair (default-getter)))
-	   (option-set #f)
-	   (getter (lambda () (convert-to-owner
-			       (if option-set
-				   option
-				   (default-getter)))))
-	   (value->string (lambda ()
-			    (string-append
-			     "'" (gnc:value->string
-				  (if option-set option #f)))))
-	   (validator
-	    (if (not value-validator)
-		(lambda (owner)
-		  (let ((type (if (pair? owner)
+           (option-set #f)
+           (getter (lambda () (convert-to-owner
+                               (if option-set
+                                   option
+                                   (default-getter)))))
+           (value->string (lambda ()
+                            (string-append
+                             "'" (gnc:value->string
+                                  (if option-set option #f)))))
+           (validator
+            (if (not value-validator)
+                (lambda (owner)
+                  (let ((type (if (pair? owner)
                                   (car owner)
                                   (gncOwnerGetType owner))))
-		    (if (equal? type owner-type)
-			(list #t owner)
-			(list #f "Owner-Type Mismatch"))))
-		(lambda (owner)
-		  (value-validator (convert-to-owner owner))))))
+                    (if (equal? type owner-type)
+                        (list #t owner)
+                        (list #f "Owner-Type Mismatch"))))
+                (lambda (owner)
+                  (value-validator (convert-to-owner owner))))))
 
       (gnc:make-option
        section name sort-tag 'owner documentation-string getter
        (lambda (owner)
-	 (if (null? owner) (set! owner (default-getter)))
+         (if (null? owner) (set! owner (default-getter)))
          (set! owner (convert-to-owner owner))
          (let* ((result (validator owner))
-		(valid (car result))
-		(value (cadr result)))
-	   (if valid
-	       (begin
-		 (set! option (convert-to-pair value))
-		 (set! option-set #t))
-	       (gnc:error "Illegal owner value set"))))
+                (valid (car result))
+                (value (cadr result)))
+           (if valid
+               (begin
+                 (set! option (convert-to-pair value))
+                 (set! option-set #t))
+               (gnc:error "Illegal owner value set"))))
        (lambda () (convert-to-owner (default-getter)))
        (gnc:restore-form-generator value->string)
        (lambda (b p)
-	 (qof-book-set-option b (symbol->string (car option))
-				      (append p '("type")))
-	 (qof-book-set-option b (cdr option)
-				      (append p '("value"))))
+         (qof-book-set-option b (symbol->string (car option))
+                                      (append p '("type")))
+         (qof-book-set-option b (cdr option)
+                                      (append p '("value"))))
        (lambda (b p)
-	 (let ((t (qof-book-get-option b (append p '("type"))))
-	       (v (qof-book-get-option b (append p '("value")))))
-	   (if (and t v (string? t) (string? v))
-	       (begin
-		 (set! option (cons (string->symbol t) v))
-		 (set! option-set #t)))))
+         (let ((t (qof-book-get-option b (append p '("type"))))
+               (v (qof-book-get-option b (append p '("value")))))
+           (if (and t v (string? t) (string? v))
+               (begin
+                 (set! option (cons (string->symbol t) v))
+                 (set! option-set #t)))))
        validator
        owner-type #f #f #f))))
 
@@ -259,12 +265,12 @@
 ;; option always returns a single taxtable pointer.
 
 (define (gnc:make-taxtable-option
-	 section
-	 name
-	 sort-tag
-	 documentation-string
-	 default-getter
-	 value-validator)
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator)
 
   (define (convert-to-guid item)
     (if (string? item)
@@ -279,9 +285,9 @@
   (let* ((option (convert-to-guid (default-getter)))
          (option-set #f)
          (getter (lambda () (convert-to-taxtable
-			     (if option-set
-				 option
-				 (default-getter)))))
+                             (if option-set
+                                 option
+                                 (default-getter)))))
          (value->string (lambda ()
                           (string-append
                            "'" (gnc:value->string (if option-set option #f)))))
@@ -296,22 +302,22 @@
        (if (null? taxtable) (set! taxtable (default-getter)))
        (set! taxtable (convert-to-taxtable taxtable))
        (let* ((result (validator taxtable))
-	      (valid (car result))
-	      (value (cadr result)))
-	 (if valid
-	     (begin
-	       (set! option (convert-to-guid value))
-	       (set! option-set #t))
-	     (gnc:error "Illegal taxtable value set"))))
+              (valid (car result))
+              (value (cadr result)))
+         (if valid
+             (begin
+               (set! option (convert-to-guid value))
+               (set! option-set #t))
+             (gnc:error "Illegal taxtable value set"))))
      (lambda () (convert-to-taxtable (default-getter)))
      (gnc:restore-form-generator value->string)
      (lambda (b p) (qof-book-set-option b option p))
      (lambda (b p)
        (let ((v (qof-book-get-option b p)))
-	 (if (and v (string? v))
-	     (begin
-	       (set! option v)
-	       (set! option-set #t)))))
+         (if (and v (string? v))
+             (begin
+               (set! option v)
+               (set! option-set #t)))))
      validator
      #f #f #f #f)))
 
@@ -328,7 +334,7 @@
 (define (gnc:make-counter-option
          section
          name
-	 key
+         key
          sort-tag
          documentation-string
          default-value)

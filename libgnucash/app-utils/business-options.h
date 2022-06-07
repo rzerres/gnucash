@@ -28,6 +28,7 @@
 #include "option-util.h"
 #include "gncTaxTable.h"
 #include "gncInvoice.h"
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
 #include "gncVendor.h"
 
@@ -41,6 +42,11 @@ GncInvoice* gnc_option_db_lookup_invoice_option(GNCOptionDB *odb,
         const char *section,
         const char *name,
         GncInvoice * default_value);
+
+GncCoOwner* gnc_option_db_lookup_coowner_option(GNCOptionDB *odb,
+        const char *section,
+        const char *name,
+        GncCoOwner * default_value);
 
 GncCustomer* gnc_option_db_lookup_customer_option(GNCOptionDB *odb,
         const char *section,
