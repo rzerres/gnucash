@@ -1,17 +1,17 @@
 ;; Business Preferences
 ;;
-;; Created by:	Derek Atkins <derek@ihtfp.com>
+;; Created by:  Derek Atkins <derek@ihtfp.com>
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -37,7 +37,11 @@
 ;; (untranslated) counter name, the format label, the previous number
 ;; label, the format help text and the previous number help text.
 (define counter-types
-  (list (list "gncCustomer"     (N_ "Customer number format")
+  (list (list "gncCoOwner"      (N_ "Co-Owner number format")
+                                (N_ "Co-Owner number")
+                                (N_ "The format string to use for generating coowner numbers. This is a printf-style format string.")
+                                (N_ "The previous coowner number generated. This number will be incremented to generate the next coowner number."))
+        (list "gncCustomer"     (N_ "Customer number format")
                                 (N_ "Customer number")
                                 (N_ "The format string to use for generating customer numbers. This is a printf-style format string.")
                                 (N_ "The previous customer number generated. This number will be incremented to generate the next customer number."))
@@ -65,6 +69,10 @@
                                 (N_ "Order number")
                                 (N_ "The format string to use for generating order numbers. This is a printf-style format string.")
                                 (N_ "The previous order number generated. This number will be incremented to generate the next order number."))
+        (list "gncSettlement"   (N_ "Settlement number format")
+                                (N_ "Settlement number")
+                                (N_ "The format string to use for generating settlement numbers. This is a printf-style format string.")
+                                (N_ "The previous expense voucher number generated. This number will be incremented to generate the next voucher number."))
         (list "gncVendor"       (N_ "Vendor number format")
                                 (N_ "Vendor number")
                                 (N_ "The format string to use for generating vendor numbers. This is a printf-style format string.")
@@ -115,7 +123,13 @@
     gnc:*business-label* gnc:*company-id*
     "c5" (N_ "The ID for your company (eg 'Tax-ID: 00-000000).")
     ""))
- 
+
+  (reg-option
+   (gnc:make-taxtable-option
+    gnc:*business-label* (N_ "Default Co-Owner TaxTable")
+    "d" (N_ "The default tax table to apply to co-owners.")
+    (lambda () '()) #f))
+
   (reg-option
    (gnc:make-taxtable-option
     gnc:*business-label* (N_ "Default Customer TaxTable")
@@ -138,22 +152,22 @@
 
   (reg-option
    (gnc:make-number-range-option
-	gnc:*option-section-accounts* gnc:*option-name-auto-readonly-days*
-	"a" (N_ "Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only.")
-	0 ;; default
-	0 ;; lower bound
-	3650 ;; upper bound
-	0 ;; number of decimals
-	1 ;; step size
-	))
+        gnc:*option-section-accounts* gnc:*option-name-auto-readonly-days*
+        "a" (N_ "Choose the number of days after which transactions will be read-only and cannot be edited anymore. This threshold is marked by a red line in the account register windows. If zero, all transactions can be edited and none are read-only.")
+        0 ;; default
+        0 ;; lower bound
+        3650 ;; upper bound
+        0 ;; number of decimals
+        1 ;; step size
+        ))
 
-  (reg-option 
+  (reg-option
    (gnc:make-simple-boolean-option
     gnc:*option-section-accounts* gnc:*option-name-num-field-source*
     "b" (N_ "Check to have split action field used in registers for 'Num' field in place of transaction number; transaction number shown as 'T-Num' on second line of register. Has corresponding effect on business features, reporting and imports/exports.")
     #f))
 
-  (reg-option 
+  (reg-option
    (gnc:make-simple-boolean-option
     gnc:*option-section-accounts* gnc:*option-name-trading-accounts*
     "a" (N_ "Check to have trading accounts used for transactions involving more than one currency or commodity.")

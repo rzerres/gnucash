@@ -71,6 +71,16 @@ gnc_option_db_lookup_invoice_option(GNCOptionDB *odb,
     return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncInvoice"), 1, 0);
 }
 
+GncCoOwner*
+gnc_option_db_lookup_coowner_option(GNCOptionDB *odb,
+                                     const char *section,
+                                     const char *name,
+                                     GncCoOwner * default_value)
+{
+    LOOKUP_OPTION("gnc_option_db_lookup_coowner_option");
+    return SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncCoOwner"), 1, 0);
+}
+
 GncCustomer*
 gnc_option_db_lookup_customer_option(GNCOptionDB *odb,
                                      const char *section,
