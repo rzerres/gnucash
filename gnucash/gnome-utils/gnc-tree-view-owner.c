@@ -349,7 +349,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
         owner_id = _("ID #");
         break;
     case GNC_OWNER_COOWNER :
-        owner_name = _("Co-Onwer Name");
+        owner_name = _("Co-Owner Name");
         owner_id = _("Co-Owner Number");
         break;
     case GNC_OWNER_CUSTOMER :
