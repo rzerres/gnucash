@@ -120,8 +120,9 @@ AS_STRING_FUNC(InvoiceDialogType, ENUM_INVOICE_TYPE)
 
 typedef enum
 {
-    DUE_FOR_VENDOR,     // show bills due
+    DUE_FOR_COOWNER,    // show invoices due
     DUE_FOR_CUSTOMER,   // show invoices due
+    DUE_FOR_VENDOR,     // show bills due
 } GncWhichDueType;
 
 struct _invoice_select_window
@@ -414,7 +415,7 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
         /* Only set the job if we've actually got one */
         if (gncOwnerGetJob (&(iw->job)))
             gncInvoiceSetOwner (invoice, &(iw->job));
-        else
+else
             gncInvoiceSetOwner (invoice, &(iw->owner));
 
         /* Set the invoice currency based on the owner */
@@ -550,6 +551,9 @@ gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
 
     switch(owner_type)
     {
+        case GNC_OWNER_COOWNER:
+           gnc_gnome_help (GTK_WINDOW(iw->dialog), HF_HELP, HL_USAGE_SETTLEMENT);
+           break;
         case GNC_OWNER_CUSTOMER:
            gnc_gnome_help (GTK_WINDOW(iw->dialog), HF_HELP, HL_USAGE_INVOICE);
            break;
@@ -567,11 +571,14 @@ gnc_invoice_window_get_state_group (InvoiceWindow *iw)
 {
     switch (gncOwnerGetType (gncOwnerGetEndOwner (&iw->owner)))
     {
-        case GNC_OWNER_VENDOR:
-            return "Vendor documents";
+        case GNC_OWNER_COOWNER:
+            return "Co-Owner documents";
             break;
         case GNC_OWNER_EMPLOYEE:
             return "Employee documents";
+            break;
+        case GNC_OWNER_VENDOR:
+            return "Vendor documents";
             break;
         default:
             return "Customer documents";
@@ -883,14 +890,17 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
     entries = gncInvoiceGetEntries (invoice);
 
     /* Find the most suitable post date.
+     * For CoOwner Settlements that would be today.
      * For Customer Invoices that would be today.
      * For Vendor Bills and Employee Vouchers
      * that would be the date of the most recent invoice entry.
      * Failing that, today is used as a fallback */
     *postdate = gnc_time(NULL);
 
-    if (entries && ((gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR) ||
-                    (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)))
+    if (entries && ((gncInvoiceGetOwnerType (invoice) == GNC_OWNER_COOWNER) ||
+                    (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE) ||
+                    (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR)))
+
     {
         *postdate = gncEntryGetDate ((GncEntry*)entries->data);
         for (entries_iter = entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
@@ -967,7 +977,8 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
         return;
     }
 
-    is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
+    is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_COOWNER ||
+                   gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
     /* Ok, we can post this invoice.  Ask for verification, set the due date,
      * post date, and posted account
@@ -1314,8 +1325,9 @@ gnc_invoice_window_sort (InvoiceWindow *iw, invoice_sort_type_t sort_code)
         p2 = standard;
         break;
     case INVSORT_BY_PRICE:
-        p1 = g_slist_prepend (p1, ((iw->owner.type == GNC_OWNER_CUSTOMER) ?
-                                   ENTRY_IPRICE : ENTRY_BPRICE));
+        p1 = g_slist_prepend (p1, ((iw->owner.type == GNC_OWNER_COOWNER ||
+                                    iw->owner.type == GNC_OWNER_CUSTOMER)) ?
+                                   ENTRY_IPRICE : ENTRY_BPRICE);
         p2 = standard;
         break;
     default:
@@ -1422,6 +1434,7 @@ gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
 
     switch (gncOwnerGetType (&iw->owner))
     {
+    case GNC_OWNER_COOWNER:
     case GNC_OWNER_CUSTOMER:
     case GNC_OWNER_VENDOR:
         iw->total_subtotal_label = add_summary_label (summarybar, _("Subtotal:"));
@@ -1503,7 +1516,7 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
         case EDIT_INVOICE:
             iw->job_choice =
                 gnc_owner_edit_create (NULL, iw->job_box, iw->book, &(iw->job));
-            break;
+    break;
         case NEW_INVOICE:
         case MOD_INVOICE:
         case DUP_INVOICE:
@@ -1635,14 +1648,17 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
 
     switch (gncOwnerGetType (&(iw->owner)))
     {
+    case GNC_OWNER_COOWNER:
+        term = gncCoOwnerGetTerms (gncOwnerGetCoOwner (&(iw->owner)));
+        break;
     case GNC_OWNER_CUSTOMER:
         term = gncCustomerGetTerms (gncOwnerGetCustomer (&(iw->owner)));
         break;
-    case GNC_OWNER_VENDOR:
-        term = gncVendorGetTerms (gncOwnerGetVendor (&(iw->owner)));
-        break;
     case GNC_OWNER_EMPLOYEE:
         term = NULL;
+        break;
+    case GNC_OWNER_VENDOR:
+        term = gncVendorGetTerms (gncOwnerGetVendor (&(iw->owner)));
         break;
     default:
         g_warning ("Unknown owner type: %d\n", gncOwnerGetType (&(iw->owner)));
@@ -1918,6 +1934,10 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     if (iw->owner.type == GNC_OWNER_CUSTOMER)
         gtk_widget_hide (iw->proj_frame);
 
+    /* Hide the project frame for coowner invoices */
+    if (iw->owner.type == GNC_OWNER_COOWNER)
+        gtk_widget_hide (iw->proj_frame);
+
     /* Hide the "job" label and entry for employee invoices */
     if (iw->owner.type == GNC_OWNER_EMPLOYEE)
     {
@@ -2117,17 +2137,21 @@ gnc_invoice_get_type_from_window (InvoiceWindow *iw)
     */
     switch (gncOwnerGetType(&iw->owner))
     {
+    case GNC_OWNER_COOWNER:
+        return iw->is_credit_note ? GNC_INVOICE_COOWNER_CREDIT_NOTE
+                                  : GNC_INVOICE_COOWNER_INVOICE;
+        break;
     case GNC_OWNER_CUSTOMER:
         return iw->is_credit_note ? GNC_INVOICE_CUST_CREDIT_NOTE
                                   : GNC_INVOICE_CUST_INVOICE;
         break;
-    case GNC_OWNER_VENDOR:
-        return iw->is_credit_note ? GNC_INVOICE_VEND_CREDIT_NOTE
-                                  : GNC_INVOICE_VEND_INVOICE;
-        break;
     case GNC_OWNER_EMPLOYEE:
         return iw->is_credit_note ? GNC_INVOICE_EMPL_CREDIT_NOTE
                                   : GNC_INVOICE_EMPL_INVOICE;
+        break;
+    case GNC_OWNER_VENDOR:
+        return iw->is_credit_note ? GNC_INVOICE_VEND_CREDIT_NOTE
+                                  : GNC_INVOICE_VEND_INVOICE;
         break;
     default:
         return GNC_INVOICE_UNDEFINED;
@@ -2145,6 +2169,25 @@ gnc_invoice_get_title (InvoiceWindow *iw)
 
     switch (gncOwnerGetType (&iw->owner))
     {
+    case GNC_OWNER_COOWNER:
+        switch (iw->dialog_type)
+        {
+        case NEW_INVOICE:
+            wintitle = iw->is_credit_note ? _("New Credit Note")
+                       : _("New Settlement");
+            break;
+        case MOD_INVOICE:
+        case DUP_INVOICE:
+        case EDIT_INVOICE:
+            wintitle = iw->is_credit_note ? _("Edit Credit Note")
+                       : _("Edit Settlement");
+            break;
+        case VIEW_INVOICE:
+            wintitle = iw->is_credit_note ? _("View Credit Note")
+                       : _("View Settlement");
+            break;
+        }
+        break;
     case GNC_OWNER_CUSTOMER:
         switch (iw->dialog_type)
         {
@@ -2164,25 +2207,6 @@ gnc_invoice_get_title (InvoiceWindow *iw)
             break;
         }
         break;
-    case GNC_OWNER_VENDOR:
-        switch (iw->dialog_type)
-        {
-        case NEW_INVOICE:
-            wintitle = iw->is_credit_note ? _("New Credit Note")
-                       : _("New Bill");
-            break;
-        case MOD_INVOICE:
-        case DUP_INVOICE:
-        case EDIT_INVOICE:
-            wintitle = iw->is_credit_note ? _("Edit Credit Note")
-                       : _("Edit Bill");
-            break;
-        case VIEW_INVOICE:
-            wintitle = iw->is_credit_note ? _("View Credit Note")
-                       : _("View Bill");
-            break;
-        }
-        break;
     case GNC_OWNER_EMPLOYEE:
         switch (iw->dialog_type)
         {
@@ -2199,6 +2223,25 @@ gnc_invoice_get_title (InvoiceWindow *iw)
         case VIEW_INVOICE:
             wintitle = iw->is_credit_note ? _("View Credit Note")
                        : _("View Expense Voucher");
+            break;
+        }
+        break;
+    case GNC_OWNER_VENDOR:
+        switch (iw->dialog_type)
+        {
+        case NEW_INVOICE:
+            wintitle = iw->is_credit_note ? _("New Credit Note")
+                       : _("New Bill");
+            break;
+        case MOD_INVOICE:
+        case DUP_INVOICE:
+        case EDIT_INVOICE:
+            wintitle = iw->is_credit_note ? _("Edit Credit Note")
+                       : _("Edit Bill");
+            break;
+        case VIEW_INVOICE:
+            wintitle = iw->is_credit_note ? _("View Credit Note")
+                       : _("View Bill");
             break;
         }
         break;
@@ -2588,17 +2631,21 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     case EDIT_INVOICE:
         switch (owner_type)
         {
+        case GNC_OWNER_COOWNER:
+            ledger_type = is_credit_note ? GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY
+                          : GNCENTRY_SETTLEMENT_ENTRY;
+            break;
         case GNC_OWNER_CUSTOMER:
             ledger_type = is_credit_note ? GNCENTRY_CUST_CREDIT_NOTE_ENTRY
                           : GNCENTRY_INVOICE_ENTRY;
             break;
-        case GNC_OWNER_VENDOR:
-            ledger_type = is_credit_note ? GNCENTRY_VEND_CREDIT_NOTE_ENTRY
-                          : GNCENTRY_BILL_ENTRY;
-            break;
         case GNC_OWNER_EMPLOYEE:
             ledger_type = is_credit_note ? GNCENTRY_EMPL_CREDIT_NOTE_ENTRY
                           : GNCENTRY_EXPVOUCHER_ENTRY;
+            break;
+        case GNC_OWNER_VENDOR:
+            ledger_type = is_credit_note ? GNCENTRY_VEND_CREDIT_NOTE_ENTRY
+                          : GNCENTRY_BILL_ENTRY;
             break;
         default:
             g_warning ("Invalid owner type");
@@ -2609,19 +2656,24 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     default:
         switch (owner_type)
         {
+        case GNC_OWNER_COOWNER:
+            ledger_type = is_credit_note ? GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER
+                          : GNCENTRY_SETTLEMENT_VIEWER;
+            prefs_group   = GNC_PREFS_GROUP_BILL;
+            break;
         case GNC_OWNER_CUSTOMER:
             ledger_type = is_credit_note ? GNCENTRY_CUST_CREDIT_NOTE_VIEWER
                           : GNCENTRY_INVOICE_VIEWER;
             prefs_group   = GNC_PREFS_GROUP_INVOICE;
             break;
-        case GNC_OWNER_VENDOR:
-            ledger_type = is_credit_note ? GNCENTRY_VEND_CREDIT_NOTE_VIEWER
-                          : GNCENTRY_BILL_VIEWER;
-            prefs_group   = GNC_PREFS_GROUP_BILL;
-            break;
         case GNC_OWNER_EMPLOYEE:
             ledger_type = is_credit_note ? GNCENTRY_EMPL_CREDIT_NOTE_VIEWER
                           : GNCENTRY_EXPVOUCHER_VIEWER;
+            prefs_group   = GNC_PREFS_GROUP_BILL;
+            break;
+        case GNC_OWNER_VENDOR:
+            ledger_type = is_credit_note ? GNCENTRY_VEND_CREDIT_NOTE_VIEWER
+                          : GNCENTRY_BILL_VIEWER;
             prefs_group   = GNC_PREFS_GROUP_BILL;
             break;
         default:
@@ -2633,17 +2685,23 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     /* Default labels are for invoices, change them if they are anything else. */
     switch (owner_type)
     {
-        case GNC_OWNER_VENDOR:
-            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Bill Information"));
-            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill"));
-            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID"));
-            style_label = "gnc-class-vendors";
+        case GNC_OWNER_COOWNER:
+            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Settlement Information"));
+            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Settlement"));
+            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Settlement ID"));
+            style_label = "gnc-class-coowner";
             break;
         case GNC_OWNER_EMPLOYEE:
             gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Voucher Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Voucher"));
             gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Voucher ID"));
             style_label = "gnc-class-employees";
+            break;
+        case GNC_OWNER_VENDOR:
+            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Bill Information"));
+            gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill"));
+            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID"));
+            style_label = "gnc-class-vendors";
             break;
         default:
             style_label = "gnc-class-customers";
@@ -2801,6 +2859,9 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
         start_owner = owner;
         switch (gncOwnerGetType (gncOwnerGetEndOwner (owner)))
         {
+        case GNC_OWNER_COOWNER:
+            owner_terms = gncCoOwnerGetTerms (gncOwnerGetCoOwner (gncOwnerGetEndOwner (owner)));
+            break;
         case GNC_OWNER_CUSTOMER:
             owner_terms = gncCustomerGetTerms (gncOwnerGetCustomer (gncOwnerGetEndOwner (owner)));
             break;
@@ -3164,7 +3225,7 @@ static void multi_duplicate_invoice_one(gpointer data, gpointer user_data)
     if (old_invoice)
     {
         GncInvoice *new_invoice;
-        // In this simplest form, we just use the existing duplication
+// In this simplest form, we just use the existing duplication
         // algorithm, only without opening the "edit invoice" window for editing
         // the number etc. for each of the invoices.
         InvoiceWindow *iw = gnc_ui_invoice_duplicate(dup_user_data->parent, old_invoice, FALSE, &dup_user_data->date);
@@ -3370,7 +3431,7 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     if (inv_params == NULL)
     {
         inv_params = gnc_search_param_prepend (inv_params,
-                                               _("Invoice Owner"), NULL, type,
+                                        _("Invoice Owner"), NULL, type,
                                                INVOICE_OWNER, NULL);
         inv_params = gnc_search_param_prepend (inv_params,
                                                _("Invoice Notes"), NULL, type,
@@ -3438,23 +3499,15 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     if (emp_params == NULL)
     {
         emp_params = gnc_search_param_prepend (emp_params,
-                                               _("Voucher Owner"), NULL, type,
-                                               INVOICE_OWNER, NULL);
-        emp_params = gnc_search_param_prepend (emp_params,
-                                               _("Voucher Notes"), NULL, type,
-                                               INVOICE_NOTES, NULL);
-        emp_params = gnc_search_param_prepend (emp_params,
                                                _("Billing ID"), NULL, type,
                                                INVOICE_BILLINGID, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
-                                               _("Is Paid?"), NULL, type,
-                                               INVOICE_IS_PAID, NULL);
+                                               _("Co-Owner Name"), NULL, type,
+                                               INVOICE_OWNER, OWNER_PARENT,
+                                               OWNER_NAME, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
                                                _("Date Posted"), NULL, type,
                                                INVOICE_POSTED, NULL);
-        emp_params = gnc_search_param_prepend (emp_params,
-                                               _("Is Posted?"), NULL, type,
-                                               INVOICE_IS_POSTED, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
                                                _("Date Opened"), NULL, type,
                                                INVOICE_OPENED, NULL);
@@ -3466,8 +3519,27 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
                                                INVOICE_OWNER, OWNER_PARENT,
                                                OWNER_NAME, NULL);
         emp_params = gnc_search_param_prepend (emp_params,
-                                               _("Voucher ID"), NULL, type,
+                                               _("Is Paid?"), NULL, type,
+                                               INVOICE_IS_PAID, NULL);
+        emp_params = gnc_search_param_prepend (emp_params,
+                                               _("Is Posted?"), NULL, type,
+                                               INVOICE_IS_POSTED, NULL);
+        emp_params = gnc_search_param_prepend (emp_params,
+                                               _("Settlement ID"), NULL, type,
                                                INVOICE_ID, NULL);
+        emp_params = gnc_search_param_prepend (emp_params,
+                                               _("Settlement Owner"), NULL, type,
+                                               INVOICE_OWNER, NULL);
+        emp_params = gnc_search_param_prepend (emp_params,
+                                               _("Settlement Notes"), NULL, type,
+                                               INVOICE_NOTES, NULL);
+        emp_params = gnc_search_param_prepend (emp_params,
+                                               _("Voucher ID"), NULL, type,
+                                               _("Voucher Owner"), NULL, type,
+                                               INVOICE_ID, NULL);
+        emp_params = gnc_search_param_prepend (emp_params,
+                                               _("Voucher Notes"), NULL, type,
+                                               INVOICE_NOTES, NULL);
     }
 
     /* Build the column list in reverse order */

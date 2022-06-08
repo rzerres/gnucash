@@ -4,6 +4,7 @@
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003 Jan Arne Petersen
  * Copyright (C) 2005 David Hampton <hampton@employees.org>
+ * Copyright (C) 2022 Ralf Zerres <ralf.zerres@mail.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -31,13 +32,14 @@
 
 #include "dialog-doclink.h"
 #include "dialog-billterms.h"
+#include "dialog-coowner.h"
 #include "dialog-customer.h"
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
 #include "dialog-job.h"
 #include "dialog-payment.h"
-#include "dialog-tax-table.h"
 #include "dialog-vendor.h"
+#include "dialog-tax-table.h"
 
 #include "business-gnome-utils.h"
 #include "gncOwner.h"
@@ -197,11 +199,6 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     { "CoOwnerMenuAction", NULL, N_("_CoOwner"), NULL, NULL, NULL },
     {
-        "CoOwnerFindCoOwnerOpenAction", NULL, N_("Find In_voice..."), NULL,
-        N_("Open the Find Co-Owner dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_coowner_find_coowner)
-    },
-    {
         "CoOwnerFindJobOpenAction", NULL, N_("Find Jo_b..."), NULL,
         N_("Open the Find Job dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_coowner_find_job)
@@ -283,24 +280,24 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     { "EmployeeMenuAction", NULL, N_("_Employee"), NULL, NULL, NULL },
     {
-        "EmployeeNewEmployeeOpenAction", NULL, N_("_New Employee..."), NULL,
-        N_("Open the New Employee dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_employee_new_employee)
-    },
-    {
         "EmployeeFindEmployeeOpenAction", NULL, N_("_Find Employee..."), NULL,
         N_("Open the Find Employee dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_employee_find_employee)
     },
     {
-        "EmployeeNewExpenseVoucherOpenAction", NULL, N_("New _Expense Voucher..."), NULL,
-        N_("Open the New Expense Voucher dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_employee_new_expense_voucher)
-    },
-    {
         "EmployeeFindExpenseVoucherOpenAction", NULL, N_("Find Expense _Voucher..."), NULL,
         N_("Open the Find Expense Voucher dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_employee_find_expense_voucher)
+    },
+    {
+        "EmployeeNewEmployeeOpenAction", NULL, N_("_New Employee..."), NULL,
+        N_("Open the New Employee dialog"),
+        G_CALLBACK (gnc_plugin_business_cmd_employee_new_employee)
+    },
+    {
+        "EmployeeNewExpenseVoucherOpenAction", NULL, N_("New _Expense Voucher..."), NULL,
+        N_("Open the New Expense Voucher dialog"),
+        G_CALLBACK (gnc_plugin_business_cmd_employee_new_expense_voucher)
     },
     {
         "EmployeeProcessPaymentAction", NULL, N_("_Process Payment..."), NULL,
@@ -316,9 +313,14 @@ static GtkActionEntry gnc_plugin_actions [] =
     },
     { "VendorMenuAction", NULL, N_("_Vendor"), NULL, NULL, NULL },
     {
-        "VendorNewVendorOpenAction", NULL, N_("_New Vendor..."), NULL,
-        N_("Open the New Vendor dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_new_vendor)
+        "VendorFindBillOpenAction", NULL, N_("Find Bi_ll..."), NULL,
+        N_("Open the Find Bill dialog"),
+        G_CALLBACK (gnc_plugin_business_cmd_vendor_find_bill)
+    },
+    {
+        "VendorFindJobOpenAction", NULL, N_("Find Jo_b..."), NULL,
+        N_("Open the Find Job dialog"),
+        G_CALLBACK (gnc_plugin_business_cmd_vendor_find_job)
     },
     {
         "VendorFindVendorOpenAction", NULL, N_("_Find Vendor..."), NULL,
@@ -331,19 +333,14 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_plugin_business_cmd_vendor_new_bill)
     },
     {
-        "VendorFindBillOpenAction", NULL, N_("Find Bi_ll..."), NULL,
-        N_("Open the Find Bill dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_find_bill)
-    },
-    {
         "VendorNewJobOpenAction", NULL, N_("New _Job..."), NULL,
         N_("Open the New Job dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_vendor_new_job)
     },
     {
-        "VendorFindJobOpenAction", NULL, N_("Find Jo_b..."), NULL,
-        N_("Open the Find Job dialog"),
-        G_CALLBACK (gnc_plugin_business_cmd_vendor_find_job)
+        "VendorNewVendorOpenAction", NULL, N_("_New Vendor..."), NULL,
+        N_("Open the New Vendor dialog"),
+        G_CALLBACK (gnc_plugin_business_cmd_vendor_new_vendor)
     },
     {
         "VendorProcessPaymentAction", NULL, N_("_Process Payment..."), NULL,
@@ -1052,13 +1049,16 @@ static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-    plugin_page = gnc_main_window_get_current_page(mw->window);
+    gnc_ui_tax_table_window_new (GTK_WINDOW (mw->window), gnc_get_current_book());
+
+    /*
+      plugin_page = gnc_main_window_get_current_page(mw->window);
 
     // We continue only if the current page is a plugin page and more
     // specifically a register plugin page
     if (!GNC_IS_PLUGIN_PAGE(plugin_page) ||
         !GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page))
-return;
+        return;
 
     gsr = gnc_plugin_page_register_get_gsr(plugin_page);
     g_return_if_fail(gsr);
@@ -1085,6 +1085,7 @@ return;
 
     gnc_business_assign_payment (GTK_WINDOW (mw->window),
                                  trans, owner_p);
+    */
 }
 
 static const gchar *register_txn_actions[] =
