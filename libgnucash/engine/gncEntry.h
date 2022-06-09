@@ -10,7 +10,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
  * GNU General Public License for more details.                     *
- *                                                                  *
+s *                                                                  *
  * You should have received a copy of the GNU General Public License*
  * along with this program; if not, contact:                        *
  *                                                                  *
@@ -80,10 +80,10 @@ GType gnc_entry_get_type(void);
 /** How to apply the discount and taxes.  There are three distinct ways to
  * apply them:
  *
- * Type:	discount	tax
- * PRETAX	pretax		pretax-discount
- * SAMETIME	pretax		pretax
- * POSTTAX	pretax+tax	pretax
+ * Type:        discount        tax
+ * PRETAX       pretax          pretax-discount
+ * SAMETIME     pretax          pretax
+ * POSTTAX      pretax+tax      pretax
  */
 
 const char * gncEntryDiscountHowToString (GncDiscountHow how);
@@ -126,6 +126,9 @@ void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
  *  to the user). */
 void gncEntrySetDocQuantity (GncEntry *entry, gnc_numeric quantity, gboolean is_cn);
 /** @} */
+
+/** TODO: Co-Owner Invoices */
+/** distinguish them from Customer Invoices */
 
 /** @name Customer Invoices
  @{ */
@@ -303,32 +306,32 @@ void gncEntryBeginEdit (GncEntry *entry);
 void gncEntryCommitEdit (GncEntry *entry);
 int gncEntryCompare (const GncEntry *a, const GncEntry *b);
 
-#define ENTRY_DATE			"date"
-#define ENTRY_DATE_ENTERED 	"date-entered"
-#define ENTRY_DESC			"desc"
-#define ENTRY_ACTION		"action"
-#define ENTRY_NOTES			"notes"
-#define ENTRY_QTY			"qty"
+#define ENTRY_DATE                      "date"
+#define ENTRY_DATE_ENTERED      "date-entered"
+#define ENTRY_DESC                      "desc"
+#define ENTRY_ACTION            "action"
+#define ENTRY_NOTES                     "notes"
+#define ENTRY_QTY                       "qty"
 
-#define ENTRY_IPRICE		"iprice"
-#define ENTRY_IACCT			"invoice-account"
-#define ENTRY_BACCT			"bill-account"
-#define ENTRY_BPRICE		"bprice"
-#define ENTRY_BILLABLE		"billable?"
-#define ENTRY_BILLTO		"bill-to"
+#define ENTRY_IPRICE            "iprice"
+#define ENTRY_IACCT                     "invoice-account"
+#define ENTRY_BACCT                     "bill-account"
+#define ENTRY_BPRICE            "bprice"
+#define ENTRY_BILLABLE          "billable?"
+#define ENTRY_BILLTO            "bill-to"
 
-#define ENTRY_ORDER			"order"
-#define ENTRY_INVOICE		"invoice"
-#define ENTRY_BILL			"bill"
+#define ENTRY_ORDER                     "order"
+#define ENTRY_INVOICE           "invoice"
+#define ENTRY_BILL                      "bill"
 
-#define ENTRY_INV_DISC_TYPE		"discount-type"
-#define ENTRY_INV_DISC_HOW		"discount-method"
+#define ENTRY_INV_DISC_TYPE             "discount-type"
+#define ENTRY_INV_DISC_HOW              "discount-method"
 
-#define ENTRY_INV_TAXABLE	"invoice-taxable"
-#define ENTRY_BILL_TAXABLE	"bill-taxable"
-#define ENTRY_INV_TAX_INC	"invoice-tax-included"
-#define ENTRY_BILL_TAX_INC	"bill-tax-included"
-#define ENTRY_INV_DISCOUNT	"invoice-discount"
+#define ENTRY_INV_TAXABLE       "invoice-taxable"
+#define ENTRY_BILL_TAXABLE      "bill-taxable"
+#define ENTRY_INV_TAX_INC       "invoice-tax-included"
+#define ENTRY_BILL_TAX_INC      "bill-tax-included"
+#define ENTRY_INV_DISCOUNT      "invoice-discount"
 #define ENTRY_BILL_PAY_TYPE "bill-payment-type"
 
 

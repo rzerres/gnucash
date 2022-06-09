@@ -90,20 +90,20 @@ void mark_vendor (GncVendor *vendor)
 enum
 {
     PROP_0,
-    PROP_NAME,			/* Table */
-    PROP_ID,			/* Table */
-    PROP_NOTES,			/* Table */
-    PROP_CURRENCY,		/* Table */
-    PROP_ACTIVE,		/* Table */
-    PROP_TAXTABLE_OVERRIDE,	/* Table */
-    PROP_BILLTERMS,		/* Table */
-    PROP_TAXTABLE,		/* Table */
-    PROP_ADDRESS,		/* Table, 8 fields */
-    PROP_TAX_INCLUDED,		/* Table */
-    PROP_TAX_INCLUDED_STR,	/* Alternate setter for PROP_TAX_INCLUDED */
-    PROP_PDF_DIRNAME,		/* KVP */
-    PROP_LAST_POSTED,		/* KVP */
-    PROP_PAYMENT_LAST_ACCT,	/* KVP */
+    PROP_NAME,                  /* Table */
+    PROP_ID,                    /* Table */
+    PROP_NOTES,                 /* Table */
+    PROP_CURRENCY,              /* Table */
+    PROP_ACTIVE,                /* Table */
+    PROP_TAXTABLE_OVERRIDE,     /* Table */
+    PROP_BILLTERMS,             /* Table */
+    PROP_TAXTABLE,              /* Table */
+    PROP_ADDRESS,               /* Table, 8 fields */
+    PROP_TAX_INCLUDED,          /* Table */
+    PROP_TAX_INCLUDED_STR,      /* Alternate setter for PROP_TAX_INCLUDED */
+    PROP_PDF_DIRNAME,           /* KVP */
+    PROP_LAST_POSTED,           /* KVP */
+    PROP_PAYMENT_LAST_ACCT,     /* KVP */
 };
 
 /* GObject Initialization */
@@ -417,16 +417,17 @@ gnc_vendor_class_init (GncVendorClass *klass)
                          "The tax-included-string property contains a character version of tax-included.",
                          FALSE,
                          G_PARAM_READWRITE));
+
     g_object_class_install_property
     (gobject_class,
      PROP_PDF_DIRNAME,
      g_param_spec_string ("export-pdf-dir",
                           "Export PDF Directory Name",
                           "A subdirectory for exporting PDF reports which is "
-			  "appended to the target directory when writing them "
-			  "out. It is retrieved from preferences and stored on "
-			  "each 'Owner' object which prints items after "
-			  "printing.",
+                          "appended to the target directory when writing them "
+                          "out. It is retrieved from preferences and stored on "
+                          "each 'Owner' object which prints items after "
+                          "printing.",
                           NULL,
                           G_PARAM_READWRITE));
 
@@ -434,21 +435,21 @@ gnc_vendor_class_init (GncVendorClass *klass)
        gobject_class,
        PROP_LAST_POSTED,
        g_param_spec_boxed("invoice-last-posted-account",
-			  "Invoice Last Posted Account",
-			  "The last account to which an invoice belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
+                          "Invoice Last Posted Account",
+                          "The last account to which an invoice belonging to "
+                          "this owner was posted.",
+                          GNC_TYPE_GUID,
+                          G_PARAM_READWRITE));
 
     g_object_class_install_property(
        gobject_class,
        PROP_PAYMENT_LAST_ACCT,
        g_param_spec_boxed("payment-last-account",
-			  "Payment Last Account",
-			  "The last account to which an payment belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
+                          "Payment Last Account",
+                          "The last account to which an payment belonging to "
+                          "this owner was posted.",
+                          GNC_TYPE_GUID,
+                          G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */
@@ -1014,6 +1015,7 @@ gboolean gncVendorRegister (void)
         { NULL },
     };
 
+    /*
     if (!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_VENDOR, INVOICE_OWNER))
     {
         return FALSE;
@@ -1022,6 +1024,7 @@ gboolean gncVendorRegister (void)
     {
         return FALSE;
     }
+    */
 
     qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncVendorCompare, params);
 

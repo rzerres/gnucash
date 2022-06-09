@@ -35,9 +35,24 @@ typedef struct _gncJob GncJob;
 typedef struct _gncJobClass GncJobClass;
 
 #include "gncAddress.h"
+#include "gncEntry.h"
 #include "gncOwner.h"
 
 #define GNC_ID_JOB "gncJob"
+
+typedef enum
+{
+    GNC_JOB_UNDEFINED,
+    GNC_JOB_COOWNER_INVOICE,      /* Settlement */
+    GNC_JOB_CUST_INVOICE,         /* Invoice */
+    GNC_JOB_EMPL_INVOICE,         /* Voucher */
+    GNC_JOB_VEND_INVOICE,         /* Bill */
+    GNC_JOB_COOWNER_CREDIT_NOTE,  /* Settlement Note for a coowner */
+    GNC_JOB_CUST_CREDIT_NOTE,     /* Credit Note for a customer */
+    GNC_JOB_EMPL_CREDIT_NOTE,     /* Credit Note from an employee */
+    GNC_JOB_VEND_CREDIT_NOTE,     /* Credit Note from a vendor */
+    GNC_JOB_NUM_TYPES
+} GncJobType;
 
 /* --- type macros --- */
 #define GNC_TYPE_JOB            (gnc_job_get_type ())
@@ -59,31 +74,47 @@ GncJob *gncJobCreate (QofBook *book);
 void gncJobDestroy (GncJob *job);
 void gncJobFreeList (GList *jobs);
 
-/** \name Set Functions
-@{
-*/
-
-void gncJobSetID (GncJob *job, const char *id);
-void gncJobSetName (GncJob *job, const char *jobname);
-void gncJobSetReference (GncJob *job, const char *owner_reference);
-void gncJobSetRate (GncJob *job, gnc_numeric rate);
-void gncJobSetOwner (GncJob *job, GncOwner *owner);
-void gncJobSetActive (GncJob *job, gboolean active);
-
+/** Create a new GncJob object as a copy of the given other
+ * job.
+ *
+ * The returned new job has everything copied from the other
+ * job, including the ID string field. All GncEntries are newly
+ * allocated copies of the original jobs's entries. */
+GncJob *gncJobCopy (const GncJob *other_job);
 /** @} */
-void gncJobBeginEdit (GncJob *job);
-void gncJobCommitEdit (GncJob *job);
 
 /** \name Get Functions
 @{
 */
 
-const char * gncJobGetID (const GncJob *job);
-const char * gncJobGetName (const GncJob *job);
-const char * gncJobGetReference (const GncJob *job);
-gnc_numeric  gncJobGetRate (const GncJob *job);
-GncOwner   * gncJobGetOwner (GncJob *job);
-gboolean     gncJobGetActive (const GncJob *job);
+typedef GList JobEntryList;
+
+gboolean gncJobGetActive (const GncJob *job);
+JobEntryList * gncJobGetEntries (GncJob *job);
+const char *gncJobGetID (const GncJob *job);
+const char *gncJobGetName (const GncJob *job);
+const GncOwner *gncJobGetOwner (const GncJob *job);
+GncOwnerType gncJobGetOwnerType (const GncJob *job);
+GncJobType gncJobGetType (const GncJob *job);
+gnc_numeric gncJobGetRate (const GncJob *job);
+const char *gncJobGetReference (const GncJob *job);
+gboolean gncJobGetTypeIsCoOwner (const GncJob *job);
+
+/** \name Set Functions
+@{
+*/
+
+void gncJobSetActive (GncJob *job, gboolean active);
+void gncJobSetID (GncJob *job, const char *id);
+void gncJobSetName (GncJob *job, const char *jobname);
+void gncJobSetOwner (GncJob *job, GncOwner *owner);
+void gncJobSetRate (GncJob *job, gnc_numeric rate);
+void gncJobSetReference (GncJob *job, const char *owner_reference);
+void gncJobSetTypeIsCoOwner (GncJob *job, gboolean type_coowner);
+
+/** @} */
+void gncJobBeginEdit (GncJob *job);
+void gncJobCommitEdit (GncJob *job);
 
 /** @} */
 
@@ -103,13 +134,14 @@ static inline GncJob * gncJobLookup (const QofBook *book, const GncGUID *guid)
 int gncJobCompare (const GncJob *a, const GncJob *b);
 gboolean gncJobEqual(const GncJob *a, const GncJob *b);
 
-#define JOB_ID          "id"
-#define JOB_NAME        "name"
-#define JOB_REFERENCE   "reference"
-#define JOB_RATE        "rate"
-#define JOB_OWNER       "owner"
-#define Q_JOB_OWNER     "owner_collection"
-#define JOB_ACTIVE      "active"
+#define JOB_ACTIVE          "active"
+#define JOB_ID              "id"
+#define JOB_NAME            "name"
+#define JOB_OWNER           "owner"
+#define JOB_RATE            "rate"
+#define JOB_REFERENCE       "reference"
+#define JOB_TYPE_IS_COOWNER "type_coowner"
+#define Q_JOB_OWNER         "owner_collection"
 
 /** deprecated functions */
 #define gncJobGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))

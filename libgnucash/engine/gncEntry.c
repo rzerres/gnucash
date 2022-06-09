@@ -43,60 +43,60 @@ struct _gncEntry
 {
     QofInstance inst;
 
-    time64	date;
-    time64	date_entered;
-    const char *	desc;
-    const char *	action;
-    const char *	notes;
-    gnc_numeric 	quantity;
+    time64      date;
+    time64      date_entered;
+    const char *        desc;
+    const char *        action;
+    const char *        notes;
+    gnc_numeric         quantity;
 
     /* customer invoice data */
-    Account *	i_account;
-    gnc_numeric 	i_price;
-    gboolean	i_taxable;
-    gboolean	i_taxincluded;
-    GncTaxTable *	i_tax_table;
-    gnc_numeric 	i_discount;
-    GncAmountType	i_disc_type;
+    Account *   i_account;
+    gnc_numeric         i_price;
+    gboolean    i_taxable;
+    gboolean    i_taxincluded;
+    GncTaxTable *       i_tax_table;
+    gnc_numeric         i_discount;
+    GncAmountType       i_disc_type;
     GncDiscountHow i_disc_how;
 
     /* vendor bill data */
-    Account *	b_account;
-    gnc_numeric 	b_price;
-    gboolean	b_taxable;
-    gboolean	b_taxincluded;
-    GncTaxTable *	b_tax_table;
-    gboolean	billable;
-    GncOwner	billto;
+    Account *   b_account;
+    gnc_numeric         b_price;
+    gboolean    b_taxable;
+    gboolean    b_taxincluded;
+    GncTaxTable *       b_tax_table;
+    gboolean    billable;
+    GncOwner    billto;
 
     /* employee bill data */
     GncEntryPaymentType b_payment;
 
     /* my parent(s) */
-    GncOrder *	order;
-    GncInvoice *	invoice;
-    GncInvoice *	bill;
+    GncOrder *  order;
+    GncInvoice *        invoice;
+    GncInvoice *        bill;
 
     /* CACHED VALUES */
-    gboolean	values_dirty;
+    gboolean    values_dirty;
 
     /* customer invoice */
-    gnc_numeric	i_value;
-    gnc_numeric	i_value_rounded;
-    GList *	i_tax_values;
-    gnc_numeric	i_tax_value;
-    gnc_numeric	i_tax_value_rounded;
-    gnc_numeric	i_disc_value;
-    gnc_numeric	i_disc_value_rounded;
-    time64	i_taxtable_modtime;
+    gnc_numeric i_value;
+    gnc_numeric i_value_rounded;
+    GList *     i_tax_values;
+    gnc_numeric i_tax_value;
+    gnc_numeric i_tax_value_rounded;
+    gnc_numeric i_disc_value;
+    gnc_numeric i_disc_value_rounded;
+    time64      i_taxtable_modtime;
 
     /* vendor bill */
-    gnc_numeric	b_value;
-    gnc_numeric	b_value_rounded;
-    GList *	b_tax_values;
-    gnc_numeric	b_tax_value;
-    gnc_numeric	b_tax_value_rounded;
-    time64	b_taxtable_modtime;
+    gnc_numeric b_value;
+    gnc_numeric b_value_rounded;
+    GList *     b_tax_values;
+    gnc_numeric b_tax_value;
+    gnc_numeric b_tax_value_rounded;
+    time64      b_taxtable_modtime;
 };
 
 struct _gncEntryClass
@@ -192,10 +192,10 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 #define _GNC_MOD_NAME GNC_ID_ENTRY
 
 #define SET_STR(obj, member, str) { \
-	if (!g_strcmp0 (member, str)) return; \
-	gncEntryBeginEdit (obj); \
-	CACHE_REPLACE (member, str); \
-	}
+        if (!g_strcmp0 (member, str)) return; \
+        gncEntryBeginEdit (obj); \
+        CACHE_REPLACE (member, str); \
+        }
 
 static inline void mark_entry (GncEntry *entry);
 void mark_entry (GncEntry *entry)
@@ -209,32 +209,32 @@ void mark_entry (GncEntry *entry)
 enum
 {
     PROP_0,
-//  PROP_DATE,		/* Table */
-//  PROP_DATE_ENTERED,	/* Table */
-    PROP_DESCRIPTION,	/* Table */
-//  PROP_ACTION,	/* Table */
-//  PROP_NOTES,		/* Table */
-//  PROP_QUANTITY,	/* Table (numeric) */
-//  PROP_I_ACCT,	/* Table */
-//  PROP_I_PRICE,	/* Table (numeric) */
-//  PROP_I_DISCOUNT,	/* Table (numeric) */
-//  PROP_INVOICE,	/* Table */
-//  PROP_I_DISC_TYPE,	/* Table */
-//  PROP_I_DISC_HOW,	/* Table */
-//  PROP_I_TAXABLE,	/* Table */
-//  PROP_I_TAX_INCL,	/* Table */
-//  PROP_I_TAXTABLE,	/* Table */
-//  PROP_B_ACCT,	/* Table */
-//  PROP_B_PRICE,	/* Table (numeric) */
-//  PROP_BILL,		/* Table */
-//  PROP_B_TAXTABLE_1,	/* Table */
-//  PROP_B_TAX_INCL,	/* Table */
-//  PROP_B_TAXTABLE,	/* Table */
-//  PROP_B_PAYTYPE,	/* Table */
-//  PROP_BILLABLE,	/* Table */
-//  PROP_BILLTO_TYPE,	/* Table */
-//  PROP_BILLTO,	/* Table */
-//  PROP_ORDER,		/* Table */
+//  PROP_DATE,          /* Table */
+//  PROP_DATE_ENTERED,  /* Table */
+    PROP_DESCRIPTION,   /* Table */
+//  PROP_ACTION,        /* Table */
+//  PROP_NOTES,         /* Table */
+//  PROP_QUANTITY,      /* Table (numeric) */
+//  PROP_I_ACCT,        /* Table */
+//  PROP_I_PRICE,       /* Table (numeric) */
+//  PROP_I_DISCOUNT,    /* Table (numeric) */
+//  PROP_INVOICE,       /* Table */
+//  PROP_I_DISC_TYPE,   /* Table */
+//  PROP_I_DISC_HOW,    /* Table */
+//  PROP_I_TAXABLE,     /* Table */
+//  PROP_I_TAX_INCL,    /* Table */
+//  PROP_I_TAXTABLE,    /* Table */
+//  PROP_B_ACCT,        /* Table */
+//  PROP_B_PRICE,       /* Table (numeric) */
+//  PROP_BILL,          /* Table */
+//  PROP_B_TAXTABLE_1,  /* Table */
+//  PROP_B_TAX_INCL,    /* Table */
+//  PROP_B_TAXTABLE,    /* Table */
+//  PROP_B_PAYTYPE,     /* Table */
+//  PROP_BILLABLE,      /* Table */
+//  PROP_BILLTO_TYPE,   /* Table */
+//  PROP_BILLTO,        /* Table */
+//  PROP_ORDER,         /* Table */
 };
 
 /* GObject Initialization */
@@ -570,6 +570,9 @@ void gncEntrySetDocQuantity (GncEntry *entry, gnc_numeric quantity, gboolean is_
     gncEntryCommitEdit (entry);
 }
 
+/* TODO: Coowner Invoices */
+/* need to distinguish from Customer Invoices */
+
 /* Customer Invoices */
 
 void gncEntrySetInvAccount (GncEntry *entry, Account *acc)
@@ -861,28 +864,28 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest, gboolean add_entry)
     if (!src || !dest) return;
 
     gncEntryBeginEdit (dest);
-    dest->date 			= src->date;
-    dest->date_entered		= src->date_entered; /* ??? */
+    dest->date                  = src->date;
+    dest->date_entered          = src->date_entered; /* ??? */
     gncEntrySetDescription (dest, src->desc);
     gncEntrySetAction (dest, src->action);
     gncEntrySetNotes (dest, src->notes);
-    dest->quantity		= src->quantity;
+    dest->quantity              = src->quantity;
 
-    dest->i_account		= src->i_account;
-    dest->i_price			= src->i_price;
-    dest->i_taxable		= src->i_taxable;
-    dest->i_taxincluded		= src->i_taxincluded;
-    dest->i_discount		= src->i_discount;
-    dest->i_disc_type		= src->i_disc_type;
-    dest->i_disc_how		= src->i_disc_how;
+    dest->i_account             = src->i_account;
+    dest->i_price                       = src->i_price;
+    dest->i_taxable             = src->i_taxable;
+    dest->i_taxincluded         = src->i_taxincluded;
+    dest->i_discount            = src->i_discount;
+    dest->i_disc_type           = src->i_disc_type;
+    dest->i_disc_how            = src->i_disc_how;
 
     /* vendor bill data */
-    dest->b_account		= src->b_account;
-    dest->b_price			= src->b_price;
-    dest->b_taxable		= src->b_taxable;
-    dest->b_taxincluded		= src->b_taxincluded;
-    dest->billable		= src->billable;
-    dest->billto			= src->billto;
+    dest->b_account             = src->b_account;
+    dest->b_price                       = src->b_price;
+    dest->b_taxable             = src->b_taxable;
+    dest->b_taxincluded         = src->b_taxincluded;
+    dest->billable              = src->billable;
+    dest->billto                        = src->billto;
 
     if (src->i_tax_table)
         gncEntrySetInvTaxTable (dest, src->i_tax_table);
@@ -1129,11 +1132,11 @@ GncOrder * gncEntryGetOrder (const GncEntry *entry)
  * denominator if needed.
  */
 static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
-				    const GncTaxTable *tax_table, gboolean tax_included,
-				    gnc_numeric discount, GncAmountType discount_type,
-				    GncDiscountHow discount_how,
-				    gnc_numeric *value, gnc_numeric *discount_value,
-				    GList **tax_value, gnc_numeric *net_price)
+                                    const GncTaxTable *tax_table, gboolean tax_included,
+                                    gnc_numeric discount, GncAmountType discount_type,
+                                    GncDiscountHow discount_how,
+                                    gnc_numeric *value, gnc_numeric *discount_value,
+                                    GList **tax_value, gnc_numeric *net_price)
 {
     gnc_numeric aggregate;
     gnc_numeric pretax;
@@ -1197,10 +1200,10 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
                                           GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD),
                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
         PINFO ("pretax %" PRId64 "/%" PRId64, pretax.num, pretax.denom);
-	if (!gnc_numeric_zero_p(qty))
-	{
-	  i_net_price = gnc_numeric_div (pretax, qty, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
-	}
+        if (!gnc_numeric_zero_p(qty))
+        {
+          i_net_price = gnc_numeric_div (pretax, qty, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE | GNC_HOW_RND_ROUND);
+        }
         PINFO("i_net_price %" PRId64 "/%" PRId64, i_net_price.num, i_net_price.denom);
     }
     else
@@ -1291,7 +1294,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
 
     if (tax_value != NULL)
     {
-        GList *	taxes = NULL;
+        GList * taxes = NULL;
 
         PINFO("Computing tax value list");
         for (node = entries; node; node = node->next)
@@ -1335,7 +1338,7 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
                            GList **tax_value)
 {
   gncEntryComputeValueInt (qty, price, tax_table, tax_included, discount, discount_type,
-			   discount_how, value, discount_value, tax_value, NULL);
+                           discount_how, value, discount_value, tax_value, NULL);
 }
 
 static int

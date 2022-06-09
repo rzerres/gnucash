@@ -136,20 +136,20 @@ gnc_customer_get_property (GObject         *object,
     switch (prop_id)
     {
     case PROP_NAME:
-        g_value_set_string(value, cust->name);
-        break;
+g_value_set_string(value, cust->name);
+break;
     case PROP_PDF_DIRNAME:
-        qof_instance_get_kvp (QOF_INSTANCE (cust), value, 1, OWNER_EXPORT_PDF_DIRNAME);
-        break;
+qof_instance_get_kvp (QOF_INSTANCE (cust), value, 1, OWNER_EXPORT_PDF_DIRNAME);
+break;
     case PROP_LAST_POSTED:
-        qof_instance_get_kvp (QOF_INSTANCE (cust), value, 1, LAST_POSTED_TO_ACCT);
-        break;
+qof_instance_get_kvp (QOF_INSTANCE (cust), value, 1, LAST_POSTED_TO_ACCT);
+break;
     case PROP_PAYMENT_LAST_ACCT:
-        qof_instance_get_kvp (QOF_INSTANCE (cust), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
-        break;
+qof_instance_get_kvp (QOF_INSTANCE (cust), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
+break;
     default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-        break;
+G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+break;
     }
 }
 
@@ -170,20 +170,20 @@ gnc_customer_set_property (GObject         *object,
     switch (prop_id)
     {
     case PROP_NAME:
-        gncCustomerSetName(cust, g_value_get_string(value));
-        break;
+gncCustomerSetName(cust, g_value_get_string(value));
+break;
     case PROP_PDF_DIRNAME:
-        qof_instance_set_kvp (QOF_INSTANCE (cust), value, 1, OWNER_EXPORT_PDF_DIRNAME);
-        break;
+qof_instance_set_kvp (QOF_INSTANCE (cust), value, 1, OWNER_EXPORT_PDF_DIRNAME);
+break;
     case PROP_LAST_POSTED:
-        qof_instance_set_kvp (QOF_INSTANCE (cust), value, 1, LAST_POSTED_TO_ACCT);
-        break;
+qof_instance_set_kvp (QOF_INSTANCE (cust), value, 1, LAST_POSTED_TO_ACCT);
+break;
     case PROP_PAYMENT_LAST_ACCT:
-        qof_instance_set_kvp (QOF_INSTANCE (cust), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
-        break;
+qof_instance_set_kvp (QOF_INSTANCE (cust), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
+break;
     default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-        break;
+G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+break;
     }
 }
 
@@ -214,11 +214,11 @@ impl_refers_to_object(const QofInstance* inst, const QofInstance* ref)
 
     if (GNC_IS_BILLTERM(ref))
     {
-        return (cust->terms == GNC_BILLTERM(ref));
+return (cust->terms == GNC_BILLTERM(ref));
     }
     else if (GNC_IS_TAXTABLE(ref))
     {
-        return (cust->taxtable == GNC_TAXTABLE(ref));
+return (cust->taxtable == GNC_TAXTABLE(ref));
     }
 
     return FALSE;
@@ -235,7 +235,7 @@ impl_get_typed_referring_object_list(const QofInstance* inst, const QofInstance*
 {
     if (!GNC_IS_BILLTERM(ref) && !GNC_IS_TAXTABLE(ref))
     {
-        return NULL;
+return NULL;
     }
 
     return qof_instance_get_referring_object_list_from_collection(qof_instance_get_collection(inst), ref);
@@ -273,10 +273,10 @@ gnc_customer_class_init (GncCustomerClass *klass)
      g_param_spec_string ("export-pdf-dir",
                           "Export PDF Directory Name",
                           "A subdirectory for exporting PDF reports which is "
-			  "appended to the target directory when writing them "
-			  "out. It is retrieved from preferences and stored on "
-			  "each 'Owner' object which prints items after "
-			  "printing.",
+                          "appended to the target directory when writing them "
+                          "out. It is retrieved from preferences and stored on "
+                          "each 'Owner' object which prints items after "
+                          "printing.",
                           NULL,
                           G_PARAM_READWRITE));
 
@@ -284,26 +284,27 @@ gnc_customer_class_init (GncCustomerClass *klass)
        gobject_class,
        PROP_LAST_POSTED,
        g_param_spec_boxed("invoice-last-posted-account",
-			  "Invoice Last Posted Account",
-			  "The last account to which an invoice belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
+                          "Invoice Last Posted Account",
+                          "The last account to which an invoice belonging to "
+                          "this owner was posted.",
+                          GNC_TYPE_GUID,
+                          G_PARAM_READWRITE));
 
     g_object_class_install_property(
        gobject_class,
        PROP_PAYMENT_LAST_ACCT,
        g_param_spec_boxed("payment-last-account",
-			  "Payment Last Account",
-			  "The last account to which an payment belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
+                          "Payment Last Account",
+                          "The last account to which an payment belonging to "
+                          "this owner was posted.",
+                          GNC_TYPE_GUID,
+                          G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */
 GncCustomer *gncCustomerCreate (QofBook *book)
 {
+
     GncCustomer *cust;
 
     if (!book) return NULL;
@@ -374,10 +375,10 @@ static void gncCustomerFree (GncCustomer *cust)
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-        if (!g_strcmp0 (member, str)) return; \
-        gncCustomerBeginEdit (obj); \
-        CACHE_REPLACE(member, str); \
-        }
+if (!g_strcmp0 (member, str)) return; \
+gncCustomerBeginEdit (obj); \
+CACHE_REPLACE(member, str); \
+}
 
 void gncCustomerSetID (GncCustomer *cust, const char *id)
 {
@@ -413,10 +414,10 @@ void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
 
     gncCustomerBeginEdit (cust);
     if (cust->terms)
-        gncBillTermDecRef (cust->terms);
+gncBillTermDecRef (cust->terms);
     cust->terms = terms;
     if (cust->terms)
-        gncBillTermIncRef (cust->terms);
+gncBillTermIncRef (cust->terms);
     mark_customer (cust);
     gncCustomerCommitEdit (cust);
 }
@@ -488,9 +489,9 @@ void gncCustomerSetTaxTable (GncCustomer *customer, GncTaxTable *table)
 
     gncCustomerBeginEdit (customer);
     if (customer->taxtable)
-        gncTaxTableDecRef (customer->taxtable);
+gncTaxTableDecRef (customer->taxtable);
     if (table)
-        gncTaxTableIncRef (table);
+gncTaxTableIncRef (table);
     customer->taxtable = table;
     mark_customer (customer);
     gncCustomerCommitEdit (customer);
@@ -503,8 +504,8 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
     if (!job) return;
 
     if (g_list_index(cust->jobs, job) == -1)
-        cust->jobs = g_list_insert_sorted (cust->jobs, job,
-                                           (GCompareFunc)gncJobCompare);
+cust->jobs = g_list_insert_sorted (cust->jobs, job,
+(GCompareFunc)gncJobCompare);
 
     qof_event_gen (&cust->inst, QOF_EVENT_MODIFY, NULL);
 }
@@ -519,12 +520,12 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
     node = g_list_find (cust->jobs, job);
     if (!node)
     {
-        /*    PERR ("split not in account"); */
+/*    PERR ("split not in account"); */
     }
     else
     {
-        cust->jobs = g_list_remove_link (cust->jobs, node);
-        g_list_free_1 (node);
+cust->jobs = g_list_remove_link (cust->jobs, node);
+g_list_free_1 (node);
     }
     qof_event_gen (&cust->inst, QOF_EVENT_MODIFY, NULL);
 }
@@ -557,7 +558,7 @@ void gncCustomerCommitEdit (GncCustomer *cust)
 {
     if (!qof_commit_edit (QOF_INSTANCE(cust))) return;
     qof_commit_edit_part2 (&cust->inst, gncCustomerOnError,
-                           gncCustomerOnDone, cust_free);
+gncCustomerOnDone, cust_free);
 }
 
 /* ============================================================== */
@@ -588,17 +589,17 @@ qofCustomerSetAddr (GncCustomer *cust, QofInstance *addr_ent)
 
     if (!cust || !addr_ent)
     {
-        return;
+return;
     }
     addr = (GncAddress*)addr_ent;
     if (addr == cust->addr)
     {
-        return;
+return;
     }
     if (cust->addr != NULL)
     {
-        gncAddressBeginEdit(cust->addr);
-        gncAddressDestroy(cust->addr);
+gncAddressBeginEdit(cust->addr);
+gncAddressDestroy(cust->addr);
     }
     gncCustomerBeginEdit(cust);
     cust->addr = addr;
@@ -612,17 +613,17 @@ qofCustomerSetShipAddr (GncCustomer *cust, QofInstance *ship_addr_ent)
 
     if (!cust || !ship_addr_ent)
     {
-        return;
+return;
     }
     ship_addr = (GncAddress*)ship_addr_ent;
     if (ship_addr == cust->shipaddr)
     {
-        return;
+return;
     }
     if (cust->shipaddr != NULL)
     {
-        gncAddressBeginEdit(cust->shipaddr);
-        gncAddressDestroy(cust->shipaddr);
+gncAddressBeginEdit(cust->shipaddr);
+gncAddressDestroy(cust->shipaddr);
     }
     gncCustomerBeginEdit(cust);
     cust->shipaddr = ship_addr;
@@ -695,18 +696,18 @@ GList * gncCustomerGetJoblist (const GncCustomer *cust, gboolean show_all)
 
     if (show_all)
     {
-        return (g_list_copy (cust->jobs));
+return (g_list_copy (cust->jobs));
     }
     else
     {
-        GList *list = NULL, *iterator;
-        for (iterator = cust->jobs; iterator; iterator = iterator->next)
-        {
-            GncJob *j = iterator->data;
-            if (gncJobGetActive (j))
-                list = g_list_prepend (list, j);
-        }
-        return g_list_reverse (list);
+GList *list = NULL, *iterator;
+for (iterator = cust->jobs; iterator; iterator = iterator->next)
+{
+GncJob *j = iterator->data;
+if (gncJobGetActive (j))
+list = g_list_prepend (list, j);
+}
+return g_list_reverse (list);
     }
 }
 
@@ -714,8 +715,8 @@ gboolean gncCustomerIsDirty (GncCustomer *cust)
 {
     if (!cust) return FALSE;
     return (qof_instance_is_dirty(&cust->inst) ||
-            gncAddressIsDirty (cust->addr) ||
-            gncAddressIsDirty (cust->shipaddr));
+gncAddressIsDirty (cust->addr) ||
+gncAddressIsDirty (cust->shipaddr));
 }
 
 /* Other functions */
@@ -740,79 +741,79 @@ gncCustomerEqual(const GncCustomer *a, const GncCustomer *b)
 
     if (g_strcmp0(a->id, b->id) != 0)
     {
-        PWARN("IDs differ: %s vs %s", a->id, b->id);
-        return FALSE;
+PWARN("IDs differ: %s vs %s", a->id, b->id);
+return FALSE;
     }
 
     if (g_strcmp0(a->name, b->name) != 0)
     {
-        PWARN("Names differ: %s vs %s", a->name, b->name);
-        return FALSE;
+PWARN("Names differ: %s vs %s", a->name, b->name);
+return FALSE;
     }
 
     if (g_strcmp0(a->notes, b->notes) != 0)
     {
-        PWARN("Notes differ: %s vs %s", a->notes, b->notes);
-        return FALSE;
+PWARN("Notes differ: %s vs %s", a->notes, b->notes);
+return FALSE;
     }
 
     if (!gncBillTermEqual(a->terms, b->terms))
     {
-        PWARN("Bill terms differ");
-        return FALSE;
+PWARN("Bill terms differ");
+return FALSE;
     }
 
     if (!gnc_commodity_equal(a->currency, b->currency))
     {
-        PWARN("currencies differ");
-        return FALSE;
+PWARN("currencies differ");
+return FALSE;
     }
 
     if (!gncTaxTableEqual(a->taxtable, b->taxtable))
     {
-        PWARN("tax tables differ");
-        return FALSE;
+PWARN("tax tables differ");
+return FALSE;
     }
 
     if (a->taxtable_override != b->taxtable_override)
     {
-        PWARN("Tax table override flags differ");
-        return FALSE;
+PWARN("Tax table override flags differ");
+return FALSE;
     }
 
     if (a->taxincluded != b->taxincluded)
     {
-        PWARN("Tax included flags differ");
-        return FALSE;
+PWARN("Tax included flags differ");
+return FALSE;
     }
 
     if (a->active != b->active)
     {
-        PWARN("Active flags differ");
-        return FALSE;
+PWARN("Active flags differ");
+return FALSE;
     }
 
     if (!gncAddressEqual(a->addr, b->addr))
     {
-        PWARN("addresses differ");
-        return FALSE;
+PWARN("addresses differ");
+return FALSE;
     }
     if (!gncAddressEqual(a->shipaddr, b->shipaddr))
     {
-        PWARN("addresses differ");
-        return FALSE;
+PWARN("addresses differ");
+return FALSE;
     }
 
     if (!gnc_numeric_equal(a->credit, b->credit))
     {
-        PWARN("Credit amounts differ");
-        return FALSE;
+PWARN("Credit amounts differ");
+return FALSE;
     }
 
     if (!gnc_numeric_equal(a->discount, b->discount))
     {
-        PWARN("Discount amounts differ");
-        return FALSE;
+PWARN("Discount amounts differ");
+return FALSE;
     }
 
     /* FIXME: Need to check jobs list
@@ -840,42 +841,42 @@ cust_handle_qof_events (QofInstance *entity, QofEventId event_type,
 {
     /* Handle address change events */
     if ((GNC_IS_ADDRESS (entity) &&
-        (event_type & QOF_EVENT_MODIFY) != 0))
+(event_type & QOF_EVENT_MODIFY) != 0))
     {
-        if (GNC_IS_CUSTOMER (event_data))
-        {
-            GncCustomer* cust = GNC_CUSTOMER (event_data);
-            gncCustomerBeginEdit (cust);
-            mark_customer (cust);
-            gncCustomerCommitEdit (cust);
-        }
-        return;
+if (GNC_IS_CUSTOMER (event_data))
+{
+GncCustomer* cust = GNC_CUSTOMER (event_data);
+gncCustomerBeginEdit (cust);
+mark_customer (cust);
+gncCustomerCommitEdit (cust);
+}
+return;
     }
 
     /* Handle lot change events */
     if (GNC_IS_LOT (entity))
     {
-        GNCLot *lot = GNC_LOT (entity);
-        GncOwner lot_owner;
-        const GncOwner *end_owner = NULL;
-        GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+GNCLot *lot = GNC_LOT (entity);
+GncOwner lot_owner;
+const GncOwner *end_owner = NULL;
+GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
 
-        /* Determine the owner associated with the lot */
-        if (invoice)
-            /* Invoice lots */
-            end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
-        else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
-            /* Pre-payment lots */
-            end_owner = gncOwnerGetEndOwner (&lot_owner);
+/* Determine the owner associated with the lot */
+if (invoice)
+/* Invoice lots */
+end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
+/* Pre-payment lots */
+end_owner = gncOwnerGetEndOwner (&lot_owner);
 
-        if (gncOwnerGetType (end_owner) == GNC_OWNER_CUSTOMER)
-        {
-            /* Clear the cached balance */
-            GncCustomer* cust = gncOwnerGetCustomer (end_owner);
-            g_free (cust->balance);
-            cust->balance = NULL;
-        }
-        return;
+if (gncOwnerGetType (end_owner) == GNC_OWNER_CUSTOMER)
+{
+/* Clear the cached balance */
+GncCustomer* cust = gncOwnerGetCustomer (end_owner);
+g_free (cust->balance);
+cust->balance = NULL;
+}
+return;
     }
 }
 
@@ -929,42 +930,45 @@ gboolean gncCustomerRegister (void)
 {
     static QofParam params[] =
     {
-        { CUSTOMER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetID, (QofSetterFunc)gncCustomerSetID },
-        { CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName, (QofSetterFunc)gncCustomerSetName },
-        { CUSTOMER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetNotes, (QofSetterFunc)gncCustomerSetNotes },
-        {
-            CUSTOMER_DISCOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncCustomerGetDiscount,
-            (QofSetterFunc)gncCustomerSetDiscount
-        },
-        {
-            CUSTOMER_CREDIT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncCustomerGetCredit,
-            (QofSetterFunc)gncCustomerSetCredit
-        },
-        { CUSTOMER_ADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCustomerGetAddr, (QofSetterFunc)qofCustomerSetAddr },
-        { CUSTOMER_SHIPADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCustomerGetShipAddr, (QofSetterFunc)qofCustomerSetShipAddr },
-        {
-            CUSTOMER_TT_OVER, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetTaxTableOverride,
-            (QofSetterFunc)gncCustomerSetTaxTableOverride
-        },
-        { CUSTOMER_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncCustomerGetTerms, (QofSetterFunc)gncCustomerSetTerms },
-        { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, (QofSetterFunc)gncCustomerSetActive },
-        { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
-        { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
-        { NULL },
+{ CUSTOMER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetID, (QofSetterFunc)gncCustomerSetID },
+{ CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName, (QofSetterFunc)gncCustomerSetName },
+{ CUSTOMER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetNotes, (QofSetterFunc)gncCustomerSetNotes },
+{
+CUSTOMER_DISCOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncCustomerGetDiscount,
+(QofSetterFunc)gncCustomerSetDiscount
+},
+{
+CUSTOMER_CREDIT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncCustomerGetCredit,
+(QofSetterFunc)gncCustomerSetCredit
+},
+{ CUSTOMER_ADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCustomerGetAddr, (QofSetterFunc)qofCustomerSetAddr },
+{ CUSTOMER_SHIPADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCustomerGetShipAddr, (QofSetterFunc)qofCustomerSetShipAddr },
+{
+CUSTOMER_TT_OVER, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetTaxTableOverride,
+(QofSetterFunc)gncCustomerSetTaxTableOverride
+},
+{ CUSTOMER_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncCustomerGetTerms, (QofSetterFunc)gncCustomerSetTerms },
+{ QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, (QofSetterFunc)gncCustomerSetActive },
+{ QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+{ QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+{ NULL },
     };
 
+    /*
     if (!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_CUSTOMER, INVOICE_OWNER))
     {
-        return FALSE;
+return FALSE;
     }
     if (!qof_choice_add_class(GNC_ID_JOB, GNC_ID_CUSTOMER, JOB_OWNER))
     {
-        return FALSE;
+return FALSE;
     }
+    */
+
     qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncCustomerCompare, params);
     if (!qof_choice_create(GNC_ID_CUSTOMER))
     {
-        return FALSE;
+return FALSE;
     }
     /* temp */
     _gncCustomerPrintable(NULL);
@@ -986,16 +990,16 @@ void gncCustomerSetCachedBalance (GncCustomer *cust, const gnc_numeric *new_bal)
 {
     if (!new_bal)
     {
-        if (cust->balance)
-        {
-            g_free (cust->balance);
-            cust->balance = NULL;
-        }
-        return;
+if (cust->balance)
+{
+g_free (cust->balance);
+cust->balance = NULL;
+}
+return;
     }
 
     if (!cust->balance)
-        cust->balance = g_new0 (gnc_numeric, 1);
+cust->balance = g_new0 (gnc_numeric, 1);
 
     *cust->balance = *new_bal;
 }

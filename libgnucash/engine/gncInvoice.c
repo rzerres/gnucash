@@ -398,6 +398,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *from)
             // this is a vendor bill, or an expense voucher
             gncBillAddEntry (invoice, to_entry);
             break;
+        case GNC_OWNER_COOWNER:
         case GNC_OWNER_CUSTOMER:
         default:
             // this is an invoice
@@ -797,6 +798,7 @@ void gncInvoiceRemoveEntries (GncInvoice *invoice)
             // this is a vendor bill, or an expense voucher
             gncBillRemoveEntry (invoice, entry);
             break;
+        case GNC_OWNER_COOWNER:
         case GNC_OWNER_CUSTOMER:
         default:
             // this is an invoice
@@ -1069,17 +1071,21 @@ GList * gncInvoiceGetTypeListForOwnerType (GncOwnerType type)
     GList *type_list = NULL;
     switch (type)
     {
+    case GNC_OWNER_COOWNER:
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_COOWNER_INVOICE));
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_COOWNER_CREDIT_NOTE));
+        return type_list;
     case GNC_OWNER_CUSTOMER:
         type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_CUST_INVOICE));
         type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_CUST_CREDIT_NOTE));
         return type_list;
-    case GNC_OWNER_VENDOR:
-        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_VEND_INVOICE));
-        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_VEND_CREDIT_NOTE));
-        return type_list;
     case GNC_OWNER_EMPLOYEE:
         type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_EMPL_INVOICE));
         type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_EMPL_CREDIT_NOTE));
+        return type_list;
+    case GNC_OWNER_VENDOR:
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_VEND_INVOICE));
+        type_list = g_list_append (type_list, GINT_TO_POINTER(GNC_INVOICE_VEND_CREDIT_NOTE));
         return type_list;
     default:
         PWARN("Bad owner type, no invoices.");
@@ -1093,6 +1099,10 @@ GncInvoiceType gncInvoiceGetType (const GncInvoice *invoice)
     if (!invoice) return GNC_INVOICE_UNDEFINED;
     switch (gncInvoiceGetOwnerType (invoice))
     {
+    case GNC_OWNER_COOWNER:
+        return (gncInvoiceGetIsCreditNote (invoice) ?
+                GNC_INVOICE_COOWNER_CREDIT_NOTE :
+                GNC_INVOICE_COOWNER_INVOICE);
     case GNC_OWNER_CUSTOMER:
         return (gncInvoiceGetIsCreditNote (invoice) ?
                 GNC_INVOICE_CUST_CREDIT_NOTE :
@@ -1117,6 +1127,7 @@ const char * gncInvoiceGetTypeString (const GncInvoice *invoice)
     GncInvoiceType type = gncInvoiceGetType (invoice);
     switch (type)
     {
+    case GNC_INVOICE_COOWNER_INVOICE:
     case GNC_INVOICE_CUST_INVOICE:
         return _("Invoice");
     case GNC_INVOICE_VEND_INVOICE:
@@ -1128,7 +1139,7 @@ const char * gncInvoiceGetTypeString (const GncInvoice *invoice)
     case GNC_INVOICE_EMPL_CREDIT_NOTE:
         return _("Credit Note");
     default:
-        PWARN("Unknown invoice type");
+      PWARN("Unknown invoice type");
         return NULL;
     }
 }
@@ -1368,10 +1379,12 @@ gboolean gncInvoiceAmountPositive (const GncInvoice *invoice)
 {
     switch (gncInvoiceGetType (invoice))
     {
+    case GNC_INVOICE_COOWNER_INVOICE:
     case GNC_INVOICE_CUST_INVOICE:
     case GNC_INVOICE_VEND_CREDIT_NOTE:
     case GNC_INVOICE_EMPL_CREDIT_NOTE:
         return TRUE;
+    case GNC_INVOICE_COOWNER_CREDIT_NOTE:
     case GNC_INVOICE_CUST_CREDIT_NOTE:
     case GNC_INVOICE_VEND_INVOICE:
     case GNC_INVOICE_EMPL_INVOICE:
@@ -2345,6 +2358,9 @@ gchar *gncInvoiceNextID (QofBook *book, const GncOwner *owner)
     gchar *nextID;
     switch (gncOwnerGetType (gncOwnerGetEndOwner (owner)))
     {
+    case GNC_OWNER_COOWNER:
+        nextID = qof_book_increment_and_format_counter (book, "gncInvoice");
+        break;
     case GNC_OWNER_CUSTOMER:
         nextID = qof_book_increment_and_format_counter (book, "gncInvoice");
         break;
