@@ -79,7 +79,7 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* sql_be,
     }
     if (type == GNC_OWNER_NONE || pGuid == nullptr)
         return;
-    
+
     switch (type)
     {
     case GNC_OWNER_CUSTOMER:
@@ -192,8 +192,16 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(QofIdTypeConst obj_name,
         type = gncOwnerGetType (owner);
         switch (type)
         {
+        case GNC_OWNER_COOWNER:
+            inst = QOF_INSTANCE (gncOwnerGetCustomer (owner));
+            break;
+
         case GNC_OWNER_CUSTOMER:
             inst = QOF_INSTANCE (gncOwnerGetCustomer (owner));
+            break;
+
+        case GNC_OWNER_EMPLOYEE:
+            inst = QOF_INSTANCE (gncOwnerGetEmployee (owner));
             break;
 
         case GNC_OWNER_JOB:
@@ -202,10 +210,6 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(QofIdTypeConst obj_name,
 
         case GNC_OWNER_VENDOR:
             inst = QOF_INSTANCE (gncOwnerGetVendor (owner));
-            break;
-
-        case GNC_OWNER_EMPLOYEE:
-            inst = QOF_INSTANCE (gncOwnerGetEmployee (owner));
             break;
 
         default:
