@@ -26,10 +26,11 @@
 
 typedef enum
 {   UNDEFINED,
+    BILL,
+    COOWNER,
     CUSTOMER,
-    VENDOR,
     INVOICE,
-    BILL
+    VENDOR
 }GncSearchType;
 
 static void * search(QofBook * book, const gchar *id, void * object, GncSearchType type);
@@ -37,11 +38,20 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 /***********************************************************************
  * Search the book for a Customer/Invoice/Bill with the same ID.
  * If it exists return a valid object, if not then returns NULL.
- @param QofBook	The book
+ @param QofBook The book
  @param gchar ID of the Customer
  @return GncCustomer * Pointer to the customer or NULL of there is no customer
  **********************************************************************/
 
+
+GncCoOwner *
+gnc_search_coowner_on_id (QofBook * book, const gchar *id)
+{
+    GncCoOwner *coowner = NULL;
+    GncSearchType type = COOWNER;
+    coowner = (GncCoOwner*)search(book, id, coowner, type);
+    return coowner;
+}
 
 GncCustomer *
 gnc_search_customer_on_id (QofBook * book, const gchar *id)
@@ -91,7 +101,7 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
     GList *result;
     QofQuery *q;
     QofQueryPredData* string_pred_data;
-    
+
     PINFO("Type = %d", type);
     g_return_val_if_fail (type, NULL);
     g_return_val_if_fail (id, NULL);
@@ -102,7 +112,12 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
     qof_query_set_book (q, book);
     // Search only the id field
     string_pred_data = qof_query_string_predicate (QOF_COMPARE_EQUAL, id, QOF_STRING_MATCH_NORMAL, FALSE);
-    if (type == CUSTOMER)
+    if (type == COOWNER)
+    {
+        qof_query_search_for(q,GNC_COOWNER_MODULE_NAME);
+        qof_query_add_term (q, qof_query_build_param_list("COOWNER_ID"), string_pred_data, QOF_QUERY_AND);
+    }
+    else if (type == CUSTOMER)
     {
         qof_query_search_for(q,GNC_CUSTOMER_MODULE_NAME);
         qof_query_add_term (q, qof_query_build_param_list("CUSTOMER_ID"), string_pred_data, QOF_QUERY_AND);
@@ -130,20 +145,42 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
         while (result)
         {
             c = result->data;
-            
-            if (type == CUSTOMER && strcmp(id, gncCustomerGetID(c)) == 0)
+
+            if (type == COOWNER && strcmp(id, gncCoOwnerGetID(c)) == 0)
+            {
+                object = c;
+                break;
+            }
+            else if (type == CUSTOMER && strcmp(id, gncCustomerGetID(c)) == 0)
+            {
+                object = c;
+                break;
+            }
+            else if (type == INVOICE && strcmp(id, gncInvoiceGetID(c)) == 0
+                        && gncInvoiceGetType(c) == GNC_INVOICE_COOWNER_INVOICE)
+            {
+                object = c;
+                break;
+            }
+            else if (type == CUSTOMER && strcmp(id, gncCustomerGetID(c)) == 0)
             {
                 // correct id found
                 object = c;
                 break;
             }
-            else if (type == INVOICE && strcmp(id, gncInvoiceGetID(c)) == 0 
+            else if (type == INVOICE && strcmp(id, gncInvoiceGetID(c)) == 0
+                        && gncInvoiceGetType(c) == GNC_INVOICE_COOWNER_INVOICE)
+            {
+                object = c;
+                break;
+            }
+            else if (type == INVOICE && strcmp(id, gncInvoiceGetID(c)) == 0
                         && gncInvoiceGetType(c) == GNC_INVOICE_CUST_INVOICE)
             {
                 object = c;
                 break;
             }
-            else if (type == BILL && strcmp(id, gncInvoiceGetID(c)) == 0 
+            else if (type == BILL && strcmp(id, gncInvoiceGetID(c)) == 0
                         && gncInvoiceGetType(c) == GNC_INVOICE_VEND_INVOICE)
             {
                 object = c;
