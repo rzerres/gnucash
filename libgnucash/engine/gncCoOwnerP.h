@@ -1,5 +1,5 @@
 /********************************************************************\
- * gncJobP.h -- the Core Job Interface                              *
+ * gncCoOwnerP.h -- the Core CoOwner Interface
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,19 +21,20 @@
 \********************************************************************/
 
 /*
- * Copyright (C) 2001 Derek Atkins
- * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
- * Author: Derek Atkins <warlord@MIT.EDU>
+ * Copyright (C) 2022 Ralf Zerres
+ * Author: Ralf Zerres <ralf.zerres@mail.de>
  */
 
-#ifndef GNC_JOBP_H_
-#define GNC_JOBP_H_
+#ifndef GNC_COOWNERP_H_
+#define GNC_COOWNERP_H_
 
-#include "gncJob.h"
+#include "gncCoOwner.h"
 
-gboolean gncJobRegister (void);
-gchar *gncJobNextID (QofBook *book, const GncOwner *owner);
+gboolean gncCoOwnerRegister (void);
+gchar *gncCoOwnerNextID (QofBook *book);
+const gnc_numeric *gncCoOwnerGetCachedBalance (GncCoOwner *coowner);
+void gncCoOwnerSetCachedBalance (GncCoOwner *coowner, const gnc_numeric *new_bal);
 
-#define gncJobSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
+#define gncCoOwnerSetGUID(C,G) qof_instance_set_guid(QOF_INSTANCE(C),(G))
 
-#endif /* GNC_JOBP_H_ */
+#endif /* GNC_COOWNERP_H_ */

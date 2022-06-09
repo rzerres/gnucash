@@ -44,20 +44,22 @@ typedef struct _gncOwner GncOwner;
 
 typedef enum
 {
-    GNC_OWNER_NONE ,
-    GNC_OWNER_UNDEFINED ,
-    GNC_OWNER_CUSTOMER ,
-    GNC_OWNER_JOB ,
-    GNC_OWNER_VENDOR ,
-    GNC_OWNER_EMPLOYEE ,
+    GNC_OWNER_NONE,
+    GNC_OWNER_UNDEFINED,
+    GNC_OWNER_COOWNER,
+    GNC_OWNER_CUSTOMER,
+    GNC_OWNER_EMPLOYEE,
+    GNC_OWNER_JOB,
+    GNC_OWNER_VENDOR
 } GncOwnerType;
 
 #include "qof.h"
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
-#include "gncJob.h"
-#include "gncVendor.h"
 #include "gncEmployee.h"
 #include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncVendor.h"
 #include "Account.h"
 #include "gnc-lot.h"
 
@@ -95,10 +97,11 @@ gncOwnerRegister(void);
 /** \struct GncOwner */
 struct _gncOwner
 {
-    GncOwnerType     type;      /**< Customer, Job, Vendor, Employee or Undefined. */
+    GncOwnerType     type;      /**< Co-Owner, Customer, Employee, Job, Vendor or Undefined. */
     union
     {
         gpointer       undefined;
+        GncCoOwner *   coowner;
         GncCustomer *  customer;
         GncJob *       job;
         GncVendor *    vendor;
@@ -112,36 +115,40 @@ struct _gncOwner
 /** \name Setup routines
 @{
 */
-void gncOwnerInitUndefined (GncOwner *owner, gpointer obj);
+void gncOwnerInitCoOwner (GncOwner *owner, GncCoOwner *coowner);
 void gncOwnerInitCustomer (GncOwner *owner, GncCustomer *customer);
+void gncOwnerInitEmployee (GncOwner *owner, GncEmployee *employee);
 void gncOwnerInitJob (GncOwner *owner, GncJob *job);
 void gncOwnerInitVendor (GncOwner *owner, GncVendor *vendor);
-void gncOwnerInitEmployee (GncOwner *owner, GncEmployee *employee);
+void gncOwnerInitUndefined (GncOwner *owner, gpointer obj);
 /** @} */
 /** \name Get routines.
 @{
 */
-/** Returns the GncOwnerType of this owner. (Not to be confused with qofOwnerGetType().) */
-GncOwnerType gncOwnerGetType (const GncOwner *owner);
-/** Returns TRUE if the given owner is one of the valid objects.
- * Returns FALSE if the owner is (still) undefined, or if it is NULL. */
-gboolean gncOwnerIsValid (const GncOwner *owner);
-
-/** If the given owner is of type GNC_OWNER_UNDEFINED, returns the undefined
- * pointer, which is usually NULL. Otherwise returns NULL. */
-gpointer gncOwnerGetUndefined (const GncOwner *owner);
+/** If the given owner is of type GNC_OWNER_COOWNER, returns the pointer
+ * to the co-owner object. Otherwise returns NULL. */
+GncCoOwner * gncOwnerGetCoOwner (const GncOwner *owner);
 /** If the given owner is of type GNC_OWNER_CUSTOMER, returns the pointer
  * to the customer object. Otherwise returns NULL. */
 GncCustomer * gncOwnerGetCustomer (const GncOwner *owner);
+/** If the given owner is of type GNC_OWNER_EMPLOYEE, returns the pointer
+ * to the employee object. Otherwise returns NULL. */
+GncEmployee * gncOwnerGetEmployee (const GncOwner *owner);
 /** If the given owner is of type GNC_OWNER_JOB, returns the pointer
  * to the job object. Otherwise returns NULL. */
 GncJob * gncOwnerGetJob (const GncOwner *owner);
 /** If the given owner is of type GNC_OWNER_VENDOR, returns the pointer
  * to the vendor object. Otherwise returns NULL. */
 GncVendor * gncOwnerGetVendor (const GncOwner *owner);
-/** If the given owner is of type GNC_OWNER_EMPLOYEE, returns the pointer
- * to the employee object. Otherwise returns NULL. */
-GncEmployee * gncOwnerGetEmployee (const GncOwner *owner);
+/** Returns the GncOwnerType of this owner. (Not to be confused with qofOwnerGetType().) */
+GncOwnerType gncOwnerGetType (const GncOwner *owner);
+/** If the given owner is of type GNC_OWNER_UNDEFINED, returns the undefined
+ * pointer, which is usually NULL. Otherwise returns NULL. */
+gpointer gncOwnerGetUndefined (const GncOwner *owner);
+/** Returns TRUE if the given owner is one of the valid objects.
+ * Returns FALSE if the owner is (still) undefined, or if it is NULL. */
+gboolean gncOwnerIsValid (const GncOwner *owner);
+
 
 const char * gncOwnerGetID (const GncOwner *owner);
 const char * gncOwnerGetName (const GncOwner *owner);
@@ -164,7 +171,7 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
 /** Assess equality by checking
  *  - if both owner objects refer to the same owner type
  *  - and if the owner reference points to the same
- *    {vendor/customer/employee} in memory */
+ *    {coowner/customer/employee/vendor} in memory */
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
 /** Same as gncOwnerEqual, but returns 0 if
     equal to be used as a GList custom compare function */
@@ -179,7 +186,7 @@ GncGUID gncOwnerRetGUID (GncOwner *owner);
 
 /**
  * Get the "parent" Owner or GncGUID thereof.  The "parent" owner
- * is the Customer or Vendor, or the Owner of a Job
+ * is the Co-Owner, Employee, Customer or Vendor, or the Owner of a Job
  */
 const GncOwner * gncOwnerGetEndOwner (const GncOwner *owner);
 const GncGUID * gncOwnerGetEndGUID (const GncOwner *owner);
@@ -323,10 +330,11 @@ gncOwnerGetBalanceInCurrency (const GncOwner *owner,
 
 #define OWNER_TYPE        "type"
 #define OWNER_TYPE_STRING "type-string"  /**< Allows the type to be handled externally. */
+#define OWNER_COOWNER     "coowner"
 #define OWNER_CUSTOMER    "customer"
+#define OWNER_EMPLOYEE    "employee"
 #define OWNER_JOB         "job"
 #define OWNER_VENDOR      "vendor"
-#define OWNER_EMPLOYEE    "employee"
 #define OWNER_PARENT      "parent"
 #define OWNER_PARENTG     "parent-guid"
 #define OWNER_NAME        "name"
@@ -343,7 +351,7 @@ void gncOwnerFree (GncOwner *owner);
 
 
 /**
- * These are convenience wrappers around gnc{Vendor,Customer,Job,Employee}*
+ * These are convenience wrappers around gnc{CoOwner,Customer,Employee,Job,Vendor}*
  * functions. This allows you to begin edit, destroy commit edit an owner
  * without knowing its type.
  */
