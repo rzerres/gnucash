@@ -33,25 +33,25 @@
 
 /** @struct GncCustomer
 
-credit, discount and shipaddr are unique to GncCustomer\n
-id, name, notes, terms, addr, currency, taxtable, taxtable_override
-taxincluded, active and jobs are identical to ::GncVendor.
+Generic params:
 
-@param	QofInstance     inst;
-@param	char *          id;
-@param	char *          name;
-@param	char *          notes;
-@param	GncBillTerm *   terms;
-@param	GncAddress *    addr;
-@param	gnc_commodity * currency;
-@param	GncTaxTable*    taxtable;
-@param	gboolean        taxtable_override;
-@param	GncTaxIncluded  taxincluded;
-@param	gboolean        active;
-@param	GList *         jobs;
-@param	gnc_numeric     credit;
-@param	gnc_numeric     discount;
-@param	GncAddress *    shipaddr;
+@param  QofInstance     inst;
+@param  char *          id;
+@param  char *          name;
+@param  char *          notes;
+@param  GncBillTerm *   terms;
+@param  GncAddress *    addr;
+@param  gnc_commodity * currency;
+@param  GncTaxTable*    taxtable;
+@param  gboolean        taxtable_override;
+@param  GncTaxIncluded  taxincluded;
+@param  gboolean        active;
+@param  GList *         jobs;
+
+Customer specific:\n
+@param  gnc_numeric     credit;
+@param  gnc_numeric     discount;
+@param  GncAddress *    shipaddr;
 
 */
 typedef struct _gncCustomer GncCustomer;
