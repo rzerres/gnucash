@@ -643,6 +643,31 @@ billterm_scrub_invoices (QofInstance* invoice_p, gpointer ht_p)
 }
 
 static void
+billterm_scrub_coowner (QofInstance* coowner_p, gpointer ht_p)
+{
+    GHashTable* ht = static_cast<decltype (ht)> (ht_p);
+    GncCoOwner* coowner = GNC_COOWNER (coowner_p);
+    GncBillTerm* term;
+    gint32 count;
+
+    term = gncCoOwnerGetTerms (coowner);
+    if (term)
+    {
+        count = GPOINTER_TO_INT (g_hash_table_lookup (ht, term));
+        count++;
+        g_hash_table_insert (ht, term, GINT_TO_POINTER (count));
+        if (billterm_is_grandchild (term))
+        {
+            gchar coownerstr[GUID_ENCODING_LENGTH + 1];
+            gchar termstr[GUID_ENCODING_LENGTH + 1];
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (coowner)), coownerstr);
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (term)), termstr);
+            PWARN ("co-owner %s has grandchild billterm %s\n", coownerstr, termstr);
+        }
+    }
+}
+
+static void
 billterm_scrub_cust (QofInstance* cust_p, gpointer ht_p)
 {
     GHashTable* ht = static_cast<decltype (ht)> (ht_p);
