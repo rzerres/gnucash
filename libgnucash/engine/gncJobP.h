@@ -36,7 +36,7 @@ extern "C" {
 #endif
 
 gboolean gncJobRegister (void);
-gchar *gncJobNextID (QofBook *book);
+gchar *gncJobNextID (QofBook *book, const GncOwner *owner);
 
 #define gncJobSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
