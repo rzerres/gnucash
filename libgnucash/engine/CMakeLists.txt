@@ -77,6 +77,8 @@ set (engine_HEADERS
   gncBillTerm.h
   gncBillTermP.h
   gncBusiness.h
+  gncCoOwner.h
+  gncCoOwnerP.h
   gncCustomer.h
   gncCustomerP.h
   gncEmployee.h
@@ -181,6 +183,7 @@ set (engine_SOURCES
   gncAddress.c
   gncBillTerm.c
   gncBusiness.c
+  gncCoOwner.c
   gncCustomer.c
   gncEmployee.c
   gncEntry.c

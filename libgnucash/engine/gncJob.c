@@ -41,11 +41,14 @@
 struct _gncJob
 {
     QofInstance inst;
-    const char *  id;
-    const char *  name;
-    const char *  desc;
-    GncOwner      owner;
-    gboolean      active;
+
+    gboolean active;
+    const char *billing_id;
+    GList *entries;
+    const char *id;
+    const char *name;
+    const char *desc;
+    GncOwner owner;
 };
 
 struct _gncJobClass
@@ -55,8 +58,9 @@ struct _gncJobClass
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
-#define _GNC_MOD_NAME        GNC_ID_JOB
-#define GNC_JOB_RATE         "job-rate"
+#define _GNC_MOD_NAME           GNC_ID_JOB
+#define GNC_JOB_RATE            "job-rate"
+#define GNC_JOB_TYPE_IS_COOWNER "type_coowner"
 
 /* ================================================================== */
 /* misc inline functions */
@@ -73,7 +77,7 @@ void mark_job (GncJob *job)
 enum
 {
     PROP_0,
-//  PROP_ID,            /* Table */
+    PROP_ID,            /* Table */
     PROP_NAME,          /* Table */
 //  PROP_REFERENCE,     /* Table */
 //  PROP_ACTIVE,        /* Table */
@@ -115,6 +119,9 @@ gnc_job_get_property (GObject         *object,
     job = GNC_JOB(object);
     switch (prop_id)
     {
+    case PROP_ID:
+        g_value_set_string(value, job->id);
+        break;
     case PROP_NAME:
         g_value_set_string(value, job->name);
         break;
@@ -184,6 +191,18 @@ gnc_job_class_init (GncJobClass *klass)
 
     g_object_class_install_property
     (gobject_class,
+     PROP_ID,
+     g_param_spec_string ("ID",
+                          "Job ID",
+                          "The job ID is an arbitrary string "
+                          "assigned by the user.  It is intended to "
+                          "be displayed inside the GUI qualifieng the "
+                          "jobs identifier.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
      PROP_NAME,
      g_param_spec_string ("name",
                           "Job Name",
@@ -209,6 +228,40 @@ gnc_job_class_init (GncJobClass *klass)
 }
 
 /* Create/Destroy Functions */
+GncJob *gncJobCopy (const GncJob *from)
+{
+    GncJob *job;
+    QofBook* book;
+    GValue v = G_VALUE_INIT;
+
+    g_assert (from);
+    book = qof_instance_get_book (from);
+    g_assert (book);
+
+    job = g_object_new (GNC_TYPE_JOB, NULL);
+    qof_instance_init_data (&job->inst, _GNC_MOD_NAME, book);
+
+    gncJobBeginEdit (job);
+
+    job->active = from->active;
+    job->id = CACHE_INSERT (from->id);
+    job->billing_id = CACHE_INSERT (from->billing_id);
+
+    /* Dialog marked this type as Co-Owner */
+    qof_instance_get_kvp (QOF_INSTANCE (from), &v, 1, GNC_JOB_TYPE_IS_COOWNER);
+    if (G_VALUE_HOLDS_INT64 (&v))
+         qof_instance_set_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_TYPE_IS_COOWNER);
+    g_value_unset (&v);
+
+    //gncOwnerCopy (&from->billto, &job->billto);
+    gncOwnerCopy (&from->owner, &job->owner);
+
+    mark_job (job);
+    gncJobCommitEdit (job);
+
+    return job;
+}
+
 GncJob *gncJobCreate (QofBook *book)
 {
     GncJob *job;
@@ -248,6 +301,12 @@ void gncJobDestroy (GncJob *job)
     gncJobCommitEdit (job);
 }
 
+JobEntryList * gncJobGetEntries (GncJob *job)
+{
+    if (!job) return NULL;
+    return job->entries;
+}
+
 static void gncJobFree (GncJob *job)
 {
     if (!job) return;
@@ -260,6 +319,9 @@ static void gncJobFree (GncJob *job)
 
     switch (gncOwnerGetType (&(job->owner)))
     {
+    case GNC_OWNER_COOWNER:
+        gncCoOwnerRemoveJob (gncOwnerGetCoOwner(&job->owner), job);
+        break;
     case GNC_OWNER_CUSTOMER:
         gncCustomerRemoveJob (gncOwnerGetCustomer(&job->owner), job);
         break;
@@ -341,6 +403,7 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
 
     switch (gncOwnerGetType (owner))
     {
+    case GNC_OWNER_COOWNER:
     case GNC_OWNER_CUSTOMER:
     case GNC_OWNER_VENDOR:
         break;
@@ -353,6 +416,9 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
 
     switch (gncOwnerGetType (&(job->owner)))
     {
+    case GNC_OWNER_COOWNER:
+        gncCoOwnerRemoveJob (gncOwnerGetCoOwner(&job->owner), job);
+        break;
     case GNC_OWNER_CUSTOMER:
         gncCustomerRemoveJob (gncOwnerGetCustomer(&job->owner), job);
         break;
@@ -367,6 +433,9 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
 
     switch (gncOwnerGetType (&(job->owner)))
     {
+    case GNC_OWNER_COOWNER:
+        gncCoOwnerAddJob (gncOwnerGetCoOwner(&job->owner), job);
+        break;
     case GNC_OWNER_CUSTOMER:
         gncCustomerAddJob (gncOwnerGetCustomer(&job->owner), job);
         break;
@@ -389,6 +458,19 @@ void gncJobSetActive (GncJob *job, gboolean active)
     job->active = active;
     mark_job (job);
     gncJobCommitEdit (job);
+}
+
+void gncJobSetTypeIsCoOwner (GncJob *job, gboolean type_coowner)
+{
+     GValue v = G_VALUE_INIT;
+     if (!job) return;
+     gncJobBeginEdit (job);
+     g_value_init (&v, G_TYPE_INT64);
+     g_value_set_int64 (&v, type_coowner ? 1 : 0);
+     qof_instance_set_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_TYPE_IS_COOWNER);
+     g_value_unset (&v);
+     mark_job (job);
+     gncJobCommitEdit (job);
 }
 
 static void
@@ -438,19 +520,40 @@ void gncJobCommitEdit (GncJob *job)
 /* ================================================================== */
 /* Get Functions */
 
-const char * gncJobGetID (const GncJob *job)
+gboolean gncJobGetActive (const GncJob *job)
 {
-    if (!job) return NULL;
-    return job->id;
+    if (!job) return FALSE;
+    return job->active;
 }
 
-const char * gncJobGetName (const GncJob *job)
+const char *gncJobGetName (const GncJob *job)
 {
     if (!job) return NULL;
     return job->name;
 }
 
-const char * gncJobGetReference (const GncJob *job)
+const GncOwner *gncJobGetOwner (const GncJob *job)
+{
+    if (!job) return NULL;
+    return &job->owner;
+}
+
+const char *gncJobGetID (const GncJob *job)
+{
+    if (!job) return NULL;
+    return job->id;
+}
+
+GncOwnerType gncJobGetOwnerType (const GncJob *job)
+{
+    const GncOwner *owner;
+    g_return_val_if_fail (job, GNC_OWNER_NONE);
+
+    owner = gncOwnerGetEndOwner (gncJobGetOwner (job));
+    return (gncOwnerGetType (owner));
+}
+
+const char *gncJobGetReference (const GncJob *job)
 {
     if (!job) return NULL;
     return job->desc;
@@ -470,16 +573,24 @@ gnc_numeric gncJobGetRate (const GncJob *job)
     return retval;
 }
 
-GncOwner * gncJobGetOwner (GncJob *job)
+GncJobType gncJobGetType (const GncJob *job)
 {
-    if (!job) return NULL;
-    return &(job->owner);
+    const GncOwner *owner;
+    g_return_val_if_fail (job, GNC_OWNER_NONE);
+
+    owner = gncOwnerGetEndOwner (gncJobGetOwner (job));
+    return (gncOwnerGetType (owner));
 }
 
-gboolean gncJobGetActive (const GncJob *job)
+gboolean gncJobGetTypeIsCoOwner (const GncJob *job)
 {
+    GValue v = G_VALUE_INIT;
+    gboolean retval;
     if (!job) return FALSE;
-    return job->active;
+    qof_instance_get_kvp (QOF_INSTANCE(job), &v, 1, GNC_JOB_TYPE_IS_COOWNER);
+    retval = G_VALUE_HOLDS_INT64(&v) && g_value_get_int64 (&v);
+    g_value_unset (&v);
+    return retval;
 }
 
 static QofInstance*
@@ -552,7 +663,7 @@ gboolean gncJobEqual(const GncJob * a, const GncJob *b)
 /* ================================================================== */
 /* Package-Private functions */
 
-static const char * _gncJobPrintable (gpointer item)
+static const char *_gncJobPrintable (gpointer item)
 {
     GncJob *c;
     if (!item) return NULL;
@@ -579,12 +690,13 @@ gboolean gncJobRegister (void)
 {
     static QofParam params[] =
     {
+        { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
         { JOB_ID, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetID, (QofSetterFunc)gncJobSetID },
         { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, (QofSetterFunc)gncJobSetName },
-        { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
+        { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
         { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, (QofSetterFunc)gncJobSetReference },
         { JOB_RATE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncJobGetRate, (QofSetterFunc)gncJobSetRate },
-        { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
+        { JOB_TYPE_IS_COOWNER, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetTypeIsCoOwner, (QofSetterFunc)gncJobSetTypeIsCoOwner },
         { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
         { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
         { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
@@ -606,7 +718,30 @@ gboolean gncJobRegister (void)
     return qof_object_register (&gncJobDesc);
 }
 
-gchar *gncJobNextID (QofBook *book)
+gchar *gncJobNextID (QofBook *book, const GncOwner *owner)
 {
     return qof_book_increment_and_format_counter (book, _GNC_MOD_NAME);
+
+    /*
+    gchar *nextID;
+    switch (gncOwnerGetType (gncOwnerGetEndOwner (owner)))
+    {
+    case GNC_OWNER_COOWNER:
+        nextID = qof_book_increment_and_format_counter (book, "gncJob");
+        break;
+    case GNC_OWNER_CUSTOMER:
+        nextID = qof_book_increment_and_format_counter (book, "gncJob");
+        break;
+    case GNC_OWNER_VENDOR:
+        nextID = qof_book_increment_and_format_counter (book, "gncBill");
+        break;
+    case GNC_OWNER_EMPLOYEE:
+        nextID = qof_book_increment_and_format_counter (book, "gncExpVoucher");
+        break;
+    default:
+        nextID = qof_book_increment_and_format_counter (book, _GNC_MOD_NAME);
+        break;
+    }
+    return nextID;
+    */
 }
