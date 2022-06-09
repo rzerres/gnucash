@@ -39,6 +39,7 @@
 
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"
 #include "gncEntryP.h"
@@ -53,13 +54,14 @@ static void
 business_core_init(void)
 {
     /* initialize known types */
-    gncInvoiceRegister ();
-    gncJobRegister ();
-    gncBillTermRegister ();
-    gncCustomerRegister ();
     gncAddressRegister ();
+    gncBillTermRegister ();
+    gncCoOwnerRegister ();
+    gncCustomerRegister ();
     gncEmployeeRegister ();
     gncEntryRegister ();
+    gncInvoiceRegister ();
+    gncJobRegister ();
     gncOrderRegister ();
     gncOwnerRegister ();
     gncTaxTableRegister ();
@@ -84,4 +86,3 @@ cashobjects_register(void)
 
     return TRUE;
 }
-

@@ -32,6 +32,7 @@
 
 #include "gncAddress.h"
 #include "gncAddressP.h"
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 #include "gnc-features.h"
 
@@ -59,7 +60,7 @@ struct _gncAddressClass
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_ADDRESS_MODULE_NAME
+#define _GNC_MOD_NAME   GNC_ADDRESS_MODULE_NAME
 
 static inline void mark_address (GncAddress *address);
 void mark_address (GncAddress *address)
@@ -393,11 +394,11 @@ gncAddressFree (GncAddress *addr)
 /* Set functions */
 
 #define SET_STR(obj, member, str) { \
-	if (member == str) return; \
-	if (!g_strcmp0 (member, str)) return; \
-	gncAddressBeginEdit (obj); \
-	CACHE_REPLACE(member, str); \
-	}
+        if (member == str) return; \
+        if (!g_strcmp0 (member, str)) return; \
+        gncAddressBeginEdit (obj); \
+        CACHE_REPLACE(member, str); \
+        }
 
 void gncAddressSetName (GncAddress *addr, const char *name)
 {
