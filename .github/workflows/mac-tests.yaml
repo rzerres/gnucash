@@ -1,5 +1,14 @@
 name: mac-tests
-on: [push, pull_request]
+on:
+  # trigger for any new pull request
+  pull_request:
+  # trigger on pushes with changes to branch master
+  push:
+    branches:
+      # we need to use `master`, since github pages can't handle other branches
+      - master
+  # trigger manually trigger from the Actions tab
+  workflow_dispatch:
 jobs:
   ci_tests_mac:
     runs-on: macos-10.15

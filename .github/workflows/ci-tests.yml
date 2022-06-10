@@ -1,5 +1,14 @@
 name: ci-tests
-on: [push, pull_request]
+on:
+  # trigger for any new pull request
+  pull_request:
+  # trigger on pushes with changes to branch master
+  push:
+    branches:
+      # we need to use `master`, since github pages can't handle other branches
+      - maint
+      - wip-coowner
+
 jobs:
   ci_tests_ubuntu-18:
     runs-on: ubuntu-18.04
