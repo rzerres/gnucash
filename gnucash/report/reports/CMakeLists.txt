@@ -1,4 +1,3 @@
-
 add_subdirectory(standard/test)
 add_subdirectory(support)
 
@@ -34,6 +33,7 @@ set (reports_standard_SCHEME
     standard/cash-flow.scm
     standard/cashflow-barchart.scm
     standard/category-barchart.scm
+    standard/coowner-settlement.scm
     standard/dashboard.scm
     standard/equity-statement.scm
     standard/general-journal.scm

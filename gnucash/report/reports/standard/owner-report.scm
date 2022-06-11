@@ -7,16 +7,16 @@
 ;; Copyright (c) 2002, 2003 Derek Atkins <warlord@MIT.EDU>
 ;; Modified by AMM to show tax figures of invoice.
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -40,10 +40,11 @@
 (define optname-to-date (N_ "To"))
 (define optname-date-driver (N_ "Due or Post Date"))
 
-;; let's define a name for the report-guid's, much prettier
+;; Define a name that reference to the unique report guid
+(define coowner-report-guid "1c3f0d24f0324d498e02434e1f3a7218-old")
+(define customer-report-guid "c146317be32e4948a561ec7fc89d15c1-old")
 (define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44-old")
 (define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0-old")
-(define customer-report-guid "c146317be32e4948a561ec7fc89d15c1-old")
 
 (define acct-string (N_ "Account"))
 (define owner-page gnc:pagename-general)
@@ -58,33 +59,37 @@
 (define debit-header (N_ "Debits"))
 (define amount-header (N_ "Amount"))
 
-;; Depending on the report type we want to set up some lists/cases 
+;; Depending on the report type we want to set up some lists/cases
 ;; with strings to ease overview and translation
 ;; note: we default to company
 
 ;; owner-string & doctype-str are nearly equivalent, report is vendor report
-;; but default option naming was Company. 
+;; but default option naming was Company.
 
 ;; Names in Option panel (Untranslated! Because it is used for option
 ;; naming and lookup only, and the display of the option name will be
 ;; translated somewhere else.)
 (define (owner-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
+  (cond ((eqv? owner-type GNC-OWNER-COOWNER) (N_ "Co-Owner"))
+        ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
+        ((eqv? owner-type GNC-OWNER-Owner) (N_ "Owner"))
         ;; FALL THROUGH
         (else
-          (N_ "Company")))) 
+          (N_ "Company"))))
 
 ;; Error strings in case there is no (valid) selection (translated)
 (define (invalid-selection-title-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "No valid customer selected."))
+(cond ((eqv? owner-type GNC-OWNER-COOWNER) (G_ "No valid co-owner selected."))
+        ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "No valid customer selected."))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "No valid employee selected."))
         ;; FALL THROUGH
         (else
           (G_ "No valid company selected."))))
 
 (define (invalid-selection-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "This report requires a customer to be selected."))
+(cond ((eqv? owner-type GNC-OWNER-COOWNER) (G_ "This report requires a co-owner to be selected."))
+        ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "This report requires a customer to be selected."))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "This report requires a employee to be selected."))
         ;; FALL THROUGH
         (else
@@ -110,11 +115,12 @@
 
 ;; Document names, used in report names (translated)
 (define (doctype-str owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "Customer"))
+  (cond ((eqv? owner-type GNC-OWNER-COOWNER) (G_ "Co-Owner"))
+        ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "Customer"))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "Employee"))
         ;; FALL THROUGH
         (else
-          (G_ "Vendor")))) 
+          (G_ "Vendor"))))
 
 (define (date-col columns-used)
   (vector-ref columns-used 0))
@@ -139,9 +145,9 @@
 
 (define columns-used-size 10)
 
-(define (build-column-used options)   
+(define (build-column-used options)
   (define (opt-val section name)
-    (gnc:option-value 
+    (gnc:option-value
      (gnc:lookup-option options section name)))
   (define (make-set-col col-vector)
     (let ((col 0))
@@ -151,7 +157,7 @@
               (vector-set! col-vector index col)
               (set! col (+ col 1)))
             (vector-set! col-vector index #f)))))
-  
+
   (let* ((col-vector (make-vector columns-used-size #f))
          (set-col (make-set-col col-vector)))
     (set-col (opt-val "Display Columns" date-header) 0)
@@ -202,11 +208,11 @@
     (set! begindate (decdate begindate ThirtyDayDelta))
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
-;; Have make-list create a stepped list, then add a date in the future for the "current" bucket 
-(define (make-extended-interval-list to-date) 
-    (define dayforcurrent (incdate to-date YearDelta)) ;; MAGIC CONSTANT 
-    (define oldintervalreversed (reverse (make-interval-list to-date)))          
-    (reverse (cons dayforcurrent oldintervalreversed))) 
+;; Have make-list create a stepped list, then add a date in the future for the "current" bucket
+(define (make-extended-interval-list to-date)
+    (define dayforcurrent (incdate to-date YearDelta)) ;; MAGIC CONSTANT
+    (define oldintervalreversed (reverse (make-interval-list to-date)))
+    (reverse (cons dayforcurrent oldintervalreversed)))
 
 (define (make-aging-table options query bucket-intervals reverse? date-type currency)
   (let ((lots (xaccQueryGetLots query QUERY-TXN-MATCH-ANY))
@@ -243,7 +249,7 @@
                (gncInvoiceGetDatePosted invoice)
                (gncInvoiceGetDateDue invoice)))
               )
-         
+
      (if (not (gnc-numeric-zero-p bal))
          (begin
            (if reverse?
@@ -269,7 +275,7 @@
            (vector->list buckets))))
 
     table))
-         
+
 ;;
 ;; Make a row list based on the visible columns
 ;;
@@ -278,7 +284,7 @@
     (if (date-col column-vector)
         (addto! row-contents (qof-print-date date)))
     (if (date-due-col column-vector)
-        (addto! row-contents 
+        (addto! row-contents
          (if due-date
              (qof-print-date due-date)
              "")))
@@ -309,7 +315,7 @@
 ;; Adds the 'Balance' row to the table if it has not been printed and
 ;; total is not zero
 ;;
-;; Returns printed? 
+;; Returns printed?
 ;;
 (define (add-balance-row table column-vector txn odd-row? printed? start-date total)
   (if (not printed?)
@@ -353,8 +359,8 @@
         (G_ "Unknown")))
        ((equal? type TXN-TYPE-PAYMENT)
         (gnc:make-html-text
-	 (gnc:html-markup-anchor
-	  (gnc:split-anchor-text split) (G_ "Payment"))))
+         (gnc:html-markup-anchor
+          (gnc:split-anchor-text split) (G_ "Payment"))))
        (else (G_ "Unknown"))))
      )
 
@@ -363,10 +369,10 @@
 
    (if (<= start-date date)
     (begin
-      
+
       ; Adds 'balance' row if needed
       (set! printed? (add-balance-row table column-vector txn odd-row? printed? start-date total))
-      
+
       ; Now print out the invoice row
       (if (not (null? invoice))
         (begin
@@ -455,7 +461,7 @@
         ))
 
     (if (or (sale-col used-columns) (tax-col used-columns) (credit-col used-columns) (debit-col used-columns))
-    (gnc:html-table-append-row/markup! 
+    (gnc:html-table-append-row/markup!
      table
      "grand-total"
      (append (cons (gnc:make-html-table-cell/markup
@@ -496,7 +502,7 @@
      row-contents))))
 
     (if (value-col used-columns)
-    (gnc:html-table-append-row/markup! 
+    (gnc:html-table-append-row/markup!
      table
      "grand-total"
      (append (cons (gnc:make-html-table-cell/markup
@@ -599,16 +605,16 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") amount-header
-    "hb" (N_ "Display the transaction amount?") #t)) 
-  
-  (gnc:register-inv-option 
-   (gnc:make-multichoice-option 
-    gnc:pagename-general 
-    optname-date-driver 
-    "k" 
-    (N_ "Leading date.") 
-    'duedate 
-    (list 
+    "hb" (N_ "Display the transaction amount?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-multichoice-option
+    gnc:pagename-general
+    optname-date-driver
+    "k"
+    (N_ "Leading date.")
+    'duedate
+    (list
      (vector 'duedate (N_ "Due Date"))
      (vector 'postdate (N_ "Post Date")))))
 
@@ -616,20 +622,23 @@
 
   gnc:*report-options*)
 
+(define (coowner-options-generator)
+  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-COOWNER #f))
+
 (define (customer-options-generator)
   (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER #f))
 
+(define (employee-options-generator)
+  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEED #t))
+
 (define (vendor-options-generator)
   (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR #t))
-
-(define (employee-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE #t))
 
 (define (setup-query q owner account end-date)
   (let* ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
 
     (qof-query-add-guid-match
-     q 
+     q
      (list SPLIT-TRANS INVOICE-FROM-TXN INVOICE-OWNER
        OWNER-PARENTG)
      guid QOF-QUERY-OR)
@@ -728,10 +737,10 @@
      (orders '())
      (query (qof-query-create-for-splits))
      (account (opt-val owner-page acct-string))
-     (start-date (gnc:time64-start-day-time 
+     (start-date (gnc:time64-start-day-time
       (gnc:date-option-absolute-time
        (opt-val gnc:pagename-general optname-from-date))))
-     (end-date (gnc:time64-end-day-time 
+     (end-date (gnc:time64-end-day-time
                (gnc:date-option-absolute-time
                (opt-val gnc:pagename-general optname-to-date))))
      (book (gnc-get-current-book))
@@ -769,7 +778,7 @@
                    (gnc:html-markup-anchor
                     (gnc:owner-anchor-text owner)
                     (gncOwnerGetName owner))))
-      
+
         (set! table (make-txn-table (gnc:report-options report-obj)
                         query account start-date end-date date-type))
         (gnc:html-table-set-style!
@@ -816,6 +825,9 @@
 (define* (find-first-account-for-owner owner #:key currency)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
+      ((eqv? type GNC-OWNER-COOWNER)
+       (find-first-account ACCT-TYPE-RECEIVABLE #:currency currency))
+
       ((eqv? type GNC-OWNER-CUSTOMER)
        (find-first-account ACCT-TYPE-RECEIVABLE #:currency currency))
 
@@ -825,12 +837,24 @@
       ((eqv? type GNC-OWNER-EMPLOYEE)
        (find-first-account ACCT-TYPE-PAYABLE #:currency currency))
 
+      ((eqv? type GNC-OWNER-OWNER)
+       (find-first-account ACCT-TYPE-PAYABLE #:currency currency))
+
       ((eqv? type GNC-OWNER-JOB)
        (find-first-account-for-owner (gncOwnerGetEndOwner owner)
                                      #:currency currency))
 
       (else
        '()))))
+
+(gnc:define-report
+ 'version 1
+ 'name "Co-Owner Report (legacy)"
+ 'report-guid coowner-report-guid
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator coowner-options-generator
+ 'renderer reg-renderer
+ 'in-menu? (gnc-prefs-is-extra-enabled))
 
 (gnc:define-report
  'version 1
@@ -843,19 +867,18 @@
 
 (gnc:define-report
  'version 1
+ 'name "Employee Report (legacy)"
+ 'report-guid employee-report-guid
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator employee-options-generator
+ 'renderer reg-renderer
+ 'in-menu? (gnc-prefs-is-extra-enabled))
+
+(gnc:define-report
+ 'version 1
  'name "Vendor Report (legacy)"
  'report-guid vendor-report-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator vendor-options-generator
  'renderer reg-renderer
  'in-menu? (gnc-prefs-is-extra-enabled))
-
-(gnc:define-report
- 'version 1
- 'name "Employee Report (legacy)"
- 'report-guid employee-report-guid 
- 'menu-path (list gnc:menuname-business-reports)
- 'options-generator employee-options-generator
- 'renderer reg-renderer
- 'in-menu? (gnc-prefs-is-extra-enabled))
-
