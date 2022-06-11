@@ -5,16 +5,16 @@
 ;; Copyright (c) 2010 Christian Stimming <christian@cstimming.de>
 ;; Copyright (c) 2002, 2003 Derek Atkins <warlord@MIT.EDU>
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -40,7 +40,7 @@
 (define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
 
-;; let's define a name for the report-guid's, much prettier
+;; Define a name that reference to the unique report guid
 (define customer-report-guid "4166a20981985fd2b07ff8cb3b7d384e")
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -495,4 +495,3 @@
  'options-generator options-generator
  'renderer reg-renderer
  'in-menu? #t)
-
