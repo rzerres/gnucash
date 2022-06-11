@@ -215,11 +215,14 @@ gnc_invoice_select_search_set_label(GncISI* isi)
     /* Translators:  See comments in dialog-invoice.c:gnc_invoice_search() */
     switch (owner_type)
     {
-    case GNC_OWNER_VENDOR:
-        label = _("Bill");
+    case GNC_OWNER_COOWNER:
+        label = _("Settlement");
         break;
     case GNC_OWNER_EMPLOYEE:
         label = _("Voucher");
+        break;
+    case GNC_OWNER_VENDOR:
+        label = _("Bill");
         break;
     default:
         label = _("Invoice");

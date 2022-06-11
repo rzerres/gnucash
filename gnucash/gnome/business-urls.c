@@ -87,6 +87,22 @@
 }
 
 static gboolean
+coownerCB (const char *location, const char *label,
+            gboolean new_window, GNCURLResult * result)
+{
+    QofInstance *entity;
+    GncCoOwner *coowner;
+
+    /* href="...:coowner=<guid>" */
+    HANDLE_TYPE ("coowner=", GNC_ID_COOWNER);
+
+    coowner = (GncCoOwner *) entity;
+    gnc_ui_coowner_edit (result->parent, coowner);
+
+    return TRUE;
+}
+
+static gboolean
 customerCB (const char *location, const char *label,
             gboolean new_window, GNCURLResult * result)
 {
@@ -97,21 +113,6 @@ customerCB (const char *location, const char *label,
     HANDLE_TYPE ("customer=", GNC_ID_CUSTOMER);
     customer = (GncCustomer *) entity;
     gnc_ui_customer_edit (result->parent, customer);
-
-    return TRUE;
-}
-
-static gboolean
-vendorCB (const char *location, const char *label,
-          gboolean new_window, GNCURLResult * result)
-{
-    QofInstance *entity;
-    GncVendor *vendor;
-
-    /* href="...:vendor=<guid>" */
-    HANDLE_TYPE ("vendor=", GNC_ID_VENDOR);
-    vendor = (GncVendor *) entity;
-    gnc_ui_vendor_edit (result->parent, vendor);
 
     return TRUE;
 }
@@ -131,6 +132,22 @@ employeeCB (const char *location, const char *label,
 
     return TRUE;
 }
+
+static gboolean
+vendorCB (const char *location, const char *label,
+          gboolean new_window, GNCURLResult * result)
+{
+    QofInstance *entity;
+    GncVendor *vendor;
+
+    /* href="...:vendor=<guid>" */
+    HANDLE_TYPE ("vendor=", GNC_ID_VENDOR);
+    vendor = (GncVendor *) entity;
+    gnc_ui_vendor_edit (result->parent, vendor);
+
+    return TRUE;
+}
+
 
 static gboolean
 invoiceCB (const char *location, const char *label,
@@ -242,6 +259,15 @@ ownerreportCB (const char *location, const char *label,
     memset (&owner, 0, sizeof (owner));
     switch (*ownerptr)
     {
+    case 'o':
+    {
+        GncCoOwner *coowner =
+            gncCoOwnerLookup (gnc_get_current_book (), &guid);
+        DISABLE_REPORT_IF_NULL (coowner);
+        gncOwnerInitCoOwner (&owner, coowner);
+        etype = "CoOwner";
+        break;
+    }
     case 'c':
     {
         GncCustomer *customer =
@@ -249,15 +275,6 @@ ownerreportCB (const char *location, const char *label,
         DISABLE_REPORT_IF_NULL (customer);
         gncOwnerInitCustomer (&owner, customer);
         etype = "Customer";
-        break;
-    }
-    case 'v':
-    {
-        GncVendor *vendor =
-            gncVendorLookup (gnc_get_current_book (), &guid);
-        DISABLE_REPORT_IF_NULL (vendor);
-        gncOwnerInitVendor (&owner, vendor);
-        etype = "Vendor";
         break;
     }
     case 'e':
@@ -276,6 +293,15 @@ ownerreportCB (const char *location, const char *label,
         DISABLE_REPORT_IF_NULL(job);
         gncOwnerInitJob (&owner, job);
         etype = "Job";
+        break;
+    }
+    case 'v':
+    {
+        GncVendor *vendor =
+            gncVendorLookup (gnc_get_current_book (), &guid);
+        DISABLE_REPORT_IF_NULL (vendor);
+        gncOwnerInitVendor (&owner, vendor);
+        etype = "Vendor";
         break;
     }
     default:
