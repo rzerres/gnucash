@@ -85,6 +85,11 @@
 ;; with strings to ease overview and translation
 (define owner-string-alist
   (list
+   (list GNC-OWNER-COOWNER
+         (N_ "Co-Owner")
+         (G_ "No valid co-owner selected.")
+         (G_ "This report requires a co-owner to be selected."))
+
    (list GNC-OWNER-CUSTOMER
          (N_ "Customer")
          (G_ "No valid customer selected.")
@@ -330,7 +335,7 @@
         (rhs (num-cols column-vector 'rhs-cols)))
     (append
      ;; Translators: ~a History refers to main details table in owner
-     ;; report. ~a will be replaced with Customer, Vendor or Employee.
+     ;; report. ~a will be replaced with Co-Owner, Customer, Vendor or Employee.
      (addif (< 0 lhs) (make-heading lhs (format #f (G_ "~a History") owner-desc)) )
      (addif (< 0 mid) (make-heading mid #f))
      (addif (< 0 rhs) (make-heading rhs (G_ "Linked Details"))))))
@@ -1038,9 +1043,12 @@ and do not match the transaction."))))))))
          (owner-descr (owner-string type))
          (date-type (opt-val gnc:pagename-general optname-date-driver))
          (owner (opt-val owner-page owner-descr))
-         (acct-type (if (eqv? (gncOwnerGetType (gncOwnerGetEndOwner owner))
+         (acct-type (cond ((eqv? (gncOwnerGetType (gncOwnerGetEndOwner owner))
+                              GNC-OWNER-COOWNER)
+                           ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE)
+                          ((eqv? (gncOwnerGetType (gncOwnerGetEndOwner owner))
                               GNC-OWNER-CUSTOMER)
-                        ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE))
+                           ACCT-TYPE-RECEIVABLE ACCT-TYPE-PAYABLE)))
          (accounts (filter (lambda (a) (eqv? (xaccAccountGetType a) acct-type))
                            (gnc-account-get-descendants-sorted
                             (gnc-get-current-root-account))))
@@ -1167,21 +1175,35 @@ and do not match the transaction."))))))))
 
     document))
 
+(define (coowner-renderer obj)
+  (reg-renderer obj GNC-OWNER-COOWNER))
+
 (define (customer-renderer obj)
   (reg-renderer obj GNC-OWNER-CUSTOMER))
-
-(define (vendor-renderer  obj)
-  (reg-renderer obj GNC-OWNER-VENDOR))
 
 (define (employee-renderer obj)
   (reg-renderer obj GNC-OWNER-EMPLOYEE))
 
+(define (vendor-renderer  obj)
+  (reg-renderer obj GNC-OWNER-VENDOR))
+
 (define (job-renderer obj)
   (reg-renderer obj GNC-OWNER-JOB))
 
+(define coowner-report-guid "1c3f0d24f0324d498e02434e1f3a7218")
 (define customer-report-guid "c146317be32e4948a561ec7fc89d15c1")
-(define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0")
 (define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44")
+(define job-report-guid "5518ac227e474f47a34439f2d4d049de")
+(define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0")
+
+(gnc:define-report
+ 'version 1
+ 'name (N_ "Co-Owner Report")
+ 'report-guid coowner-report-guid
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator (lambda () (options-generator GNC-OWNER-COOWNER))
+ 'renderer customer-renderer
+ 'in-menu? #t)
 
 (gnc:define-report
  'version 1
@@ -1190,15 +1212,6 @@ and do not match the transaction."))))))))
  'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator GNC-OWNER-CUSTOMER))
  'renderer customer-renderer
- 'in-menu? #t)
-
-(gnc:define-report
- 'version 1
- 'name (N_ "Vendor Report")
- 'report-guid vendor-report-guid
- 'menu-path (list gnc:menuname-business-reports)
- 'options-generator (lambda () (options-generator GNC-OWNER-VENDOR))
- 'renderer vendor-renderer
  'in-menu? #t)
 
 (gnc:define-report
@@ -1213,10 +1226,19 @@ and do not match the transaction."))))))))
 (gnc:define-report
  'version 1
  'name (N_ "Job Report")
- 'report-guid "5518ac227e474f47a34439f2d4d049de"
+ 'report-guid job-report-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator GNC-OWNER-JOB))
  'renderer job-renderer
+ 'in-menu? #t)
+
+(gnc:define-report
+ 'version 1
+ 'name (N_ "Vendor Report")
+ 'report-guid vendor-report-guid
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator (lambda () (options-generator GNC-OWNER-VENDOR))
+ 'renderer vendor-renderer
  'in-menu? #t)
 
 
@@ -1233,9 +1255,10 @@ and do not match the transaction."))))))))
 (define (owner-report-create-with-enddate owner account enddate)
   ;; note account isn't actually used
   (define guid-alist
-    (list (cons GNC-OWNER-CUSTOMER customer-report-guid)
-          (cons GNC-OWNER-VENDOR vendor-report-guid)
-          (cons GNC-OWNER-EMPLOYEE employee-report-guid)))
+    (list (cons GNC-OWNER-COOWNER coowner-report-guid)
+          (cons GNC-OWNER-CUSTOMER customer-report-guid)
+          (cons GNC-OWNER-EMPLOYEE employee-report-guid)
+          (cons GNC-OWNER-VENDOR vendor-report-guid)))
   (and-let* ((type (gncOwnerGetType (gncOwnerGetEndOwner owner)))
              (guid (assv-ref guid-alist type)))
     (owner-report-create-internal guid owner type enddate)))
