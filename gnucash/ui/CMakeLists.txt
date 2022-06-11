@@ -7,6 +7,7 @@ set (ui_SOURCES
       gnc-plugin-business-ui.xml
       gnc-plugin-csv-export-ui.xml
       gnc-plugin-csv-import-ui.xml
+      gnc-plugin-coowner-import-ui.xml
       gnc-plugin-customer-import-ui.xml
       gnc-plugin-file-history-ui.xml
       gnc-plugin-log-replay-ui.xml

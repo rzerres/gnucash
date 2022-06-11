@@ -9,6 +9,18 @@
 
     <placeholder name="AdditionalMenusPlaceholder">
       <menu name="Business" action="BusinessAction">
+        <menu name="CoOwnerMenu" action="CoOwnerMenuAction">
+          <menuitem name="CoOwnerOverviewPage" action="CoOwnerOverviewPageAction"/>
+          <menuitem name="CoOwnerNewCoOwnerOpen" action="CoOwnerNewCoOwnerOpenAction"/>
+          <menuitem name="CoOwnerFindCoOwnerOpen" action="CoOwnerFindCoOwnerOpenAction"/>
+          <menuitem name="CoOwnerNewInvoiceOpen" action="CoOwnerNewInvoiceOpenAction"/>
+          <menuitem name="CoOwnerFindInvoiceOpen" action="CoOwnerFindInvoiceOpenAction"/>
+          <menuitem name="CoOwnerNewJobOpen" action="CoOwnerNewJobOpenAction"/>
+          <menuitem name="CoOwnerFindJobOpen" action="CoOwnerFindJobOpenAction"/>
+          <menuitem name="CoOwnerProcessPayment" action="CoOwnerProcessPaymentAction"/>
+          <menuitem name="InvoicesDueReminderOpen" action="InvoicesDueReminderOpenAction"/>
+        </menu>
+
         <menu name="CustomerMenu" action="CustomerMenuAction">
           <menuitem name="CustomerOverviewPage" action="CustomerOverviewPageAction"/>
           <menuitem name="CustomerNewCustomerOpen" action="CustomerNewCustomerOpenAction"/>
@@ -21,6 +33,15 @@
           <menuitem name="InvoicesDueReminderOpen" action="InvoicesDueReminderOpenAction"/>
         </menu>
 
+        <menu name="EmployeeMenu" action="EmployeeMenuAction">
+          <menuitem name="EmployeeOverviewPage" action="EmployeeOverviewPageAction"/>
+          <menuitem name="EmployeeNewEmployeeOpen" action="EmployeeNewEmployeeOpenAction"/>
+          <menuitem name="EmployeeFindEmployeeOpen" action="EmployeeFindEmployeeOpenAction"/>
+          <menuitem name="EmployeeNewExpenseOpen" action="EmployeeNewExpenseVoucherOpenAction"/>
+          <menuitem name="EmployeeFindExpenseOpen" action="EmployeeFindExpenseVoucherOpenAction"/>
+          <menuitem name="EmployeeProcessPayment" action="EmployeeProcessPaymentAction"/>
+        </menu>
+
         <menu name="VendorMenu" action="VendorMenuAction">
           <menuitem name="VendorOverviewPage" action="VendorOverviewPageAction"/>
           <menuitem name="VendorNewVendorOpen" action="VendorNewVendorOpenAction"/>
@@ -31,15 +52,6 @@
           <menuitem name="VendorFindJobOpen" action="VendorFindJobOpenAction"/>
           <menuitem name="VendorProcessPayment" action="VendorProcessPaymentAction"/>
           <menuitem name="BillsDueReminderOpen" action="BillsDueReminderOpenAction"/>
-        </menu>
-
-        <menu name="EmployeeMenu" action="EmployeeMenuAction">
-          <menuitem name="EmployeeOverviewPage" action="EmployeeOverviewPageAction"/>
-          <menuitem name="EmployeeNewEmployeeOpen" action="EmployeeNewEmployeeOpenAction"/>
-          <menuitem name="EmployeeFindEmployeeOpen" action="EmployeeFindEmployeeOpenAction"/>
-          <menuitem name="EmployeeNewExpenseOpen" action="EmployeeNewExpenseVoucherOpenAction"/>
-          <menuitem name="EmployeeFindExpenseOpen" action="EmployeeFindExpenseVoucherOpenAction"/>
-          <menuitem name="EmployeeProcessPayment" action="EmployeeProcessPaymentAction"/>
         </menu>
 
         <menuitem name="BusinessLinkOpen" action="BusinessLinkedDocsAction"/>
@@ -60,6 +72,8 @@
         <menu name="BusinessTest" action="BusinessTestAction">
           <menuitem name="BusinessTestSearch" action="BusinessTestSearchAction"/>
           <menuitem name="BusinessTestInitData" action="BusinessTestInitDataAction"/>
+          <menuitem name="BusinessTestCoOwnerInitData" action="BusinessTestCoOwnerInitDataAction"/>
+          <menuitem name="BusinessTestCustomerInitData" action="BusinessTestCustomerInitDataAction"/>
         </menu>
       </placeholder>
     </menu>
