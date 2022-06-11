@@ -40,10 +40,11 @@
 (define optname-to-date (N_ "To"))
 (define optname-date-driver (N_ "Due or Post Date"))
 
-;; let's define a name for the report-guid's, much prettier
+;; Define a name that reference to the unique report guid
+(define coowner-report-guid "1c3f0d24f0324d498e02434e1f3a7218-old")
+(define customer-report-guid "c146317be32e4948a561ec7fc89d15c1-old")
 (define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44-old")
 (define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0-old")
-(define customer-report-guid "c146317be32e4948a561ec7fc89d15c1-old")
 
 (define acct-string (N_ "Account"))
 (define owner-page gnc:pagename-general)
@@ -69,31 +70,34 @@
 ;; naming and lookup only, and the display of the option name will be
 ;; translated somewhere else.)
 (define (owner-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
-	((eqv? owner-type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
-	((eqv? owner-type GNC-OWNER-Owner) (N_ "Owner"))
-	;; FALL THROUGH
-	(else
-	  (N_ "Company"))))
+  (cond ((eqv? owner-type GNC-OWNER-COOWNER) (N_ "Co-Owner"))
+        ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
+        ((eqv? owner-type GNC-OWNER-Owner) (N_ "Owner"))
+        ;; FALL THROUGH
+        (else
+          (N_ "Company"))))
 
 ;; Error strings in case there is no (valid) selection (translated)
 (define (invalid-selection-title-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "No valid customer selected."))
-	((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "No valid employee selected."))
-	;; FALL THROUGH
-	(else
-	  (G_ "No valid company selected."))))
+(cond ((eqv? owner-type GNC-OWNER-COOWNER) (G_ "No valid co-owner selected."))
+        ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "No valid customer selected."))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "No valid employee selected."))
+        ;; FALL THROUGH
+        (else
+          (G_ "No valid company selected."))))
 
 (define (invalid-selection-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "This report requires a customer to be selected."))
-	((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "This report requires a employee to be selected."))
-	;; FALL THROUGH
-	(else
-	  (G_ "This report requires a company to be selected."))))
+(cond ((eqv? owner-type GNC-OWNER-COOWNER) (G_ "This report requires a co-owner to be selected."))
+        ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "This report requires a customer to be selected."))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "This report requires a employee to be selected."))
+        ;; FALL THROUGH
+        (else
+          (G_ "This report requires a company to be selected."))))
 
 ;; Html formatted error message documents
 (define (gnc:html-make-no-owner-warning
-	 report-title-string report-id)
+         report-title-string report-id)
   (gnc:html-make-generic-warning
     report-title-string
     report-id
@@ -101,7 +105,7 @@
     invalid-selection-string))
 
 (define (gnc:html-make-no-valid-account-warning
-	 report-title-string report-id)
+         report-title-string report-id)
   (gnc:html-make-generic-warning
     report-title-string
     report-id
@@ -111,12 +115,12 @@
 
 ;; Document names, used in report names (translated)
 (define (doctype-str owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "Customer"))
-	((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "Employee"))
-	((eqv? owner-type GNC-OWNER-OWNER) (G_ "Owner"))
-	;; FALL THROUGH
-	(else
-	  (G_ "Vendor"))))
+  (cond ((eqv? owner-type GNC-OWNER-COOWNER) (G_ "Co-Owner"))
+        ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "Customer"))
+        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "Employee"))
+        ;; FALL THROUGH
+        (else
+          (G_ "Vendor"))))
 
 (define (date-col columns-used)
   (vector-ref columns-used 0))
@@ -148,14 +152,14 @@
   (define (make-set-col col-vector)
     (let ((col 0))
       (lambda (used? index)
-	(if used?
-	    (begin
-	      (vector-set! col-vector index col)
-	      (set! col (+ col 1)))
-	    (vector-set! col-vector index #f)))))
+        (if used?
+            (begin
+              (vector-set! col-vector index col)
+              (set! col (+ col 1)))
+            (vector-set! col-vector index #f)))))
 
   (let* ((col-vector (make-vector columns-used-size #f))
-	 (set-col (make-set-col col-vector)))
+         (set-col (make-set-col col-vector)))
     (set-col (opt-val "Display Columns" date-header) 0)
     (set-col (opt-val "Display Columns" due-date-header) 1)
     (set-col (opt-val "Display Columns" reference-header) 2)
@@ -171,11 +175,11 @@
 (define (make-heading-list column-vector)
   (let ((heading-list '()))
     (if (date-col column-vector)
-	(addto! heading-list (G_ date-header)))
+        (addto! heading-list (G_ date-header)))
     (if (date-due-col column-vector)
-	(addto! heading-list (G_ due-date-header)))
+        (addto! heading-list (G_ due-date-header)))
     (if (num-col column-vector)
-	(addto! heading-list (G_ reference-header)))
+        (addto! heading-list (G_ reference-header)))
     (if (type-col column-vector)
     (addto! heading-list (G_ type-header)))
     (if (memo-col column-vector)
@@ -222,16 +226,16 @@
      (define (find-bucket current-bucket bucket-intervals date)
       (begin
        (if (>= current-bucket (vector-length bucket-intervals))
-	(gnc:error "sanity check failed in find-bucket")
-	(if (in-interval date (vector-ref bucket-intervals current-bucket))
-	current-bucket
-	(find-bucket (+ current-bucket 1) bucket-intervals date)))))
+        (gnc:error "sanity check failed in find-bucket")
+        (if (in-interval date (vector-ref bucket-intervals current-bucket))
+        current-bucket
+        (find-bucket (+ current-bucket 1) bucket-intervals date)))))
 
      (define (apply-invoice date value)
       (let* ((bucket-index (find-bucket 0 bucket-intervals date))
-	 (new-value (gnc-numeric-add-fixed
-	     value
-	     (vector-ref buckets bucket-index))))
+         (new-value (gnc-numeric-add-fixed
+             value
+             (vector-ref buckets bucket-index))))
        (vector-set! buckets bucket-index new-value)))
 
     (define (apply-payment value)
@@ -240,26 +244,26 @@
     (for-each
      (lambda (lot)
        (let* ((bal (gnc-lot-get-balance lot))
-	  (invoice (gncInvoiceGetInvoiceFromLot lot))
-	      (date (if (eq? date-type 'postdate)
-	       (gncInvoiceGetDatePosted invoice)
-	       (gncInvoiceGetDateDue invoice)))
-	      )
+          (invoice (gncInvoiceGetInvoiceFromLot lot))
+              (date (if (eq? date-type 'postdate)
+               (gncInvoiceGetDatePosted invoice)
+               (gncInvoiceGetDateDue invoice)))
+              )
 
      (if (not (gnc-numeric-zero-p bal))
-	 (begin
-	   (if reverse?
-	   (set! bal (gnc-numeric-neg bal)))
-	   (if (not (null? invoice))
-	   (begin
-	     (apply-invoice date bal))
-	   (apply-payment bal))))))
+         (begin
+           (if reverse?
+           (set! bal (gnc-numeric-neg bal)))
+           (if (not (null? invoice))
+           (begin
+             (apply-invoice date bal))
+           (apply-payment bal))))))
      lots)
 
     (gnc:html-table-set-col-headers!
      table
      (list (G_ "Current")
-	   (G_ "0-30 days")
+           (G_ "0-30 days")
        (G_ "31-60 days")
        (G_ "61-90 days")
        (G_ "91+ days")))
@@ -267,8 +271,8 @@
     (gnc:html-table-append-row!
      table
      (reverse (map (lambda (entry)
-	     (gnc:make-gnc-monetary currency entry))
-	   (vector->list buckets))))
+             (gnc:make-gnc-monetary currency entry))
+           (vector->list buckets))))
 
     table))
 
@@ -278,33 +282,33 @@
 (define (make-row column-vector date due-date num type-str memo monetary credit debit sale tax)
   (let ((row-contents '()))
     (if (date-col column-vector)
-	(addto! row-contents (qof-print-date date)))
+        (addto! row-contents (qof-print-date date)))
     (if (date-due-col column-vector)
-	(addto! row-contents
-	 (if due-date
-	     (qof-print-date due-date)
-	     "")))
+        (addto! row-contents
+         (if due-date
+             (qof-print-date due-date)
+             "")))
     (if (num-col column-vector)
-	(addto! row-contents (gnc:html-string-sanitize num)))
+        (addto! row-contents (gnc:html-string-sanitize num)))
     (if (type-col column-vector)
-	(addto! row-contents type-str))
+        (addto! row-contents type-str))
     (if (memo-col column-vector)
-	(addto! row-contents (gnc:html-string-sanitize memo)))
+        (addto! row-contents (gnc:html-string-sanitize memo)))
     (if (sale-col column-vector)
-	(addto! row-contents
-	 (gnc:make-html-table-cell/markup "number-cell" sale)))
+        (addto! row-contents
+         (gnc:make-html-table-cell/markup "number-cell" sale)))
     (if (tax-col column-vector)
-	(addto! row-contents
-	 (gnc:make-html-table-cell/markup "number-cell" tax)))
+        (addto! row-contents
+         (gnc:make-html-table-cell/markup "number-cell" tax)))
     (if (credit-col column-vector)
-	(addto! row-contents
-	 (gnc:make-html-table-cell/markup "number-cell" credit)))
+        (addto! row-contents
+         (gnc:make-html-table-cell/markup "number-cell" credit)))
     (if (debit-col column-vector)
-	(addto! row-contents
-	 (gnc:make-html-table-cell/markup "number-cell" debit)))
+        (addto! row-contents
+         (gnc:make-html-table-cell/markup "number-cell" debit)))
     (if (value-col column-vector)
-	(addto! row-contents
-	 (gnc:make-html-table-cell/markup "number-cell" monetary)))
+        (addto! row-contents
+         (gnc:make-html-table-cell/markup "number-cell" monetary)))
     row-contents))
 
 ;;
@@ -318,13 +322,13 @@
       (begin
     (set! printed? #t)
     (if (and (value-col column-vector) (not (gnc-numeric-zero-p total)))
-	(let ((row (make-row column-vector start-date #f "" (G_ "Balance") ""
-		 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total) "" "" "" ""))
-	  (row-style (if odd-row? "normal-row" "alternate-row")))
-	  (gnc:html-table-append-row/markup! table row-style (reverse row))
-	  (set! odd-row? (not odd-row?))
-	  (set! row-style (if odd-row? "normal-row" "alternate-row")))
-	)))
+        (let ((row (make-row column-vector start-date #f "" (G_ "Balance") ""
+                 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total) "" "" "" ""))
+          (row-style (if odd-row? "normal-row" "alternate-row")))
+          (gnc:html-table-append-row/markup! table row-style (reverse row))
+          (set! odd-row? (not odd-row?))
+          (set! row-style (if odd-row? "normal-row" "alternate-row")))
+        )))
     printed?)
 
 ;;
@@ -334,7 +338,7 @@
 ;; Return a list of (printed? value odd-row?)
 ;;
 (define (add-txn-row table txn acc column-vector odd-row? printed?
-	     reverse? start-date total)
+             reverse? start-date total)
   (let* ((type (xaccTransGetTxnType txn))
      (date (xaccTransGetDate txn))
      (due-date #f)
@@ -347,16 +351,16 @@
      (type-str
       (cond
        ((equal? type TXN-TYPE-INVOICE)
-	(if (not (null? invoice))
-	(gnc:make-html-text
-	 (gnc:html-markup-anchor
-	  (gnc:invoice-anchor-text invoice)
-	  (gncInvoiceGetTypeString invoice)))
-	(G_ "Unknown")))
+        (if (not (null? invoice))
+        (gnc:make-html-text
+         (gnc:html-markup-anchor
+          (gnc:invoice-anchor-text invoice)
+          (gncInvoiceGetTypeString invoice)))
+        (G_ "Unknown")))
        ((equal? type TXN-TYPE-PAYMENT)
-	(gnc:make-html-text
-	 (gnc:html-markup-anchor
-	  (gnc:split-anchor-text split) (G_ "Payment"))))
+        (gnc:make-html-text
+         (gnc:html-markup-anchor
+          (gnc:split-anchor-text split) (G_ "Payment"))))
        (else (G_ "Unknown"))))
      )
 
@@ -371,33 +375,33 @@
 
       ; Now print out the invoice row
       (if (not (null? invoice))
-	(begin
-	  (set! due-date (and (gncInvoiceIsPosted invoice)
-			      (gncInvoiceGetDateDue invoice)))
-	  (set! sale (gncInvoiceGetTotalSubtotal invoice))
-	  (set! tax (gncInvoiceGetTotalTax invoice))))
+        (begin
+          (set! due-date (and (gncInvoiceIsPosted invoice)
+                              (gncInvoiceGetDateDue invoice)))
+          (set! sale (gncInvoiceGetTotalSubtotal invoice))
+          (set! tax (gncInvoiceGetTotalTax invoice))))
 
       (if (gncInvoiceGetIsCreditNote invoice)
-	(begin
-	  (set! tax (gnc-numeric-neg tax))
-	  (set! sale (gnc-numeric-neg sale))))
+        (begin
+          (set! tax (gnc-numeric-neg tax))
+          (set! sale (gnc-numeric-neg sale))))
 
       (let ((row (make-row column-vector date due-date (gnc-get-num-action txn split)
-		   type-str (xaccSplitGetMemo split)
-		   (gnc:make-gnc-monetary currency value)
-	   (if (not (gnc-numeric-negative-p value))
-	       (gnc:make-gnc-monetary currency value) "")
-	   (if (gnc-numeric-negative-p value)
-	       (gnc:make-gnc-monetary currency value) "")
-	   (if (not (null? invoice))
-	       (gnc:make-gnc-monetary currency sale) "")
-	   (if (not (null? invoice))
-	       (gnc:make-gnc-monetary currency tax) "")
-	))
-	(row-style (if odd-row? "normal-row" "alternate-row")))
+                   type-str (xaccSplitGetMemo split)
+                   (gnc:make-gnc-monetary currency value)
+           (if (not (gnc-numeric-negative-p value))
+               (gnc:make-gnc-monetary currency value) "")
+           (if (gnc-numeric-negative-p value)
+               (gnc:make-gnc-monetary currency value) "")
+           (if (not (null? invoice))
+               (gnc:make-gnc-monetary currency sale) "")
+           (if (not (null? invoice))
+               (gnc:make-gnc-monetary currency tax) "")
+        ))
+        (row-style (if odd-row? "normal-row" "alternate-row")))
 
-	(gnc:html-table-append-row/markup! table row-style
-			   (reverse row)))
+        (gnc:html-table-append-row/markup! table row-style
+                           (reverse row)))
 
       (set! odd-row? (not odd-row?))
       ))
@@ -418,7 +422,7 @@
     (currency (xaccAccountGetCommodity acc))
     (table (gnc:make-html-table))
     (reverse? (gnc:option-value (gnc:lookup-option options "__reg"
-			      "reverse?"))))
+                              "reverse?"))))
 
     (gnc:html-table-set-col-headers!
      table
@@ -433,62 +437,62 @@
        (lambda (txn)
      (let ((type (xaccTransGetTxnType txn)))
        (if
-	(or (equal? type TXN-TYPE-INVOICE)
-	(equal? type TXN-TYPE-PAYMENT))
-	(let ((result (add-txn-row table txn acc used-columns odd-row? printed?
-		       reverse? start-date total)))
+        (or (equal? type TXN-TYPE-INVOICE)
+        (equal? type TXN-TYPE-PAYMENT))
+        (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
+                       reverse? start-date total)))
 
-	  (set! printed? (car result))
-	  (if (and printed? total)
-	    (begin
-	      (set! sale (gnc-numeric-add-fixed sale (cadddr result)))
-	      (set! tax (gnc-numeric-add-fixed tax (car (cddddr result))))
-	      (if (gnc-numeric-negative-p (cadr result))
-		(set! debit (gnc-numeric-add-fixed debit (cadr result)))
-		(set! credit (gnc-numeric-add-fixed credit (cadr result))))))
-	  (set! total (gnc-numeric-add-fixed total (cadr result)))
-	  (set! odd-row? (caddr result))
-	  ))))
+          (set! printed? (car result))
+          (if (and printed? total)
+            (begin
+              (set! sale (gnc-numeric-add-fixed sale (cadddr result)))
+              (set! tax (gnc-numeric-add-fixed tax (car (cddddr result))))
+              (if (gnc-numeric-negative-p (cadr result))
+                (set! debit (gnc-numeric-add-fixed debit (cadr result)))
+                (set! credit (gnc-numeric-add-fixed credit (cadr result))))))
+          (set! total (gnc-numeric-add-fixed total (cadr result)))
+          (set! odd-row? (caddr result))
+          ))))
        txns)
       ;Balance row may not have been added if all transactions were before
       ;start-date (and no other rows would be added either) so add it now
       (if (not (null? txns))
       (add-balance-row table used-columns (car txns) odd-row? printed? start-date total)
-	))
+        ))
 
     (if (or (sale-col used-columns) (tax-col used-columns) (credit-col used-columns) (debit-col used-columns))
     (gnc:html-table-append-row/markup!
      table
      "grand-total"
      (append (cons (gnc:make-html-table-cell/markup
-	    "total-label-cell"
-	    (G_ "Period Totals"))
-	   '())
+            "total-label-cell"
+            (G_ "Period Totals"))
+           '())
 
      (let ((row-contents '())
-	 (pre-span 0))
+         (pre-span 0))
 
       ; HTML gets generated in reverse order
       (if (value-col used-columns) (addto! row-contents
-	  (gnc:make-html-table-cell/size/markup
-	  1 1 "total-number-cell"
-	  (gnc:make-gnc-monetary currency (gnc-numeric-add-fixed credit debit)))))
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency (gnc-numeric-add-fixed credit debit)))))
       (if (debit-col used-columns) (addto! row-contents
-	  (gnc:make-html-table-cell/size/markup
-	  1 1 "total-number-cell"
-	  (gnc:make-gnc-monetary currency debit))))
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency debit))))
       (if (credit-col used-columns) (addto! row-contents
-	  (gnc:make-html-table-cell/size/markup
-	  1 1 "total-number-cell"
-	  (gnc:make-gnc-monetary currency credit))))
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency credit))))
       (if (tax-col used-columns) (addto! row-contents
-	  (gnc:make-html-table-cell/size/markup
-	  1 1 "total-number-cell"
-	  (gnc:make-gnc-monetary currency tax))))
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency tax))))
       (if (sale-col used-columns) (addto! row-contents
-	  (gnc:make-html-table-cell/size/markup
-	  1 1 "total-number-cell"
-	  (gnc:make-gnc-monetary currency sale))))
+          (gnc:make-html-table-cell/size/markup
+          1 1 "total-number-cell"
+          (gnc:make-gnc-monetary currency sale))))
       (if (memo-col used-columns) (set! pre-span (+ pre-span 1)))
       (if (type-col used-columns) (set! pre-span (+ pre-span 1)))
       (if (num-col used-columns) (set! pre-span (+ pre-span 1)))
@@ -502,23 +506,23 @@
      table
      "grand-total"
      (append (cons (gnc:make-html-table-cell/markup
-	    "total-label-cell"
-	    (if (gnc-numeric-negative-p total)
-	    (G_ "Total Credit")
-	    (G_ "Total Due")))
-	   '())
-	 (list (gnc:make-html-table-cell/size/markup
-	    1 (value-col used-columns)
-	    "total-number-cell"
-	    (gnc:make-gnc-monetary currency total))))))
+            "total-label-cell"
+            (if (gnc-numeric-negative-p total)
+            (G_ "Total Credit")
+            (G_ "Total Due")))
+           '())
+         (list (gnc:make-html-table-cell/size/markup
+            1 (value-col used-columns)
+            "total-number-cell"
+            (gnc:make-gnc-monetary currency total))))))
 
     (let* ((interval-vec (list->vector (make-extended-interval-list end-date))))
       (gnc:html-table-append-row/markup!
        table
        "grand-total"
        (list (gnc:make-html-table-cell/size
-	  1 columns-used-size
-	  (make-aging-table options query interval-vec reverse? date-type currency)))))
+          1 columns-used-size
+          (make-aging-table options query interval-vec reverse? date-type currency)))))
 
     table))
 
@@ -534,16 +538,16 @@
 
   (gnc:register-inv-option
    (gnc:make-owner-option owner-page (owner-string owner-type) "v"
-	      (N_ "The company for this report.")
-	      (lambda () '()) #f owner-type))
+              (N_ "The company for this report.")
+              (lambda () '()) #f owner-type))
 
   (gnc:register-inv-option
    (gnc:make-internal-option "__reg" "owner-type" owner-type))
 
   (gnc:register-inv-option
    (gnc:make-account-sel-limited-option owner-page acct-string "w"
-		    (N_ "The account to search for transactions.")
-		    #f #f acct-type-list))
+                    (N_ "The account to search for transactions.")
+                    #f #f acct-type-list))
 
   (gnc:options-add-date-interval!
    gnc:*report-options* gnc:pagename-general
@@ -618,14 +622,17 @@
 
   gnc:*report-options*)
 
+(define (coowner-options-generator)
+  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-COOWNER #f))
+
 (define (customer-options-generator)
   (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER #f))
 
+(define (employee-options-generator)
+  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEED #t))
+
 (define (vendor-options-generator)
   (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR #t))
-
-(define (employee-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE #t))
 
 (define (setup-query q owner account end-date)
   (let* ((guid (gncOwnerReturnGUID (gncOwnerGetEndOwner owner))))
@@ -734,8 +741,8 @@
       (gnc:date-option-absolute-time
        (opt-val gnc:pagename-general optname-from-date))))
      (end-date (gnc:time64-end-day-time
-	       (gnc:date-option-absolute-time
-	       (opt-val gnc:pagename-general optname-to-date))))
+               (gnc:date-option-absolute-time
+               (opt-val gnc:pagename-general optname-to-date))))
      (book (gnc-get-current-book))
      (date-format (gnc:options-fancy-date book))
      (type (opt-val "__reg" "owner-type"))
@@ -754,70 +761,73 @@
       (set! report-title (string-append report-title ": " (gncOwnerGetName owner)))
       (if (null? account)
        (gnc:html-document-add-object!
-	document
-	(gnc:html-make-no-valid-account-warning
-	 report-title (gnc:report-id report-obj)))
+        document
+        (gnc:html-make-no-valid-account-warning
+         report-title (gnc:report-id report-obj)))
 
       ;; else....
        (begin
-	(setup-query query owner account end-date)
-	(gnc:html-document-set-title! document report-title)
+        (setup-query query owner account end-date)
+        (gnc:html-document-set-title! document report-title)
 
-	(gnc:html-document-set-headline!
-	 document (gnc:html-markup
-		   "span"
-		   (doctype-str type)
-		   " " (G_ "Report:") " "
-		   (gnc:html-markup-anchor
-		    (gnc:owner-anchor-text owner)
-		    (gncOwnerGetName owner))))
+        (gnc:html-document-set-headline!
+         document (gnc:html-markup
+                   "span"
+                   (doctype-str type)
+                   " " (G_ "Report:") " "
+                   (gnc:html-markup-anchor
+                    (gnc:owner-anchor-text owner)
+                    (gncOwnerGetName owner))))
 
-	(set! table (make-txn-table (gnc:report-options report-obj)
-			query account start-date end-date date-type))
-	(gnc:html-table-set-style!
-	 table "table"
-	 'attribute (list "border" 1)
-	 'attribute (list "cellspacing" 0)
-	 'attribute (list "cellpadding" 4))
+        (set! table (make-txn-table (gnc:report-options report-obj)
+                        query account start-date end-date date-type))
+        (gnc:html-table-set-style!
+         table "table"
+         'attribute (list "border" 1)
+         'attribute (list "cellspacing" 0)
+         'attribute (list "cellpadding" 4))
 
-	(gnc:html-document-add-object!
-	 document
-	 (make-myname-table book date-format))
+        (gnc:html-document-add-object!
+         document
+         (make-myname-table book date-format))
 
-	(gnc:html-document-add-object!
-	 document
-	 (make-owner-table owner))
+        (gnc:html-document-add-object!
+         document
+         (make-owner-table owner))
 
-	(make-break! document)
+        (make-break! document)
 
-	(gnc:html-document-add-object!
-	 document
-	 (gnc:make-html-text
-	  (string-append
-	   (G_ "Date Range")
-	   ": "
-	   (qof-print-date start-date)
-	   " - "
-	   (qof-print-date end-date))))
+        (gnc:html-document-add-object!
+         document
+         (gnc:make-html-text
+          (string-append
+           (G_ "Date Range")
+           ": "
+           (qof-print-date start-date)
+           " - "
+           (qof-print-date end-date))))
 
-	(make-break! document)
+        (make-break! document)
 
-	(gnc:html-document-add-object! document table)
-	(qof-query-destroy query)))))
+        (gnc:html-document-add-object! document table)
+        (qof-query-destroy query)))))
    document))
 
 (define* (find-first-account type #:key currency)
   (or (find
        (lambda (acc)
-	 (and (eqv? type (xaccAccountGetType acc))
-	      (or (not currency)
-		  (gnc-commodity-equiv currency (xaccAccountGetCommodity acc)))))
+         (and (eqv? type (xaccAccountGetType acc))
+              (or (not currency)
+                  (gnc-commodity-equiv currency (xaccAccountGetCommodity acc)))))
        (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
       '()))
 
 (define* (find-first-account-for-owner owner #:key currency)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
+      ((eqv? type GNC-OWNER-COOWNER)
+       (find-first-account ACCT-TYPE-RECEIVABLE #:currency currency))
+
       ((eqv? type GNC-OWNER-CUSTOMER)
        (find-first-account ACCT-TYPE-RECEIVABLE #:currency currency))
 
@@ -832,10 +842,19 @@
 
       ((eqv? type GNC-OWNER-JOB)
        (find-first-account-for-owner (gncOwnerGetEndOwner owner)
-				     #:currency currency))
+                                     #:currency currency))
 
       (else
        '()))))
+
+(gnc:define-report
+ 'version 1
+ 'name "Co-Owner Report (legacy)"
+ 'report-guid coowner-report-guid
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator coowner-options-generator
+ 'renderer reg-renderer
+ 'in-menu? (gnc-prefs-is-extra-enabled))
 
 (gnc:define-report
  'version 1
@@ -843,15 +862,6 @@
  'report-guid customer-report-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator customer-options-generator
- 'renderer reg-renderer
- 'in-menu? (gnc-prefs-is-extra-enabled))
-
-(gnc:define-report
- 'version 1
- 'name "Vendor Report (legacy)"
- 'report-guid vendor-report-guid
- 'menu-path (list gnc:menuname-business-reports)
- 'options-generator vendor-options-generator
  'renderer reg-renderer
  'in-menu? (gnc-prefs-is-extra-enabled))
 
@@ -866,9 +876,9 @@
 
 (gnc:define-report
  'version 1
- 'name "Owner Report (legacy)"
- 'report-guid owner-report-guid
+ 'name "Vendor Report (legacy)"
+ 'report-guid vendor-report-guid
  'menu-path (list gnc:menuname-business-reports)
- 'options-generator owner-options-generator
+ 'options-generator vendor-options-generator
  'renderer reg-renderer
  'in-menu? (gnc-prefs-is-extra-enabled))
