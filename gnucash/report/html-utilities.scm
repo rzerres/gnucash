@@ -1,19 +1,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; html-utilities.scm: Useful functions when using the HTML generator.
-;; 
+;;
 ;; Modified slightly by David Montenegro 2004.06.18.
-;; 
+;;
 ;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -51,6 +51,7 @@
 (export gnc:html-transaction-doclink-anchor)
 (export gnc:html-invoice-doclink-anchor)
 (export gnc:html-price-anchor)
+(export gnc:coowner-anchor-text)
 (export gnc:customer-anchor-text)
 (export gnc:job-anchor-text)
 (export gnc:vendor-anchor-text)
@@ -72,7 +73,7 @@
 (export gnc:html-js-include)
 (export gnc:html-css-include)
 
-;; returns a list with n #f (empty cell) values 
+;; returns a list with n #f (empty cell) values
 (define (gnc:html-make-empty-cell) #f)
 (define (gnc:html-make-empty-cells n)
   (if (> n 0)
@@ -99,16 +100,19 @@
 
 (define (gnc:report-anchor-text report-id)
   (gnc-build-url URL-TYPE-REPORT
-		      (string-append "id=" (number->string report-id))
-		      ""))
+                      (string-append "id=" (number->string report-id))
+                      ""))
 
 (define (gnc:price-anchor-text price)
   (gnc-build-url URL-TYPE-PRICE
-		      (string-append "price-guid=" (gncPriceGetGUID price))
-		      ""))
+                      (string-append "price-guid=" (gncPriceGetGUID price))
+                      ""))
 
 (define (guid-ref idstr type guid)
   (gnc-build-url type (string-append idstr guid) ""))
+
+(define (gnc:coowner-anchor-text coowner)
+  (guid-ref "coowner=" URL-TYPE-COOWNER (gncCoOwnerReturnGUID coowner)))
 
 (define (gnc:customer-anchor-text customer)
   (guid-ref "customer=" URL-TYPE-CUSTOMER (gncCustomerReturnGUID customer)))
@@ -116,26 +120,29 @@
 (define (gnc:job-anchor-text job)
   (guid-ref "job=" URL-TYPE-JOB (gncJobReturnGUID job)))
 
-(define (gnc:vendor-anchor-text vendor)
-  (guid-ref "vendor=" URL-TYPE-VENDOR (gncVendorReturnGUID vendor)))
-
 (define (gnc:employee-anchor-text employee)
   (guid-ref "employee=" URL-TYPE-EMPLOYEE (gncEmployeeReturnGUID employee)))
 
 (define (gnc:invoice-anchor-text invoice)
   (guid-ref "invoice=" URL-TYPE-INVOICE (gncInvoiceReturnGUID invoice)))
 
+(define (gnc:vendor-anchor-text vendor)
+  (guid-ref "vendor=" URL-TYPE-VENDOR (gncVendorReturnGUID vendor)))
+
 (define (gnc:owner-anchor-text owner)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
+      ((eqv? type GNC-OWNER-COOWNER)
+       (gnc:coowner-anchor-text (gncOwnerGetCoOwner owner)))
+
       ((eqv? type GNC-OWNER-CUSTOMER)
        (gnc:customer-anchor-text (gncOwnerGetCustomer owner)))
 
-      ((eqv? type GNC-OWNER-VENDOR)
-       (gnc:vendor-anchor-text (gncOwnerGetVendor owner)))
-
       ((eqv? type GNC-OWNER-EMPLOYEE)
        (gnc:employee-anchor-text (gncOwnerGetEmployee owner)))
+
+      ((eqv? type GNC-OWNER-VENDOR)
+       (gnc:vendor-anchor-text (gncOwnerGetVendor owner)))
 
       ((eqv? type GNC-OWNER-JOB)
        (gnc:job-anchor-text (gncOwnerGetJob owner)))
@@ -149,9 +156,10 @@
     (gnc-build-url
      URL-TYPE-OWNERREPORT
      (string-append
-      (cond ((eqv? type GNC-OWNER-CUSTOMER) "owner=c:")
-            ((eqv? type GNC-OWNER-VENDOR) "owner=v:")
+      (cond ((eqv? type GNC-OWNER-COOWNER) "owner=o:")
+            ((eqv? type GNC-OWNER-CUSTOMER) "owner=c:")
             ((eqv? type GNC-OWNER-EMPLOYEE) "owner=e:")
+            ((eqv? type GNC-OWNER-VENDOR) "owner=v:")
             (else "unknown-type="))
       (gncOwnerReturnGUID end-owner)
       (if date (format #f "&enddate=~a" date) "")
@@ -164,23 +172,23 @@
 ;; according to 'optionlist'. Each element of optionlist is a list of
 ;; section, name, and value of the function.
 (define (gnc:make-report-anchor reportname src-report
-				optionlist)
+                                optionlist)
   (let ((src-options (gnc:report-options src-report))
-	(options (gnc:make-report-options reportname)))
+        (options (gnc:make-report-options reportname)))
     (if options
-	(begin
-	  (gnc:options-copy-values src-options options)
-	  (for-each
-	   (lambda (l)
-	     (let ((o (gnc:lookup-option options (car l) (cadr l))))
-	       (if o
-		   (gnc:option-set-value o (caddr l))
-		   (warn "gnc:make-report-anchor:" reportname
-			 " No such option: " (car l) (cadr l)))))
-	   optionlist)
-	  (let ((id (gnc:make-report reportname options)))
-	    (gnc:report-anchor-text id)))
-	(warn "gnc:make-report-anchor: No such report: " reportname))))
+        (begin
+          (gnc:options-copy-values src-options options)
+          (for-each
+           (lambda (l)
+             (let ((o (gnc:lookup-option options (car l) (cadr l))))
+               (if o
+                   (gnc:option-set-value o (caddr l))
+                   (warn "gnc:make-report-anchor:" reportname
+                         " No such option: " (car l) (cadr l)))))
+           optionlist)
+          (let ((id (gnc:make-report reportname options)))
+            (gnc:report-anchor-text id)))
+        (warn "gnc:make-report-anchor: No such report: " reportname))))
 
 
 ;; returns the account name as html-text and anchor to the register.
@@ -217,9 +225,9 @@
   (gnc:make-html-text (if price
                           (gnc:html-markup-anchor
                            (gnc:price-anchor-text price)
-			   (if value
-			       value
-			       (gnc-price-get-value price)))
+                           (if value
+                               value
+                               (gnc-price-get-value price)))
                           value)))
 
 (define (gnc:assign-colors num-colors)
@@ -430,6 +438,3 @@
   (format #f
           "<link rel=\"stylesheet\" type=\"text/css\" href=~s />\n"
           (make-uri (gnc-resolve-file-path file))))
-
-
-
