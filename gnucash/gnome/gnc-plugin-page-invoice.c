@@ -26,26 +26,27 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "gnc-plugin.h"
 #include "business-gnome-utils.h"
-#include "dialog-invoice.h"
-#include "gnc-ledger-display.h"
-#include "gnc-plugin-page-invoice.h"
-
-#include "dialog-account.h"
+#include "gncInvoice.h"
 #include "gnc-component-manager.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
-#include "gnucash-register.h"
+#include "gnc-ledger-display.h"
+#include "gnc-plugin.h"
+#include "gnc-plugin-page-invoice.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "gnc-uri-utils.h"
 #include "gnc-window.h"
-#include "dialog-utils.h"
+
+#include "dialog-account.h"
+#include "dialog-invoice.h"
 #include "dialog-doclink.h"
 #include "dialog-doclink-utils.h"
-#include "gncInvoice.h"
+#include "dialog-utils.h"
+
+#include "gnucash-register.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -291,27 +292,7 @@ static const gchar *can_unpost_actions[] =
     NULL
 };
 
-static action_toolbar_labels invoice_action_labels[] =
-{
-    {"FilePrintAction", N_("_Print Invoice")},
-    {"EditEditInvoiceAction", N_("_Edit Invoice")},
-    {"EditDuplicateInvoiceAction", N_("_Duplicate Invoice")},
-    {"EditPostInvoiceAction", N_("_Post Invoice")},
-    {"EditUnpostInvoiceAction", N_("_Unpost Invoice")},
-    {"BusinessNewInvoiceAction", N_("New _Invoice")},
-    {"ToolsProcessPaymentAction", N_("_Pay Invoice")},
-    {"BusinessLinkAction", N_("_Manage Document Link...")},
-    {"BusinessLinkOpenAction", N_("_Open Linked Document")},
-    {NULL, NULL},
-};
-
-static action_toolbar_labels invoice_action_layout_labels[] =
-{
-    {"ViewSaveLayoutAction", N_("_Use as Default Layout for Customer Documents")},
-    {"ViewResetLayoutAction", N_("_Reset Default Layout for Customer Documents")},
-    {NULL, NULL},
-};
-
+/* Bill actions */
 static action_toolbar_labels bill_action_labels[] =
 {
     {"FilePrintAction", N_("_Print Bill")},
@@ -333,6 +314,101 @@ static action_toolbar_labels bill_action_layout_labels[] =
     {NULL, NULL},
 };
 
+static action_toolbar_labels bill_action_layout_tooltips[] = {
+    {"ViewSaveLayoutAction", N_("Use the current layout as default for all vendor bills and credit notes")},
+    {"ViewResetLayoutAction", N_("Reset default layout for all vendor bills and credit notes back to built-in defaults and update the current page accordingly")},
+    {NULL, NULL},
+};
+
+static action_toolbar_labels bill_action_tooltips[] = {
+    {"FilePrintAction", N_("Make a printable bill")},
+    {"EditEditInvoiceAction", N_("Edit this bill")},
+    {"EditDuplicateInvoiceAction", N_("Create a new bill as a duplicate of the current one")},
+    {"EditPostInvoiceAction", N_("Post this bill to your Chart of Accounts")},
+    {"EditUnpostInvoiceAction", N_("Unpost this bill and make it editable")},
+    {"BusinessNewInvoiceAction", N_("Create a new bill for the same owner as the current one")},
+    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the bill")},
+    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this bill") },
+    {"ReportsCompanyReportAction", N_("Open a vendor report window for the owner of this bill") },
+    {"BusinessLinkAction", N_("Manage Document Link")},
+    {"BusinessLinkOpenAction", N_("Open Linked Document")},
+    {NULL, NULL},
+};
+
+/* Creditnote actions */
+static action_toolbar_labels creditnote_action_labels[] =
+{
+    {"FilePrintAction", N_("_Print Credit Note")},
+    {"EditEditInvoiceAction", N_("_Edit Credit Note")},
+    {"EditDuplicateInvoiceAction", N_("_Duplicate Credit Note")},
+    {"EditPostInvoiceAction", N_("_Post Credit Note")},
+    {"EditUnpostInvoiceAction", N_("_Unpost Credit Note")},
+    {"BusinessNewInvoiceAction", N_("New _Credit Note")},
+    {"ToolsProcessPaymentAction", N_("_Pay Credit Note")},
+    {"BusinessLinkAction", N_("_Manage Document Link...")},
+    {"BusinessLinkOpenAction", N_("_Open Linked Document")},
+    {NULL, NULL},
+};
+
+static action_toolbar_labels creditnote_action_tooltips[] = {
+    {"FilePrintAction", N_("Make a printable credit note")},
+    {"EditEditInvoiceAction", N_("Edit this credit note")},
+    {"EditDuplicateInvoiceAction", N_("Create a new credit note as a duplicate of the current one")},
+    {"EditPostInvoiceAction", N_("Post this credit note to your Chart of Accounts")},
+    {"EditUnpostInvoiceAction", N_("Unpost this credit note and make it editable")},
+    {"BusinessNewInvoiceAction", N_("Create a new credit note for the same owner as the current one")},
+    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
+    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
+    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
+    {"BusinessLinkAction", N_("Manage Document Link...")},
+    {"BusinessLinkOpenAction", N_("Open Linked Document")},
+    {NULL, NULL},
+};
+
+/* Invoice actions */
+static action_toolbar_labels invoice_action_labels[] =
+{
+    {"FilePrintAction", N_("_Print Invoice")},
+    {"EditEditInvoiceAction", N_("_Edit Invoice")},
+    {"EditDuplicateInvoiceAction", N_("_Duplicate Invoice")},
+    {"EditPostInvoiceAction", N_("_Post Invoice")},
+    {"EditUnpostInvoiceAction", N_("_Unpost Invoice")},
+    {"BusinessNewInvoiceAction", N_("New _Invoice")},
+    {"ToolsProcessPaymentAction", N_("_Pay Invoice")},
+    {"BusinessLinkAction", N_("_Manage Document Link...")},
+    {"BusinessLinkOpenAction", N_("_Open Linked Document")},
+    {NULL, NULL},
+};
+
+static action_toolbar_labels invoice_action_layout_labels[] =
+{
+    {"ViewSaveLayoutAction", N_("_Use as Default Layout for Customer Documents")},
+    {"ViewResetLayoutAction", N_("_Reset Default Layout for Customer Documents")},
+    {NULL, NULL},
+};
+
+static action_toolbar_labels invoice_action_layout_tooltips[] = {
+    {"ViewSaveLayoutAction", N_("Use the current layout as default for all customer invoices and credit notes")},
+    {"ViewResetLayoutAction", N_("Reset default layout for all customer invoices and credit notes back to built-in defaults and update the current page accordingly")},
+    {NULL, NULL},
+};
+
+static action_toolbar_labels invoice_action_tooltips[] = {
+    {"FilePrintAction", N_("Make a printable invoice")},
+    {"EditEditInvoiceAction", N_("Edit this invoice")},
+    {"EditDuplicateInvoiceAction", N_("Create a new invoice as a duplicate of the current one")},
+    {"EditPostInvoiceAction", N_("Post this invoice to your Chart of Accounts")},
+    {"EditUnpostInvoiceAction", N_("Unpost this invoice and make it editable")},
+    {"BusinessNewInvoiceAction", N_("Create a new invoice for the same owner as the current one")},
+    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the invoice")},
+    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this invoice") },
+    {"ReportsCompanyReportAction", N_("Open a customer report window for the owner of this invoice") },
+    {"BusinessLinkAction", N_("Manage Document Link")},
+    {"BusinessLinkOpenAction", N_("Open Linked Document")},
+    {NULL, NULL},
+};
+
+/* Voucher actions */
 static action_toolbar_labels voucher_action_labels[] =
 {
     {"FilePrintAction", N_("_Print Voucher")},
@@ -354,60 +430,9 @@ static action_toolbar_labels voucher_action_layout_labels[] =
     {NULL, NULL},
 };
 
-static action_toolbar_labels creditnote_action_labels[] =
-{
-    {"FilePrintAction", N_("_Print Credit Note")},
-    {"EditEditInvoiceAction", N_("_Edit Credit Note")},
-    {"EditDuplicateInvoiceAction", N_("_Duplicate Credit Note")},
-    {"EditPostInvoiceAction", N_("_Post Credit Note")},
-    {"EditUnpostInvoiceAction", N_("_Unpost Credit Note")},
-    {"BusinessNewInvoiceAction", N_("New _Credit Note")},
-    {"ToolsProcessPaymentAction", N_("_Pay Credit Note")},
-    {"BusinessLinkAction", N_("_Manage Document Link...")},
-    {"BusinessLinkOpenAction", N_("_Open Linked Document")},
-    {NULL, NULL},
-};
-
-
-static action_toolbar_labels invoice_action_tooltips[] = {
-    {"FilePrintAction", N_("Make a printable invoice")},
-    {"EditEditInvoiceAction", N_("Edit this invoice")},
-    {"EditDuplicateInvoiceAction", N_("Create a new invoice as a duplicate of the current one")},
-    {"EditPostInvoiceAction", N_("Post this invoice to your Chart of Accounts")},
-    {"EditUnpostInvoiceAction", N_("Unpost this invoice and make it editable")},
-    {"BusinessNewInvoiceAction", N_("Create a new invoice for the same owner as the current one")},
-    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the invoice")},
-    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this invoice") },
-    {"ReportsCompanyReportAction", N_("Open a customer report window for the owner of this invoice") },
-    {"BusinessLinkAction", N_("Manage Document Link")},
-    {"BusinessLinkOpenAction", N_("Open Linked Document")},
-    {NULL, NULL},
-};
-
-static action_toolbar_labels invoice_action_layout_tooltips[] = {
-    {"ViewSaveLayoutAction", N_("Use the current layout as default for all customer invoices and credit notes")},
-    {"ViewResetLayoutAction", N_("Reset default layout for all customer invoices and credit notes back to built-in defaults and update the current page accordingly")},
-    {NULL, NULL},
-};
-
-static action_toolbar_labels bill_action_tooltips[] = {
-    {"FilePrintAction", N_("Make a printable bill")},
-    {"EditEditInvoiceAction", N_("Edit this bill")},
-    {"EditDuplicateInvoiceAction", N_("Create a new bill as a duplicate of the current one")},
-    {"EditPostInvoiceAction", N_("Post this bill to your Chart of Accounts")},
-    {"EditUnpostInvoiceAction", N_("Unpost this bill and make it editable")},
-    {"BusinessNewInvoiceAction", N_("Create a new bill for the same owner as the current one")},
-    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the bill")},
-    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this bill") },
-    {"ReportsCompanyReportAction", N_("Open a vendor report window for the owner of this bill") },
-    {"BusinessLinkAction", N_("Manage Document Link")},
-    {"BusinessLinkOpenAction", N_("Open Linked Document")},
-    {NULL, NULL},
-};
-
-static action_toolbar_labels bill_action_layout_tooltips[] = {
-    {"ViewSaveLayoutAction", N_("Use the current layout as default for all vendor bills and credit notes")},
-    {"ViewResetLayoutAction", N_("Reset default layout for all vendor bills and credit notes back to built-in defaults and update the current page accordingly")},
+static action_toolbar_labels voucher_action_layout_tooltips[] = {
+    {"ViewSaveLayoutAction", N_("Use the current layout as default for all employee vouchers and credit notes")},
+    {"ViewResetLayoutAction", N_("Reset default layout for all employee vouchers and credit notes back to built-in defaults and update the current page accordingly")},
     {NULL, NULL},
 };
 
@@ -426,24 +451,18 @@ static action_toolbar_labels voucher_action_tooltips[] = {
     {NULL, NULL},
 };
 
-static action_toolbar_labels voucher_action_layout_tooltips[] = {
-    {"ViewSaveLayoutAction", N_("Use the current layout as default for all employee vouchers and credit notes")},
-    {"ViewResetLayoutAction", N_("Reset default layout for all employee vouchers and credit notes back to built-in defaults and update the current page accordingly")},
-    {NULL, NULL},
-};
-
-static action_toolbar_labels creditnote_action_tooltips[] = {
-    {"FilePrintAction", N_("Make a printable credit note")},
-    {"EditEditInvoiceAction", N_("Edit this credit note")},
-    {"EditDuplicateInvoiceAction", N_("Create a new credit note as a duplicate of the current one")},
-    {"EditPostInvoiceAction", N_("Post this credit note to your Chart of Accounts")},
-    {"EditUnpostInvoiceAction", N_("Unpost this credit note and make it editable")},
-    {"BusinessNewInvoiceAction", N_("Create a new credit note for the same owner as the current one")},
-    {"BlankEntryAction", N_("Move to the blank entry at the bottom of the credit note")},
-    {"ToolsProcessPaymentAction", N_("Enter a payment for the owner of this credit note") },
-    {"ReportsCompanyReportAction", N_("Open a company report window for the owner of this credit note") },
-    {"BusinessLinkAction", N_("Manage Document Link...")},
-    {"BusinessLinkOpenAction", N_("Open Linked Document")},
+/* Settlement actions */
+static action_toolbar_labels settlement_action_labels[] =
+{
+    {"FilePrintAction", N_("_Print Settlement")},
+    {"EditEditInvoiceAction", N_("_Edit Settlement")},
+    {"EditDuplicateInvoiceAction", N_("_Duplicate Settlement")},
+    {"EditPostInvoiceAction", N_("_Post Settlement")},
+    {"EditUnpostInvoiceAction", N_("_Unpost Settlement")},
+    {"BusinessNewInvoiceAction", N_("New _Settlement")},
+    {"ToolsProcessPaymentAction", N_("_Pay Settlement")},
+    {"BusinessLinkAction", N_("_Manage Document Link...")},
+    {"BusinessLinkOpenAction", N_("_Open Linked Document")},
     {NULL, NULL},
 };
 

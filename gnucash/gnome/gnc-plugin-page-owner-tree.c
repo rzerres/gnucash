@@ -143,8 +143,8 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
 
     /* Edit menu */
     {
-        "OTEditVendorAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Vendor"), "<primary>e",
-        N_("Edit the selected vendor"),
+        "OTEditCoOwnerAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Co-Owner"), "<primary>e",
+        N_("Edit the selected co-owner"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
@@ -158,8 +158,13 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTNewVendorAction", GNC_ICON_NEW_ACCOUNT, N_("_New Vendor..."), NULL,
-        N_("Create a new vendor"),
+        "OTEditVendorAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Vendor"), "<primary>e",
+        N_("Edit the selected vendor"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
+    },
+    {
+        "OTNewCoOwnerAction", GNC_ICON_NEW_ACCOUNT, N_("_New Co-Owner..."), NULL,
+        N_("Create a new co-owner"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
     {
@@ -170,6 +175,11 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
     {
         "OTNewEmployeeAction", GNC_ICON_NEW_ACCOUNT, N_("_New Employee..."), NULL,
         N_("Create a new employee"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
+    },
+    {
+        "OTNewVendorAction", GNC_ICON_NEW_ACCOUNT, N_("_New Vendor..."), NULL,
+        N_("Create a new vendor"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_owner)
     },
 
@@ -209,7 +219,12 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
     },
     {
-        "OTVendorListingReportAction", "document-print-preview", N_("Vendor Listing"), NULL,
+        "OTNewSettlementAction", GNC_ICON_INVOICE_NEW, N_("New _Settlement..."), NULL,
+        N_("Create a new Settlement"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_new_invoice)
+    },
+    {
+        "OTCoOwnerListingReportAction", "document-print-preview", N_("Co-Owner Listing"), NULL,
         N_("Show vendor aging overview for all vendors"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owners_report)
     },
@@ -219,8 +234,13 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owners_report)
     },
     {
-        "OTVendorReportAction", NULL, N_("Vendor Report"), NULL,
-        N_("Show vendor report"),
+        "OTVendorListingReportAction", "document-print-preview", N_("Vendor Listing"), NULL,
+        N_("Show vendor aging overview for all vendors"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owners_report)
+    },
+    {
+        "OTCoOwnerReportAction", NULL, N_("Co-Owner Report"), NULL,
+        N_("Show co-owner report"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owner_report)
     },
     {
@@ -231,6 +251,11 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
     {
         "OTEmployeeReportAction", NULL, N_("Employee Report"), NULL,
         N_("Show employee report"),
+        G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owner_report)
+    },
+    {
+        "OTVendorReportAction", NULL, N_("Vendor Report"), NULL,
+        N_("Show vendor report"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_owner_report)
     },
     {
@@ -247,10 +272,11 @@ static guint gnc_plugin_page_owner_tree_n_actions = G_N_ELEMENTS (gnc_plugin_pag
  *  enabled. These ones are only sensitive in a read-write book. */
 static const gchar *actions_requiring_owner_rw[] =
 {
-    "OTEditVendorAction",
+    "OTEditCoOwnerAction",
     "OTEditCustomerAction",
     "OTEditEmployeeAction",
     "OTProcessPaymentAction",
+    "OTEditVendorAction",
 /* FIXME disabled due to crash    "EditDeleteOwnerAction", */
     NULL
 };
@@ -259,22 +285,25 @@ static const gchar *actions_requiring_owner_rw[] =
  *  enabled. These are sensitive always. */
 static const gchar *actions_requiring_owner_always[] =
 {
-    "OTVendorReportAction",
+    "OTCoOwnerReportAction",
     "OTCustomerReportAction",
     "OTEmployeeReportAction",
     "OTProcessPaymentAction",
+    "OTVendorReportAction",
     NULL
 };
 
 /* This is the list of actions which are switched inactive in a read-only book. */
 static const gchar* readonly_inactive_actions[] =
 {
-    "OTNewVendorAction",
+    "OTNewBillAction",
+    "OTNewCoOwnerAction",
     "OTNewCustomerAction",
     "OTNewEmployeeAction",
-    "OTNewBillAction",
     "OTNewInvoiceAction",
+    "OTNewSettlementAction",
     "OTNewVoucherAction",
+    "OTNewVendorAction",
     "OTProcessPaymentAction",
     NULL
 };
@@ -283,17 +312,21 @@ static const gchar* readonly_inactive_actions[] =
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "OTEditVendorAction",             N_("Edit") },
+    { "OTEditCoOwnerAction",            N_("Edit") },
     { "OTEditCustomerAction",           N_("Edit") },
     { "OTEditEmployeeAction",           N_("Edit") },
-    { "OTNewVendorAction",              N_("New") },
+    { "OTEditVendorAction",             N_("Edit") },
+    { "OTNewBillAction",                N_("New Bill") },
+    { "OTNewCoOwnerAction",             N_("New") },
     { "OTNewCustomerAction",            N_("New") },
     { "OTNewEmployeeAction",            N_("New") },
-    { "OTNewBillAction",                N_("New Bill") },
     { "OTNewInvoiceAction",             N_("New Invoice") },
+    { "OTNewSettlementAction",          N_("New Settlement") },
     { "OTNewVoucherAction",             N_("New Voucher") },
-    { "OTVendorListingReportAction",    N_("Vendor Listing") },
+    { "OTNewVendorAction",              N_("New") },
+    { "OTCoOwnerListingReportAction",   N_("Co-Owner Listing") },
     { "OTCustomerListingReportAction",  N_("Customer Listing") },
+    { "OTVendorListingReportAction",    N_("Vendor Listing") },
     { "OTProcessPaymentAction",         N_("Process Payment") },
 /* FIXME disable due to crash   { "EditDeleteOwnerAction",   N_("Delete") },*/
     { NULL, NULL },
@@ -312,20 +345,25 @@ typedef struct
 
 static action_owners_struct action_owners[] =
 {
-    { "OTEditVendorAction",            GNC_OWNER_VENDOR },
+    { "OTEditCoOwnerAction",           GNC_OWNER_COOWNER },
     { "OTEditCustomerAction",          GNC_OWNER_CUSTOMER },
     { "OTEditEmployeeAction",          GNC_OWNER_EMPLOYEE },
-    { "OTNewVendorAction",             GNC_OWNER_VENDOR },
+    { "OTEditVendorAction",            GNC_OWNER_VENDOR },
+    { "OTNewBillAction",               GNC_OWNER_VENDOR },
+    { "OTNewCoOwnerAction",            GNC_OWNER_COOWNER },
     { "OTNewCustomerAction",           GNC_OWNER_CUSTOMER },
     { "OTNewEmployeeAction",           GNC_OWNER_EMPLOYEE },
-    { "OTNewBillAction",               GNC_OWNER_VENDOR },
     { "OTNewInvoiceAction",            GNC_OWNER_CUSTOMER },
+    { "OTNewSettlementAction",         GNC_OWNER_COOWNER },
+    { "OTNewVendorAction",             GNC_OWNER_VENDOR },
     { "OTNewVoucherAction",            GNC_OWNER_EMPLOYEE },
-    { "OTVendorListingReportAction",   GNC_OWNER_VENDOR },
+    { "OTCOOwnerListingReportAction",  GNC_OWNER_COOWNER },
     { "OTCustomerListingReportAction", GNC_OWNER_CUSTOMER },
-    { "OTVendorReportAction",          GNC_OWNER_VENDOR },
-    { "OTCustomerReportAction",        GNC_OWNER_CUSTOMER },
+    { "OTVendorListingReportAction",   GNC_OWNER_VENDOR },
+    { "OTCoOwnerReportAction",         GNC_OWNER_COOWNER },
     { "OTEmployeeReportAction",        GNC_OWNER_EMPLOYEE },
+    { "OTCustomerReportAction",        GNC_OWNER_CUSTOMER },
+    { "OTVendorReportAction",          GNC_OWNER_VENDOR },
     { NULL, GNC_OWNER_NONE },
 };
 
@@ -934,8 +972,8 @@ build_aging_report (GncOwnerType owner_type)
     }
     case GNC_OWNER_COOWNER :
     {
-        report_name = "gnc:receivables-report-create";
-        report_title = _("CO-Owner Listing");
+        report_name  = "gnc:receivables-report-create";
+        report_title = _("Co-Owner Listing");
         break;
     }
     case GNC_OWNER_CUSTOMER :
