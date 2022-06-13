@@ -51,6 +51,9 @@ create_owner_widget (GNCOption *option, GncOwnerType type, GtkWidget *hbox)
 
     switch (type)
     {
+    case GNC_OWNER_COOWNER:
+        gncOwnerInitCoOwner (&owner, NULL);
+        break;
     case GNC_OWNER_CUSTOMER:
         gncOwnerInitCustomer (&owner, NULL);
         break;
@@ -152,7 +155,7 @@ owner_set_value (GNCOption *option, gboolean use_default,
 static SCM
 owner_get_value (GNCOption *option, GtkWidget *widget)
 {
-    static GncOwner owner;	/* XXX: might cause trouble? */
+    static GncOwner owner;      /* XXX: might cause trouble? */
     GncOwnerType type;
 
     type = get_owner_type_from_option (option);
@@ -160,6 +163,63 @@ owner_get_value (GNCOption *option, GtkWidget *widget)
     gnc_owner_get_owner (widget, &owner);
 
     return SWIG_NewPointerObj(&owner, SWIG_TypeQuery("_p__gncOwner"), 0);
+}
+
+
+
+/********************************************************************/
+/* "Co-Owner" Option functions */
+
+
+/* Function to set the UI widget based upon the option */
+static GtkWidget *
+coowner_set_widget (GNCOption *option, GtkGrid *page_box,
+                     GtkLabel *name_label, char *documentation,
+                     /* Return values */
+                     GtkWidget **enclosing, gboolean *packed)
+{
+    GtkWidget *value;
+
+    *enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous (GTK_BOX (*enclosing), FALSE);
+
+    value = create_owner_widget (option, GNC_OWNER_COOWNER, *enclosing);
+
+    gnc_option_set_ui_value (option, FALSE);
+
+    gtk_widget_show_all (*enclosing);
+    return value;
+}
+
+/* Function to set the UI Value for a particular option */
+static gboolean
+coowner_set_value (GNCOption *option, gboolean use_default,
+                    GtkWidget *widget, SCM value)
+{
+    GncOwner owner;
+    GncCoOwner *coowner;
+
+    if (!SWIG_IsPointer (value))
+        scm_misc_error("business_options:coowner_set_value",
+                       "SCM is not a wrapped pointer.", value);
+
+    coowner = SWIG_MustGetPtr(value, SWIG_TypeQuery("_p__gncCoOwner"), 1, 0);
+    gncOwnerInitCoOwner (&owner, coowner);
+
+    widget = gnc_option_get_gtk_widget (option);
+    gnc_owner_set_owner (widget, &owner);
+    return FALSE;
+}
+
+/* Function to get the UI Value for a particular option */
+static SCM
+coowner_get_value (GNCOption *option, GtkWidget *widget)
+{
+    GncOwner owner;
+
+    gnc_owner_get_owner (widget, &owner);
+    return SWIG_NewPointerObj(owner.owner.undefined,
+                              SWIG_TypeQuery("_p__gncCoOwner"), 0);
 }
 
 
