@@ -208,10 +208,11 @@ make_type_menu (GNCSearchCoreType *fe)
     type = gncOwnerGetType (&(priv->owner));
 
     combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
+    gnc_combo_box_search_add(combo, _("CoOwner"), GNC_OWNER_COOWNER);
     gnc_combo_box_search_add(combo, _("Customer"), GNC_OWNER_CUSTOMER);
-    gnc_combo_box_search_add(combo, _("Vendor"), GNC_OWNER_VENDOR);
     gnc_combo_box_search_add(combo, _("Employee"), GNC_OWNER_EMPLOYEE);
     gnc_combo_box_search_add(combo, _("Job"), GNC_OWNER_JOB);
+    gnc_combo_box_search_add(combo, _("Vendor"), GNC_OWNER_VENDOR);
 
     g_signal_connect (combo, "changed", G_CALLBACK (type_combo_changed), fe);
     gnc_combo_box_search_set_active(combo, type);
