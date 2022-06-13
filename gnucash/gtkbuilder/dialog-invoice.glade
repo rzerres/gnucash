@@ -977,36 +977,6 @@ Are you sure you want to unpost it?</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
-                          <object class="GtkBox" id="dialog_type_label_hbox">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <child>
-                              <object class="GtkLabel" id="dialog_type_label">
-                                <property name="can-focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="margin-start">3</property>
-                                <property name="margin-end">3</property>
-                                <property name="margin-top">3</property>
-                                <property name="margin-bottom">3</property>
-                                <property name="label" translatable="yes">Invoice</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <style>
-                              <class name="frame"/>
-                            </style>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkBox" id="dialog_type_choice_hbox">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
