@@ -31,9 +31,10 @@
 #include "gncInvoice.h"
 
 
-#define GNC_PREFS_GROUP_INVOICE "dialogs.business.invoice"
-#define GNC_PREFS_GROUP_BILL    "dialogs.business.bill"
-#define GNC_PREFS_GROUP_VOUCHER "dialogs.business.voucher"
+#define GNC_PREFS_GROUP_BILL       "dialogs.business.bill"
+#define GNC_PREFS_GROUP_INVOICE    "dialogs.business.invoice"
+#define GNC_PREFS_GROUP_SETTLEMENT "dialogs.business.settlement"
+#define GNC_PREFS_GROUP_VOUCHER    "dialogs.business.voucher"
 
 #define GNC_PREF_AUTO_PAY "auto-pay"
 
