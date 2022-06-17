@@ -666,6 +666,10 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     invoice_type = gnc_invoice_get_type_from_window(priv->iw);
 
     switch (invoice_type) {
+        case GNC_INVOICE_COOWNER_INVOICE:
+            label_list = invoice_action_labels;
+            tooltip_list = invoice_action_tooltips;
+            break;
         case GNC_INVOICE_CUST_INVOICE:
             label_list = invoice_action_labels;
             tooltip_list = invoice_action_tooltips;
@@ -678,9 +682,10 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
             label_list = voucher_action_labels;
             tooltip_list = voucher_action_tooltips;
             break;
-        case GNC_INVOICE_CUST_CREDIT_NOTE:  // fallthrough
-        case GNC_INVOICE_VEND_CREDIT_NOTE:  // fallthrough
-        case GNC_INVOICE_EMPL_CREDIT_NOTE:  // fallthrough
+        case GNC_INVOICE_COOWNER_CREDIT_NOTE:  // fallthrough
+        case GNC_INVOICE_CUST_CREDIT_NOTE:     // fallthrough
+        case GNC_INVOICE_VEND_CREDIT_NOTE:     // fallthrough
+        case GNC_INVOICE_EMPL_CREDIT_NOTE:     // fallthrough
             label_list = creditnote_action_labels;
             tooltip_list = creditnote_action_tooltips;
             break;
@@ -691,6 +696,11 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
 
     // layout actions
     switch (invoice_type) {
+        case GNC_INVOICE_COOWNER_INVOICE:
+        case GNC_INVOICE_COOWNER_CREDIT_NOTE:
+            label_layout_list = invoice_action_layout_labels;
+            tooltip_layout_list = invoice_action_layout_tooltips;
+            break;
         case GNC_INVOICE_CUST_INVOICE:
         case GNC_INVOICE_CUST_CREDIT_NOTE:
             label_layout_list = invoice_action_layout_labels;
