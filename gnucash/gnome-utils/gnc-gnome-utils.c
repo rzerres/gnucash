@@ -667,6 +667,7 @@ gnc_gui_init(void)
 
     ENTER ("");
 
+    /* only initialize the gui components once */
     if (gnome_is_initialized)
         return main_window;
 
@@ -819,4 +820,3 @@ gnc_shutdown (int exit_status)
         exit(exit_status);
     }
 }
-

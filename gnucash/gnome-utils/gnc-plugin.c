@@ -62,7 +62,7 @@ typedef struct GncPluginPrivate
 } GncPluginPrivate;
 
 GNC_DEFINE_TYPE_WITH_CODE(GncPlugin, gnc_plugin, G_TYPE_OBJECT,
-		        G_ADD_PRIVATE(GncPlugin))
+                        G_ADD_PRIVATE(GncPlugin))
 
 #define GNC_PLUGIN_GET_PRIVATE(o)  \
    ((GncPluginPrivate*)gnc_plugin_get_instance_private((GncPlugin*)o))
@@ -143,7 +143,8 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
     if (klass->actions_name)
     {
         DEBUG ("%s: %d actions to merge with gui from %s",
-               klass->actions_name, (klass->n_actions + klass->n_toggle_actions), klass->ui_filename);
+            klass->actions_name, (klass->n_actions + klass->n_toggle_actions), klass->ui_filename);
+
         gnc_main_window_merge_actions (window, klass->actions_name,
                                        klass->actions, klass->n_actions,
                                        klass->toggle_actions, klass->n_toggle_actions,
@@ -155,7 +156,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
             action_group =
                 gnc_main_window_get_action_group(window, klass->actions_name);
             gnc_plugin_set_important_actions(action_group,
-                                             klass->important_actions);
+                klass->important_actions);
         }
     }
 
