@@ -137,7 +137,7 @@ static guint secs_to_save = 0;
 /* Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
 static void gnc_main_window_init (GncMainWindow *window,
-		                  void *data);
+                                  void *data);
 static void gnc_main_window_finalize (GObject *object);
 static void gnc_main_window_destroy (GtkWidget *widget);
 
@@ -243,7 +243,7 @@ typedef struct GncMainWindowPrivate
 GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
                         G_ADD_PRIVATE (GncMainWindow)
                         G_IMPLEMENT_INTERFACE (GNC_TYPE_WINDOW,
-		                               gnc_window_main_window_init))
+                                               gnc_window_main_window_init))
 
 #define GNC_MAIN_WINDOW_GET_PRIVATE(o)  \
    ((GncMainWindowPrivate*)g_type_instance_get_private((GTypeInstance*)o, GNC_TYPE_MAIN_WINDOW))
@@ -2742,7 +2742,7 @@ gnc_main_window_init (GncMainWindow *window, void *data)
 
     gnc_main_window_setup_window (window);
     gnc_gobject_tracking_remember(G_OBJECT(window),
-		                  G_OBJECT_CLASS(klass));
+                                  G_OBJECT_CLASS(klass));
 }
 
 
@@ -3107,7 +3107,7 @@ gnc_main_window_disconnect (GncMainWindow *window,
                sometimes  forgets to cancel before deleting the object.  See
                <https://bugs.webkit.org/show_bug.cgi?id=119003>.   Get around this
                by flushing all events to get rid of the timer interrupt. */
-            while (gtk_events_pending())
+while (gtk_events_pending())
                 gtk_main_iteration();
         }
     }
@@ -3430,6 +3430,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     MergedActionEntry *entry;
     GError *error = NULL;
     gchar *pathname;
+    int i;
 
     g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
     g_return_if_fail (group_name != NULL);
@@ -3450,6 +3451,11 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     entry->action_group = gtk_action_group_new (group_name);
     gtk_action_group_set_translation_domain (entry->action_group, PROJECT_NAME);
     gtk_action_group_add_actions (entry->action_group, actions, n_actions, data);
+
+    for (i = 0; i < n_actions; i++)
+      /* actions->name and actions->accelerator are not populated from the xml-file */
+      DEBUG ("%d: action %s(%s) merged from %s", i, actions->name, actions->accelerator, filename);
+
     if (toggle_actions != NULL && n_toggle_actions > 0)
     {
         gtk_action_group_add_toggle_actions (entry->action_group,
@@ -3648,7 +3654,7 @@ gnc_main_window_update_edit_actions_sensitivity (GncMainWindow *window, gboolean
         can_copy = can_cut = can_paste = TRUE;
 #else
         /* If its not a GtkEditable, we don't know what to do
-         * with it. */
+        * with it. */
         can_copy = can_cut = can_paste = FALSE;
 #endif
     }
