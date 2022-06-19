@@ -1,4 +1,4 @@
-/** @file 
+/** @file
     @brief interface file for SWIG, used by python-bindings and scheme/guile.
     @addtogroup python_bindings
 */
@@ -112,7 +112,7 @@ typedef char gchar;
      }
     $result = tm;
  }
- 
+
 %typemap(newfree) struct tm * "gnc_tm_free($1);"
 
 %typemap(argout) struct tm * {
@@ -276,32 +276,34 @@ typedef char gchar;
         data = l->data;
         if (GNC_IS_ACCOUNT(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Account, 0));
-        else if (GNC_IS_SPLIT(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Split, 0));
-        else if (GNC_IS_TRANSACTION(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Transaction, 0));
         else if (GNC_IS_COMMODITY(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_gnc_commodity, 0));
         else if (GNC_IS_COMMODITY_NAMESPACE(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_gnc_commodity_namespace, 0));
+        else if (GNC_IS_COOWNER(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncCoOwner, 0));
+        else if (GNC_IS_CUSTOMER(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncCustomer, 0));
+        else if (GNC_IS_EMPLOYEE(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEmployee, 0));
+        else if (GNC_IS_ENTRY(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEntry, 0));
+        else if (GNC_IS_INVOICE(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncInvoice, 0));
+        else if (GNC_IS_JOB(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncJob, 0));
         else if (GNC_IS_LOT(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCLot, 0));
         else if (GNC_IS_PRICE(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_GNCPrice, 0));
-        else if (GNC_IS_INVOICE(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncInvoice, 0));
-        else if (GNC_IS_ENTRY(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEntry, 0));
-        else if (GNC_IS_CUSTOMER(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncCustomer, 0));
-        else if (GNC_IS_VENDOR(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncVendor, 0));
-        else if (GNC_IS_EMPLOYEE(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncEmployee, 0));
-        else if (GNC_IS_JOB(data))
-            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncJob, 0));
+        else if (GNC_IS_SPLIT(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Split, 0));
         else if (GNC_IS_TAXTABLE(data))
             PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncTaxTable, 0));
+        else if (GNC_IS_TRANSACTION(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p_Transaction, 0));
+        else if (GNC_IS_VENDOR(data))
+            PyList_Append(list, SWIG_NewPointerObj(data, SWIGTYPE_p__gncVendor, 0));
         else if ($1_descriptor == $descriptor(MonetaryList *))
             PyList_Append(list, SWIG_NewPointerObj(data, $descriptor(gnc_monetary *), 0));
         else
