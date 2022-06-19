@@ -38,43 +38,45 @@
 typedef enum
 {
     GNC_ENTRY_ORDER_NONE = -1, //Force clang to use int representation of enum.
-    GNCENTRY_ORDER_ENTRY,
-    GNCENTRY_ORDER_VIEWER,
-    GNCENTRY_INVOICE_ENTRY,
-    GNCENTRY_INVOICE_VIEWER,
-    GNCENTRY_CUST_CREDIT_NOTE_ENTRY,
-    GNCENTRY_CUST_CREDIT_NOTE_VIEWER,
     GNCENTRY_BILL_ENTRY,
     GNCENTRY_BILL_VIEWER,
-    GNCENTRY_VEND_CREDIT_NOTE_ENTRY,
-    GNCENTRY_VEND_CREDIT_NOTE_VIEWER,
-    GNCENTRY_EXPVOUCHER_ENTRY,
-    GNCENTRY_EXPVOUCHER_VIEWER,
+    GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY,
+    GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER,
+    GNCENTRY_CUST_CREDIT_NOTE_ENTRY,
+    GNCENTRY_CUST_CREDIT_NOTE_VIEWER,
     GNCENTRY_EMPL_CREDIT_NOTE_ENTRY,
     GNCENTRY_EMPL_CREDIT_NOTE_VIEWER,
-    GNCENTRY_NUM_REGISTER_TYPES
+    GNCENTRY_EXPVOUCHER_ENTRY,
+    GNCENTRY_EXPVOUCHER_VIEWER,
+    GNCENTRY_INVOICE_ENTRY,
+    GNCENTRY_INVOICE_VIEWER,
+    GNCENTRY_NUM_REGISTER_TYPES,
+    GNCENTRY_ORDER_ENTRY,
+    GNCENTRY_ORDER_VIEWER,
+    GNCENTRY_SETTLEMENT_ENTRY,
+    GNCENTRY_SETTLEMENT_VIEWER,
+    GNCENTRY_VEND_CREDIT_NOTE_ENTRY,
+    GNCENTRY_VEND_CREDIT_NOTE_VIEWER,
 } GncEntryLedgerType;
 
-#define ENTRY_IACCT_CELL	"inv-account"
-#define ENTRY_BACCT_CELL	"bill-account"
-#define ENTRY_ACTN_CELL		"action"
-#define ENTRY_DATE_CELL		"date"
-#define ENTRY_DESC_CELL		"description"
-#define ENTRY_DISC_CELL		"discount"
-#define ENTRY_DISTYPE_CELL	"discount-type"
-#define ENTRY_DISHOW_CELL	"discount-how"
-#define ENTRY_PRIC_CELL		"price"
-#define ENTRY_QTY_CELL		"quantity"
-#define ENTRY_TAXABLE_CELL	"istaxable"
-#define ENTRY_TAXTABLE_CELL	"taxtable"
-#define ENTRY_TAXINCLUDED_CELL	"taxincluded"
-#define ENTRY_BILLABLE_CELL	"isbillable"
-
-#define ENTRY_INV_CELL		"isinvoiced"
-#define ENTRY_VALUE_CELL	"line-value"
-#define ENTRY_TAXVAL_CELL	"line-tax-val"
-
-#define ENTRY_PAYMENT_CELL	"payment"
+#define ENTRY_ACTN_CELL         "action"
+#define ENTRY_BACCT_CELL        "bill-account"
+#define ENTRY_BILLABLE_CELL     "isbillable"
+#define ENTRY_DATE_CELL         "date"
+#define ENTRY_DESC_CELL         "description"
+#define ENTRY_DISC_CELL         "discount"
+#define ENTRY_DISTYPE_CELL      "discount-type"
+#define ENTRY_DISHOW_CELL       "discount-how"
+#define ENTRY_IACCT_CELL        "inv-account"
+#define ENTRY_INV_CELL          "isinvoiced"
+#define ENTRY_PAYMENT_CELL      "payment"
+#define ENTRY_PRIC_CELL         "price"
+#define ENTRY_QTY_CELL          "quantity"
+#define ENTRY_TAXABLE_CELL      "istaxable"
+#define ENTRY_TAXINCLUDED_CELL  "taxincluded"
+#define ENTRY_TAXTABLE_CELL     "taxtable"
+#define ENTRY_TAXVAL_CELL       "line-tax-val"
+#define ENTRY_VALUE_CELL        "line-value"
 
 typedef struct GncEntryLedger_s GncEntryLedger;
 
