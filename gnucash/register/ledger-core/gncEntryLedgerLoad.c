@@ -30,15 +30,14 @@
 #include "account-quickfill.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
-#include "gnc-prefs.h"
-#include "gnc-ui-util.h"
-#include "recncell.h"
-
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
 #include "gncEntryLedgerP.h"
-#include "quickfillcell.h"
 #include "gnc-entry-quickfill.h"
+#include "gnc-prefs.h"
+#include "gnc-ui-util.h"
+#include "quickfillcell.h"
+#include "recncell.h"
 
 #define GNC_PREF_TAX_INCL "tax-included"
 
@@ -205,12 +204,14 @@ load_xfer_type_cells (GncEntryLedger* ledger)
      */
     switch (ledger->type)
     {
-    case GNCENTRY_ORDER_ENTRY:
-    case GNCENTRY_ORDER_VIEWER:
-    case GNCENTRY_INVOICE_ENTRY:
-    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_ORDER_VIEWER:
         qf = gnc_get_shared_account_name_quickfill (root, IKEY,
                                                     skip_expense_acct_cb, NULL);
         store = gnc_get_shared_account_name_list_store (root, IKEY,
@@ -219,13 +220,13 @@ load_xfer_type_cells (GncEntryLedger* ledger)
 
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_BILL_VIEWER:
-    case GNCENTRY_EXPVOUCHER_ENTRY:
-    case GNCENTRY_EXPVOUCHER_VIEWER:
-    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
-    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
     case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
     case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
     case GNCENTRY_NUM_REGISTER_TYPES:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
         qf = gnc_get_shared_account_name_quickfill (root, EKEY,
                                                     skip_income_acct_cb, NULL);
         store = gnc_get_shared_account_name_list_store (root, EKEY,
@@ -294,10 +295,12 @@ load_description_cell (GncEntryLedger* ledger)
 
     switch (ledger->type)
     {
-    case GNCENTRY_INVOICE_ENTRY:
-    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
         shared_quickfill = gnc_get_shared_entry_desc_quickfill (ledger->book,
                                                                 DESC_QF_KEY_INVOICES, TRUE);
         break;
@@ -356,13 +359,13 @@ void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
     {
         switch (ledger->type)
         {
-        case GNCENTRY_ORDER_ENTRY:
-        case GNCENTRY_INVOICE_ENTRY:
         case GNCENTRY_BILL_ENTRY:
-        case GNCENTRY_EXPVOUCHER_ENTRY:
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
-        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
         case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_EXPVOUCHER_ENTRY:
+        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_ORDER_ENTRY:
+        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
 
             gnc_suspend_gui_refresh();
 
@@ -431,6 +434,14 @@ void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
                 /* Compute the proper taxtable */
                 switch (gncOwnerGetType (owner))
                 {
+                case GNC_OWNER_COOWNER:
+                    table = gncTaxTableGetDefault (ledger->book,
+                                                   GNC_OWNER_COOWNER);
+
+                    if (gncCoOwnerGetTaxTableOverride (owner->owner.coowner))
+                        table = gncCoOwnerGetTaxTable (owner->owner.coowner);
+                    break;
+
                 case GNC_OWNER_CUSTOMER:
                     table = gncTaxTableGetDefault (ledger->book,
                                                    GNC_OWNER_CUSTOMER);
@@ -451,7 +462,7 @@ void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
                     break;
                 }
 
-                if (ledger->is_cust_doc)
+                if (ledger->is_cust_doc || ledger->is_coowner_doc)
                 {
                     gncEntrySetInvTaxable (blank_entry, table != NULL);
                     gncEntrySetInvTaxTable (blank_entry, table);
