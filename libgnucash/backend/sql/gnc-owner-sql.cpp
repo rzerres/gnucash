@@ -33,9 +33,10 @@ extern "C"
 #include <config.h>
 #include <qof.h>
 #include <glib.h>
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
-#include "gncJobP.h"
 #include "gncEmployeeP.h"
+#include "gncJobP.h"
 #include "gncVendorP.h"
 }
 #include <cstdlib>
@@ -79,9 +80,26 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* sql_be,
     }
     if (type == GNC_OWNER_NONE || pGuid == nullptr)
         return;
-    
+
     switch (type)
     {
+    case GNC_OWNER_COOWNER:
+    {
+        GncCoOwner* coowner = NULL;
+
+        if (pGuid != NULL)
+        {
+            coowner = gncCoOwnerLookup (book, pGuid);
+            if (coowner == NULL)
+            {
+                coowner = gncCoOwnerCreate (book);
+                gncCoOwnerSetGUID (coowner, &guid);
+            }
+        }
+        gncOwnerInitCoOwner (&owner, coowner);
+        break;
+    }
+
     case GNC_OWNER_CUSTOMER:
     {
         GncCustomer* cust = NULL;
@@ -96,6 +114,23 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* sql_be,
             }
         }
         gncOwnerInitCustomer (&owner, cust);
+        break;
+    }
+
+    case GNC_OWNER_EMPLOYEE:
+    {
+        GncEmployee* employee = NULL;
+
+        if (pGuid != NULL)
+        {
+            employee = gncEmployeeLookup (book, pGuid);
+            if (employee == NULL)
+            {
+                employee = gncEmployeeCreate (book);
+                gncEmployeeSetGUID (employee, &guid);
+            }
+        }
+        gncOwnerInitEmployee (&owner, employee);
         break;
     }
 
@@ -130,23 +165,6 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* sql_be,
             }
         }
         gncOwnerInitVendor (&owner, vendor);
-        break;
-    }
-
-    case GNC_OWNER_EMPLOYEE:
-    {
-        GncEmployee* employee = NULL;
-
-        if (pGuid != NULL)
-        {
-            employee = gncEmployeeLookup (book, pGuid);
-            if (employee == NULL)
-            {
-                employee = gncEmployeeCreate (book);
-                gncEmployeeSetGUID (employee, &guid);
-            }
-        }
-        gncOwnerInitEmployee (&owner, employee);
         break;
     }
 
@@ -192,8 +210,15 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(QofIdTypeConst obj_name,
         type = gncOwnerGetType (owner);
         switch (type)
         {
+        case GNC_OWNER_COOWNER:
+            inst = QOF_INSTANCE (gncOwnerGetCoOwner (owner));
+            break;
         case GNC_OWNER_CUSTOMER:
             inst = QOF_INSTANCE (gncOwnerGetCustomer (owner));
+            break;
+
+        case GNC_OWNER_EMPLOYEE:
+            inst = QOF_INSTANCE (gncOwnerGetEmployee (owner));
             break;
 
         case GNC_OWNER_JOB:
@@ -202,10 +227,6 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::add_to_query(QofIdTypeConst obj_name,
 
         case GNC_OWNER_VENDOR:
             inst = QOF_INSTANCE (gncOwnerGetVendor (owner));
-            break;
-
-        case GNC_OWNER_EMPLOYEE:
-            inst = QOF_INSTANCE (gncOwnerGetEmployee (owner));
             break;
 
         default:
