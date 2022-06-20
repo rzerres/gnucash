@@ -37,8 +37,8 @@ from gnucash.gnucash_core import \
      GnuCashCoreClass, GncNumeric, GncCommodity, Transaction, \
      Split, Book, GncLot, Account, GUID
 
-from gnucash.gnucash_core_c import GNC_OWNER_CUSTOMER, GNC_OWNER_JOB, \
-    GNC_OWNER_EMPLOYEE, GNC_OWNER_VENDOR, \
+from gnucash.gnucash_core_c import GNC_OWNER_COOWNER, GNC_OWNER_CUSTOMER, \
+    GNC_OWNER_EMPLOYEE, GNC_OWNER_JOB, GNC_OWNER_VENDOR, \
     GNC_PAYMENT_CASH, GNC_PAYMENT_CARD, \
     GNC_DISC_PRETAX, GNC_DISC_SAMETIME, GNC_DISC_POSTTAX, \
     GNC_TAXINCLUDED_YES, GNC_TAXINCLUDED_NO, GNC_TAXINCLUDED_USEGLOBAL, \
@@ -64,6 +64,8 @@ class GnuCashBusinessEntity(GnuCashCoreClass):
             self.CommitEdit()
         else:
             GnuCashCoreClass.__init__(self, instance=instance)
+
+class CoOwner(GnuCashBusinessEntity): pass
 
 class Customer(GnuCashBusinessEntity): pass
 
@@ -146,8 +148,8 @@ class Invoice(GnuCashCoreClass):
         """Invoice Constructor
 
         You must provide a book, id, currency and owner
-        (Customer, Job, Employee, Vendor) or an existing swig proxy object
-        in the keyword argument instance.
+        (CoOwner, Customer, Job, Employee, Vendor) or an existing
+        swig proxy object in the keyword argument instance.
 
         Optionally, you may provide a date the invoice is opened on
         (datetime.date or datetime.datetime), otherwise today's date is used.
@@ -176,12 +178,14 @@ class Bill(Invoice):
 def decorate_to_return_instance_instead_of_owner(dec_function):
     def new_get_owner_function(self):
         (owner_type, instance) = dec_function(self)
-        if owner_type == GNC_OWNER_CUSTOMER:
+        if owner_type == GNC_OWNER_COOWNER:
+            return CoOwner(instance=instance)
+        elif owner_type == GNC_OWNER_CUSTOMER:
             return Customer(instance=instance)
-        elif owner_type == GNC_OWNER_JOB:
-            return Job(instance=instance)
         elif owner_type == GNC_OWNER_EMPLOYEE:
             return Employee(instance=instance)
+        elif owner_type == GNC_OWNER_JOB:
+            return Job(instance=instance)
         elif owner_type == GNC_OWNER_VENDOR:
             return Vendor(instance=instance)
         else:
@@ -225,19 +229,112 @@ class Entry(GnuCashCoreClass):
         if invoice.GetTypeString() == "Bill" and self.GetBill() == None:
             raise Exception("Entry type error. Check that Entry type matches Bill.")
 
+# Address
+Address.add_constructor_and_methods_with_prefix('gncAddress', 'Create')
+
+# Bill
+Bill.add_methods_with_prefix('gncBill')
+
+invoice_dict = {
+                   'GetBook': Book,
+                   'GetCurrency': GncCommodity,
+                   'GetPostedLot': GncLot,
+                   'GetPostedTxn': Transaction,
+                   'GetPostedAcc': Account,
+                   'GetTerms': BillTerm,
+                   'GetToChargeAmount': GncNumeric,
+                   'GetTotal': GncNumeric,
+                   'GetTotalOf': GncNumeric,
+                   'GetTotalSubtotal': GncNumeric,
+                   'GetTotalTax': GncNumeric,
+                   'PostToAccount': Transaction,
+               }
+methods_return_instance(Invoice, invoice_dict)
+Invoice.decorate_functions(
+    decorate_to_return_instance_instead_of_owner,
+    'GetOwner', 'GetBillTo')
+
+# BillTerm
+BillTerm.add_constructor_and_methods_with_prefix('gncBillTerm', 'Create')
+
+billterm_dict = {
+                    'GetDiscount' : GncNumeric,
+                    'GetParent' : BillTerm,
+                    'LookupByName' : BillTerm,
+                    'ReturnChild' : BillTerm
+                }
+methods_return_instance(BillTerm, billterm_dict)
+
+# CoOwner
+CoOwner.add_constructor_and_methods_with_prefix('gncCoOwner', 'Create')
+CoOwner.add_method('gncOwnerApplyPaymentSecs', 'ApplyPayment')
+
+customer_dict = {
+                    'GetAddr' : Address,
+                    'GetAptShare' : GncNumeric,
+                    'GetCredit' : GncNumeric,
+                    'GetCurrency' : GncCommodity,
+                    'GetDiscount' : GncNumeric,
+                    'GetTaxTable': TaxTable,
+                    'GetTerms' : BillTerm,
+                }
+methods_return_instance(Customer, customer_dict)
+
+# Customer
+Customer.add_constructor_and_methods_with_prefix('gncCustomer', 'Create')
+Customer.add_method('gncOwnerApplyPaymentSecs', 'ApplyPayment')
+
+customer_dict = {
+                    'GetAddr' : Address,
+                    'GetCredit' : GncNumeric,
+                    'GetCurrency' : GncCommodity,
+                    'GetDiscount' : GncNumeric,
+                    'GetShipAddr' : Address,
+                    'GetTaxTable': TaxTable,
+                    'GetTerms' : BillTerm,
+                }
+methods_return_instance(Customer, customer_dict)
+
+# Employee
+Employee.add_constructor_and_methods_with_prefix('gncEmployee', 'Create')
+
+employee_dict = {
+                    'GetAddr' : Address,
+                    'GetBook' : Book,
+                    'GetCurrency' : GncCommodity
+                    'GetRate' : GncNumeric,
+                    'GetWorkday' : GncNumeric,
+                }
+methods_return_instance(Employee, employee_dict)
+
+# Invoice
+Invoice.add_constructor_and_methods_with_prefix('gncInvoice', 'Create')
+methods_return_instance_lists(
+    Invoice, { 'GetEntries': Entry })
+
+Invoice.add_method('gncInvoiceRemoveEntry', 'RemoveEntry')
+Invoice.add_method('gncInvoiceUnpost', 'Unpost')
+
+# Job
+Job.add_constructor_and_methods_with_prefix('gncJob', 'Create')
+Job.decorate_functions(
+    decorate_to_return_instance_instead_of_owner,
+    'GetOwner')
+
 # Owner
 GnuCashBusinessEntity.add_methods_with_prefix('gncOwner')
 
 owner_dict = {
-                    'GetGUID' : GUID,
-                    'GetCustomer' : Customer,
-                    'GetVendor' : Vendor,
-                    'GetEmployee' : Employee,
-                    'GetJob' : Job,
-                    'GetAddr' : Address,
-                    'GetCurrency' : GncCommodity,
-                    'GetEndOwner': GnuCashBusinessEntity,
                     'GetBalanceInCurrency': GncNumeric,
+                    'GetAddr' : Address,
+                    'GetCoOwner' : CoOwner,
+                    'GetCustomer' : Customer,
+                    'GetCurrency' : GncCommodity,
+                    'GetGUID' : GUID,
+                    'GetEmployee' : Employee,
+                    'GetEndOwner': GnuCashBusinessEntity,
+                    'GetJob' : Job,
+                    'GetVendor' : Vendor,
               }
 methods_return_instance(GnuCashBusinessEntity, owner_dict)
 
@@ -246,63 +343,16 @@ methods_return_instance_lists(
         'GetCommoditiesList': GncCommodity
     })
 
-# Customer
-Customer.add_constructor_and_methods_with_prefix('gncCustomer', 'Create')
-Customer.add_method('gncOwnerApplyPaymentSecs', 'ApplyPayment')
-
-customer_dict = {
-                    'GetAddr' : Address,
-                    'GetShipAddr' : Address,
-                    'GetDiscount' : GncNumeric,
-                    'GetCredit' : GncNumeric,
-                    'GetTerms' : BillTerm,
-                    'GetCurrency' : GncCommodity,
-                    'GetTaxTable': TaxTable,
-                }
-methods_return_instance(Customer, customer_dict)
-
-# Employee
-Employee.add_constructor_and_methods_with_prefix('gncEmployee', 'Create')
-
-employee_dict = {
-                    'GetBook' : Book,
-                    'GetAddr' : Address,
-                    'GetWorkday' : GncNumeric,
-                    'GetRate' : GncNumeric,
-                    'GetCurrency' : GncCommodity
-                }
-methods_return_instance(Employee, employee_dict)
-
 # Vendor
 Vendor.add_constructor_and_methods_with_prefix('gncVendor', 'Create')
 
 vendor_dict =   {
                     'GetAddr' : Address,
-                    'GetTerms' : BillTerm,
                     'GetCurrency' : GncCommodity,
                     'GetTaxTable': TaxTable,
+                    'GetTerms' : BillTerm,
                 }
 methods_return_instance(Vendor, vendor_dict)
-
-# Job
-Job.add_constructor_and_methods_with_prefix('gncJob', 'Create')
-Job.decorate_functions(
-    decorate_to_return_instance_instead_of_owner,
-    'GetOwner')
-
-# Address
-Address.add_constructor_and_methods_with_prefix('gncAddress', 'Create')
-
-# BillTerm
-BillTerm.add_constructor_and_methods_with_prefix('gncBillTerm', 'Create')
-
-billterm_dict = {
-                    'LookupByName' : BillTerm,
-                    'GetDiscount' : GncNumeric,
-                    'GetParent' : BillTerm,
-                    'ReturnChild' : BillTerm
-                }
-methods_return_instance(BillTerm, billterm_dict)
 
 # TaxTable
 TaxTable.add_constructor_and_methods_with_prefix('gncTaxTable', 'Create')
@@ -321,36 +371,6 @@ taxtableentry_dict = {
                          'GetAmount': GncNumeric,
                      }
 
-# Invoice
-Invoice.add_constructor_and_methods_with_prefix('gncInvoice', 'Create')
-methods_return_instance_lists(
-    Invoice, { 'GetEntries': Entry })
-
-Invoice.add_method('gncInvoiceRemoveEntry', 'RemoveEntry')
-Invoice.add_method('gncInvoiceUnpost', 'Unpost')
-
-# Bill
-Bill.add_methods_with_prefix('gncBill')
-
-invoice_dict = {
-                   'GetTerms': BillTerm,
-                   'GetCurrency': GncCommodity,
-                   'GetToChargeAmount': GncNumeric,
-                   'GetPostedLot': GncLot,
-                   'GetPostedTxn': Transaction,
-                   'GetPostedAcc': Account,
-                   'GetTotal': GncNumeric,
-                   'GetTotalOf': GncNumeric,
-                   'GetTotalSubtotal': GncNumeric,
-                   'GetTotalTax': GncNumeric,
-                   'PostToAccount': Transaction,
-                   'GetBook': Book,
-               }
-methods_return_instance(Invoice, invoice_dict)
-Invoice.decorate_functions(
-    decorate_to_return_instance_instead_of_owner,
-    'GetOwner', 'GetBillTo')
-
 # Entry
 Entry.add_constructor_and_methods_with_prefix('gncEntry', 'Create')
 
@@ -358,18 +378,18 @@ Entry.add_method('gncEntryGetGUID', 'GetGUID')
 Entry.add_method('gncEntryDestroy', 'Destroy')
 
 entry_dict = {
-                 'GetGUID' : GUID,
-                 'GetQuantity': GncNumeric,
-                 'GetInvAccount': Account,
-                 'GetInvPrice': GncNumeric,
-                 'GetInvDiscount': GncNumeric,
-                 'GetInvTaxTable': TaxTable,
+                 'GetBill': Invoice
                  'GetBillAccount': Account,
                  'GetBillPrice': GncNumeric,
                  'GetBillTaxTable': TaxTable,
                  'Copy': Entry,
+                 'GetGUID' : GUID,
+                 'GetInvAccount': Account,
+                 'GetInvDiscount': GncNumeric,
+                 'GetInvPrice': GncNumeric,
                  'GetInvoice': Invoice,
-                 'GetBill': Invoice
+                 'GetInvTaxTable': TaxTable,
+                 'GetQuantity': GncNumeric,
              }
 methods_return_instance(Entry, entry_dict)
 Entry.decorate_functions(
@@ -378,3 +398,4 @@ Entry.decorate_functions(
 
 from gnucash.gnucash_core import decorate_monetary_list_returning_function
 Entry.decorate_functions(decorate_monetary_list_returning_function, 'GetBalTaxValues')
+

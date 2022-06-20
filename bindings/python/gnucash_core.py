@@ -42,15 +42,23 @@ from gnucash.function_class import \
      methods_return_instance, process_list_convert_to_instance, \
      method_function_returns_instance_list, methods_return_instance_lists
 
-from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
-    gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
-    gncCustomerLookup, gncVendorLookup, gncJobLookup, gncEmployeeLookup, \
-    gncTaxTableLookup, gncTaxTableLookupByName, gnc_search_invoice_on_id, \
-    gnc_search_customer_on_id, gnc_search_bill_on_id , \
-    gnc_search_vendor_on_id, gncInvoiceNextID, gncCustomerNextID, \
-    gncVendorNextID, gncTaxTableGetTables, gnc_numeric_zero, \
-    gnc_numeric_create, double_to_gnc_numeric, string_to_gnc_numeric, \
-    gnc_numeric_to_string
+from gnucash.gnucash_core_c import \
+    gncCoOwnerLookup, gncCustomerLookup, \
+    gncEntryLookup, gncEmployeeLookup, \
+    gncInvoiceLookup, gncJobLookup, \
+    gncVendorLookup, \
+    gncInvoiceGetInvoiceFromTxn, \
+    gncInvoiceGetInvoiceFromLot, \
+    gncTaxTableLookup, gncTaxTableLookupByName, \
+    gnc_search_bill_on_id, gnc_search_coowner_on_id, \
+    gnc_search_coowner_on_id, gnc_search_customer_on_id, \
+    gnc_search_invoice_on_id, gnc_search_vendor_on_id, \
+    gncCoOwnerNextID, gncCustomerNextID, \
+    gncInvoiceNextID, gncVendorNextID, \
+    gncTaxTableGetTables, \
+    gnc_numeric_create, gnc_numeric_to_string, \
+    gnc_numeric_zero, \
+    double_to_gnc_numeric, string_to_gnc_numeric
 
 from gnucash.deprecation import (
     deprecated_args_session,
@@ -306,20 +314,30 @@ class Book(GnuCashCoreClass):
     get_root_account -- Returns the root level Account
     get_table -- Returns a commodity lookup table, of type GncCommodityTable
     """
-    def InvoiceLookup(self, guid):
-        from gnucash.gnucash_business import Invoice
+    def CoOwnerLookup(self, guid):
+        from gnucash.gnucash_business import Customer
         return self.do_lookup_create_oo_instance(
-            gncInvoiceLookup, Invoice, guid.get_instance() )
+            gncCustomerLookup, Customer, guid.get_instance())
+
+    def CustomerLookup(self, guid):
+        from gnucash.gnucash_business import Customer
+        return self.do_lookup_create_oo_instance(
+            gncCustomerLookup, Customer, guid.get_instance())
+
+    def EmployeeLookup(self, guid):
+        from gnucash.gnucash_business import Employee
+        return self.do_lookup_create_oo_instance(
+            gncEmployeeLookup, Employee, guid.get_instance() )
 
     def EntryLookup(self, guid):
         from gnucash.gnucash_business import Entry
         return self.do_lookup_create_oo_instance(
             gncEntryLookup, Entry, guid.get_instance() )
 
-    def CustomerLookup(self, guid):
-        from gnucash.gnucash_business import Customer
+    def InvoiceLookup(self, guid):
+        from gnucash.gnucash_business import Invoice
         return self.do_lookup_create_oo_instance(
-            gncCustomerLookup, Customer, guid.get_instance())
+            gncInvoiceLookup, Invoice, guid.get_instance() )
 
     def JobLookup(self, guid):
         from gnucash.gnucash_business import Job
@@ -330,11 +348,6 @@ class Book(GnuCashCoreClass):
         from gnucash.gnucash_business import Vendor
         return self.do_lookup_create_oo_instance(
             gncVendorLookup, Vendor, guid.get_instance() )
-
-    def EmployeeLookup(self, guid):
-        from gnucash.gnucash_business import Employee
-        return self.do_lookup_create_oo_instance(
-            gncEmployeeLookup, Employee, guid.get_instance() )
 
     def TaxTableLookup(self, guid):
         from gnucash.gnucash_business import TaxTable
@@ -355,36 +368,45 @@ class Book(GnuCashCoreClass):
         return self.do_lookup_create_oo_instance(
             gnc_search_bill_on_id, Bill, id)
 
-    def InvoiceLookupByID(self, id):
-        from gnucash.gnucash_business import Invoice
+    def CoOwnerLookupByID(self, id):
+        from gnucash.gnucash_business import CoOwner
         return self.do_lookup_create_oo_instance(
-            gnc_search_invoice_on_id, Invoice, id)
+            gnc_search_customer_on_id, CoOwner, id)
 
     def CustomerLookupByID(self, id):
         from gnucash.gnucash_business import Customer
         return self.do_lookup_create_oo_instance(
             gnc_search_customer_on_id, Customer, id)
 
+    def InvoiceLookupByID(self, id):
+        from gnucash.gnucash_business import Invoice
+        return self.do_lookup_create_oo_instance(
+            gnc_search_invoice_on_id, Invoice, id)
+
     def VendorLookupByID(self, id):
         from gnucash.gnucash_business import Vendor
         return self.do_lookup_create_oo_instance(
             gnc_search_vendor_on_id, Vendor, id)
-
-    def InvoiceNextID(self, customer):
-      ''' Return the next invoice ID.
-      '''
-      from gnucash.gnucash_core_c import gncInvoiceNextID
-      return gncInvoiceNextID(self.get_instance(),customer.GetEndOwner().get_instance()[1])
 
     def BillNextID(self, vendor):
       ''' Return the next Bill ID. '''
       from gnucash.gnucash_core_c import gncInvoiceNextID
       return gncInvoiceNextID(self.get_instance(),vendor.GetEndOwner().get_instance()[1])
 
+    def CoOwnerNextID(self):
+      ''' Return the next Co-Owner ID. '''
+      from gnucash.gnucash_core_c import gncCoOwnerNextID
+      return gncCoOwnerNextID(self.get_instance())
+
     def CustomerNextID(self):
       ''' Return the next Customer ID. '''
       from gnucash.gnucash_core_c import gncCustomerNextID
       return gncCustomerNextID(self.get_instance())
+
+    def InvoiceNextID(self, customer):
+      ''' Return the next invoice ID. '''
+      from gnucash.gnucash_core_c import gncInvoiceNextID
+      return gncInvoiceNextID(self.get_instance(),customer.GetEndOwner().get_instance()[1])
 
     def VendorNextID(self):
       ''' Return the next Vendor ID. '''
@@ -1127,3 +1149,4 @@ class QueryNumericPredicate(GnuCashCoreClass):
 
 QueryNumericPredicate.add_constructor_and_methods_with_prefix(
     'qof_query_', 'numeric_predicate')
+
