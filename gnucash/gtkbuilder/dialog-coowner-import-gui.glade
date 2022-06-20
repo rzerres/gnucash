@@ -149,33 +149,16 @@
                 <property name="halign">start</property>
                 <property name="border-width">3</property>
                 <child>
-                  <object class="GtkRadioButton" id="radiobutton_customer">
-                    <property name="label" translatable="yes">Customer</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes">For importing customer lists.</property>
-                    <property name="halign">start</property>
-                    <property name="draw-indicator">True</property>
-                    <signal name="clicked" handler="gnc_customer_import_gui_type_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkRadioButton" id="radiobutton_vendor">
-                    <property name="label" translatable="yes">Vendor</property>
+                    <property name="label" translatable="yes">Co-Owner</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes">For importing vendor lists.</property>
+                    <property name="tooltip-text" translatable="yes">For importing co-owner lists.</property>
                     <property name="halign">start</property>
                     <property name="draw-indicator">True</property>
-                    <property name="group">radiobutton_customer</property>
-                    <signal name="clicked" handler="gnc_customer_import_gui_type_cb" swapped="no"/>
+                    <property name="group">radiobutton_coowner</property>
+                    <signal name="clicked" handler="gnc_coowner_import_gui_type_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -221,7 +204,7 @@
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
-                    <signal name="toggled" handler="gnc_customer_import_gui_option1_cb" swapped="no"/>
+                    <signal name="toggled" handler="gnc_coowner_import_gui_option1_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -239,7 +222,7 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">radiobutton1</property>
-                    <signal name="toggled" handler="gnc_customer_import_gui_option2_cb" swapped="no"/>
+                    <signal name="toggled" handler="gnc_coowner_import_gui_option2_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -257,7 +240,7 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">radiobutton1</property>
-                    <signal name="toggled" handler="gnc_customer_import_gui_option3_cb" swapped="no"/>
+                    <signal name="toggled" handler="gnc_coowner_import_gui_option3_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -275,7 +258,7 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">radiobutton1</property>
-                    <signal name="toggled" handler="gnc_customer_import_gui_option4_cb" swapped="no"/>
+                    <signal name="toggled" handler="gnc_coowner_import_gui_option4_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -293,7 +276,7 @@
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <property name="group">radiobutton1</property>
-                    <signal name="clicked" handler="gnc_customer_import_gui_option5_cb" swapped="no"/>
+                    <signal name="clicked" handler="gnc_coowner_import_gui_option5_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
