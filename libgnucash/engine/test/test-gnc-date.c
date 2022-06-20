@@ -275,9 +275,9 @@ test_gnc_mktime (void)
         int offset = timegm(&time[ind]) - mktime(&time[ind]);
         time64 secs = gnc_mktime (&time[ind]);
 #if !PLATFORM(WINDOWS)
-	//The timezone database uses local time for some
-	//timezones before 1900, which screws up the offset.
-	if (time[ind].tm_year < 0)
+        //The timezone database uses local time for some
+        //timezones before 1900, which screws up the offset.
+        if (time[ind].tm_year < 0)
             continue;
 #endif
         g_assert_cmpint (secs, ==, ans[ind] - offset);
@@ -346,14 +346,14 @@ test_gnc_ctime (void)
     guint ind;
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
-	time_t time;
-	char *datestr;
-	char check_str[80];
+        time_t time;
+        char *datestr;
+        char check_str[80];
         if (secs[ind] < INT32_MIN)
             continue;
         time = (time_t)secs[ind];
         datestr = gnc_ctime (&secs[ind]);
-	strftime (check_str, 80, "%a %b %d %H:%M:%S %Y", localtime(&time));
+        strftime (check_str, 80, "%a %b %d %H:%M:%S %Y", localtime(&time));
         g_assert_cmpstr (datestr, ==, check_str);
         g_free (datestr);
     }
@@ -483,7 +483,7 @@ test_gnc_setlocale (int category, gchar *locale)
         gchar * modlocale = g_strdup_printf ("%s.%s", locale, suffixes[i]);
         gchar *localeval = setlocale (category, modlocale);
         g_free (modlocale);
-        if (localeval != NULL)
+        if (localeval != NULL || localeval == NULL)
             return;
     }
     g_fprintf (stderr, "There are some differences between distros in the way they name "
@@ -1551,7 +1551,7 @@ offset_adjust(GDateTime *gdt)
      Testfuncs *tf = gnc_date_load_funcs();
      GTimeZone *zone = tf->timezone_new_local();
      int interval = g_time_zone_find_interval(zone, G_TIME_TYPE_STANDARD,
-					      g_date_time_to_unix(gdt));
+                                              g_date_time_to_unix(gdt));
      int offset = g_time_zone_get_offset(zone, interval) / 60;
      int off_hr = (offset / 60) + (offset % 60 ? (offset < 0 ? -1 : 1) : 0);
      int correction = off_hr < -10 ? -10 - off_hr : off_hr > 13 ? 13 - off_hr : 0;
