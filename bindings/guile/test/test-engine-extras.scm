@@ -68,21 +68,21 @@
 ;; Really could do with generalising and making into a 'with' macro
 (define (with-account account fn)
   (begin (xaccAccountBeginEdit account)
-	 (let ((result (fn)))
-	   (xaccAccountCommitEdit account)
-	   result)))
+         (let ((result (fn)))
+           (xaccAccountCommitEdit account)
+           result)))
 
 (define (with-accounts accounts fn)
   (begin (map xaccAccountBeginEdit accounts)
-	 (let ((result (fn)))
-	   (map xaccAccountCommitEdit accounts)
-	   result)))
+         (let ((result (fn)))
+           (map xaccAccountCommitEdit accounts)
+           result)))
 
 (define (with-transaction txn fn)
   (begin (xaccTransBeginEdit txn)
-	 (let ((result (fn)))
-	   (xaccTransCommitEdit txn)
-	   result)))
+         (let ((result (fn)))
+           (xaccTransCommitEdit txn)
+           result)))
 
 ;; Test environments.. an environment is just an alist with some well
 ;; known names.  The idea is that we can use it to pass around
@@ -92,11 +92,11 @@
   (let ((x 0))
     (lambda ()
       (begin (set! x (+ x 1))
-	     x))))
+             x))))
 
 (define (create-test-env)
   (list (cons 'random (seed->random-state (random 1000)))
-	(cons 'counter (make-counter))))
+        (cons 'counter (make-counter))))
 
 (define (env-random-amount env n)
   (/ (env-random env n) 1))
@@ -117,26 +117,26 @@
 
 (define (env-create-transaction env date credit debit aaa)
   (let ((txn (xaccMallocTransaction (gnc-get-current-book)))
-	(split-1 (xaccMallocSplit  (gnc-get-current-book)))
-	(split-2 (xaccMallocSplit  (gnc-get-current-book)))
-	(datevec (gnc-localtime date)))
+        (split-1 (xaccMallocSplit  (gnc-get-current-book)))
+        (split-2 (xaccMallocSplit  (gnc-get-current-book)))
+        (datevec (gnc-localtime date)))
     (with-transaction txn
-		      (lambda ()
-			(xaccTransSetDescription txn (env-string env "ponies"))
-			(xaccTransSetCurrency txn (gnc-default-report-currency))
-			(xaccTransSetDate txn
-					  (gnc:date-get-month-day datevec)
-					  (gnc:date-get-month datevec)
-					  (gnc:date-get-year datevec))
-			(xaccSplitSetParent split-1 txn)
-			(xaccSplitSetParent split-2 txn)
-			(xaccSplitSetAccount split-1 credit)
-			(xaccSplitSetAccount split-2 debit)
-			(xaccSplitSetAmount split-1 aaa)
-			(xaccSplitSetAmount split-2 (gnc-numeric-neg aaa))
-			(xaccSplitSetValue split-1 aaa)
-			(xaccSplitSetValue split-2 (gnc-numeric-neg aaa))
-			))
+                      (lambda ()
+                        (xaccTransSetDescription txn (env-string env "ponies"))
+                        (xaccTransSetCurrency txn (gnc-default-report-currency))
+                        (xaccTransSetDate txn
+                                          (gnc:date-get-month-day datevec)
+                                          (gnc:date-get-month datevec)
+                                          (gnc:date-get-year datevec))
+                        (xaccSplitSetParent split-1 txn)
+                        (xaccSplitSetParent split-2 txn)
+                        (xaccSplitSetAccount split-1 credit)
+                        (xaccSplitSetAccount split-2 debit)
+                        (xaccSplitSetAmount split-1 aaa)
+                        (xaccSplitSetAmount split-2 (gnc-numeric-neg aaa))
+                        (xaccSplitSetValue split-1 aaa)
+                        (xaccSplitSetValue split-2 (gnc-numeric-neg aaa))
+                        ))
     ;(format #t "tx ~a\n" (map xaccSplitGetAmount (list split-1 split-2)))
     ;(format #t "tx ~a\n" (map xaccSplitGetValue (list split-1 split-2)))
     txn))
@@ -298,88 +298,88 @@
 (define (env-create-account env type commodity parent-account)
   (let ((new-account (xaccMallocAccount (gnc-get-current-book))))
     (with-accounts (list new-account parent-account)
-		  (lambda ()
-		    (xaccAccountSetCommodity new-account commodity)
-		    (xaccAccountSetName new-account (env-string env "account"))
-		    (xaccAccountSetType new-account type)
-		    (gnc-account-append-child parent-account new-account)
-		    new-account))))
+                  (lambda ()
+                    (xaccAccountSetCommodity new-account commodity)
+                    (xaccAccountSetName new-account (env-string env "account"))
+                    (xaccAccountSetType new-account type)
+                    (gnc-account-append-child parent-account new-account)
+                    new-account))))
 
 ;; Spend '1' on the 1st, '2' on the 2nd, etc.  Makes for pretty graphs
 (define (env-create-daily-transactions env start-date end-date to-account from-account)
   (let ((dates-this-month (gnc:make-date-list start-date
-					      end-date
-					      DayDelta)))
+                                              end-date
+                                              DayDelta)))
       (for-each (lambda (date)
-		  (env-create-transaction env date to-account
-					  from-account
-					  (/
-					   (gnc:date-get-month-day (gnc-localtime date))
-					   1)))
-		(cdr (reverse dates-this-month)))))
+                  (env-create-transaction env date to-account
+                                          from-account
+                                          (/
+                                           (gnc:date-get-month-day (gnc-localtime date))
+                                           1)))
+                (cdr (reverse dates-this-month)))))
 
 (define (env-create-account-structure env account-structure)
   (define (lookup-options list)
     (if (null? list) (cons '() '())
-	(if (not (pair? (car list)))
-	    (cons '() list)
-	    (if (not (pair? (car (car list))))
-		(cons '() list)
-		list))))
+        (if (not (pair? (car list)))
+            (cons '() list)
+            (if (not (pair? (car (car list))))
+                (cons '() list)
+                list))))
 
   (define (create-substructure parent options account-structure)
     ;;(format #t "Creating subaccounts for ~a ~a\n"
     ;; (xaccAccountGetName parent) account-structure)
     (let* ((account-name (car account-structure))
-	   (options-pair (lookup-options (cdr account-structure)))
-	   (options (append (car options-pair) options)))
+           (options-pair (lookup-options (cdr account-structure)))
+           (options (append (car options-pair) options)))
       ;;(format #t "New Account ~a\n" account-name)
       ;;(format #t "Options ~a\n" (car options-pair))
       ;;(format #t "Child list ~a\n" (cdr options-pair))
       (let ((new-account (env-create-account env (assoc-ref options 'type)
-					     (assoc-ref options 'commodity)
-					     parent)))
-	(with-accounts (list new-account)
-		       (lambda ()
-			 (xaccAccountSetName new-account account-name)))
+                                             (assoc-ref options 'commodity)
+                                             parent)))
+        (with-accounts (list new-account)
+                       (lambda ()
+                         (xaccAccountSetName new-account account-name)))
 
-	(cons new-account
-	      (map (lambda (child)
-		     (create-substructure new-account options child))
-		   (cdr options-pair))))))
+        (cons new-account
+              (map (lambda (child)
+                     (create-substructure new-account options child))
+                   (cdr options-pair))))))
   (let ((options (list (cons 'commodity (gnc-default-report-currency))
-		       (cons 'type '()))))
+                       (cons 'type '()))))
     (create-substructure (gnc-get-current-root-account)
-			 options
-			 account-structure)))
+                         options
+                         account-structure)))
 
 (define (env-create-account-structure-alist env account-structure)
   (let ((accounts (env-create-account-structure env account-structure)))
     (map (lambda (acct) (cons (xaccAccountGetName acct) acct))
-	 (gnc:list-flatten accounts))))
+         (gnc:list-flatten accounts))))
 
 (define (env-expense-account-structure env)
   (env-create-account-structure
    env
    (list "Expenses"
-	 (list (cons 'type ACCT-TYPE-EXPENSE))
-	 (list "Groceries")
-	 (list "Rent")
-	 (list "Auto"
-	       (list "Tax")
-	       (list "Parking")
-	       (list "Petrol")))))
+         (list (cons 'type ACCT-TYPE-EXPENSE))
+         (list "Groceries")
+         (list "Rent")
+         (list "Auto"
+               (list "Tax")
+               (list "Parking")
+               (list "Petrol")))))
 
 (define (env-create-test-accounts env)
   (env-create-account-structure-alist
    env
    (list "Root"
-	 (list (cons 'type ACCT-TYPE-ASSET))
-	 (list "Bank")
-	 (list "Wallet")
-	 (list "Other")
-	 (list "Expenses"
-	       (list (cons 'type ACCT-TYPE-EXPENSE))))))
+         (list (cons 'type ACCT-TYPE-ASSET))
+         (list "Bank")
+         (list "Wallet")
+         (list "Other")
+         (list "Expenses"
+               (list (cons 'type ACCT-TYPE-EXPENSE))))))
 
 (define (mnemonic->commodity sym)
     (gnc-commodity-table-lookup
@@ -485,6 +485,8 @@
 ;; (6) vendor credit-note (7) employee credit-note (8)
 ;; customer-invoice with various combinations of entries. in addition,
 ;; this function will return the vector-list of invoices created.
+
+;; TODO: add Co-Owner tests
 (define-public (create-test-invoice-data)
   (define USD (mnemonic->commodity "USD"))
   (define structure
@@ -1051,4 +1053,3 @@
      #:description "spin-off $150")
 
     account-alist))
-
