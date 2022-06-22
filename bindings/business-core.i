@@ -34,16 +34,7 @@
 %rename(gncOwnerReturnGUID) gncOwnerRetGUID;
 
 %inline %{
-static GncGUID gncTaxTableReturnGUID(GncTaxTable *x)
-{ return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
-
-static GncGUID gncInvoiceReturnGUID(GncInvoice *x)
-{ return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
-
-static GncGUID gncJobReturnGUID(GncJob *x)
-{ return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
-
-static GncGUID gncVendorReturnGUID(GncVendor *x)
+static GncGUID gncCoOwnerReturnGUID(GncCoOwner *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
 static GncGUID gncCustomerReturnGUID(GncCustomer *x)
@@ -52,11 +43,29 @@ static GncGUID gncCustomerReturnGUID(GncCustomer *x)
 static GncGUID gncEmployeeReturnGUID(GncEmployee *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
+static GncGUID gncInvoiceReturnGUID(GncInvoice *x)
+{ return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
+static GncGUID gncJobReturnGUID(GncJob *x)
+{ return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
 static GncGUID gncLotReturnGUID(GNCLot *x)
 { return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
 
-static GncTaxTable * gncTaxTableLookupFlip(GncGUID g, QofBook *b)
-{ return gncTaxTableLookup(b, &g); }
+static GncGUID gncVendorReturnGUID(GncVendor *x)
+{ return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
+static GncGUID gncTaxTableReturnGUID(GncTaxTable *x)
+{ return (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null())); }
+
+static GncCoOwner * gncCoOwnerLookupFlip(GncGUID g, QofBook *b)
+{ return gncCoOwnerLookup(b, &g); }
+
+static GncCustomer * gncCustomerLookupFlip(GncGUID g, QofBook *b)
+{ return gncCustomerLookup(b, &g); }
+
+static GncEmployee * gncEmployeeLookupFlip(GncGUID g, QofBook *b)
+{ return gncEmployeeLookup(b, &g); }
 
 static GncInvoice * gncInvoiceLookupFlip(GncGUID g, QofBook *b)
 { return gncInvoiceLookup(b, &g); }
@@ -67,16 +76,13 @@ static GncJob * gncJobLookupFlip(GncGUID g, QofBook *b)
 static GncVendor * gncVendorLookupFlip(GncGUID g, QofBook *b)
 { return gncVendorLookup(b, &g); }
 
-static GncCustomer * gncCustomerLookupFlip(GncGUID g, QofBook *b)
-{ return gncCustomerLookup(b, &g); }
-
-static GncEmployee * gncEmployeeLookupFlip(GncGUID g, QofBook *b)
-{ return gncEmployeeLookup(b, &g); }
+static GncTaxTable * gncTaxTableLookupFlip(GncGUID g, QofBook *b)
+{ return gncTaxTableLookup(b, &g); }
 
 %}
 
-GLIST_HELPER_INOUT(GncInvoiceList, SWIGTYPE_p__gncInvoice);
 GLIST_HELPER_INOUT(EntryList, SWIGTYPE_p__gncEntry);
+GLIST_HELPER_INOUT(GncInvoiceList, SWIGTYPE_p__gncInvoice);
 GLIST_HELPER_INOUT(GncTaxTableGetTables, SWIGTYPE_p__gncTaxTable);
 GLIST_HELPER_INOUT(GncTaxTableEntryList, SWIGTYPE_p__gncTaxTableEntry);
 GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
@@ -119,6 +125,7 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 %include <gncAddress.h>
 %include <gncBillTerm.h>
 %include <gncBusiness.h>
+%include <gncCoOwner.h>
 %include <gncCustomer.h>
 %include <gncEmployee.h>
 %include <gncEntry.h>
@@ -126,8 +133,8 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 %include <gncJob.h>
 %include <gncOrder.h>
 %include <gncOwner.h>
-%include <gncTaxTable.h>
 %include <gncVendor.h>
+%include <gncTaxTable.h>
 #if defined(SWIGGUILE)
 %include <gnc-engine-guile.h>
 #endif
@@ -135,11 +142,12 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
  * don't generate bindings for them). */
 %import <qofquery.h>
 
+#define URL_TYPE_COOWNER GNC_ID_COOWNER
 #define URL_TYPE_CUSTOMER GNC_ID_CUSTOMER
-#define URL_TYPE_VENDOR GNC_ID_VENDOR
 #define URL_TYPE_EMPLOYEE GNC_ID_EMPLOYEE
-#define URL_TYPE_JOB GNC_ID_JOB
 #define URL_TYPE_INVOICE GNC_ID_INVOICE
+#define URL_TYPE_JOB GNC_ID_JOB
+#define URL_TYPE_VENDOR GNC_ID_VENDOR
 // not exactly clean
 #define URL_TYPE_OWNERREPORT "owner-report"
 
@@ -161,34 +169,40 @@ static GncInvoiceList * qof_query_run_for_invoices(QofQuery *q) {
 #define SET_ENUM(e) snprintf(tmp, 100, "(set! %s (%s))", (e), (e));  \
     scm_c_eval_string(tmp);
 
-    SET_ENUM("GNC-OWNER-CUSTOMER");
-    SET_ENUM("GNC-OWNER-VENDOR");
-    SET_ENUM("GNC-OWNER-EMPLOYEE");
-    SET_ENUM("GNC-OWNER-JOB");
     SET_ENUM("GNC-AMT-TYPE-VALUE");
     SET_ENUM("GNC-AMT-TYPE-PERCENT");
 
-    SET_ENUM("URL-TYPE-CUSTOMER");
-    SET_ENUM("URL-TYPE-VENDOR");
-    SET_ENUM("URL-TYPE-EMPLOYEE");
-    SET_ENUM("URL-TYPE-JOB");
-    SET_ENUM("URL-TYPE-INVOICE");
-    SET_ENUM("URL-TYPE-OWNERREPORT");
+    SET_ENUM("GNC-INVOICE-COOWNER-INVOICE");
+    SET_ENUM("GNC-INVOICE-CUST-INVOICE");
+    SET_ENUM("GNC-INVOICE-EMPL-INVOICE");
+    SET_ENUM("GNC-INVOICE-VEND-INVOICE");
+    SET_ENUM("GNC-INVOICE-COOWNER-CREDIT-NOTE");
+    SET_ENUM("GNC-INVOICE-CUST-CREDIT-NOTE");
+    SET_ENUM("GNC-INVOICE-EMPL-CREDIT-NOTE");
+    SET_ENUM("GNC-INVOICE-VEND-CREDIT-NOTE");
+    SET_ENUM("GNC-INVOICE-UNDEFINED");
 
+    SET_ENUM("GNC-OWNER-COOWNER");
+    SET_ENUM("GNC-OWNER-VENDOR");
+    SET_ENUM("GNC-OWNER-EMPLOYEE");
+    SET_ENUM("GNC-OWNER-JOB");
+    SET_ENUM("GNC-OWNER-CUSTOMER");
+
+    SET_ENUM("INVOICE-BILLTO");
     SET_ENUM("INVOICE-FROM-TXN");
     SET_ENUM("INVOICE-FROM-LOT");
     SET_ENUM("INVOICE-OWNER");
-    SET_ENUM("INVOICE-BILLTO");
-    SET_ENUM("OWNER-PARENTG");
-    SET_ENUM("OWNER-FROM-LOT");
 
-    SET_ENUM("GNC-INVOICE-UNDEFINED");
-    SET_ENUM("GNC-INVOICE-CUST-INVOICE");
-    SET_ENUM("GNC-INVOICE-VEND-INVOICE");
-    SET_ENUM("GNC-INVOICE-EMPL-INVOICE");
-    SET_ENUM("GNC-INVOICE-CUST-CREDIT-NOTE");
-    SET_ENUM("GNC-INVOICE-VEND-CREDIT-NOTE");
-    SET_ENUM("GNC-INVOICE-EMPL-CREDIT-NOTE");
+    SET_ENUM("OWNER-FROM-LOT");
+    SET_ENUM("OWNER-PARENTG");
+
+    SET_ENUM("URL-TYPE-COOWNER");
+    SET_ENUM("URL-TYPE-CUSTOMER");
+    SET_ENUM("URL-TYPE-EMPLOYEE");
+    SET_ENUM("URL-TYPE-INVOICE");
+    SET_ENUM("URL-TYPE-JOB");
+    SET_ENUM("URL-TYPE-OWNERREPORT");
+    SET_ENUM("URL-TYPE-VENDOR");
 
 #undef SET_ENUM
   }
