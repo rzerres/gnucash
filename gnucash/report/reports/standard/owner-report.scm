@@ -41,7 +41,6 @@
 (define optname-date-driver (N_ "Due or Post Date"))
 
 ;; Define a name that reference to the unique report guid
-(define coowner-report-guid "1c3f0d24f0324d498e02434e1f3a7218-old")
 (define customer-report-guid "c146317be32e4948a561ec7fc89d15c1-old")
 (define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44-old")
 (define vendor-report-guid "d7d1e53505ee4b1b82efad9eacedaea0-old")
@@ -70,8 +69,7 @@
 ;; naming and lookup only, and the display of the option name will be
 ;; translated somewhere else.)
 (define (owner-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-COOWNER) (N_ "Co-Owner"))
-        ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
         ((eqv? owner-type GNC-OWNER-Owner) (N_ "Owner"))
         ;; FALL THROUGH
@@ -80,19 +78,17 @@
 
 ;; Error strings in case there is no (valid) selection (translated)
 (define (invalid-selection-title-string owner-type)
-(cond ((eqv? owner-type GNC-OWNER-COOWNER) (G_ "No valid co-owner selected."))
-        ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "No valid customer selected."))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "No valid employee selected."))
-        ;; FALL THROUGH
-        (else
+(cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "No valid customer selected."))
+      ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "No valid employee selected."))
+      ;; FALL THROUGH
+      (else
           (G_ "No valid company selected."))))
 
 (define (invalid-selection-string owner-type)
-(cond ((eqv? owner-type GNC-OWNER-COOWNER) (G_ "This report requires a co-owner to be selected."))
-        ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "This report requires a customer to be selected."))
-        ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "This report requires a employee to be selected."))
-        ;; FALL THROUGH
-        (else
+(cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "This report requires a customer to be selected."))
+      ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "This report requires a employee to be selected."))
+      ;; FALL THROUGH
+      (else
           (G_ "This report requires a company to be selected."))))
 
 ;; Html formatted error message documents
@@ -115,8 +111,7 @@
 
 ;; Document names, used in report names (translated)
 (define (doctype-str owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-COOWNER) (G_ "Co-Owner"))
-        ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "Customer"))
+  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (G_ "Customer"))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (G_ "Employee"))
         ;; FALL THROUGH
         (else
@@ -622,9 +617,6 @@
 
   gnc:*report-options*)
 
-(define (coowner-options-generator)
-  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-COOWNER #f))
-
 (define (customer-options-generator)
   (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER #f))
 
@@ -825,9 +817,6 @@
 (define* (find-first-account-for-owner owner #:key currency)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
-      ((eqv? type GNC-OWNER-COOWNER)
-       (find-first-account ACCT-TYPE-RECEIVABLE #:currency currency))
-
       ((eqv? type GNC-OWNER-CUSTOMER)
        (find-first-account ACCT-TYPE-RECEIVABLE #:currency currency))
 
@@ -846,15 +835,6 @@
 
       (else
        '()))))
-
-(gnc:define-report
- 'version 1
- 'name "Co-Owner Report (legacy)"
- 'report-guid coowner-report-guid
- 'menu-path (list gnc:menuname-business-reports)
- 'options-generator coowner-options-generator
- 'renderer reg-renderer
- 'in-menu? (gnc-prefs-is-extra-enabled))
 
 (gnc:define-report
  'version 1
