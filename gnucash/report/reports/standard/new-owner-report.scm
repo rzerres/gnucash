@@ -1190,7 +1190,7 @@ and do not match the transaction."))))))))
 (define (job-renderer obj)
   (reg-renderer obj GNC-OWNER-JOB))
 
-(define coowner-report-guid "1c3f0d24f0324d498e02434e1f3a7218")
+(define coowner-report-guid "60fd4053ce0b4fd28e382f0836dca5c1")
 (define customer-report-guid "c146317be32e4948a561ec7fc89d15c1")
 (define employee-report-guid "08ae9c2e884b4f9787144f47eacd7f44")
 (define job-report-guid "5518ac227e474f47a34439f2d4d049de")
@@ -1202,7 +1202,7 @@ and do not match the transaction."))))))))
  'report-guid coowner-report-guid
  'menu-path (list gnc:menuname-business-reports)
  'options-generator (lambda () (options-generator GNC-OWNER-COOWNER))
- 'renderer customer-renderer
+ 'renderer coowner-renderer
  'in-menu? #t)
 
 (gnc:define-report
