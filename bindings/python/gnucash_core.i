@@ -31,7 +31,7 @@
         Have a look at the includes to see which parts of the GnuCash source SWIG takes as input.
     @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
     @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
-    @ingroup python_bindings 
+    @ingroup python_bindings
 
     @file gnucash_core.c
     @brief SWIG output file.
@@ -124,9 +124,17 @@
     PyObject * owner_tuple = PyTuple_New(2);
     PyTuple_SetItem(owner_tuple, 0, PyInt_FromLong( (long) owner_type ) );
     PyObject * swig_wrapper_object;
-    if (owner_type == GNC_OWNER_CUSTOMER ){
+    if (owner_type == GNC_OWNER_COOWNER ){
         swig_wrapper_object = SWIG_NewPointerObj(
         gncOwnerGetCustomer($1), $descriptor(GncCustomer *), 0);
+    }
+    else if (owner_type == GNC_OWNER_CUSTOMER ){
+        swig_wrapper_object = SWIG_NewPointerObj(
+        gncOwnerGetCustomer($1), $descriptor(GncCustomer *), 0);
+    }
+    else if (owner_type == GNC_OWNER_EMPLOYEE){
+        swig_wrapper_object = SWIG_NewPointerObj(
+        gncOwnerGetEmployee($1), $descriptor(GncEmployee *), 0);
     }
     else if (owner_type == GNC_OWNER_JOB){
         swig_wrapper_object = SWIG_NewPointerObj(
@@ -153,9 +161,21 @@
     GncOwner * temp_owner = gncOwnerNew();
     void * pointer_to_real_thing;
     if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncCoOwner *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitCoOwner(temp_owner, (GncCoOwner *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
                          $descriptor(GncCustomer *),
                          SWIG_POINTER_EXCEPTION)) == 0){
         gncOwnerInitCustomer(temp_owner, (GncCustomer *)pointer_to_real_thing);
+        $1 = temp_owner;
+    }
+    else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
+                         $descriptor(GncEmployee *),
+                         SWIG_POINTER_EXCEPTION)) == 0){
+        gncOwnerInitEmployee(temp_owner, (GncEmployee *)pointer_to_real_thing);
         $1 = temp_owner;
     }
     else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
@@ -168,12 +188,6 @@
                          $descriptor(GncVendor *),
                          SWIG_POINTER_EXCEPTION)) == 0){
         gncOwnerInitVendor(temp_owner, (GncVendor *)pointer_to_real_thing);
-        $1 = temp_owner;
-    }
-    else if ((SWIG_ConvertPtr($input, &pointer_to_real_thing,
-                         $descriptor(GncEmployee *),
-                         SWIG_POINTER_EXCEPTION)) == 0){
-        gncOwnerInitEmployee(temp_owner, (GncEmployee *)pointer_to_real_thing);
         $1 = temp_owner;
     }
     else {
