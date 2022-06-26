@@ -141,7 +141,7 @@ setup_with_invoice( Fixture *fixture, gconstpointer pData )
     gncEntrySetDescription (entry, desc);
     gncEntrySetDocQuantity (entry, data->quantity, data->is_cn);
 
-    if (data->is_cust_doc)
+    if (data->is_coowner_doc || data->is_cust_doc)
     {
         gncEntrySetInvAccount(entry, fixture->account);
         gncInvoiceAddEntry (fixture->invoice, entry);
@@ -264,6 +264,7 @@ test_suite_gncInvoice ( void )
     GNC_TEST_ADD( suitename, "post trans - coowner invoice", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
 
     pData.is_cust_doc = TRUE;   // Customer credit note
+    pData.is_coowner_doc = FALSE;
     GNC_TEST_ADD( suitename, "post trans - customer creditnote", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
     pData.is_cn = FALSE;   // Customer invoice
     GNC_TEST_ADD( suitename, "post trans - customer invoice", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
