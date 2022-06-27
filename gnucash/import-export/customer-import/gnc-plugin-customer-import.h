@@ -38,11 +38,11 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_customer_import            (gnc_plugin_customer_import_get_type())
-#define GNC_PLUGIN_customer_import(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GNC_TYPE_PLUGIN_customer_import, GncPlugincustomer_import))
-#define GNC_PLUGIN_customer_import_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),  GNC_TYPE_PLUGIN_customer_import, GncPlugincustomer_importClass))
-#define GNC_IS_PLUGIN_customer_import(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GNC_TYPE_PLUGIN_customer_import))
-#define GNC_IS_PLUGIN_customer_import_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  GNC_TYPE_PLUGIN_customer_import))
-#define GNC_PLUGIN_customer_import_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  GNC_TYPE_PLUGIN_customer_import, GncPlugincustomer_importClass))
+#define GNC_PLUGIN_customer_import(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GNC_TYPE_PLUGIN_CUSTOMER_IMPORT, GncPlugincustomer_import))
+#define GNC_PLUGIN_customer_import_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),  GNC_TYPE_PLUGIN_CUSTOMER_IMPORT, GncPlugincustomer_importClass))
+#define GNC_IS_PLUGIN_customer_import(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GNC_TYPE_PLUGIN_CUSTOMER_IMPORT))
+#define GNC_IS_PLUGIN_customer_import_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  GNC_TYPE_PLUGIN_CUSTOMER_IMPORT))
+#define GNC_PLUGIN_customer_import_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  GNC_TYPE_PLUGIN_CUSOTMER_IMPORT, GncPlugincustomer_importClass))
 
 #define GNC_PLUGIN_customer_import_NAME "gnc-plugin-customer-import"
 
