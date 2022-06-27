@@ -357,7 +357,7 @@ gnc_job_window_new (GtkWindow *parent, JobDialogType dialog_type, QofBook *bookp
     GtkWidget *amount_rate, *entry_billing_id, *entry_owner, *entry_rate, *label_owner,
       *radiobutton_active, *radiobutton_owner;
 
-    g_assert (dialog_type == NEW_JOB || dialog_type == MOD_JOB || dialog_type == DUP_JOB);
+    //g_assert (dialog_type == NEW_JOB || dialog_type == MOD_JOB || dialog_type == DUP_JOB);
 
     /*
      * Find an existing window for this job.  If found, bring it to
