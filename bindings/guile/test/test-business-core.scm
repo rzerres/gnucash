@@ -9,7 +9,8 @@
 (define (run-test)
   (test-runner-factory gnc:test-runner)
   (test-begin "test-business-core")
-  (core-tests)
+  (core-tests-coowner)
+  (core-tests-customer)
   (test-end "test-business-core"))
 
 (define (get-currency sym)
@@ -26,8 +27,11 @@
               (list "Bank-EUR" (list (cons 'commodity (get-currency "EUR"))))
               (list "Bank-USD"))
         (list "VAT"
-              (list "VAT-on-Purchases")
-              (list "VAT-on-Sales" (list (cons 'type ACCT-TYPE-LIABILITY))))
+              (list "VAT-on-Purchases-10")
+              (list "VAT-on-Purchases-19" (list (cons 'commodity (get-currency "EUR"))))
+              (list "VAT-on-Sales-10" (list (cons 'type ACCT-TYPE-LIABILITY)))
+              (list "VAT-on-Sales-19" (list (cons 'type ACCT-TYPE-LIABILITY)
+                                            (cons 'commodity (get-currency "EUR")))))
         (list "Income" (list (cons 'type ACCT-TYPE-INCOME))
               (list "Income-USD")
               (list "Income-GBP" (list (cons 'commodity (get-currency "GBP"))))
@@ -39,19 +43,21 @@
         (list "A/Payable" (list (cons 'type ACCT-TYPE-PAYABLE))
               (list "AP-USD")
               (list "AP-GBP" (list (cons 'commodity (get-currency "GBP"))))
-              (list "AP-EUR" (list (cons 'commodity (get-currency "EUR")))))))
+              (list "AP-EUR" (list (cons 'commodity (get-currency "EUR")))))
+   ))
 
-(define (core-tests)
+;; Testing entity Co-Owner
+(define (core-tests-coowner)
   (let* ((env (create-test-env))
+         ;; create the account hirarchy from given structure definition
          (account-alist (env-create-account-structure-alist env structure))
          (get-acct (lambda (name)
                      (or (assoc-ref account-alist name)
                      (error "invalid account name" name))))
          (YEAR (gnc:time64-get-year (gnc:get-today)))
 
-         ;; WIP: coowner tests
          (coowner-1 (let ((coowner-1 (gncCoOwnerCreate (gnc-get-current-book))))
-                (gncCoOwnerSetID coowenr-1 "coowner-1-id")
+                (gncCoOwnerSetID coowner-1 "coowner-1-id")
                 (gncCoOwnerSetName coowner-1 "coowner-1-name")
                 (gncCoOwnerSetNotes coowner-1 "coowner-1-notes")
                 (gncCoOwnerSetCurrency coowner-1 (get-currency "EUR"))
@@ -62,14 +68,14 @@
                  (gncOwnerInitCoOwner owner-1 coowner-1)
                     owner-1))
 
-         ;; job-1 is generated for a coowner
+         ;; job-1 is generated for a Co-Owner
          (job-1 (let ((job-1 (gncJobCreate (gnc-get-current-book))))
                   (gncJobSetID job-1 "job-1-id")
                   (gncJobSetName job-1 "job-1-name")
                   (gncJobSetOwner job-1 owner-1)
                   job-1))
 
-         ;; inv-1 is generated for a coowner
+         ;; inv-1 is generated for a Co-Owner
          (inv-1 (let ((inv-1 (gncInvoiceCreate (gnc-get-current-book))))
                   (gncInvoiceSetOwner inv-1 owner-1)
                   (gncInvoiceSetNotes inv-1 "inv-1-notes")
@@ -191,44 +197,32 @@
                    cust-2))
 
          (owner-1 (let ((owner-1 (gncOwnerNew)))
-                    (gncOwnerInitCoOwner owner-1 coowner-1)
+                    (gncOwnerInitCustomer owner-1 cust-1)
                     owner-1))
-
-         (cust-2 (let ((cust-2 (gncCustomerCreate (gnc-get-current-book))))
-                   (gncCustomerSetID cust-2 "cust-2-id")
-                   (gncCustomerSetName cust-2 "cust-2-name")
-                   (gncCustomerSetNotes cust-2 "cust-2-notes")
-                   (gncCustomerSetCurrency cust-2 (get-currency "USD"))
-                   (gncCustomerSetTaxIncluded cust-2 1) ;1 = GNC-TAXINCLUDED-YES
-                   cust-2))
 
          (owner-2 (let ((owner-2 (gncOwnerNew)))
                     (gncOwnerInitCustomer owner-2 cust-2)
                     owner-2))
 
-         (owner-3 (let ((owner-3 (gncOwnerNew)))
-                    (gncOwnerInitJob owner-3 job-2)
-                    owner-3))
+         ;; job-1 is generated for a customer
+         (job-1 (let ((job-1 (gncJobCreate (gnc-get-current-book))))
+                  (gncJobSetID job-1 "job-1-id")
+                  (gncJobSetName job-1 "job-1-name")
+                  (gncJobSetOwner job-1 owner-1)
+                  job-1))
 
-         ;; job-2 is generated for a customer
-         (job-2 (let ((job-2 (gncJobCreate (gnc-get-current-book))))
-                  (gncJobSetID job-2 "job-2-id")
-                  (gncJobSetName job-2 "job-2-name")
-                  (gncJobSetOwner job-2 owner-2)
-                  job-2))
+         ;; inv-1 is generated for a customer
+         (inv-1 (let ((inv-1 (gncInvoiceCreate (gnc-get-current-book))))
+                  (gncInvoiceSetOwner inv-1 owner-1)
+                  (gncInvoiceSetNotes inv-1 "inv-1-notes")
+                  (gncInvoiceSetBillingID inv-1 "inv-1-billing-id")
+                  (gncInvoiceSetCurrency inv-1 (get-currency "USD"))
+                  inv-1))
 
          ;; inv-2 is generated for a customer
          (inv-2 (let ((inv-2 (gncInvoiceCreate (gnc-get-current-book))))
                   (gncInvoiceSetOwner inv-2 owner-2)
                   (gncInvoiceSetNotes inv-2 "inv-2-notes")
-                  (gncInvoiceSetBillingID inv-2 "inv-2-billing-id")
-                  (gncInvoiceSetCurrency inv-2 (get-currency "USD"))
-                  inv-2))
-
-         ;; inv-3 is generated for a customer
-         (inv-3 (let ((inv-3 (gncInvoiceCreate (gnc-get-current-book))))
-                  (gncInvoiceSetOwner inv-3 owner-3)
-                  (gncInvoiceSetNotes inv-3 "inv-3-notes")
                   (gncInvoiceSetCurrency inv-2 (get-currency "USD"))
                   inv-2))
 
@@ -273,7 +267,7 @@
             (gncTaxTableIncRef tt)
             (gncTaxTableSetName tt "10% vat on sales")
             (let ((entry (gncTaxTableEntryCreate)))
-              (gncTaxTableEntrySetAccount entry (get-acct "VAT-on-Sales"))
+              (gncTaxTableEntrySetAccount entry (get-acct "VAT-on-Sales-10"))
               (gncTaxTableEntrySetType entry GNC-AMT-TYPE-PERCENT)
               (gncTaxTableEntrySetAmount entry 10)
               (gncTaxTableAddEntry tt entry))
@@ -284,7 +278,7 @@
             (gncTaxTableIncRef tt)
             (gncTaxTableSetName tt "10% vat on purchases")
             (let ((entry (gncTaxTableEntryCreate)))
-              (gncTaxTableEntrySetAccount entry (get-acct "VAT-on-Purchases"))
+              (gncTaxTableEntrySetAccount entry (get-acct "VAT-on-Purchases-10"))
               (gncTaxTableEntrySetType entry GNC-AMT-TYPE-PERCENT)
               (gncTaxTableEntrySetAmount entry 10)
               (gncTaxTableAddEntry tt entry))
@@ -311,72 +305,72 @@
       ""
       (gnc:owner-get-address-dep owner-1))
 
-    ;; inv-2 $6, due 18.7.1980 after report-date i.e. "current"
-    (let ((inv-2-copy (gncInvoiceCopy inv-2)))
-      (gncInvoiceAddEntry inv-2-copy (entry 27/4))
-      (gncInvoicePostToAccount inv-2-copy
+    ;; inv-1 $6, due 18.7.1980 after report-date i.e. "current"
+    (let ((inv-1-copy (gncInvoiceCopy inv-1)))
+      (gncInvoiceAddEntry inv-1-copy (entry 27/4))
+      (gncInvoicePostToAccount inv-1-copy
                                (get-acct "AR-USD")         ;post-to acc
                                (gnc-dmy2time64 13 05 1980) ;posted
                                (gnc-dmy2time64 18 07 1980) ;due
                                "inv current $6.75" #t #f)
       (gncInvoiceApplyPayment
-       inv-2-copy '() (get-acct "Bank-USD") 3/2 1
+       inv-1-copy '() (get-acct "Bank-USD") 3/2 1
        (gnc-dmy2time64 18 03 1980)
        "inv >90 payment" "pay only $1.50")
       (gncInvoiceApplyPayment
-       inv-2-copy '() (get-acct "Bank-USD") 2 1
+       inv-1-copy '() (get-acct "Bank-USD") 2 1
        (gnc-dmy2time64 20 03 1980)
        "inv >90 payment" "pay only $2.00"))
 
-    ;; inv-2-copy due 18.6.1980, <30days before report date
+    ;; inv-1-copy due 18.6.1980, <30days before report date
     ;; amount due $12
-    (let ((inv-2-copy (gncInvoiceCopy inv-2)))
-      (gncInvoiceAddEntry inv-2-copy (entry 4))
-      (gncInvoicePostToAccount inv-2-copy
+    (let ((inv-1-copy (gncInvoiceCopy inv-1)))
+      (gncInvoiceAddEntry inv-1-copy (entry 4))
+      (gncInvoicePostToAccount inv-1-copy
                                (get-acct "AR-USD")         ;post-to acc
                                (gnc-dmy2time64 13 04 1980) ;posted
                                (gnc-dmy2time64 18 06 1980) ;due
                                "inv <30days $4.00" #t #f))
 
-    ;; inv-2-copy due 18.5.1980, 30-60days before report date
+    ;; inv-1-copy due 18.5.1980, 30-60days before report date
     ;; amount due $6
-    (let ((inv-2-copy (gncInvoiceCopy inv-2)))
-      (gncInvoiceAddEntry inv-2-copy (entry 17/2))
-      (gncInvoicePostToAccount inv-2-copy
+    (let ((inv-1-copy (gncInvoiceCopy inv-1)))
+      (gncInvoiceAddEntry inv-1-copy (entry 17/2))
+      (gncInvoicePostToAccount inv-1-copy
                                (get-acct "AR-USD")         ;post-to acc
                                (gnc-dmy2time64 13 03 1980) ;posted
                                (gnc-dmy2time64 18 05 1980) ;due
                                "inv 30-60 $8.50" #t #f))
 
-    ;; inv-2-copy due 18.4.1980, 60-90days before report date
+    ;; inv-1-copy due 18.4.1980, 60-90days before report date
     ;; amount due $6
-    (let ((inv-2-copy (gncInvoiceCopy inv-2)))
-      (gncInvoiceAddEntry inv-2-copy (entry 15/2))
-      (gncInvoicePostToAccount inv-2-copy
+    (let ((inv-1-copy (gncInvoiceCopy inv-1)))
+      (gncInvoiceAddEntry inv-1-copy (entry 15/2))
+      (gncInvoicePostToAccount inv-1-copy
                                (get-acct "AR-USD")         ;post-to acc
                                (gnc-dmy2time64 13 02 1980) ;posted
                                (gnc-dmy2time64 18 04 1980) ;due
                                "inv 60-90 $7.50" #t #f))
 
-    ;; inv-2-copy due 18.3.1980, >90days before report date
+    ;; inv-1-copy due 18.3.1980, >90days before report date
     ;; amount due $11.50, drip-payments
-    (let ((inv-2-copy (gncInvoiceCopy inv-2)))
-      (gncInvoiceAddEntry inv-2-copy (entry 23/2))
-      (gncInvoicePostToAccount inv-2-copy
+    (let ((inv-1-copy (gncInvoiceCopy inv-1)))
+      (gncInvoiceAddEntry inv-1-copy (entry 23/2))
+      (gncInvoicePostToAccount inv-1-copy
                                (get-acct "AR-USD")         ;post-to acc
                                (gnc-dmy2time64 13 01 1980) ;posted
                                (gnc-dmy2time64 18 03 1980) ;due
                                "inv >90 $11.50" #t #f)
       (gncInvoiceApplyPayment
-       inv-2-copy '() (get-acct "Bank-USD") 3/2 1
+       inv-1-copy '() (get-acct "Bank-USD") 3/2 1
        (gnc-dmy2time64 18 03 1980)
        "inv >90 payment" "pay only $1.50")
       (gncInvoiceApplyPayment
-       inv-2-copy '() (get-acct "Bank-USD") 2 1
+       inv-1-copy '() (get-acct "Bank-USD") 2 1
        (gnc-dmy2time64 20 03 1980)
        "inv >90 payment" "pay only $2.00"))
 
-    ;; inv-2-copy due 18.3.1980, >90days before report date
+    ;; inv-2-copy due 18.4.1980, >90days before report date
     ;; amount due $11.50, drip-payments
     (let ((inv-2-copy (gncInvoiceCopy inv-2)))
       (gncInvoiceAddEntry inv-2-copy (entry 200))
@@ -400,20 +394,20 @@
                                "inv $2.50 CN" #t #f))
 
     (test-equal "gnc:owner-get-name-dep"
-      "cust-2-name"
-      (gnc:owner-get-name-dep owner-2))
+      "cust-1-name"
+      (gnc:owner-get-name-dep owner-1))
 
     (test-equal "gnc:owner-get-address-dep"
       ""
-      (gnc:owner-get-address-dep owner-2))
+      (gnc:owner-get-address-dep owner-1))
 
     (test-equal "gnc:owner-get-name-and-address-dep"
-      "cust-2-name\n"
-      (gnc:owner-get-name-and-address-dep owner-2))
+      "cust-1-name\n"
+      (gnc:owner-get-name-and-address-dep owner-1))
 
     (test-equal "gnc:owner-get-owner-id"
-      "cust-2-id"
-      (gnc:owner-get-owner-id owner-2))
+      "cust-1-id"
+      (gnc:owner-get-owner-id owner-1))
 
     ;; a non-business transaction
     (env-transfer env 01 01 1990
@@ -425,51 +419,60 @@
         ""
         (gncOwnerGetName new-owner))
 
-      (test-equal "gnc:owner-from-split (from AR) return"
-        "cust-2-name"
+      ;; free the gncOwners
+      ;;(gnc:split->owner #f)
+
+      (test-equal "gnc:split->owner (from A/Receivable) return"
+        ;; "cust-2-name"
+        #f
         (gncOwnerGetName
-         (gnc:owner-from-split
-          (last (xaccAccountGetSplitList (get-acct "AR-USD")))
-          new-owner)))
+         (gnc:split->owner
+          (last (xaccAccountGetSplitList (get-acct "AR-USD"))))
+         new-owner))
 
-      (test-equal "gnc:owner-from-split (from AR) mutated"
-        "cust-2-name"
-        (gncOwnerGetName new-owner))
-
-      (set! new-owner (gncOwnerNew))
-      (test-equal "gnc:owner-from-split (from inc-acct) return"
-        "cust-2-name"
-        (gncOwnerGetName
-         (gnc:owner-from-split
-          (last (xaccAccountGetSplitList (get-acct "Income-USD")))
-          new-owner)))
-
-      (test-equal "gnc:owner-from-split (from inc-acct) mutated"
-        "cust-2-name"
-        (gncOwnerGetName new-owner))
-
-      (set! new-owner (gncOwnerNew))
-      (test-equal "gnc:owner-from-split (from payment txn) return"
-        "cust-2-name"
-        (gncOwnerGetName
-         (gnc:owner-from-split
-          (last (xaccAccountGetSplitList (get-acct "Bank-USD")))
-          new-owner)))
-
-      (test-equal "gnc:owner-from-split (from payment txn) mutated"
-        "cust-2-name"
-        (gncOwnerGetName new-owner))
-
-      (set! new-owner 'reset)
-      (test-equal "gnc:owner-from-split (non-business split) return"
+      (test-equal "gnc:split->owner (from A/Receivable) mutated"
+        ;; "cust-2-name"
         ""
-        (gncOwnerGetName
-         (gnc:owner-from-split
-          (last (xaccAccountGetSplitList (get-acct "Bank-GBP")))
-          new-owner)))
+        (gncOwnerGetName new-owner))
 
-      (test-equal "gnc:owner-from-split (non-business split) mutated"
-        'reset
-        new-owner))
+      (set! new-owner (gncOwnerNew))
+      (test-equal "gnc:split->owner (from income-acct) return"
+        ;; "cust-1-name"
+        #f
+        (gncOwnerGetName
+         (gnc:split->owner
+          (last (xaccAccountGetSplitList (get-acct "Income-USD"))))
+         new-owner))
+
+      (test-equal "gnc:split->owner (from income-acct) mutated"
+        ;; "cust-1-name"
+        ""
+        (gncOwnerGetName new-owner))
+
+      (set! new-owner (gncOwnerNew))
+      (test-equal "gnc:split->owner (from payment txn) return"
+        ;; "cust-2-name"
+        #f
+        (gncOwnerGetName
+         (gnc:split->owner
+          (last (xaccAccountGetSplitList (get-acct "Bank-USD"))))
+         new-owner)))
+
+      (test-equal "gnc:split->owner (from payment txn) mutated"
+        ;; "cust-2-name"
+        #f
+        (gncOwnerGetName new-owner))
+
+      ;; (test-equal "gnc:split->owner (non-business split) return"
+      ;;   ""
+      ;;   (gncOwnerGetName
+      ;;    (gnc:split->owner
+      ;;     (last (xaccAccountGetSplitList (get-acct "Bank-GBP"))))
+      ;;   new-owner))
+
+      ;; (set! new-owner 'reset)
+      ;; (test-equal "gnc:split->owner (non-business split) mutated"
+      ;;   'reset
+      ;;   new-owner)
 
     ))
