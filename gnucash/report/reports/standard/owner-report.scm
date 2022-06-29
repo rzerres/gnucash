@@ -69,9 +69,9 @@
 ;; naming and lookup only, and the display of the option name will be
 ;; translated somewhere else.)
 (define (owner-string owner-type)
-  (cond ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
+  (cond ((eqv? owner-type GNC-OWNER-COOWNER) (N_ "Co-Owner"))
+        ((eqv? owner-type GNC-OWNER-CUSTOMER) (N_ "Customer"))
         ((eqv? owner-type GNC-OWNER-EMPLOYEE) (N_ "Employee"))
-        ((eqv? owner-type GNC-OWNER-Owner) (N_ "Owner"))
         ;; FALL THROUGH
         (else
           (N_ "Company"))))
@@ -617,11 +617,14 @@
 
   gnc:*report-options*)
 
+(define (coowner-options-generator)
+  (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-COOWNER #f))
+
 (define (customer-options-generator)
   (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER #f))
 
 (define (employee-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEED #t))
+  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE #t))
 
 (define (vendor-options-generator)
   (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR #t))
