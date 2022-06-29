@@ -159,7 +159,7 @@
 (define gnc:pagename-general (N_ "General"))
 (define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-multicolumn (N_ "_Multicolumn"))
-(define gnc:menuname-property-management (N_ "Property management"))
+(define gnc:menuname-property-management (N_ "_Property Management"))
 (define gnc:menuname-reports "Reports/StandardReports")
 (define gnc:menuname-taxes (N_ "_Taxes"))
 (define gnc:optname-invoice-number (N_ "Invoice Number"))
