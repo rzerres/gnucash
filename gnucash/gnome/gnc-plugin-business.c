@@ -155,6 +155,9 @@ static void gnc_plugin_business_cmd_invoices_due_reminder (GtkAction *action,
     GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_tax_tables (GtkAction *action,
     GncMainWindowActionData *data);
+/* depreciated: use coowner/customer functions*/
+static void gnc_plugin_business_cmd_test_init_data (GtkAction *action,
+    GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_test_search (GtkAction *action,
     GncMainWindowActionData *data);
 
@@ -197,6 +200,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_plugin_business_cmd_coowner_find_job)
     },
     {
+        "CoOwnerFindInvoiceOpenAction", NULL, N_("Find In_voice..."), NULL,
+        N_("Open the Find Invoice dialog"),
+        G_CALLBACK (gnc_plugin_business_cmd_coowner_find_invoice)
+    },
+     {
         "CoOwnerFindSettlementOpenAction", NULL, N_("Find Settle_ment..."), NULL,
         N_("Open the Find Settlement dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_coowner_find_settlement)
@@ -382,6 +390,12 @@ static GtkActionEntry gnc_plugin_actions [] =
         "BusinessTestSearchAction", NULL, N_("Test Search Dialog"), NULL,
         N_("Test Search Dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_test_search)
+    },
+    /* depreciated: use coowner/customer functions */
+    {
+        "BusinessTestInitDataAction", NULL, N_("Initialize Test Data"), NULL,
+        N_("Initialize Test Data"),
+        G_CALLBACK (gnc_plugin_business_cmd_test_init_data)
     },
     {
         "BusinessTestCoOwnerInitDataAction", NULL, N_("Initialize Co-Owner Test Data"), NULL,
@@ -1359,6 +1373,78 @@ static const gchar* readonly_inactive_actions[] =
     "RegisterEditPayment",
     NULL
 };
+
+/* depreciated: use coowner/customer functions */
+static void
+gnc_plugin_business_cmd_test_init_data (GtkAction *action,
+                                                 GncMainWindowActionData *data)
+{
+    QofBook *book           = gnc_get_current_book();
+    GncCustomer *customer   = gncCustomerCreate(book);
+    GncAddress *address     = gncCustomerGetAddr(customer);
+    GncInvoice *invoice     = gncInvoiceCreate(book);
+    GncOwner *owner         = gncOwnerNew();
+    GncJob *job             = gncJobCreate(book);
+    Account *root           = gnc_book_get_root_account(book);
+    Account *inc_acct       = xaccMallocAccount(book);
+    Account *bank_acct      = xaccMallocAccount(book);
+    Account *tax_acct       = xaccMallocAccount(book);
+    Account *ar_acct        = xaccMallocAccount(book);
+
+    // Create Customer
+    gncCustomerSetID(customer, "000001");
+    gncCustomerSetName(customer, "Test Customer");
+    gncCustomerSetCurrency(customer, gnc_default_currency());
+    gncAddressSetName(address, "Contact Person");
+    gncAddressSetAddr1(address, "20 Customer Lane");
+    gncAddressSetAddr2(address, "Customer M/S");
+    gncAddressSetAddr3(address, "Addr3, XXX  12345");
+
+    // Create the Owner
+    gncOwnerInitCustomer(owner, customer);
+
+    // Create the Invoice
+    gncInvoiceSetID(invoice, "000012");
+    gncInvoiceSetOwner(invoice, owner);
+    gncInvoiceSetDateOpened(invoice, gnc_time (NULL));
+    gncInvoiceSetCurrency(invoice, gnc_default_currency());
+
+    // Create the Job
+    gncJobSetID(job, "000025");
+    gncJobSetName(job, "Test Job");
+    gncJobSetReference(job, "Customer's ref#");
+    gncJobSetOwner(job, owner);
+
+    // MODIFY THE OWNER
+    gncOwnerInitJob(owner, job);
+
+    // Create the A/R account
+    xaccAccountSetType(ar_acct, ACCT_TYPE_RECEIVABLE);
+    xaccAccountSetName(ar_acct, "A/R");
+    xaccAccountSetCommodity(ar_acct, gnc_default_currency());
+    gnc_account_append_child(root, ar_acct);
+
+    // Create the Income account
+    xaccAccountSetType(inc_acct, ACCT_TYPE_INCOME);
+    xaccAccountSetName(inc_acct, "Income");
+    xaccAccountSetCommodity(inc_acct, gnc_default_currency());
+    gnc_account_append_child(root, inc_acct);
+
+    // Create the Bank account
+    xaccAccountSetType(bank_acct, ACCT_TYPE_BANK);
+    xaccAccountSetName(bank_acct, "Bank");
+    xaccAccountSetCommodity(bank_acct, gnc_default_currency());
+    gnc_account_append_child(root, bank_acct);
+
+    // Create the Tax account
+    xaccAccountSetType(tax_acct, ACCT_TYPE_LIABILITY);
+    xaccAccountSetName(tax_acct, "Tax-Holding");
+    xaccAccountSetCommodity(tax_acct, gnc_default_currency());
+    gnc_account_append_child(root, tax_acct);
+
+    // Launch the invoice editor
+    gnc_ui_invoice_edit (GTK_WINDOW (data->window), invoice);
+}
 
 static void update_inactive_actions(GncPluginPage *plugin_page)
 {
