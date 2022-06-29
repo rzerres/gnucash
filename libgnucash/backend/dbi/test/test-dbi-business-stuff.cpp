@@ -47,6 +47,28 @@ extern "C"
 G_GNUC_UNUSED static QofLogModule log_module = "test-dbi";
 
 static void
+compare_single_coowner (QofInstance* inst, gpointer user_data)
+{
+    CompareInfoStruct* info = (CompareInfoStruct*)user_data;
+    GncCoOwner* coowner_1 = GNC_COOWNER (inst);
+    GncCoOwner* coowner_2 = gncCoOwnerLookup (info->book_2,
+                                              qof_instance_get_guid (inst));
+
+    if (!gncCoOwnerEqual (coowner_1, coowner_2))
+    {
+        info->result = FALSE;
+    }
+}
+
+static void
+compare_coowner (QofBook* book_1, QofBook* book_2)
+{
+    do_compare (book_1, book_2, GNC_ID_COOWNER, compare_single_coowner,
+                "Co-Owner lists match");
+}
+
+
+static void
 compare_single_customer (QofInstance* inst, gpointer user_data)
 {
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
