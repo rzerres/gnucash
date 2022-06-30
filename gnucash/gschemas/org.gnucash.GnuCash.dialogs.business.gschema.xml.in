@@ -1,5 +1,6 @@
 <schemalist gettext-domain="@PROJECT_NAME@">
   <schema id="org.gnucash.GnuCash.dialogs.business" path="/org/gnucash/GnuCash/dialogs/business/">
+    <child name="coowner-search" schema="org.gnucash.GnuCash.dialogs.business.coowner-search"/>
     <child name="customer-search" schema="org.gnucash.GnuCash.dialogs.business.customer-search"/>
     <child name="employee-search" schema="org.gnucash.GnuCash.dialogs.business.employee-search"/>
     <child name="invoice-search" schema="org.gnucash.GnuCash.dialogs.business.invoice-search"/>
@@ -9,6 +10,21 @@
     <child name="invoice" schema="org.gnucash.GnuCash.dialogs.business.invoice"/>
     <child name="bill" schema="org.gnucash.GnuCash.dialogs.business.bill"/>
     <child name="tax-tables" schema="org.gnucash.GnuCash.dialogs.business.tax-tables"/>
+  </schema>
+
+  <schema id="org.gnucash.GnuCash.dialogs.business.coowner-search" path="/org/gnucash/GnuCash/dialogs/business/coowner-search/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+    <key name="search-for-active-only" type="b">
+      <default>false</default>
+      <summary>Search only in active items</summary>
+      <description>If active, only the 'active' items in the current class will be searched. Otherwise all items in the current class will be searched.</description>
+    </key>
   </schema>
 
   <schema id="org.gnucash.GnuCash.dialogs.business.customer-search" path="/org/gnucash/GnuCash/dialogs/business/customer-search/">
