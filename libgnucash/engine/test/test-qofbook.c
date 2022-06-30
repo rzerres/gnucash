@@ -1,6 +1,6 @@
 /********************************************************************
- * test_qofbook.c: GLib g_test test suite for qofbook.		    *
- * Copyright 2011 John Ralls <jralls@ceridwen.us>		    *
+ * test_qofbook.c: GLib g_test test suite for qofbook.              *
+ * Copyright 2011 John Ralls <jralls@ceridwen.us>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -128,6 +128,7 @@ test_book_readonly( Fixture *fixture, gconstpointer pData )
     qof_book_mark_readonly( fixture->book );
     g_assert( qof_book_is_readonly( fixture->book ) );
 }
+
 static void
 test_book_normalize_counter( void )
 {
@@ -440,14 +441,14 @@ test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing with existing trading accounts set to true - t" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "trading-accts", "t",
-		      NULL);
+                      "trading-accts", "t",
+                      NULL);
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == TRUE );
 
     g_test_message( "Testing with existing trading accounts and incorrect value - tt" );
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "trading-accts", "tt",
-		      NULL);
+                      "trading-accts", "tt",
+                      NULL);
     g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
     qof_book_commit_edit (fixture->book);
 
@@ -471,8 +472,8 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing with existing trading accounts set to true - t" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "trading-accts", "t",
-		      NULL);
+                      "trading-accts", "t",
+                      NULL);
     cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , NULL );
     pol = qof_book_get_default_gains_policy( fixture-> book );
@@ -487,8 +488,8 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing with book-currency set and no default-gains-policy or account" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "USD",
-		      NULL);
+                      "book-currency", "USD",
+                      NULL);
     cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , "USD" );
     pol = qof_book_get_default_gains_policy( fixture-> book );
@@ -503,8 +504,8 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing with default-gains-policy set and no book-currency" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "fifo",
-		      NULL);
+                      "default-gains-policy", "fifo",
+                      NULL);
     cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , NULL );
     pol = qof_book_get_default_gains_policy( fixture-> book );
@@ -519,11 +520,11 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing with book-currency and default-gains-policy set to nonsense" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "myMoney",
-		      NULL);
+                      "book-currency", "myMoney",
+                      NULL);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "random",
-		      NULL);
+                      "default-gains-policy", "random",
+                      NULL);
     cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , "myMoney" );
     pol = qof_book_get_default_gains_policy( fixture-> book );
@@ -538,15 +539,15 @@ test_book_use_book_currency( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing with book-currency, default-gains-policy and default-gains-account set to valid values" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "book-currency", "USD",
-		      NULL);
+                      "book-currency", "USD",
+                      NULL);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gains-policy", "fifo",
-		      NULL);
+                      "default-gains-policy", "fifo",
+                      NULL);
     acct = guid_new();
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "default-gain-loss-account-guid", acct,
-		      NULL);
+                      "default-gain-loss-account-guid", acct,
+                      NULL);
     cur = qof_book_get_book_currency_name( fixture-> book );
     g_assert_cmpstr( cur, == , "USD" );
     pol = qof_book_get_default_gains_policy( fixture-> book );
@@ -570,22 +571,22 @@ test_book_get_num_days_autofreeze( Fixture *fixture, gconstpointer pData )
 
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "autoreadonly-days", (gdouble)17,
-		      NULL);
+                      "autoreadonly-days", (gdouble)17,
+                      NULL);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 17 );
 
     g_test_message( "Testing when setting this correctly to zero again" );
 
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "autoreadonly-days", (gdouble)0,
-		      NULL);
+                      "autoreadonly-days", (gdouble)0,
+                      NULL);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "autoreadonly-days", (gdouble)32,
-		      NULL);
+                      "autoreadonly-days", (gdouble)32,
+                      NULL);
     g_assert( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
     g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 32 );
 
@@ -602,14 +603,14 @@ test_book_use_split_action_for_num_field( Fixture *fixture, gconstpointer pData 
 
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "split-action-num-field", "t",
-		      NULL);
+                      "split-action-num-field", "t",
+                      NULL);
     g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == TRUE );
 
     g_test_message( "Testing with existing use split action for num and incorrect value - tt" );
     qof_instance_set (QOF_INSTANCE (fixture->book),
-		      "split-action-num-field", "tt",
-		      NULL);
+                      "split-action-num-field", "tt",
+                      NULL);
     g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
     qof_book_commit_edit (fixture->book);
 }
