@@ -143,22 +143,22 @@ static GtkActionEntry gnc_plugin_page_owner_tree_actions [] =
 
     /* Edit menu */
     {
-        "OTEditCoOwnerAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Co-Owner"), "<primary>e",
+        "OTEditCoOwnerAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit Co-Owner"), "<primary>e",
         N_("Edit the selected co-owner"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTEditCustomerAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Customer"), "<primary>e",
+        "OTEditCustomerAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit Customer"), "<primary>e",
         N_("Edit the selected customer"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTEditEmployeeAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Employee"), "<primary>e",
+        "OTEditEmployeeAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit Employee"), "<primary>e",
         N_("Edit the selected employee"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
     {
-        "OTEditVendorAction", GNC_ICON_EDIT_ACCOUNT, N_("E_dit Vendor"), "<primary>e",
+        "OTEditVendorAction", GNC_ICON_EDIT_ACCOUNT, N_("_Edit Vendor"), "<primary>e",
         N_("Edit the selected vendor"),
         G_CALLBACK (gnc_plugin_page_owner_tree_cmd_edit_owner)
     },
