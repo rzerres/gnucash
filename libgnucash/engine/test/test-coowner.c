@@ -150,7 +150,7 @@ test_string_fcn (QofBook *book, const char *message,
     /* CoOwner record should be dirty */
     do_test (gncCoOwnerIsDirty (coowner), "test dirty later");
     gncCoOwnerCommitEdit (coowner);
-    /* CoOwner record should be not dirty */
+    /* CoOwner record shouldn't be dirty */
     /* Skip, because will always fail without a backend.
      * It's not possible to load a backend in the engine code
      * without having circular dependencies.
@@ -225,6 +225,7 @@ main (int argc, char **argv)
     do_test (gncJobRegister (),  "Cannot register GncJob");
     do_test (gncCoOwnerRegister(), "Cannot register GncCoOwner");
 #endif
+    set_success_print(TRUE);
     test_coowner();
     print_test_results();
     qof_close ();
