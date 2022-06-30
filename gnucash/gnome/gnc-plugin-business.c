@@ -32,6 +32,7 @@
 
 #include "dialog-doclink.h"
 #include "dialog-billterms.h"
+        /* depreciated: use coowner/customer functions */
 #include "dialog-doclink.h"
 #include "dialog-coowner.h"
 #include "dialog-customer.h"
@@ -391,8 +392,8 @@ static GtkActionEntry gnc_plugin_actions [] =
         N_("Test Search Dialog"),
         G_CALLBACK (gnc_plugin_business_cmd_test_search)
     },
-    /* depreciated: use coowner/customer functions */
     {
+        /* depreciated: use gnc_plugin_business_cmd_coowner/customer_test_init_data functions */
         "BusinessTestInitDataAction", NULL, N_("Initialize Test Data"), NULL,
         N_("Initialize Test Data"),
         G_CALLBACK (gnc_plugin_business_cmd_test_init_data)
