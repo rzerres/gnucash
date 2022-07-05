@@ -87,7 +87,12 @@ test_coowner (void)
 
         test_bool_fcn (book, "Active", gncCoOwnerSetActive, gncCoOwnerGetActive);
 
+        /* TODO: Address and Ship-Address tests */
+        // do_test (gncCoOwnerGetAddr (coowner) != NULL, "Addr");
+        // do_test (gncCoOwnerGetShipAddr (coowner) != NULL, "ShipAddr");
+
         /* TODO: apt unit tests */
+        // test_numeric_fcn (book, "Apartment Unit", gncCoOwnerSetAptUnit, gncCoOwnerGetAptUnit);
 
         guid_replace (&guid);
         coowner = gncCoOwnerCreate (book);
@@ -121,7 +126,7 @@ test_coowner (void)
         do_test (g_strcmp0 (str, res) == 0, "Printable equals");
     }
 
-    /* TODO */
+    /* TODO: Job-list test */
     // do_test (gncCoOwnerGetJoblist (coowner, TRUE) == NULL, "joblist empty");
 
     /* Test the Entity Table */
