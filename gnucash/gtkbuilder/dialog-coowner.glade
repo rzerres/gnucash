@@ -2,15 +2,15 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkListStore" id="tax_included_store">
+  <object class="GtkListStore" id="coowner_liststore_taxincluded">
     <columns>
-      <!-- column-name tax_included_name -->
+      <!-- column-name taxincluded_name -->
       <column type="gchararray"/>
-      <!-- column-name tax_included_value -->
+      <!-- column-name taxincluded_value -->
       <column type="gpointer"/>
     </columns>
   </object>
-  <object class="GtkListStore" id="taxtable_store">
+  <object class="GtkListStore" id="coowner_liststore_taxtable">
     <columns>
       <!-- column-name taxtable_name -->
       <column type="gchararray"/>
@@ -18,7 +18,7 @@
       <column type="gpointer"/>
     </columns>
   </object>
-  <object class="GtkListStore" id="terms_store">
+  <object class="GtkListStore" id="coowner_liststore_terms">
     <columns>
       <!-- column-name terms_name -->
       <column type="gchararray"/>
@@ -32,18 +32,18 @@
     <property name="type-hint">dialog</property>
     <signal name="destroy" handler="gnc_coowner_window_destroy_cb" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+      <object class="GtkBox" id="coowner_vbox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
+          <object class="GtkButtonBox" id="coowner_area_action">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="helpbutton">
+              <object class="GtkButton" id="coowner_button_help">
                 <property name="label" translatable="yes">_Help</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -60,7 +60,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancelbutton">
+              <object class="GtkButton" id="coowner_button_cancel">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -76,7 +76,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="okbutton">
+              <object class="GtkButton" id="coowner_button_ok">
                 <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -105,7 +105,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <child>
-              <object class="GtkBox" id="coowner_vbox_identificaton">
+              <object class="GtkBox" id="coowner_vbox_coowner_information">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
@@ -130,7 +130,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Coowner Id</property>
+                            <property name="label" translatable="yes">Co-Owner Id</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -139,11 +139,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="coowner_label_property_name">
+                          <object class="GtkLabel" id="coowner_label_coowner_name">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
-                            <property name="label" translatable="yes">Property Name</property>
+                            <property name="label" translatable="yes">Co-Owner Name</property>
                             <property name="justify">right</property>
                           </object>
                           <packing>
@@ -166,31 +166,34 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="coowner_entry_property_name">
+                          <object class="GtkEntry" id="coowner_entry_coowner_id">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="has-focus">True</property>
+                            <property name="tooltip-text" translatable="yes">The property ID number. If left blank a reasonable number will be chosen for you.</property>
+                            <property name="double-buffered">False</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
-                            <signal name="changed" handler="gnc_coowner_name_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="coowner_entry_id">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="tooltip-text" translatable="yes">The coowner ID number. If left blank a reasonable number will be chosen for you</property>
-                            <property name="hexpand">True</property>
-                            <property name="activates-default">True</property>
-                            <signal name="changed" handler="gnc_coowner_name_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="gnc_coowner_property_unit_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
                             <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="coowner_entry_coowner_name">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="has-focus">True</property>
+                            <property name="tooltip-text" translatable="yes">The name of the Co-Owner that is associated to the property.</property>
+                            <property name="double-buffered">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="activates-default">True</property>
+                            <signal name="changed" handler="gnc_coowner_property_unit_changed_cb" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
@@ -321,7 +324,7 @@
                           <object class="GtkEntry" id="coowner_entry_distribution_key">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="tooltip-text" translatable="yes">The distribution key. Used to calculate prorated expenses.</property>
+                            <property name="tooltip-text" translatable="yes">The distribution key.</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
                             <signal name="changed" handler="gnc_coowner_distribution_key_changed_cb" swapped="no"/>
@@ -335,7 +338,6 @@
                           <object class="GtkEntry" id="coowner_entry_language">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="has-focus">True</property>
                             <property name="tooltip-text" translatable="yes">The prefered language used in reports and settlements</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
@@ -379,7 +381,7 @@
                         <property name="row-spacing">3</property>
                         <property name="column-spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="coowner_label_coowner_name">
+                          <object class="GtkLabel" id="coowner_label_coowner_name1">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
@@ -444,7 +446,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="email_entry">
+                          <object class="GtkEntry" id="coowner_entry_email">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -456,7 +458,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="fax_entry">
+                          <object class="GtkEntry" id="coowner_entry_fax">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -468,7 +470,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="phone_entry">
+                          <object class="GtkEntry" id="coowner_entry_phone">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -480,7 +482,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="addr4_entry">
+                          <object class="GtkEntry" id="coowner_entry_addr4">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -494,7 +496,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="addr3_entry">
+                          <object class="GtkEntry" id="coowner_entry_addr3">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -508,7 +510,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="addr2_entry">
+                          <object class="GtkEntry" id="coowner_entry_addr2">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -534,9 +536,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="&gt;coowner_entry_name">
+                          <object class="GtkEntry" id="coowner_entry_addrname">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
+                            <property name="tooltip-text" translatable="yes">The persons name that is assigned to recieve billing informations for this apartment unit.</property>
+                            <property name="double-buffered">False</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
                           </object>
@@ -567,7 +571,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -610,7 +614,7 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
@@ -726,12 +730,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="hbox7">
+                          <object class="GtkBox" id="coowner_hbox_taxtable">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
                             <child>
-                              <object class="GtkCheckButton" id="taxtable_button">
+                              <object class="GtkCheckButton" id="coowner_button_taxtable">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
@@ -749,13 +753,13 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="taxtable_menu">
+                              <object class="GtkComboBox" id="coowner_combobox_taxtable">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="model">taxtable_store</property>
+                                <property name="model">coowner_liststore_taxtable</property>
                                 <signal name="changed" handler="gnc_coowner_taxtable_changed_cb" swapped="no"/>
                                 <child>
-                                  <object class="GtkCellRendererText" id="taxtable_cell_renderer_text"/>
+                                  <object class="GtkCellRendererText" id="coowner_cell_renderer_text_taxtable"/>
                                   <attributes>
                                     <attribute name="text">0</attribute>
                                   </attributes>
@@ -774,14 +778,14 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="tax_included_menu">
+                          <object class="GtkComboBox" id="coowner_combobox_taxincluded">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="model">tax_included_store</property>
+                            <property name="model">coowner_liststore_taxincluded</property>
                             <signal name="changed" handler="gnc_coowner_taxincluded_changed_cb" swapped="no"/>
                             <child>
-                              <object class="GtkCellRendererText" id="taxincluded_cell_renderer_text"/>
+                              <object class="GtkCellRendererText" id="coowner_cell_renderer_text_taxincluded"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
                               </attributes>
@@ -793,7 +797,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="credit_box">
+                          <object class="GtkBox" id="coowner_box_credit">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
@@ -807,7 +811,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="currency_box">
+                          <object class="GtkBox" id="coowner_box_currency">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
@@ -821,11 +825,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="terms_menu">
+                          <object class="GtkComboBox" id="coowner_combobox_terms">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="model">terms_store</property>
+                            <property name="model">coowner_liststore_terms</property>
                             <signal name="changed" handler="gnc_coowner_terms_changed_cb" swapped="no"/>
                             <child>
                               <object class="GtkCellRendererText" id="terms_cell_renderer_text"/>
@@ -840,7 +844,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="discount_box">
+                          <object class="GtkBox" id="coowner_box_discount">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
@@ -911,7 +915,7 @@
                         <property name="row-spacing">3</property>
                         <property name="column-spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="label14">
+                          <object class="GtkLabel" id="coownwer_label_shipname">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
@@ -924,7 +928,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label15">
+                          <object class="GtkLabel" id="coownwer_label_shipaddress">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
@@ -937,7 +941,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label16">
+                          <object class="GtkLabel" id="coownwer_label_shipphone">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
@@ -950,7 +954,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label17">
+                          <object class="GtkLabel" id="coownwer_label_shipfax">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
@@ -963,7 +967,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label18">
+                          <object class="GtkLabel" id="coownwer_label_shipemail">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">end</property>
@@ -976,7 +980,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="shipemail_entry">
+                          <object class="GtkEntry" id="coowner_entry_shipemail">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -988,7 +992,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="shipfax_entry">
+                          <object class="GtkEntry" id="coowner_entry_shipfax">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -1000,7 +1004,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="shipphone_entry">
+                          <object class="GtkEntry" id="coowner_entry_shipphone">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -1012,7 +1016,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="shipaddr4_entry">
+                          <object class="GtkEntry" id="coowner_entry_shipaddr4">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -1026,7 +1030,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="shipaddr3_entry">
+                          <object class="GtkEntry" id="coowner_entry_shipaddr3">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -1040,7 +1044,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="shipaddr2_entry">
+                          <object class="GtkEntry" id="coowner_entry_shipaddr2">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -1054,7 +1058,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="shipaddr1_entry">
+                          <object class="GtkEntry" id="coowner_entry_shipaddr1">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -1066,7 +1070,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="shipname_entry">
+                          <object class="GtkEntry" id="coowner_entry_shipname">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
@@ -1129,9 +1133,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-11">helpbutton</action-widget>
-      <action-widget response="-6">cancelbutton</action-widget>
-      <action-widget response="-5">okbutton</action-widget>
+      <action-widget response="-11">coowner_button_help</action-widget>
+      <action-widget response="-6">coowner_button_cancel</action-widget>
+      <action-widget response="-5">coowner_button_ok</action-widget>
     </action-widgets>
   </object>
 </interface>
