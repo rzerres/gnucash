@@ -33,7 +33,7 @@
 
 /** @struct GncCustomer
 
-Generic params:
+Generic params (identical to all business objects, e.g. CoOwners, Employees, Vendors):
 
 @param  QofInstance     inst;
 @param  char *          id;
@@ -48,7 +48,8 @@ Generic params:
 @param  gboolean        active;
 @param  GList *         jobs;
 
-Customer specific:\n
+Customer specific params:
+
 @param  gnc_numeric     credit;
 @param  gnc_numeric     discount;
 @param  GncAddress *    shipaddr;
