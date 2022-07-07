@@ -1213,8 +1213,8 @@ gnc_plugin_business_cmd_coowner_test_init_data (GtkAction *action,
     GncCoOwner *coowner         = gncCoOwnerCreate(book);
     GncAddress *address         = gncCoOwnerGetAddr(coowner);
     GncInvoice *invoice         = gncInvoiceCreate(book);
-    const char *property_unit   = gncCoOwnerGetPropertyUnit(coowner);
     gnc_numeric apt_share       = gncCoOwnerGetAptShare(coowner);
+    const char *apt_unit        = gncCoOwnerGetAptUnit(coowner);
     GncOwner *owner             = gncOwnerNew();
     GncJob *job                 = gncJobCreate(book);
     Account *root               = gnc_book_get_root_account(book);
@@ -1232,7 +1232,7 @@ gnc_plugin_business_cmd_coowner_test_init_data (GtkAction *action,
     gncAddressSetAddr2(address, "Penthouse Suite");
     gncAddressSetAddr3(address, "c/o Master-Owner");
     gncCoOwnerSetAptShare(coowner, gnc_numeric_create(ABS(250.0), 1.0));
-    gncCoOwnerSetPropertyUnit(coowner, "Unit 1");
+    gncCoOwnerSetAptUnit(coowner, "Unit 1");
 
     // Create the new Co-Owner
     gncOwnerInitCoOwner(owner, coowner);
