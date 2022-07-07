@@ -219,21 +219,21 @@ setup_business (Fixture* fixture, gconstpointer pData)
     gncTaxTableAddEntry (tt, tte);
 
     coowner = gncCoOwnerCreate (book);
-    gncCoOwnerSetID (coowner, "0001");
+    gncCoOwnerSetID (coowner, "0000001");
     gncCoOwnerSetCurrency (coowner, currency);
     addr = gncAddressCreate (book, QOF_INSTANCE (coowner));
-    gncAddressSetName (addr, "theAddress");
+    gncAddressSetName (addr, "Recipient Name");
     gncAddressSetAddr1 (addr, "Address line #1");
     gncAddressSetAddr2 (addr, "Address line #2");
     gncAddressSetAddr3 (addr, "Address line #3");
     gncAddressSetAddr4 (addr, "Address line #4");
     gncAddressSetPhone (addr, "(123) 555-1212");
     gncAddressSetPhone (addr, "(123) 555-2121");
-    gncAddressSetEmail (addr, "coowner@mycoowneromer.com");
+    gncAddressSetEmail (addr, "coowner@mycoowner.com");
     gncCoOwnerSetAptShare (coowner, gnc_numeric_create (15200, 100));
+    gncCoOwnerSetAptUnit (coowner, "Apartment Unit 0001");
     gncCoOwnerSetNotes (coowner, "Here are some coowner notes");
-    gncCoOwnerSetPropertyUnit (coowner, "Property Unit 0001");
-    gncCoOwnerSetUsername (coowner, "MyCoOwner");
+    gncCoOwnerSetTenant (coowner, "MyTenant");
 
     cust = gncCustomerCreate (book);
     gncCustomerSetID (cust, "0001");
