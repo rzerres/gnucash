@@ -324,7 +324,7 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
     CustomerWindow *cw = data;
     gnc_numeric min, max;
     gchar *string;
-    gnc_commodity *currency;
+    gnc_commodity *currency = NULL;
     GNCPrintAmountInfo print_info;
 
     /* Check for valid company name */
@@ -333,24 +333,26 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
                                 "enter a company name or a person's name.")))
         return;
 
-    /* Verify terms, discount, and credit are valid (or empty) */
+    /* Verify credit amount is valid (or empty) */
     min = gnc_numeric_zero ();
     max = gnc_numeric_create (100, 1);
 
-    if (check_edit_amount (cw->discount_amount, &min, &max,
-                           _("Discount percentage must be between 0-100 "
-                             "or you must leave it blank.")))
-        return;
-
-    currency = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(cw->currency_edit));
-    print_info = gnc_commodity_print_info (currency, FALSE);
-    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (cw->credit_amount), print_info);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (cw->credit_amount),
                                   gnc_commodity_get_fraction (currency));
-
+    gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (cw->credit_amount), print_info);
     if (check_edit_amount (cw->credit_amount, &min, NULL,
                            _("Credit must be a positive amount or "
                              "you must leave it blank.")))
+        return;
+
+    /* Verify commodity/currency is valid (or empty) */
+    currency = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(cw->currency_edit));
+    print_info = gnc_commodity_print_info (currency, FALSE);
+
+    /* Verify discount amount is valid (or empty) */
+    if (check_edit_amount (cw->discount_amount, &min, &max,
+                           _("Discount percentage must be between 0-100 "
+                             "or you must leave it blank.")))
         return;
 
     /* Set the customer id if one has not been chosen */
@@ -1293,6 +1295,7 @@ gnc_customer_common_key_press_cb( GtkEntry *entry,
 
     return( done_with_input );
 }
+
 gboolean
 gnc_customer_addr2_key_press_cb( GtkEntry *entry,
                                  GdkEventKey *event,
@@ -1302,6 +1305,7 @@ gnc_customer_addr2_key_press_cb( GtkEntry *entry,
     return gnc_customer_common_key_press_cb(entry, event, user_data,
                                             wdata->addr2_entry);
 }
+
 gboolean
 gnc_customer_addr3_key_press_cb( GtkEntry *entry,
                                  GdkEventKey *event,
@@ -1311,6 +1315,7 @@ gnc_customer_addr3_key_press_cb( GtkEntry *entry,
     return gnc_customer_common_key_press_cb(entry, event, user_data,
                                             wdata->addr3_entry);
 }
+
 gboolean
 gnc_customer_addr4_key_press_cb( GtkEntry *entry,
                                  GdkEventKey *event,
@@ -1320,6 +1325,7 @@ gnc_customer_addr4_key_press_cb( GtkEntry *entry,
     return gnc_customer_common_key_press_cb(entry, event, user_data,
                                             wdata->addr4_entry);
 }
+
 gboolean
 gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry,
                                      GdkEventKey *event,
@@ -1329,6 +1335,7 @@ gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry,
     return gnc_customer_common_key_press_cb(entry, event, user_data,
                                             wdata->shipaddr2_entry);
 }
+
 gboolean
 gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry,
                                      GdkEventKey *event,
@@ -1338,6 +1345,7 @@ gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry,
     return gnc_customer_common_key_press_cb(entry, event, user_data,
                                             wdata->shipaddr3_entry);
 }
+
 gboolean
 gnc_customer_shipaddr4_key_press_cb( GtkEntry *entry,
                                      GdkEventKey *event,
