@@ -63,6 +63,7 @@ const gchar* coowner_version_string = "2.0.0";
 #define coowner_active_string "coowner:active"
 #define coowner_addr_string "coowner:addr"
 #define coowner_apt_share_string "coowner:apt_share"
+#define coowner_apt_unit_string "coowner:apt_unit"
 #define coowner_credit_string "coowner:credit"
 #define coowner_currency_string "coowner:currency"
 #define coowner_discount_string "coowner:discount"
@@ -71,7 +72,6 @@ const gchar* coowner_version_string = "2.0.0";
 #define coowner_id_string "coowner:id"
 #define coowner_name_string "coowner:name"
 #define coowner_notes_string "coowner:notes"
-#define coowner_property_unit_string "coowner:property_unit"
 #define coowner_slots_string "cooner:slots"
 #define coowner_taxincluded_string "coowner:taxincluded"
 #define coowner_taxtable_string "coowner:taxtable"
@@ -99,6 +99,9 @@ coowner_dom_tree_create (GncCoOwner* coowner)
     num = gncCoOwnerGetAptShare (coowner);
     xmlAddChild (ret, gnc_numeric_to_dom_tree (coowner_apt_share_string, &num));
 
+    maybe_add_string (ret, coowner_apt_unit_string,
+        gncCoOwnerGetAptUnit (coowner));
+
     num = gncCoOwnerGetCredit (coowner);
     xmlAddChild (ret, gnc_numeric_to_dom_tree (coowner_credit_string, &num));
 
@@ -122,9 +125,6 @@ coowner_dom_tree_create (GncCoOwner* coowner)
 
     maybe_add_string (ret, coowner_notes_string,
         gncCoOwnerGetNotes (coowner));
-
-    maybe_add_string (ret, coowner_property_unit_string,
-        gncCoOwnerGetPropertyUnit (coowner));
 
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
     xmlAddChild (ret, qof_instance_slots_to_dom_tree (coowner_slots_string,
@@ -323,11 +323,11 @@ coowner_notes_handler (xmlNodePtr node, gpointer coowner_pdata)
 }
 
 static gboolean
-coowner_property_unit_handler (xmlNodePtr node, gpointer coowner_pdata)
+coowner_apt_unit_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata* pdata = static_cast<decltype (pdata)> (coowner_pdata);
 
-    return set_string (node, pdata->coowner, gncCoOwnerSetPropertyUnit);
+    return set_string (node, pdata->coowner, gncCoOwnerSetAptUnit);
 }
 
 static gboolean
@@ -413,6 +413,7 @@ static struct dom_tree_handler coowner_handlers_v2[] =
     { coowner_active_string, coowner_active_handler, 1, 0 },
     { coowner_addr_string, coowner_addr_handler, 1, 0 },
     { coowner_apt_share_string, coowner_apt_share_handler, 1, 0 },
+    { coowner_apt_unit_string, coowner_apt_unit_handler, 1, 0 },
     { "coowner:commodity", coowner_currency_handler, 0, 0 },
     { coowner_credit_string, coowner_credit_handler, 1, 0 },
     { coowner_currency_string, coowner_currency_handler, 0, 0 },
@@ -421,7 +422,6 @@ static struct dom_tree_handler coowner_handlers_v2[] =
     { coowner_guid_string, coowner_guid_handler, 1, 0 },
     { coowner_name_string, coowner_name_handler, 1, 0 },
     { coowner_notes_string, coowner_notes_handler, 0, 0 },
-    { coowner_property_unit_string, coowner_property_unit_handler, 1, 0 },
     { coowner_slots_string, coowner_slots_handler, 0, 0 },
     { coowner_terms_string, coowner_terms_handler, 0, 0 },
     { coowner_taxincluded_string, coowner_taxincluded_handler, 1, 0 },
