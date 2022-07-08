@@ -3568,7 +3568,7 @@ gnc_invoice_search (GtkWindow *parent, GncInvoice *start, GncOwner *owner, QofBo
     if (settlement_params == NULL)
     {
         settlement_params = gnc_search_param_prepend (settlement_params,
-                                               _("Co-Owner Owner"), NULL, type,
+                                               _("Settlement Owner"), NULL, type,
                                                INVOICE_OWNER, NULL);
         settlement_params = gnc_search_param_prepend (settlement_params,
                                                _("Billing ID"), NULL, type,
