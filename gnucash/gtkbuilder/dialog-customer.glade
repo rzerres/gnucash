@@ -26,11 +26,11 @@
       <column type="gpointer"/>
     </columns>
   </object>
-  <object class="GtkDialog" id="coowner_dialog">
+  <object class="GtkDialog" id="customer_dialog">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">New Customer</property>
     <property name="type-hint">dialog</property>
-    <signal name="destroy" handler="gnc_coowner_window_destroy_cb" swapped="no"/>
+    <signal name="destroy" handler="gnc_customer_window_destroy_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -50,7 +50,7 @@
                 <property name="can-default">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_coowner_window_help_cb" swapped="no"/>
+                <signal name="clicked" handler="gnc_customer_window_help_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -67,7 +67,7 @@
                 <property name="can-default">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_coowner_window_cancel_cb" swapped="no"/>
+                <signal name="clicked" handler="gnc_customer_window_cancel_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -84,7 +84,7 @@
                 <property name="has-default">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_coowner_window_ok_cb" swapped="no"/>
+                <signal name="clicked" handler="gnc_customer_window_ok_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -172,7 +172,7 @@
                             <property name="has-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
-                            <signal name="changed" handler="gnc_coowner_name_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="gnc_customer_name_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -186,7 +186,7 @@
                             <property name="tooltip-text" translatable="yes">The coowner ID number. If left blank a reasonable number will be chosen for you</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
-                            <signal name="changed" handler="gnc_coowner_name_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="gnc_customer_name_changed_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -344,8 +344,8 @@
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
-                            <signal name="insert-text" handler="gnc_coowner_addr4_insert_cb" swapped="no"/>
-                            <signal name="key-press-event" handler="gnc_coowner_addr4_key_press_cb" swapped="no"/>
+                            <signal name="insert-text" handler="gnc_customer_addr4_insert_cb" swapped="no"/>
+                            <signal name="key-press-event" handler="gnc_customer_addr4_key_press_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -358,8 +358,8 @@
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
-                            <signal name="insert-text" handler="gnc_coowner_addr3_insert_cb" swapped="no"/>
-                            <signal name="key-press-event" handler="gnc_coowner_addr3_key_press_cb" swapped="no"/>
+                            <signal name="insert-text" handler="gnc_customer_addr3_insert_cb" swapped="no"/>
+                            <signal name="key-press-event" handler="gnc_customer_addr3_key_press_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -372,8 +372,8 @@
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
-                            <signal name="insert-text" handler="gnc_coowner_addr2_insert_cb" swapped="no"/>
-                            <signal name="key-press-event" handler="gnc_coowner_addr2_key_press_cb" swapped="no"/>
+                            <signal name="insert-text" handler="gnc_customer_addr2_insert_cb" swapped="no"/>
+                            <signal name="key-press-event" handler="gnc_customer_addr2_key_press_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -599,7 +599,7 @@
                                 <property name="margin-end">6</property>
                                 <property name="use-underline">True</property>
                                 <property name="draw-indicator">True</property>
-                                <signal name="toggled" handler="gnc_coowner_taxtable_check_cb" swapped="no"/>
+                                <signal name="toggled" handler="gnc_customer_taxtable_check_cb" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -612,7 +612,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="model">taxtable_store</property>
-                                <signal name="changed" handler="gnc_coowner_taxtable_changed_cb" swapped="no"/>
+                                <signal name="changed" handler="gnc_customer_taxtable_changed_cb" swapped="no"/>
                                 <child>
                                   <object class="GtkCellRendererText" id="taxtable_cell_renderer_text"/>
                                   <attributes>
@@ -638,7 +638,7 @@
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="model">tax_included_store</property>
-                            <signal name="changed" handler="gnc_coowner_taxincluded_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="gnc_customer_taxincluded_changed_cb" swapped="no"/>
                             <child>
                               <object class="GtkCellRendererText" id="taxincluded_cell_renderer_text"/>
                               <attributes>
@@ -685,7 +685,7 @@
                             <property name="can-focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="model">terms_store</property>
-                            <signal name="changed" handler="gnc_coowner_terms_changed_cb" swapped="no"/>
+                            <signal name="changed" handler="gnc_customer_terms_changed_cb" swapped="no"/>
                             <child>
                               <object class="GtkCellRendererText" id="terms_cell_renderer_text"/>
                               <attributes>
@@ -876,8 +876,8 @@
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
-                            <signal name="insert-text" handler="gnc_coowner_shipaddr4_insert_cb" swapped="no"/>
-                            <signal name="key-press-event" handler="gnc_coowner_shipaddr4_key_press_cb" swapped="no"/>
+                            <signal name="insert-text" handler="gnc_customer_shipaddr4_insert_cb" swapped="no"/>
+                            <signal name="key-press-event" handler="gnc_customer_shipaddr4_key_press_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -890,8 +890,8 @@
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
-                            <signal name="insert-text" handler="gnc_coowner_shipaddr3_insert_cb" swapped="no"/>
-                            <signal name="key-press-event" handler="gnc_coowner_shipaddr3_key_press_cb" swapped="no"/>
+                            <signal name="insert-text" handler="gnc_customer_shipaddr3_insert_cb" swapped="no"/>
+                            <signal name="key-press-event" handler="gnc_customer_shipaddr3_key_press_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -904,8 +904,8 @@
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
-                            <signal name="insert-text" handler="gnc_coowner_shipaddr2_insert_cb" swapped="no"/>
-                            <signal name="key-press-event" handler="gnc_coowner_shipaddr2_key_press_cb" swapped="no"/>
+                            <signal name="insert-text" handler="gnc_customer_shipaddr2_insert_cb" swapped="no"/>
+                            <signal name="key-press-event" handler="gnc_customer_shipaddr2_key_press_cb" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
