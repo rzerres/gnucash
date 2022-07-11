@@ -9,7 +9,6 @@ on:
       - maint
       - coowner
 
->>>>>>> dbed86d7d6 ([.github/workflows] Update gh action sources)
 jobs:
   ci_tests_ubuntu-18:
     runs-on: ubuntu-18.04
