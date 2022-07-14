@@ -59,6 +59,7 @@ gnucash/gnome/business-urls.c
 gnucash/gnome/dialog-billterms.c
 gnucash/gnome/dialog-choose-owner.c
 gnucash/gnome/dialog-commodities.c
+gnucash/gnome/dialog-coowner.c
 gnucash/gnome/dialog-customer.c
 gnucash/gnome/dialog-custom-report.c
 gnucash/gnome/dialog-date-close.c
@@ -256,6 +257,9 @@ gnucash/gtkbuilder/dialog-book-close.glade
 gnucash/gtkbuilder/dialog-choose-owner.glade
 gnucash/gtkbuilder/dialog-commodities.glade
 gnucash/gtkbuilder/dialog-commodity.glade
+gnucash/gtkbuilder/dialog-coowner.glade
+gnucash/gtkbuilder/dialog-coowner-import-gui.glade
+gnucash/gtkbuilder/dialog-coowner-report.glade
 gnucash/gtkbuilder/dialog-customer.glade
 gnucash/gtkbuilder/dialog-customer-import-gui.glade
 gnucash/gtkbuilder/dialog-custom-report.glade
@@ -485,6 +489,7 @@ gnucash/report/reports/standard/budget.scm
 gnucash/report/reports/standard/cashflow-barchart.scm
 gnucash/report/reports/standard/cash-flow.scm
 gnucash/report/reports/standard/category-barchart.scm
+gnucash/report/reports/standard/coowner-settlement.scm
 gnucash/report/reports/standard/customer-summary.scm
 gnucash/report/reports/standard/dashboard.scm
 gnucash/report/reports/standard/equity-statement.scm
@@ -512,6 +517,7 @@ gnucash/report/reports/standard/transaction.scm
 gnucash/report/reports/standard/trial-balance.scm
 gnucash/report/reports/standard/view-column.scm
 gnucash/report/reports/support/balsheet-eg.eguile.scm
+gnucash/report/reports/support/coowner-billing.eguile.scm
 gnucash/report/reports/support/receipt.eguile.scm
 gnucash/report/reports/support/taxinvoice.eguile.scm
 gnucash/report/report.scm
@@ -558,6 +564,7 @@ libgnucash/backend/sql/gnc-bill-term-sql.cpp
 libgnucash/backend/sql/gnc-book-sql.cpp
 libgnucash/backend/sql/gnc-budget-sql.cpp
 libgnucash/backend/sql/gnc-commodity-sql.cpp
+libgnucash/backend/sql/gnc-coowner-sql.cpp
 libgnucash/backend/sql/gnc-customer-sql.cpp
 libgnucash/backend/sql/gnc-employee-sql.cpp
 libgnucash/backend/sql/gnc-entry-sql.cpp
@@ -584,6 +591,7 @@ libgnucash/backend/xml/gnc-bill-term-xml-v2.cpp
 libgnucash/backend/xml/gnc-book-xml-v2.cpp
 libgnucash/backend/xml/gnc-budget-xml-v2.cpp
 libgnucash/backend/xml/gnc-commodity-xml-v2.cpp
+libgnucash/backend/xml/gnc-coowner-xml-v2.cpp
 libgnucash/backend/xml/gnc-customer-xml-v2.cpp
 libgnucash/backend/xml/gnc-employee-xml-v2.cpp
 libgnucash/backend/xml/gnc-entry-xml-v2.cpp
@@ -635,6 +643,7 @@ libgnucash/engine/gnc-budget.cpp
 libgnucash/engine/gncBusiness.c
 libgnucash/engine/gnc-commodity.c
 libgnucash/engine/gnc-commodity.h
+libgnucash/engine/gncCoOwner.c
 libgnucash/engine/gncCustomer.c
 libgnucash/engine/gnc-date.cpp
 libgnucash/engine/gnc-datetime.cpp
