@@ -162,7 +162,7 @@
         (set-option! options "General" "From"
                      (cons 'absolute (gnc-dmy2time64 1 1 1980)))
         (set-option! options "General" "To"
-                     (cons 'absolute (gnc-dmy2time64 1 7 1981)))
+                     (cons 'absolute (gnc-dmy2time64 1 7 1980)))
         (set-option! options "Display Columns" "Transaction Links" 'detailed)
         options))
 
