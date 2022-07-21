@@ -35,9 +35,10 @@ extern "C"
 #include "Split.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
-#include "gncInvoice.h"
 #include "gncEmployee.h"
+#include "gncInvoice.h"
 #include "gncVendor.h"
 }
 
@@ -219,6 +220,7 @@ compare_business_books (QofBook* book_1, QofBook* book_2)
     compare_billterms (book_1, book_2);
     compare_taxtables (book_1, book_2);
 
+    compare_coowner (book_1, book_2);
     compare_customers (book_1, book_2);
     compare_employees (book_1, book_2);
     compare_invoices (book_1, book_2);
