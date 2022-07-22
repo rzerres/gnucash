@@ -48,56 +48,121 @@
 #include "gncInvoice.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
+static QofLogModule
+log_module = GNC_MOD_GUI;
 
-static void gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass);
-static void gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_finalize (GObject *object);
+static void
+gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass);
+static void
+gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_finalize (GObject *object);
 
-static GtkWidget *gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page);
-static gboolean gnc_plugin_page_invoice_focus_widget (GncPluginPage *plugin_page);
-static void gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page);
-static void gnc_plugin_page_invoice_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
-static GncPluginPage *gnc_plugin_page_invoice_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
-static void gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
+static GtkWidget
+*gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page);
+static gboolean
+gnc_plugin_page_invoice_focus_widget (GncPluginPage *plugin_page);
+static void
+gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page);
+static void
+gnc_plugin_page_invoice_save_page (
+    GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
+static GncPluginPage
+*gnc_plugin_page_invoice_recreate_page (
+    GtkWidget *window, GKeyFile *file, const gchar *group);
+static void
+gnc_plugin_page_invoice_window_changed (
+    GncPluginPage *plugin_page, GtkWidget *window);
 
-static void gnc_plugin_page_invoice_summarybar_position_changed(gpointer prefs, gchar* pref, gpointer user_data);
+static void
+gnc_plugin_page_invoice_summarybar_position_changed(
+    gpointer prefs, gchar* pref, gpointer user_data);
 
 /* Command callbacks */
-static void gnc_plugin_page_invoice_cmd_new_invoice (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_new_account (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_print (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_cut (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_copy (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_paste (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_edit (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_duplicateInvoice (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_post (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_unpost (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_refresh (GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_new_invoice (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_new_account (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_print (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_cut (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_copy (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_paste (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_edit (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_duplicateInvoice (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_post (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_unpost (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_refresh (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
 
-static void gnc_plugin_page_invoice_cmd_sort_changed (GtkAction *action,
-        GtkRadioAction *current,
-        GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_sort_changed (
+    GtkAction *action,
+    GtkRadioAction *current,
+    GncPluginPageInvoice *plugin_page);
 
-static void gnc_plugin_page_invoice_cmd_enter (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_cancel (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_delete (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_blank (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_duplicateEntry (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_pay_invoice (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_save_layout (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_reset_layout (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_link (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_link_remove (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_link_open (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_company_report (GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_enter (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_cancel (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void gnc_plugin_page_invoice_cmd_delete (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_blank (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_duplicateEntry (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_pay_invoice (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_save_layout (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_reset_layout (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_link (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_link_remove (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_link_open (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_company_report (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
 
-static void gnc_plugin_page_redraw_help_cb( GnucashRegister *gsr, GncPluginPageInvoice *invoice_page );
-static void gnc_plugin_page_invoice_refresh_cb (GHashTable *changes, gpointer user_data);
+static void
+gnc_plugin_page_redraw_help_cb(
+    GnucashRegister *gsr, GncPluginPageInvoice *invoice_page );
+static void gnc_plugin_page_invoice_refresh_cb (
+    GHashTable *changes, gpointer user_data);
 
-static void gnc_plugin_page_invoice_cmd_entryUp (GtkAction *action, GncPluginPageInvoice *plugin_page);
-static void gnc_plugin_page_invoice_cmd_entryDown (GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_entry_up (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
+static void
+gnc_plugin_page_invoice_cmd_entry_down (
+    GtkAction *action, GncPluginPageInvoice *plugin_page);
 
 /************************************************************
  *                          Actions                         *
@@ -203,12 +268,12 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
     {
         "EntryUpAction", "pan-up-symbolic", N_("Move Entry _Up"), NULL,
         N_("Move the current entry one row upwards"),
-        G_CALLBACK (gnc_plugin_page_invoice_cmd_entryUp)
+        G_CALLBACK (gnc_plugin_page_invoice_cmd_entry_up)
     },
     {
         "EntryDownAction", "pan-down-symbolic", N_("Move Entry Do_wn"), NULL,
         N_("Move the current entry one row downwards"),
-        G_CALLBACK (gnc_plugin_page_invoice_cmd_entryDown)
+        G_CALLBACK (gnc_plugin_page_invoice_cmd_entry_down)
     },
 
     /* Business menu */
@@ -493,7 +558,7 @@ gnc_plugin_page_invoice_get_window (GncInvoice *invoice)
     GncPluginPageInvoice *invoice_page;
     const GList *item;
 
-    /* Is there an existing page? */
+    // If there is an existing page -> forward this one
     item = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_INVOICE_NAME);
     for ( ; item; item = g_list_next(item))
     {
@@ -514,7 +579,7 @@ gnc_plugin_page_invoice_new (InvoiceWindow *iw)
     GncPluginPage *plugin_page;
     const GList *item;
 
-    /* Is there an existing page? */
+    // If there is an existing page -> forward this one
     item = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_INVOICE_NAME);
     for ( ; item; item = g_list_next(item))
     {
@@ -524,6 +589,8 @@ gnc_plugin_page_invoice_new (InvoiceWindow *iw)
             return GNC_PLUGIN_PAGE(invoice_page);
     }
 
+    // No invoice page found -> create a new one
+    // associate the new plugin_page with given invoice window
     invoice_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_INVOICE, (char *)NULL);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(invoice_page);
     priv->iw = iw;
@@ -563,30 +630,34 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
     GtkActionGroup *action_group;
     gboolean use_new;
 
-    /* Init parent declared variables */
+    // Init parent declared variables
     parent = GNC_PLUGIN_PAGE(plugin_page);
     use_new = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_USE_NEW);
-    g_object_set(G_OBJECT(plugin_page),
-                 "page-name",      _("Invoice"),
-                 "page-uri",       "default:",
-                 "ui-description", "gnc-plugin-page-invoice-ui.xml",
-                 "use-new-window", use_new,
-                 (char *)NULL);
+    g_object_set(
+        G_OBJECT(plugin_page),
+        "page-name",      _("Invoice"),
+        "page-uri",       "default:",
+        "ui-description", "gnc-plugin-page-invoice-ui.xml",
+        "use-new-window", use_new,
+        (char *)NULL);
 
-    /* change me when the system supports multiple books */
+    // change me when the system supports multiple books //
     gnc_plugin_page_add_book(parent, gnc_get_current_book());
 
-    /* Create menu and toolbar information */
+    // Create menu and toolbar information
     action_group =
-        gnc_plugin_page_create_action_group(parent,
-                                            "GncPluginPageInvoiceActions");
-    gtk_action_group_add_actions (action_group, gnc_plugin_page_invoice_actions,
-                                  gnc_plugin_page_invoice_n_actions, plugin_page);
-    gtk_action_group_add_radio_actions (action_group,
-                                        radio_entries, n_radio_entries,
-                                        REG_STYLE_LEDGER,
-                                        G_CALLBACK(gnc_plugin_page_invoice_cmd_sort_changed),
-                                        plugin_page);
+        gnc_plugin_page_create_action_group(
+            parent,
+            "GncPluginPageInvoiceActions");
+    gtk_action_group_add_actions (
+            action_group, gnc_plugin_page_invoice_actions,
+            gnc_plugin_page_invoice_n_actions, plugin_page);
+    gtk_action_group_add_radio_actions (
+            action_group,
+            radio_entries, n_radio_entries,
+            REG_STYLE_LEDGER,
+            G_CALLBACK(gnc_plugin_page_invoice_cmd_sort_changed),
+            plugin_page);
 
     gnc_plugin_init_short_names (action_group, toolbar_labels);
 }
@@ -606,14 +677,16 @@ update_doclink_actions (GncPluginPage *plugin_page, gboolean has_uri)
 {
     GtkAction *uri_action;
 
-    uri_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page), "BusinessLinkOpenAction");
+    uri_action = gnc_plugin_page_get_action (
+        GNC_PLUGIN_PAGE(plugin_page), "BusinessLinkOpenAction");
     gtk_action_set_sensitive (uri_action, has_uri);
 }
 
 static void
-gnc_plugin_page_invoice_action_update (GtkActionGroup *action_group,
-                                       action_toolbar_labels *action_list,
-                                       void (*gtkfunc)(gpointer, gpointer))
+gnc_plugin_page_invoice_action_update (
+    GtkActionGroup *action_group,
+    action_toolbar_labels *action_list,
+    void (*gtkfunc)(gpointer, gpointer))
 {
     GtkAction *action;
     gint i;
@@ -621,8 +694,9 @@ gnc_plugin_page_invoice_action_update (GtkActionGroup *action_group,
     for (i = 0; action_list[i].action_name; i++)
     {
         /* update the action */
-        action = gtk_action_group_get_action (action_group,
-                                              action_list[i].action_name);
+        action = gtk_action_group_get_action (
+            action_group,
+            action_list[i].action_name);
         gtkfunc (action, _(action_list[i].label));
     }
 }
@@ -645,7 +719,10 @@ gnc_plugin_page_update_reset_layout_action (GncPluginPage *page)
 }
 
 void
-gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, gboolean can_unpost)
+gnc_plugin_page_invoice_update_menus (
+    GncPluginPage *page,
+    gboolean is_posted,
+    gboolean can_unpost)
 {
     GtkActionGroup *action_group;
     GncPluginPageInvoicePrivate *priv;
@@ -729,27 +806,35 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
     }
 
     action_group = gnc_plugin_page_get_action_group(page);
-    gnc_plugin_update_actions (action_group, posted_actions,
-                               "sensitive", is_posted);
-    gnc_plugin_update_actions (action_group, unposted_actions,
-                               "sensitive", !is_posted);
-    gnc_plugin_update_actions (action_group, can_unpost_actions,
-                               "sensitive", can_unpost);
-    gnc_plugin_update_actions (action_group, invoice_book_readwrite_actions,
-                               "sensitive", !is_readonly);
+    gnc_plugin_update_actions (
+        action_group, posted_actions,
+        "sensitive", is_posted);
+    gnc_plugin_update_actions (
+        action_group, unposted_actions,
+        "sensitive", !is_posted);
+    gnc_plugin_update_actions (
+        action_group, can_unpost_actions,
+        "sensitive", can_unpost);
+    gnc_plugin_update_actions (
+        action_group, invoice_book_readwrite_actions,
+        "sensitive", !is_readonly);
 
     /* update the action labels */
-    gnc_plugin_page_invoice_action_update (action_group, label_list, (void*)gtk_action_set_label);
+    gnc_plugin_page_invoice_action_update (
+        action_group, label_list, (void*)gtk_action_set_label);
     /* update the action tooltips */
-    gnc_plugin_page_invoice_action_update (action_group, tooltip_list, (void*)gtk_action_set_tooltip);
+    gnc_plugin_page_invoice_action_update (
+        action_group, tooltip_list, (void*)gtk_action_set_tooltip);
 
     // if there is no default layout do not enable reset action
     gnc_plugin_page_update_reset_layout_action (page);
 
-    /* update the layout action labels */
-    gnc_plugin_page_invoice_action_update (action_group, label_layout_list, (void*)gtk_action_set_label);
-    /* update the layout action tooltips */
-    gnc_plugin_page_invoice_action_update (action_group, tooltip_layout_list, (void*)gtk_action_set_tooltip);
+    // update the layout action labels
+    gnc_plugin_page_invoice_action_update (
+        action_group, label_layout_list, (void*)gtk_action_set_label);
+    // update the layout action tooltips
+    gnc_plugin_page_invoice_action_update (
+        action_group, tooltip_layout_list, (void*)gtk_action_set_tooltip);
 
     // update doclink buttons
     invoice = gnc_invoice_window_get_invoice (priv->iw);
@@ -769,7 +854,8 @@ gnc_plugin_page_invoice_focus_widget (GncPluginPage *invoice_plugin_page)
 {
     if (GNC_IS_PLUGIN_PAGE_INVOICE(invoice_plugin_page))
     {
-        GncPluginPageInvoicePrivate *priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(invoice_plugin_page);
+        GncPluginPageInvoicePrivate *priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(
+            invoice_plugin_page);
 
         GtkWidget *regWidget = gnc_invoice_get_register(priv->iw);
         GtkWidget *notes = gnc_invoice_get_notes(priv->iw);
@@ -830,7 +916,8 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
     gtk_box_pack_start(GTK_BOX (priv->widget), widget, TRUE, TRUE, 0);
 
     plugin_page->summarybar = gnc_invoice_window_create_summary_bar(priv->iw);
-    gtk_box_pack_start(GTK_BOX (priv->widget), plugin_page->summarybar, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX
+        (priv->widget), plugin_page->summarybar, FALSE, FALSE, 0);
     gnc_plugin_page_invoice_summarybar_position_changed(NULL, NULL, page);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_SUMMARYBAR_POSITION_TOP,
@@ -871,14 +958,16 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
     page = GNC_PLUGIN_PAGE_INVOICE (plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
 
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                 GNC_PREF_SUMMARYBAR_POSITION_TOP,
-                                 gnc_plugin_page_invoice_summarybar_position_changed,
-                                 page);
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
-                                 GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
-                                 gnc_plugin_page_invoice_summarybar_position_changed,
-                                 page);
+    gnc_prefs_remove_cb_by_func (
+        GNC_PREFS_GROUP_GENERAL,
+        GNC_PREF_SUMMARYBAR_POSITION_TOP,
+        gnc_plugin_page_invoice_summarybar_position_changed,
+        page);
+    gnc_prefs_remove_cb_by_func (
+        GNC_PREFS_GROUP_GENERAL,
+        GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
+        gnc_plugin_page_invoice_summarybar_position_changed,
+        page);
 
     // Remove the page_changed signal callback
     gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(plugin_page));
@@ -947,9 +1036,10 @@ gnc_plugin_page_invoice_save_page (GncPluginPage *plugin_page,
  *
  *  @param group_name The group name to use when restoring data. */
 static GncPluginPage *
-gnc_plugin_page_invoice_recreate_page (GtkWidget *window,
-                                       GKeyFile *key_file,
-                                       const gchar *group_name)
+gnc_plugin_page_invoice_recreate_page (
+    GtkWidget *window,
+    GKeyFile *key_file,
+    const gchar *group_name)
 {
     GncPluginPage *page;
 
@@ -959,8 +1049,9 @@ gnc_plugin_page_invoice_recreate_page (GtkWidget *window,
     ENTER("key_file %p, group_name %s", key_file, group_name);
 
     /* Create the new page. */
-    page = gnc_invoice_recreate_page(GNC_MAIN_WINDOW(window),
-                                     key_file, group_name);
+    page = gnc_invoice_recreate_page(
+        GNC_MAIN_WINDOW(window),
+        key_file, group_name);
 
     LEAVE(" ");
     return page;
@@ -968,8 +1059,9 @@ gnc_plugin_page_invoice_recreate_page (GtkWidget *window,
 
 
 static void
-gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page,
-                                        GtkWidget *window)
+gnc_plugin_page_invoice_window_changed (
+    GncPluginPage *plugin_page,
+    GtkWidget *window)
 {
     GncPluginPageInvoice *page;
     GncPluginPageInvoicePrivate *priv;
@@ -983,7 +1075,10 @@ gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page,
 
 
 static void
-gnc_plugin_page_invoice_summarybar_position_changed(gpointer prefs, gchar *pref, gpointer user_data)
+gnc_plugin_page_invoice_summarybar_position_changed(
+    gpointer prefs,
+    gchar *pref,
+    gpointer user_data)
 {
     GncPluginPage *plugin_page;
     GncPluginPageInvoice *page;
@@ -996,12 +1091,14 @@ gnc_plugin_page_invoice_summarybar_position_changed(gpointer prefs, gchar *pref,
     page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
 
-    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
+    if (gnc_prefs_get_bool (
+        GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
         position = GTK_POS_TOP;
 
-    gtk_box_reorder_child(GTK_BOX(priv->widget),
-                          plugin_page->summarybar,
-                          (position == GTK_POS_TOP ? 0 : -1) );
+    gtk_box_reorder_child(
+        GTK_BOX(priv->widget),
+        plugin_page->summarybar,
+        (position == GTK_POS_TOP ? 0 : -1) );
 }
 
 
@@ -1020,7 +1117,8 @@ gnc_plugin_page_invoice_cmd_new_invoice (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (
+        GNC_PLUGIN_PAGE (plugin_page)));
     gnc_invoice_window_new_invoice_cb(parent, priv->iw);
     LEAVE(" ");
 }
@@ -1031,15 +1129,17 @@ gnc_plugin_page_invoice_cmd_new_account (GtkAction *action,
 {
     GtkWindow *parent = NULL;
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
-    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (
+        GNC_PLUGIN_PAGE (plugin_page)));
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     gnc_ui_new_account_window (parent, gnc_get_current_book(), NULL);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_print (GtkAction *action,
-                                   GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_print (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
@@ -1048,14 +1148,16 @@ gnc_plugin_page_invoice_cmd_print (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
-    gnc_invoice_window_printCB (parent, priv->iw);
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (
+        GNC_PLUGIN_PAGE (plugin_page)));
+    gnc_invoice_window_print_cb (parent, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_cut (GtkAction *action,
-                                 GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_cut (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1068,8 +1170,9 @@ gnc_plugin_page_invoice_cmd_cut (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_invoice_cmd_copy (GtkAction *action,
-                                  GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_copy (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1082,8 +1185,9 @@ gnc_plugin_page_invoice_cmd_copy (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_invoice_cmd_paste (GtkAction *action,
-                                   GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_paste (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1096,8 +1200,9 @@ gnc_plugin_page_invoice_cmd_paste (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_invoice_cmd_edit (GtkAction *action,
-                                  GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_edit (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
@@ -1107,13 +1212,14 @@ gnc_plugin_page_invoice_cmd_edit (GtkAction *action,
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
     parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
-    gnc_invoice_window_editCB (parent, priv->iw);
+    gnc_invoice_window_edit_cb (parent, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_duplicateInvoice (GtkAction *action,
-        GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_duplicateInvoice (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
@@ -1123,13 +1229,14 @@ gnc_plugin_page_invoice_cmd_duplicateInvoice (GtkAction *action,
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
     parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
-    gnc_invoice_window_duplicateInvoiceCB(parent, priv->iw);
+    gnc_invoice_window_duplicateInvoice_cb(parent, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_post (GtkAction *action,
-                                  GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_post (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1137,13 +1244,14 @@ gnc_plugin_page_invoice_cmd_post (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    gnc_invoice_window_postCB(NULL, priv->iw);
+    gnc_invoice_window_post_cb(NULL, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_unpost (GtkAction *action,
-                                    GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_unpost (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1151,14 +1259,15 @@ gnc_plugin_page_invoice_cmd_unpost (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    gnc_invoice_window_unpostCB(NULL, priv->iw);
+    gnc_invoice_window_unpost_cb(NULL, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_sort_changed (GtkAction *action,
-        GtkRadioAction *current,
-        GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_sort_changed (
+    GtkAction *action,
+    GtkRadioAction *current,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     invoice_sort_type_t value;
@@ -1180,8 +1289,9 @@ gnc_plugin_page_invoice_cmd_sort_changed (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_invoice_cmd_refresh (GtkAction *action,
-                                     GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_refresh (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1195,8 +1305,9 @@ gnc_plugin_page_invoice_cmd_refresh (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_invoice_cmd_enter (GtkAction *action,
-                                   GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_enter (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1204,13 +1315,14 @@ gnc_plugin_page_invoice_cmd_enter (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    gnc_invoice_window_recordCB(NULL, priv->iw);
+    gnc_invoice_window_record_cb(NULL, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_cancel (GtkAction *action,
-                                    GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_cancel (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1218,13 +1330,14 @@ gnc_plugin_page_invoice_cmd_cancel (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    gnc_invoice_window_cancelCB(NULL, priv->iw);
+    gnc_invoice_window_cancel_cb(NULL, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_delete (GtkAction *action,
-                                    GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_delete (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1232,13 +1345,14 @@ gnc_plugin_page_invoice_cmd_delete (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    gnc_invoice_window_deleteCB(NULL, priv->iw);
+    gnc_invoice_window_delete_cb(NULL, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_blank (GtkAction *action,
-                                   GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_blank (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1246,13 +1360,14 @@ gnc_plugin_page_invoice_cmd_blank (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    gnc_invoice_window_blankCB(NULL, priv->iw);
+    gnc_invoice_window_blank_cb(NULL, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_duplicateEntry (GtkAction *action,
-        GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_duplicateEntry (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
 
@@ -1260,39 +1375,42 @@ gnc_plugin_page_invoice_cmd_duplicateEntry (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    gnc_invoice_window_duplicateCB(NULL, priv->iw);
+    gnc_invoice_window_duplicate_cb(NULL, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_entryUp (GtkAction *action,
-                                     GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_entry_up (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    gnc_invoice_window_entryUpCB(NULL, priv->iw);
+    gnc_invoice_window_entry_up_cb(NULL, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_entryDown (GtkAction *action,
-                                       GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_entry_down (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    gnc_invoice_window_entryDownCB(NULL, priv->iw);
+    gnc_invoice_window_entry_down_cb(NULL, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_pay_invoice (GtkAction *action,
-        GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_pay_invoice (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
@@ -1301,14 +1419,16 @@ gnc_plugin_page_invoice_cmd_pay_invoice (GtkAction *action,
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (
+        GNC_PLUGIN_PAGE (plugin_page)));
     gnc_invoice_window_payment_cb (parent, priv->iw);
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_save_layout (GtkAction *action,
-        GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_save_layout (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
@@ -1320,16 +1440,18 @@ gnc_plugin_page_invoice_cmd_save_layout (GtkAction *action,
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
     gnc_invoice_window_save_document_layout_to_user_state (priv->iw);
 
-    layout_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page),
-                                                "ViewResetLayoutAction");
+    layout_action = gnc_plugin_page_get_action (
+        GNC_PLUGIN_PAGE(plugin_page),
+        "ViewResetLayoutAction");
     gtk_action_set_sensitive (layout_action, TRUE);
 
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_reset_layout (GtkAction *action,
-        GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_reset_layout (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
@@ -1341,16 +1463,18 @@ gnc_plugin_page_invoice_cmd_reset_layout (GtkAction *action,
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
     gnc_invoice_window_reset_document_layout_and_clear_user_state (priv->iw);
 
-    layout_action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(plugin_page),
-                                                "ViewResetLayoutAction");
+    layout_action = gnc_plugin_page_get_action (
+        GNC_PLUGIN_PAGE(plugin_page),
+        "ViewResetLayoutAction");
     gtk_action_set_sensitive (layout_action, FALSE);
 
     LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_invoice_cmd_link (GtkAction *action,
-        GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_link (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
@@ -1363,12 +1487,14 @@ gnc_plugin_page_invoice_cmd_link (GtkAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
+    parent = GTK_WINDOW(gnc_plugin_page_get_window (
+        GNC_PLUGIN_PAGE(plugin_page)));
 
     invoice = gnc_invoice_window_get_invoice (priv->iw);
     uri = gncInvoiceGetDocLink (invoice);
 
-    ret_uri = gnc_doclink_get_uri_dialog (parent, _("Manage Document Link"), uri);
+    ret_uri = gnc_doclink_get_uri_dialog (
+        parent, _("Manage Document Link"), uri);
 
     if (ret_uri)
         has_uri = TRUE;
@@ -1390,8 +1516,9 @@ gnc_plugin_page_invoice_cmd_link (GtkAction *action,
             {
                 gchar *display_uri =
                     gnc_doclink_get_unescaped_just_uri (ret_uri);
-                gtk_link_button_set_uri (GTK_LINK_BUTTON(doclink_button),
-                                         display_uri);
+                gtk_link_button_set_uri (
+                    GTK_LINK_BUTTON(doclink_button),
+                    display_uri);
                 gtk_widget_show (GTK_WIDGET(doclink_button));
                 g_free (display_uri);
             }
@@ -1418,7 +1545,8 @@ gnc_plugin_page_invoice_cmd_link_remove (GtkAction *action,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
+    parent = GTK_WINDOW(gnc_plugin_page_get_window (
+        GNC_PLUGIN_PAGE(plugin_page)));
 
     invoice = gnc_invoice_window_get_invoice (priv->iw);
     gncInvoiceSetDocLink (invoice, "");
@@ -1435,8 +1563,9 @@ gnc_plugin_page_invoice_cmd_link_remove (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_invoice_cmd_link_open (GtkAction *action,
-        GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_link_open (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
@@ -1446,7 +1575,8 @@ gnc_plugin_page_invoice_cmd_link_open (GtkAction *action,
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
-    parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
+    parent = GTK_WINDOW(gnc_plugin_page_get_window (
+        GNC_PLUGIN_PAGE(plugin_page)));
 
     invoice = gnc_invoice_window_get_invoice (priv->iw);
     uri = gncInvoiceGetDocLink (invoice);
@@ -1458,8 +1588,9 @@ gnc_plugin_page_invoice_cmd_link_open (GtkAction *action,
 }
 
 static void
-gnc_plugin_page_invoice_cmd_company_report (GtkAction *action,
-        GncPluginPageInvoice *plugin_page)
+gnc_plugin_page_invoice_cmd_company_report (
+    GtkAction *action,
+    GncPluginPageInvoice *plugin_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
@@ -1478,8 +1609,9 @@ gnc_plugin_page_invoice_cmd_company_report (GtkAction *action,
 /************************************************************/
 
 static void
-gnc_plugin_page_redraw_help_cb (GnucashRegister *g_reg,
-                                GncPluginPageInvoice *invoice_page)
+gnc_plugin_page_redraw_help_cb (
+    GnucashRegister *g_reg,
+    GncPluginPageInvoice *invoice_page)
 {
     GncPluginPageInvoicePrivate *priv;
     GncWindow *window;
@@ -1524,7 +1656,7 @@ gnc_plugin_page_invoice_refresh_cb (GHashTable *changes, gpointer user_data)
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(page));
 
-    /* We're only looking for forced updates here. */
+    // We're only looking for forced updates here.
     if (changes)
         return;
 
