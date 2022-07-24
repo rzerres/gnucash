@@ -55,14 +55,14 @@ GType gnc_billterm_get_type(void);
 
 /** @name BillTerm parameter names
  @{ */
-#define GNC_BILLTERM_NAME 		"name"
-#define GNC_BILLTERM_DESC 		"description"
-#define GNC_BILLTERM_DUEDAYS 	"number of days due"
-#define GNC_BILLTERM_DISCDAYS 	"number of discounted days"
-#define GNC_BILLTERM_CUTOFF 	"cut off"
-#define GNC_BILLTERM_TYPE 		"bill type"
-#define GNC_BILLTERM_DISCOUNT	"amount of discount"
-#define GNC_BILLTERM_REFCOUNT	"reference count"
+#define GNC_BILLTERM_NAME "name"
+#define GNC_BILLTERM_DESC "description"
+#define GNC_BILLTERM_DUEDAYS "number of days due"
+#define GNC_BILLTERM_DISCDAYS "number of discounted days"
+#define GNC_BILLTERM_CUTOFF "cut off"
+#define GNC_BILLTERM_TYPE "bill type"
+#define GNC_BILLTERM_DISCOUNT "amount of discount"
+#define GNC_BILLTERM_REFCOUNT "reference count"
 /** @} */
 
 /**
