@@ -2,12 +2,12 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkWindow" id="invoice_window">
+  <object class="GtkWindow" id="invoice_entry_window">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Invoice</property>
     <child>
-      <object class="GtkBox" id="invoice_box_all">
+      <object class="GtkBox" id="invoice_entry_vbox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="margin-start">3</property>
@@ -15,27 +15,27 @@
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox" id="invoice_box_invoice_info">
+          <object class="GtkBox" id="hbox1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="vexpand">False</property>
             <property name="spacing">3</property>
             <child>
-              <object class="GtkFrame" id="invoice_frame_invoice_info">
+              <object class="GtkFrame" id="frame1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label-xalign">0</property>
                 <child>
                   <!-- n-columns=2 n-rows=7 -->
-                  <object class="GtkGrid" id="invoice_grid_invoice_info">
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="border-width">6</property>
                     <property name="row-spacing">3</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_invoice_id">
+                      <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -48,7 +48,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="invoice_entry_invoice_id">
+                      <object class="GtkEntry" id="page_id_entry">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="editable">False</property>
@@ -61,7 +61,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_date_opened">
+                      <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -74,7 +74,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="invoice_entry_date_opened">
+                      <object class="GtkBox" id="page_date_opened_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
@@ -87,7 +87,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_date_posted">
+                      <object class="GtkLabel" id="posted_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -100,7 +100,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="invoice_entry_date_posted">
+                      <object class="GtkBox" id="date_posted_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
@@ -113,7 +113,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_posted_account">
+                      <object class="GtkLabel" id="acct_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -126,7 +126,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="invoice_entry_posted_account">
+                      <object class="GtkEntry" id="acct_entry">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="editable">False</property>
@@ -139,7 +139,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_type">
+                      <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -152,7 +152,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_paid">
+                      <object class="GtkLabel" id="paid_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -164,7 +164,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="invoice_checkbutton_active">
+                      <object class="GtkCheckButton" id="active_check">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -179,7 +179,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_active">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -191,11 +191,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="invoice_box_type_entry">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
-                          <object class="GtkLabel" id="invoice_entry_type">
+                          <object class="GtkLabel" id="page_type_label">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
@@ -226,7 +226,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="invoice_label_invoice_info">
+                  <object class="GtkLabel" id="label25">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Invoice Information</property>
@@ -240,20 +240,20 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="invoice_frame_billing_info">
+              <object class="GtkFrame" id="frame3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label-xalign">0</property>
                 <child>
                   <!-- n-columns=2 n-rows=4 -->
-                  <object class="GtkGrid" id="invoice_grid_billing_info">
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="border-width">6</property>
                     <property name="row-spacing">3</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_owner">
+                      <object class="GtkLabel" id="page_owner_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -266,7 +266,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="invoice_entry_owner">
+                      <object class="GtkBox" id="page_owner_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
@@ -279,7 +279,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_job">
+                      <object class="GtkLabel" id="page_job_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -292,7 +292,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="invoice_entry_job">
+                      <object class="GtkBox" id="page_job_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
@@ -305,7 +305,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_billing_id">
+                      <object class="GtkLabel" id="label19">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -318,7 +318,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="invoice_entry_billing_id">
+                      <object class="GtkEntry" id="page_billing_id_entry">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="editable">False</property>
@@ -331,7 +331,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="invoice_label_terms">
+                      <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -344,7 +344,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="invoice_entry_terms">
+                      <object class="GtkEntry" id="page_terms_menu">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="editable">False</property>
@@ -360,7 +360,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="invoice_label_billing_info">
+                  <object class="GtkLabel" id="label26">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Billing Information</property>
@@ -375,7 +375,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="invoice_frame_notes">
+              <object class="GtkFrame" id="frame2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label-xalign">0</property>
@@ -394,7 +394,7 @@
                         <property name="hscrollbar-policy">never</property>
                         <property name="shadow-type">in</property>
                         <child>
-                          <object class="GtkTextView" id="window_entry_notes">
+                          <object class="GtkTextView" id="page_notes_text">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="margin-start">3</property>
@@ -441,7 +441,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="label_notes">
+                  <object class="GtkLabel" id="label27">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Notes</property>
@@ -463,19 +463,19 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="invoice_frame_project">
+          <object class="GtkFrame" id="page_proj_frame">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="label-xalign">0</property>
             <child>
-              <object class="GtkBox" id="invoice_box_chargeback_project">
+              <object class="GtkBox" id="hbox8">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="border-width">3</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="invoice_label_customer">
+                  <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Customer</property>
@@ -488,7 +488,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="invoice_entry_project_customer">
+                  <object class="GtkBox" id="page_proj_cust_hbox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
@@ -502,7 +502,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="invoic_label_job">
+                  <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Job</property>
@@ -515,7 +515,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="invoice_entry_project_job">
+                  <object class="GtkBox" id="page_proj_job_hbox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
@@ -531,7 +531,7 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="invoice_label_default_chargeback_project">
+              <object class="GtkLabel" id="label28">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Default Chargeback Project</property>
@@ -546,19 +546,19 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="invoice_frame_to_charge">
+          <object class="GtkFrame" id="to_charge_frame">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="label-xalign">0</property>
             <child>
-              <object class="GtkBox" id="invoice_box_extra_payments">
+              <object class="GtkBox" id="hbox9">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="border-width">3</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="invoice_label_add_to_card">
+                  <object class="GtkLabel" id="label31">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Additional to Card</property>
@@ -571,7 +571,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="invoice_entry_add_to_card">
+                  <object class="GtkBox" id="to_charge_box">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
@@ -587,7 +587,7 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="invoice_label_extra_payments">
+              <object class="GtkLabel" id="label30">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Extra Payments</property>
@@ -601,7 +601,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="invoice_frame_ledger">
+          <object class="GtkFrame" id="ledger_frame">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
@@ -611,7 +611,7 @@
               <placeholder/>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="invoice_label_entries">
+              <object class="GtkLabel" id="label29">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Entries</property>
@@ -628,7 +628,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="liststore_terms">
+  <object class="GtkListStore" id="terms_store">
     <columns>
       <!-- column-name label -->
       <column type="gchararray"/>
@@ -642,18 +642,18 @@
     <property name="type-hint">dialog</property>
     <signal name="destroy" handler="gnc_invoice_window_destroy_cb" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkBox" id="new_invoice_box_all">
+      <object class="GtkBox" id="dialog-vbox2">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="new_invoice_buttonbox_action">
+          <object class="GtkButtonBox" id="dialog-action_area2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="new_invoice_button_help">
+              <object class="GtkButton" id="helpbutton">
                 <property name="label" translatable="yes">_Help</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -670,7 +670,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button_new_invoice_cancel">
+              <object class="GtkButton" id="cancelbutton">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -686,7 +686,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button_new_invoice_ok">
+              <object class="GtkButton" id="okbutton">
                 <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -710,26 +710,26 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="new_invoice_box">
+          <object class="GtkBox" id="vbox10">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkFrame" id="new_invoice_frame_invoice_info">
+              <object class="GtkFrame" id="frame4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="border-width">3</property>
                 <property name="label-xalign">0</property>
                 <child>
-                  <!-- n-columns=2 n-rows=4 -->
-                  <object class="GtkGrid" id="new_infoice_grid_invoice_info">
+                  <!-- n-columns=2 n-rows=3 -->
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="border-width">6</property>
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="new_invoice_label_type">
+                      <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -742,7 +742,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="new_invoice_label_invoice_id">
+                      <object class="GtkLabel" id="label14">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -755,7 +755,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="new_invoice_label_date_opened">
+                      <object class="GtkLabel" id="label15">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -768,7 +768,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="new_invoice_entry_date_opened_hbox">
+                      <object class="GtkBox" id="dialog_date_opened_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
@@ -782,7 +782,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="new_invoice_entry_invoice_id">
+                      <object class="GtkEntry" id="dialog_id_entry">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="tooltip-text" translatable="yes">The invoice ID number. If left blank a reasonable number will be chosen for you.</property>
@@ -798,11 +798,82 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="new_invoice_entry_type_invoice">
+                      <object class="GtkBox" id="dialog_type_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
-                          <placeholder/>
+                          <object class="GtkBox" id="dialog_type_label_hbox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <child>
+                              <object class="GtkLabel" id="dialog_type_label">
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="margin-start">3</property>
+                                <property name="margin-end">3</property>
+                                <property name="margin-top">3</property>
+                                <property name="margin-bottom">3</property>
+                                <property name="label" translatable="yes">Invoice</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <style>
+                              <class name="frame"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="dialog_type_choice_hbox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <child>
+                              <object class="GtkRadioButton" id="dialog_invoice_type">
+                                <property name="label" translatable="yes">Invoice</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="halign">start</property>
+                                <property name="active">True</property>
+                                <property name="draw-indicator">True</property>
+                                <signal name="toggled" handler="gnc_invoice_type_toggled_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="dialog_creditnote_type">
+                                <property name="label" translatable="yes">Credit Note</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="halign">start</property>
+                                <property name="draw-indicator">True</property>
+                                <property name="group">dialog_invoice_type</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -813,13 +884,12 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="new_invoice_label_invoice_info">
+                  <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Invoice Information</property>
                   </object>
                 </child>
-
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -828,21 +898,21 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="new_invoice_frame_billing_info">
+              <object class="GtkFrame" id="frame5">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="border-width">3</property>
                 <property name="label-xalign">0</property>
                 <child>
                   <!-- n-columns=2 n-rows=4 -->
-                  <object class="GtkGrid" id="new_invoice_grid_billing_info">
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="border-width">6</property>
                     <property name="row-spacing">3</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="new_invoice_label_owner">
+                      <object class="GtkLabel" id="dialog_owner_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -855,7 +925,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="new_invoice_label_job">
+                      <object class="GtkLabel" id="dialog_job_label">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -868,7 +938,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="new_invoice_label_billing_id">
+                      <object class="GtkLabel" id="label20">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -881,7 +951,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="new_invoice_label_terms">
+                      <object class="GtkLabel" id="label17">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -894,7 +964,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="new_invoice_entry_owner">
+                      <object class="GtkBox" id="dialog_owner_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
@@ -908,7 +978,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="new_invoice_entry_job">
+                      <object class="GtkBox" id="dialog_job_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
@@ -922,7 +992,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="new_invoice_entry_billing_id">
+                      <object class="GtkEntry" id="dialog_billing_id_entry">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
@@ -935,11 +1005,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="new_invoice_combobox_terms">
+                      <object class="GtkComboBox" id="dialog_terms_menu">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="model">liststore_terms</property>
+                        <property name="model">terms_store</property>
                         <signal name="changed" handler="gnc_invoice_terms_changed_cb" swapped="no"/>
                         <child>
                           <object class="GtkCellRendererText" id="dialog_cell_renderer_text"/>
@@ -956,7 +1026,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="new_invoice_label_billing_info">
+                  <object class="GtkLabel" id="label16">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Billing Information</property>
@@ -970,20 +1040,20 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="new_invoice_frame_project">
+              <object class="GtkFrame" id="dialog_proj_frame">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label-xalign">0</property>
                 <child>
                   <!-- n-columns=2 n-rows=2 -->
-                  <object class="GtkGrid" id="new_invoice_grid_chargeback">
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="border-width">6</property>
                     <property name="row-spacing">3</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="new_invoice_label_customer">
+                      <object class="GtkLabel" id="label22">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -996,7 +1066,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="new_invoice_label_job">
+                      <object class="GtkLabel" id="label23">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">end</property>
@@ -1009,7 +1079,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="new_invoice_entry_project_customer">
+                      <object class="GtkBox" id="dialog_proj_cust_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
@@ -1023,7 +1093,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="new_invoice_entry_project_job">
+                      <object class="GtkBox" id="dialog_proj_job_hbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
@@ -1039,7 +1109,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="new_invoice_label_chargeback_project">
+                  <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Default Chargeback Project</property>
@@ -1053,13 +1123,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="new_invoice_frame_notes">
+              <object class="GtkFrame" id="frame6">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="border-width">3</property>
                 <property name="label-xalign">0</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow_new_invoice_scrolledwindow">
+                  <object class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
@@ -1068,7 +1138,7 @@
                     <property name="hscrollbar-policy">never</property>
                     <property name="shadow-type">in</property>
                     <child>
-                      <object class="GtkTextView" id="new_invoice_entry_notes">
+                      <object class="GtkTextView" id="dialog_notes_text">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="margin-start">3</property>
@@ -1080,7 +1150,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="new_invoice_label_notes">
+                  <object class="GtkLabel" id="label24">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Notes</property>
@@ -1103,9 +1173,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-11">new_invoice_button_help</action-widget>
-      <action-widget response="-6">button_new_invoice_cancel</action-widget>
-      <action-widget response="-5">button_new_invoice_ok</action-widget>
+      <action-widget response="-11">helpbutton</action-widget>
+      <action-widget response="-6">cancelbutton</action-widget>
+      <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="unpost_message_dialog">
@@ -1114,17 +1184,17 @@
     <property name="modal">True</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
-      <object class="GtkBox" id="unpost_message_box_all">
+      <object class="GtkBox" id="dialog-vbox3">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="unpost_message_buttonbox_action">
+          <object class="GtkButtonBox" id="dialog-action_area3">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="unpost_message_button_cancel">
+              <object class="GtkButton" id="cancelbutton1">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -1139,7 +1209,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="unpost_message_button_ok">
+              <object class="GtkButton" id="okbutton1">
                 <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -1162,17 +1232,17 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="unpost_box_message">
+          <object class="GtkBox" id="vbox17">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <property name="homogeneous">True</property>
             <child>
-              <object class="GtkBox" id="unpost_message_box_question">
+              <object class="GtkBox" id="hbox11">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
-                  <object class="GtkImage" id="unpost_message_image_question">
+                  <object class="GtkImage" id="q_pixmap">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="icon-name">dialog-question</property>
@@ -1186,7 +1256,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="unpost_label_message">
+                  <object class="GtkLabel" id="label32">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Unposting this Invoice will delete the posted transaction.
@@ -1207,17 +1277,17 @@ Are you sure you want to unpost it?</property>
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="unposted_message_frame_tax">
+              <object class="GtkFrame" id="frame8">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="border-width">3</property>
                 <property name="label-xalign">0</property>
                 <child>
-                  <object class="GtkBox" id="unpost_message_box_selection">
+                  <object class="GtkBox" id="hbox12">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkRadioButton" id="unpost_message_radiobutton_yes">
+                      <object class="GtkRadioButton" id="yes_tt_reset">
                         <property name="label" translatable="yes">Yes, reset the Tax Tables</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -1234,7 +1304,7 @@ Are you sure you want to unpost it?</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="unpost_message_radiobutton_no">
+                      <object class="GtkRadioButton" id="no_tt_reset">
                         <property name="label" translatable="yes">No, keep them as they are</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -1243,7 +1313,7 @@ Are you sure you want to unpost it?</property>
                         <property name="use-underline">True</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
-                        <property name="group">unpost_message_radiobutton_yes</property>
+                        <property name="group">yes_tt_reset</property>
                         <signal name="toggled" handler="on_no_tt_reset_toggled" object="Invoice Entry Window" swapped="yes"/>
                       </object>
                       <packing>
@@ -1255,7 +1325,7 @@ Are you sure you want to unpost it?</property>
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="unpost_message_label_tax">
+                  <object class="GtkLabel" id="label33">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes">Reset Tax Tables to present Values?</property>
@@ -1279,8 +1349,8 @@ Are you sure you want to unpost it?</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-6">unpost_message_button_cancel</action-widget>
-      <action-widget response="-5">unpost_message_button_ok</action-widget>
+      <action-widget response="-6">cancelbutton1</action-widget>
+      <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
   </object>
 </interface>
