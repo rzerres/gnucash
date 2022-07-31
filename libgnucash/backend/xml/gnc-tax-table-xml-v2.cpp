@@ -683,7 +683,7 @@ taxtable_scrub (QofBook* book)
     GHashTable* ht = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     qof_object_foreach (GNC_ID_ENTRY, book, taxtable_scrub_entries, ht);
-    qof_object_foreach (GNC_ID_COOWNER, book, taxtable_scrub_cust, ht);
+    qof_object_foreach (GNC_ID_COOWNER, book, taxtable_scrub_coowner, ht);
     qof_object_foreach (GNC_ID_CUSTOMER, book, taxtable_scrub_cust, ht);
     qof_object_foreach (GNC_ID_VENDOR, book, taxtable_scrub_vendor, ht);
     qof_object_foreach (GNC_ID_TAXTABLE, book, taxtable_scrub_cb, &list);
