@@ -743,7 +743,7 @@ billterm_scrub (QofBook* book)
 
     DEBUG ("scrubbing billterms...");
     qof_object_foreach (GNC_ID_BILLTERM, book, billterm_scrub_cb, &list);
-    qof_object_foreach (GNC_ID_COOWNER, book, billterm_scrub_cust, ht);
+    qof_object_foreach (GNC_ID_COOWNER, book, billterm_scrub_coowner, ht);
     qof_object_foreach (GNC_ID_CUSTOMER, book, billterm_scrub_cust, ht);
     qof_object_foreach (GNC_ID_INVOICE,  book, billterm_scrub_invoices, ht);
     qof_object_foreach (GNC_ID_VENDOR,   book, billterm_scrub_vendor, ht);
