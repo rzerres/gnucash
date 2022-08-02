@@ -466,17 +466,19 @@ static const char * get_value_entry (VirtualLocation virt_loc,
     return xaccPrintAmount (value, gnc_default_print_info (FALSE));
 }
 
-static const char * get_taxval_entry (VirtualLocation virt_loc,
-                                      gboolean translate,
-                                      gboolean *conditionally_changed,
-                                      gpointer user_data)
+static const char * get_taxval_entry (
+    VirtualLocation virt_loc,
+    gboolean translate,
+    gboolean *conditionally_changed,
+    gpointer user_data)
 {
     GncEntryLedger *ledger = user_data;
     gnc_numeric value;
 
     /* Check if this is the current cursor */
-    if (virt_cell_loc_equal (ledger->table->current_cursor_loc.vcell_loc,
-                             virt_loc.vcell_loc))
+    if (virt_cell_loc_equal (
+        ledger->table->current_cursor_loc.vcell_loc,
+        virt_loc.vcell_loc))
     {
         /* Sign attention: this function works with values as seen
          * on-screen in the ledger, so they are always in the proper sign.
