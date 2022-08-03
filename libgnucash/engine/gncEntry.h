@@ -127,10 +127,7 @@ void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
 void gncEntrySetDocQuantity (GncEntry *entry, gnc_numeric quantity, gboolean is_cn);
 /** @} */
 
-/** TODO: Co-Owner Invoices */
-/** distinguish them from Customer Invoices */
-
-/** @name Customer Invoices
+/** @name Owner Invoices (like coowner, customer)
  @{ */
 void gncEntrySetInvAccount (GncEntry *entry, Account *acc);
 void gncEntrySetInvPrice (GncEntry *entry, gnc_numeric price);
@@ -144,7 +141,7 @@ void qofEntrySetInvDiscType (GncEntry *entry, const char *type);
 void qofEntrySetInvDiscHow  (GncEntry *entry, const char *type);
 /** @} */
 
-/** @name Vendor Bills (and Employee Expenses)
+/** @name Vendor Bills or Employee Expenses
  @{ */
 void gncEntrySetBillAccount (GncEntry *entry, Account *acc);
 void gncEntrySetBillPrice (GncEntry *entry, gnc_numeric price);
@@ -187,11 +184,13 @@ gnc_numeric gncEntryGetQuantity (const GncEntry *entry);
 gnc_numeric gncEntryGetDocQuantity (const GncEntry *entry, gboolean is_cn);
 /** @} */
 
-/** @name Customer Invoices
+/** @name Owner Invoices (Co-Owner, Customer)
  @{ */
 Account * gncEntryGetInvAccount (const GncEntry *entry);
 gnc_numeric gncEntryGetInvPrice (const GncEntry *entry);
-gnc_numeric gncEntryGetPrice (const GncEntry *entry, const gboolean cust_doc, const gboolean net);
+gnc_numeric
+gncEntryGetPrice (
+    const GncEntry *entry, const gboolean is_owner_doc, const gboolean net);
 gnc_numeric gncEntryGetInvDiscount (const GncEntry *entry);
 GncAmountType gncEntryGetInvDiscountType (const GncEntry *entry);
 GncDiscountHow gncEntryGetInvDiscountHow (const GncEntry *entry);
@@ -222,7 +221,7 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest, gboolean add_entry);
  * An entry has three important values:
  * - entry value: the amount the merchant gets
  * - tax value: the amount the government gets
- * - discount value: the amount the customer saved
+ * - discount value: the amount the owner saved
  *
  * These values can be retrieved in several variants. Depending on
  * how they will be used some sign reversals can be applied on
@@ -233,10 +232,11 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest, gboolean add_entry);
  *              Since credit note entry values are stored negatively
  *              internally, they will be sign-reversed before returning
  *              them.
- * - Bal value: the value as it will impact the balance. Customer
- *              invoices and vendor credit notes have a positive
- *              influence on the balance, so these values will be positive.
- *              For vendor bills and customer credit notes, the
+ * - Bal value: the value as it will impact the balance. Owner invoices
+ *              (like: coowner, customer) and vendor credit notes have
+ *              a positive influence on the balance, so these values will
+ *              be positive.
+ *              For vendor bills and owner credit notes, the
  *              values will be negative.
  *
  * For tax there are TaxValue and TaxValues variants: the first one
@@ -252,22 +252,37 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest, gboolean add_entry);
  * these functions.
  @{
 */
-gnc_numeric gncEntryGetDocValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
-gnc_numeric gncEntryGetDocTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
-/** Careful: the returned list is NOT owned by the entry and should be freed by the caller */
-AccountValueList * gncEntryGetDocTaxValues (GncEntry *entry, gboolean is_cust_doc, gboolean is_cn);
-gnc_numeric gncEntryGetDocDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
+gnc_numeric
+gncEntryGetDocValue (
+    GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
+gnc_numeric
+gncEntryGetDocTaxValue (
+    GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
+/** Careful: the returned list is NOT owned by the entry and should be
+    freed by the caller */
+AccountValueList
+*gncEntryGetDocTaxValues (
+    GncEntry *entry, gboolean is_cust_doc, gboolean is_cn);
+gnc_numeric
+    gncEntryGetDocDiscountValue (
+        GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
 
-gnc_numeric gncEntryGetBalValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
-gnc_numeric gncEntryGetBalTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
-/** Careful: the returned list is NOT owned by the entry and should be freed by the caller */
-AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_doc);
-gnc_numeric gncEntryGetBalDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
+gnc_numeric
+gncEntryGetBalValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
+gnc_numeric
+gncEntryGetBalTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc);
+/** Careful: the returned list is NOT owned by the entry and should be
+    freed by the caller */
+AccountValueList
+  *gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_doc);
+gnc_numeric
+gncEntryGetBalDiscountValue (
+    GncEntry *entry, gboolean round, gboolean is_cust_doc);
 
 /** Compute the Entry value, tax_value, and discount_value, based on
- * the quantity, price, discount, tax_-table, and types.  The value is
+ * the quantity, price, discount, tax_-table, and types. The value is
  * the amount the merchant gets, the taxes are what the gov't gets,
- * and the discount is how much the customer saved.  The SCU is the
+ * and the discount is how much the owner saved. The SCU is the
  * target denominator of the value and tax -- it should be the
  * account or commodity SCU of the target.
  *
@@ -276,13 +291,12 @@ gnc_numeric gncEntryGetBalDiscountValue (GncEntry *entry, gboolean round, gboole
  * If the tax_values list is owned by the entry, it will be destroyed
  * automatically. Otherwise use gncAccountValueDestroy to free it.
  */
-void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
-                           const GncTaxTable *tax_table, gboolean tax_included,
-                           gnc_numeric discount, GncAmountType discount_type,
-                           GncDiscountHow discount_how, int SCU,
-                           /* return values */
-                           gnc_numeric *value, gnc_numeric *discount_value,
-                           GList **tax_values);
+void gncEntryComputeValue (
+    gnc_numeric qty, gnc_numeric price, const GncTaxTable *tax_table,
+    gboolean tax_included, gnc_numeric discount, GncAmountType discount_type,
+    GncDiscountHow discount_how, int SCU,
+    //return values
+    gnc_numeric *value, gnc_numeric *discount_value, GList **tax_values);
 
 /** @} */
 
@@ -306,32 +320,32 @@ void gncEntryBeginEdit (GncEntry *entry);
 void gncEntryCommitEdit (GncEntry *entry);
 int gncEntryCompare (const GncEntry *a, const GncEntry *b);
 
-#define ENTRY_DATE                      "date"
-#define ENTRY_DATE_ENTERED      "date-entered"
-#define ENTRY_DESC                      "desc"
-#define ENTRY_ACTION            "action"
-#define ENTRY_NOTES                     "notes"
-#define ENTRY_QTY                       "qty"
+#define ENTRY_DATE "date"
+#define ENTRY_DATE_ENTERED "date-entered"
+#define ENTRY_DESC "desc"
+#define ENTRY_ACTION "action"
+#define ENTRY_NOTES "notes"
+#define ENTRY_QTY "qty"
 
-#define ENTRY_IPRICE            "iprice"
-#define ENTRY_IACCT                     "invoice-account"
-#define ENTRY_BACCT                     "bill-account"
-#define ENTRY_BPRICE            "bprice"
-#define ENTRY_BILLABLE          "billable?"
-#define ENTRY_BILLTO            "bill-to"
+#define ENTRY_IPRICE "iprice"
+#define ENTRY_IACCT "invoice-account"
+#define ENTRY_BACCT "bill-account"
+#define ENTRY_BPRICE "bprice"
+#define ENTRY_BILLABLE "billable?"
+#define ENTRY_BILLTO "bill-to"
 
-#define ENTRY_ORDER                     "order"
-#define ENTRY_INVOICE           "invoice"
-#define ENTRY_BILL                      "bill"
+#define ENTRY_ORDER "order"
+#define ENTRY_INVOICE "invoice"
+#define ENTRY_BILL "bill"
 
-#define ENTRY_INV_DISC_TYPE             "discount-type"
-#define ENTRY_INV_DISC_HOW              "discount-method"
+#define ENTRY_INV_DISC_TYPE "discount-type"
+#define ENTRY_INV_DISC_HOW "discount-method"
 
-#define ENTRY_INV_TAXABLE       "invoice-taxable"
-#define ENTRY_BILL_TAXABLE      "bill-taxable"
-#define ENTRY_INV_TAX_INC       "invoice-tax-included"
-#define ENTRY_BILL_TAX_INC      "bill-tax-included"
-#define ENTRY_INV_DISCOUNT      "invoice-discount"
+#define ENTRY_INV_TAXABLE "invoice-taxable"
+#define ENTRY_BILL_TAXABLE "bill-taxable"
+#define ENTRY_INV_TAX_INC "invoice-tax-included"
+#define ENTRY_BILL_TAX_INC "bill-tax-included"
+#define ENTRY_INV_DISCOUNT "invoice-discount"
 #define ENTRY_BILL_PAY_TYPE "bill-payment-type"
 
 
