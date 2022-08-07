@@ -67,6 +67,7 @@ add_engine_test(test-transaction-voiding test-transaction-voiding.cpp)
 add_engine_test(test-recurrence test-recurrence.c)
 add_engine_test(test-business test-business.c)
 add_engine_test(test-address test-address.c)
+add_engine_test(test-distriblist test-distriblist.c)
 add_engine_test(test-coowner test-coowner.c)
 add_engine_test(test-customer test-customer.c)
 add_engine_test(test-employee test-employee.c)
@@ -221,6 +222,7 @@ set(test_engine_SOURCES_DIST
         test-commodities.cpp
         test-coowner.c
         test-customer.c
+        test-distriblist.c
         test-employee.c
         test-engine-kvp-properties.c
         test-engine.c
