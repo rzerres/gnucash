@@ -142,41 +142,45 @@ enum
 
 /* This map contains a set of strings representing the different column types. */
 static const std::map<GNCAccountType, const char*> gnc_acct_debit_strs = {
-    { ACCT_TYPE_NONE,       N_("Funds In") },
-    { ACCT_TYPE_BANK,       N_("Deposit") },
-    { ACCT_TYPE_CASH,       N_("Receive") },
-    { ACCT_TYPE_CREDIT,     N_("Payment") },
-    { ACCT_TYPE_ASSET,      N_("Increase") },
-    { ACCT_TYPE_LIABILITY,  N_("Decrease") },
-    { ACCT_TYPE_STOCK,      N_("Buy") },
-    { ACCT_TYPE_MUTUAL,     N_("Buy") },
-    { ACCT_TYPE_CURRENCY,   N_("Buy") },
-    { ACCT_TYPE_INCOME,     N_("Charge") },
-    { ACCT_TYPE_EXPENSE,    N_("Expense") },
-    { ACCT_TYPE_PAYABLE,    N_("Payment") },
-    { ACCT_TYPE_RECEIVABLE, N_("Invoice") },
-    { ACCT_TYPE_TRADING,    N_("Decrease") },
-    { ACCT_TYPE_EQUITY,     N_("Decrease") },
+    { ACCT_TYPE_NONE,               N_("Funds In") },
+    { ACCT_TYPE_BANK,               N_("Deposit") },
+    { ACCT_TYPE_CASH,               N_("Receive") },
+    { ACCT_TYPE_CREDIT,             N_("Payment") },
+    { ACCT_TYPE_ASSET,              N_("Increase") },
+    { ACCT_TYPE_LIABILITY,          N_("Decrease") },
+    { ACCT_TYPE_STOCK,              N_("Buy") },
+    { ACCT_TYPE_MUTUAL,             N_("Buy") },
+    { ACCT_TYPE_CURRENCY,           N_("Buy") },
+    { ACCT_TYPE_INCOME,             N_("Charge") },
+    { ACCT_TYPE_EXPENSE,            N_("Expense") },
+    { ACCT_TYPE_PAYABLE,            N_("Payment") },
+    { ACCT_TYPE_RECEIVABLE,         N_("Invoice") },
+    { ACCT_TYPE_TRADING,            N_("Decrease") },
+    { ACCT_TYPE_EQUITY,             N_("Decrease") },
+    { ACCT_TYPE_APPORTIONABLE,      N_("Apportionable") },
+    { ACCT_TYPE_NONAPPORTIONABLE,   N_("NonApportionable") },
 };
 static const char* dflt_acct_debit_str = N_("Debit");
 
 /* This map contains a set of strings representing the different column types. */
 static const std::map<GNCAccountType, const char*> gnc_acct_credit_strs = {
-    { ACCT_TYPE_NONE,       N_("Funds Out") },
-    { ACCT_TYPE_BANK,       N_("Withdrawal") },
-    { ACCT_TYPE_CASH,       N_("Spend") },
-    { ACCT_TYPE_CREDIT,     N_("Charge") },
-    { ACCT_TYPE_ASSET,      N_("Decrease") },
-    { ACCT_TYPE_LIABILITY,  N_("Increase") },
-    { ACCT_TYPE_STOCK,      N_("Sell") },
-    { ACCT_TYPE_MUTUAL,     N_("Sell") },
-    { ACCT_TYPE_CURRENCY,   N_("Sell") },
-    { ACCT_TYPE_INCOME,     N_("Income") },
-    { ACCT_TYPE_EXPENSE,    N_("Rebate") },
-    { ACCT_TYPE_PAYABLE,    N_("Bill") },
-    { ACCT_TYPE_RECEIVABLE, N_("Payment") },
-    { ACCT_TYPE_TRADING,    N_("Increase") },
-    { ACCT_TYPE_EQUITY,     N_("Increase") },
+    { ACCT_TYPE_NONE,               N_("Funds Out") },
+    { ACCT_TYPE_BANK,               N_("Withdrawal") },
+    { ACCT_TYPE_CASH,               N_("Spend") },
+    { ACCT_TYPE_CREDIT,             N_("Charge") },
+    { ACCT_TYPE_ASSET,              N_("Decrease") },
+    { ACCT_TYPE_LIABILITY,          N_("Increase") },
+    { ACCT_TYPE_STOCK,              N_("Sell") },
+    { ACCT_TYPE_MUTUAL,             N_("Sell") },
+    { ACCT_TYPE_CURRENCY,           N_("Sell") },
+    { ACCT_TYPE_INCOME,             N_("Income") },
+    { ACCT_TYPE_EXPENSE,            N_("Rebate") },
+    { ACCT_TYPE_PAYABLE,            N_("Bill") },
+    { ACCT_TYPE_RECEIVABLE,         N_("Payment") },
+    { ACCT_TYPE_TRADING,            N_("Increase") },
+    { ACCT_TYPE_EQUITY,             N_("Increase") },
+    { ACCT_TYPE_APPORTIONABLE,      N_("Apportionable") },
+    { ACCT_TYPE_NONAPPORTIONABLE,   N_("NonApportionable") },
 };
 static const char* dflt_acct_credit_str = N_("Credit");
 
@@ -2355,12 +2359,28 @@ static int typeorder[NUM_ACCOUNT_TYPES] =
     ACCT_TYPE_BANK, ACCT_TYPE_STOCK, ACCT_TYPE_MUTUAL, ACCT_TYPE_CURRENCY,
     ACCT_TYPE_CASH, ACCT_TYPE_ASSET, ACCT_TYPE_RECEIVABLE,
     ACCT_TYPE_CREDIT, ACCT_TYPE_LIABILITY, ACCT_TYPE_PAYABLE,
-    ACCT_TYPE_INCOME, ACCT_TYPE_EXPENSE, ACCT_TYPE_EQUITY, ACCT_TYPE_TRADING
+    ACCT_TYPE_INCOME, ACCT_TYPE_EXPENSE, ACCT_TYPE_EQUITY, ACCT_TYPE_TRADING,
+    ACCT_TYPE_APPORTIONABLE, ACCT_TYPE_NONAPPORTIONABLE
 };
 
 static int revorder[NUM_ACCOUNT_TYPES] =
 {
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+  -1, // ACCT_TYPE_BANK
+  -1, // ACCT_TYPE_STOCK
+  -1, // ACCT_TYPE_MUTUAL
+  -1, // ACCT_TYPE_CURRENCY
+  -1, // ACCT_TYPE_CASH
+  -1, // ACCT_TYPE_ASSET
+  -1, // ACCT_TYPE_RECEIVABLE
+  -1, // ACCT_TYPE_CREDIT
+  -1, // ACCT_TYPE_LIABILITY
+  -1, // ACCT_TYPE_PAYABLE
+  -1, // ACCT_TYPE_INCOME
+  -1, // ACCT_TYPE_EXPENSE
+  -1, // ACCT_TYPE_EQUITY
+  -1, // ACCT_TYPE_TRADING
+  -1, // ACCT_TYPE_APPORTINABLE
+  -1  // ACCT_TYPE_NONAPPORTIONABLE
 };
 
 
@@ -2767,7 +2787,7 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
     {
         book = qof_instance_get_book(acc);
         gnc_commodity_table_insert (gnc_commodity_table_get_table (book),
-				    currency);
+                                    currency);
     }
 }
 
@@ -3164,7 +3184,6 @@ gnc_account_lookup_by_full_name_helper (const Account *parent,
     return NULL;
 }
 
-
 Account *
 gnc_account_lookup_by_full_name (const Account *any_acc,
                                  const gchar *name)
@@ -3279,7 +3298,6 @@ gnc_account_foreach_descendant_until (const Account *acc,
 
     return result;
 }
-
 
 GNCAccountType
 xaccAccountGetType (const Account *acc)
@@ -3458,7 +3476,8 @@ xaccAccountGetCommodity (const Account *acc)
     return GET_PRIVATE(acc)->commodity;
 }
 
-gnc_commodity * gnc_account_get_currency_or_parent(const Account* account)
+gnc_commodity
+*gnc_account_get_currency_or_parent(const Account* account)
 {
     gnc_commodity * commodity;
     g_return_val_if_fail (account, NULL);
@@ -4046,8 +4065,8 @@ gboolean gnc_account_and_descendants_empty (Account *acc)
     if (priv->splits != nullptr) return FALSE;
     for (auto *n = priv->children; n; n = n->next)
     {
-	if (!gnc_account_and_descendants_empty (static_cast<Account*>(n->data)))
-	    return FALSE;
+        if (!gnc_account_and_descendants_empty (static_cast<Account*>(n->data)))
+            return FALSE;
     }
     return TRUE;
 }
@@ -4431,6 +4450,10 @@ xaccAccountTypeEnumAsString(GNCAccountType type)
         GNC_RETURN_ENUM_AS_STRING(PAYABLE);
         GNC_RETURN_ENUM_AS_STRING(ROOT);
         GNC_RETURN_ENUM_AS_STRING(TRADING);
+        GNC_RETURN_ENUM_AS_STRING(APPORTIONABLE);
+        GNC_RETURN_ENUM_AS_STRING(NONAPPORTIONABLE);
+
+        // non production ready
         GNC_RETURN_ENUM_AS_STRING(CHECKING);
         GNC_RETURN_ENUM_AS_STRING(SAVINGS);
         GNC_RETURN_ENUM_AS_STRING(MONEYMRKT);
@@ -4467,6 +4490,10 @@ xaccAccountStringToType(const char* str, GNCAccountType *type)
     GNC_RETURN_ON_MATCH(PAYABLE);
     GNC_RETURN_ON_MATCH(ROOT);
     GNC_RETURN_ON_MATCH(TRADING);
+    GNC_RETURN_ON_MATCH(APPORTIONABLE);
+    GNC_RETURN_ON_MATCH(NONAPPORTIONABLE);
+
+    // non production ready
     GNC_RETURN_ON_MATCH(CHECKING);
     GNC_RETURN_ON_MATCH(SAVINGS);
     GNC_RETURN_ON_MATCH(MONEYMRKT);
@@ -4511,7 +4538,9 @@ account_type_name[NUM_ACCOUNT_TYPES] =
     N_("A/Receivable"),
     N_("A/Payable"),
     N_("Root"),
-    N_("Trading")
+    N_("Trading"),
+    N_("Apportionable"),
+    N_("NonApportionable"),
     /*
       N_("Checking"),
       N_("Savings"),
@@ -4540,8 +4569,6 @@ xaccAccountTypesCompatibleWith (GNCAccountType type)
         case ACCT_TYPE_ASSET:
         case ACCT_TYPE_CREDIT:
         case ACCT_TYPE_LIABILITY:
-        case ACCT_TYPE_INCOME:
-        case ACCT_TYPE_EXPENSE:
         case ACCT_TYPE_EQUITY:
             return
             (1 << ACCT_TYPE_BANK)       |
@@ -4549,9 +4576,19 @@ xaccAccountTypesCompatibleWith (GNCAccountType type)
             (1 << ACCT_TYPE_ASSET)      |
             (1 << ACCT_TYPE_CREDIT)     |
             (1 << ACCT_TYPE_LIABILITY)  |
-            (1 << ACCT_TYPE_INCOME)     |
-            (1 << ACCT_TYPE_EXPENSE)    |
             (1 << ACCT_TYPE_EQUITY);
+        case ACCT_TYPE_INCOME:
+        case ACCT_TYPE_EXPENSE:
+            (1 << ACCT_TYPE_BANK)             |
+            (1 << ACCT_TYPE_CASH)             |
+            (1 << ACCT_TYPE_ASSET)            |
+            (1 << ACCT_TYPE_CREDIT)           |
+            (1 << ACCT_TYPE_LIABILITY)        |
+            (1 << ACCT_TYPE_EQUITY)           |
+            (1 << ACCT_TYPE_EXPENSE)          |
+            (1 << ACCT_TYPE_INCOME)           |
+            (1 << ACCT_TYPE_APPORTIONABLE)    |
+            (1 << ACCT_TYPE_NONAPPORTIONABLE);
         case ACCT_TYPE_STOCK:
         case ACCT_TYPE_MUTUAL:
         case ACCT_TYPE_CURRENCY:
@@ -4565,6 +4602,10 @@ xaccAccountTypesCompatibleWith (GNCAccountType type)
             return (1 << ACCT_TYPE_PAYABLE);
         case ACCT_TYPE_TRADING:
             return (1 << ACCT_TYPE_TRADING);
+        case ACCT_TYPE_APPORTIONABLE:
+            return (1 << ACCT_TYPE_APPORTIONABLE);
+        case ACCT_TYPE_NONAPPORTIONABLE:
+            return (1 << ACCT_TYPE_NONAPPORTIONABLE);
         default:
             PERR("bad account type: %d", type);
             return 0;
@@ -4585,31 +4626,37 @@ xaccParentAccountTypesCompatibleWith (GNCAccountType type)
     case ACCT_TYPE_LIABILITY:
     case ACCT_TYPE_RECEIVABLE:
     case ACCT_TYPE_PAYABLE:
+    case ACCT_TYPE_APPORTIONABLE:
+    case ACCT_TYPE_NONAPPORTIONABLE:
         return
-            (1 << ACCT_TYPE_BANK)       |
-            (1 << ACCT_TYPE_CASH)       |
-            (1 << ACCT_TYPE_ASSET)      |
-            (1 << ACCT_TYPE_STOCK)      |
-            (1 << ACCT_TYPE_MUTUAL)     |
-            (1 << ACCT_TYPE_CURRENCY)   |
-            (1 << ACCT_TYPE_CREDIT)     |
-            (1 << ACCT_TYPE_LIABILITY)  |
-            (1 << ACCT_TYPE_RECEIVABLE) |
-            (1 << ACCT_TYPE_PAYABLE)    |
+            (1 << ACCT_TYPE_BANK)             |
+            (1 << ACCT_TYPE_CASH)             |
+            (1 << ACCT_TYPE_ASSET)            |
+            (1 << ACCT_TYPE_STOCK)            |
+            (1 << ACCT_TYPE_MUTUAL)           |
+            (1 << ACCT_TYPE_CURRENCY)         |
+            (1 << ACCT_TYPE_CREDIT)           |
+            (1 << ACCT_TYPE_LIABILITY)        |
+            (1 << ACCT_TYPE_RECEIVABLE)       |
+            (1 << ACCT_TYPE_PAYABLE)          |
+            (1 << ACCT_TYPE_APPORTIONABLE)    |
+            (1 << ACCT_TYPE_NONAPPORTIONABLE) |
             (1 << ACCT_TYPE_ROOT);
     case ACCT_TYPE_INCOME:
     case ACCT_TYPE_EXPENSE:
         return
-            (1 << ACCT_TYPE_INCOME)     |
-            (1 << ACCT_TYPE_EXPENSE)    |
+            (1 << ACCT_TYPE_EXPENSE)          |
+            (1 << ACCT_TYPE_INCOME)           |
+            (1 << ACCT_TYPE_APPORTIONABLE)    |
+            (1 << ACCT_TYPE_NONAPPORTIONABLE) |
             (1 << ACCT_TYPE_ROOT);
     case ACCT_TYPE_EQUITY:
         return
-            (1 << ACCT_TYPE_EQUITY)     |
+            (1 << ACCT_TYPE_EQUITY)           |
             (1 << ACCT_TYPE_ROOT);
     case ACCT_TYPE_TRADING:
         return
-            (1 << ACCT_TYPE_TRADING)    |
+            (1 << ACCT_TYPE_TRADING)          |
             (1 << ACCT_TYPE_ROOT);
     default:
         PERR("bad account type: %d", type);
@@ -4686,6 +4733,11 @@ xaccAccountTypeGetFundamental (GNCAccountType t)
         case ACCT_TYPE_EQUITY:
             return ACCT_TYPE_EQUITY;
         case ACCT_TYPE_TRADING:
+            return ACCT_TYPE_EQUITY;
+        case ACCT_TYPE_APPORTIONABLE:
+            return ACCT_TYPE_APPORTIONABLE;
+        case ACCT_TYPE_NONAPPORTIONABLE:
+            return ACCT_TYPE_NONAPPORTIONABLE;
         default:
             return ACCT_TYPE_NONE;
     }
