@@ -1,6 +1,6 @@
 /********************************************************************
- * utest-Account.c: GLib g_test test suite for Account.c.	    *
- * Copyright 2011 John Ralls <jralls@ceridwen.us>		    *
+ * utest-Account.c: GLib g_test test suite for Account.c.           *
+ * Copyright 2011 John Ralls <jralls@ceridwen.us>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -1470,12 +1470,12 @@ xaccAccountLookup (const GncGUID *guid, QofBook *book)// C: 37 in 28 SCM: 2 in 1
 Passthrough, no test.
 */
 /* More getters/setters:
-	xaccAccountGetMark *** Test Only ***
-	xaccAccountSetMark *** Not Used ***
-	xaccClearMark *** Not Used ***
-	xaccClearMarkDown
-	gnc_account_get_policy
-	gnc_account_set_policy
+        xaccAccountGetMark *** Test Only ***
+        xaccAccountSetMark *** Not Used ***
+        xaccClearMark *** Not Used ***
+        xaccClearMarkDown
+        gnc_account_get_policy
+        gnc_account_set_policy
 */
 /* xaccAccountRemoveLot
 void
@@ -2422,6 +2422,8 @@ test_xaccAccountType_Stuff (void)
 
         g_assert (type_name);
         g_assert_cmpint (xaccAccountStringToEnum (type_name), == , type);
+
+        // Ignore all account types, that aren't ready for production use
         if (type < 0 || type >= NUM_ACCOUNT_TYPES)
             continue;
 
@@ -2445,13 +2447,21 @@ test_xaccAccountType_Stuff (void)
             g_assert_cmpstr (typestr_uc, == , cmpstr);
             g_free (cmpstr);
         }
+        // else if (type == ACCT_TYPE_APPORTIONABLE
+        //          || type == ACCT_TYPE_NONAPPORIONABLET)
+        // {
+        //     // e.g: "Expense non apportionable"
+        //     auto cmpstr = g_strconcat (type_name, NULL);
+        //     g_assert_cmpstr (typestr_uc, == , cmpstr);
+        //     g_free (cmpstr);
+        // }
         else
             g_assert_cmpstr (typestr_uc, == , type_name);
         g_free (typestr_uc);
 
-	qof_instance_increase_editlevel (acc);
+        qof_instance_increase_editlevel (acc);
         g_object_set (acc, "type", type, NULL);
-	qof_instance_decrease_editlevel (acc);
+        qof_instance_decrease_editlevel (acc);
         if (type == ACCT_TYPE_STOCK || type == ACCT_TYPE_MUTUAL ||
                 type == ACCT_TYPE_CURRENCY)
             g_assert (xaccAccountIsPriced (acc));
@@ -2504,20 +2514,21 @@ test_xaccAccountType_Compatibility (void)
                            (1 << ACCT_TYPE_LIABILITY)  |
                            (1 << ACCT_TYPE_RECEIVABLE) |
                            (1 << ACCT_TYPE_PAYABLE)    |
+                           (1 << ACCT_TYPE_APPORTIONABLE)    |
+                           (1 << ACCT_TYPE_NONAPPORTIONABLE) |
                            (1 << ACCT_TYPE_ROOT));
-    guint32 expense_compat = ((1 << ACCT_TYPE_INCOME)     |
-                              (1 << ACCT_TYPE_EXPENSE)    |
+    guint32 expense_compat = ((1 << ACCT_TYPE_INCOME)           |
+                              (1 << ACCT_TYPE_APPORTIONABLE)    |
+                              (1 << ACCT_TYPE_NONAPPORTIONABLE) |
+                              (1 << ACCT_TYPE_EXPENSE)          |
                               (1 << ACCT_TYPE_ROOT));
     guint32 equity_compat = ((1 << ACCT_TYPE_EQUITY) | (1 << ACCT_TYPE_ROOT));
     guint32 trading_compat = ((1 << ACCT_TYPE_TRADING) | (1 << ACCT_TYPE_ROOT));
-    guint32 currency_compat = ((1 << ACCT_TYPE_BANK)       |
-                               (1 << ACCT_TYPE_CASH)       |
-                               (1 << ACCT_TYPE_ASSET)      |
-                               (1 << ACCT_TYPE_CREDIT)     |
-                               (1 << ACCT_TYPE_LIABILITY)  |
-                               (1 << ACCT_TYPE_INCOME)     |
-                               (1 << ACCT_TYPE_EXPENSE)    |
-                               (1 << ACCT_TYPE_EQUITY));
+
+    // currency accounts are deprecated
+    guint32 currency_compat = ((1 << ACCT_TYPE_STOCK)    |
+                               (1 << ACCT_TYPE_MUTUAL)   |
+                               (1 << ACCT_TYPE_CURRENCY));
     guint32 stock_compat = ((1 << ACCT_TYPE_STOCK)      |
                             (1 << ACCT_TYPE_MUTUAL)     |
                             (1 << ACCT_TYPE_CURRENCY));
@@ -2526,8 +2537,10 @@ test_xaccAccountType_Compatibility (void)
     guint32 immutable_trading_compat = (1 << ACCT_TYPE_TRADING);
     guint32 compat;
     GNCAccountType  type;
-    auto msg1 = g_strdup_printf ("[xaccParentAccountTypesCompatibleWith()] bad account type: %d", ACCT_TYPE_ROOT);
-    auto msg2 = g_strdup_printf ("[xaccParentAccountTypesCompatibleWith()] bad account type: %d", ACCT_TYPE_SAVINGS);
+    auto msg1 = g_strdup_printf (
+        "[xaccParentAccountTypesCompatibleWith()] bad account type: %d", ACCT_TYPE_ROOT);
+    auto msg2 = g_strdup_printf (
+        "[xaccParentAccountTypesCompatibleWith()] bad account type: %d", ACCT_TYPE_SAVINGS);
     auto logdomain = "gnc.account";
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check1 = test_error_struct_new(logdomain, loglevel, msg1);
@@ -2549,12 +2562,15 @@ test_xaccAccountType_Compatibility (void)
             g_free (msg1);
             continue;
         }
-        compat = xaccParentAccountTypesCompatibleWith (type);
 
+        compat = xaccParentAccountTypesCompatibleWith (type);
         if (type <= ACCT_TYPE_CURRENCY || type == ACCT_TYPE_PAYABLE
                 || type == ACCT_TYPE_RECEIVABLE)
             g_assert_cmpint (compat, == , bank_compat);
-        else if (type == ACCT_TYPE_INCOME || type == ACCT_TYPE_EXPENSE)
+        else if (type == ACCT_TYPE_INCOME
+                 || type == ACCT_TYPE_EXPENSE
+                 || type == ACCT_TYPE_APPORTIONABLE
+                 || type == ACCT_TYPE_NONAPPORTIONABLE)
             g_assert_cmpint (compat, == , expense_compat);
         else if (type == ACCT_TYPE_EQUITY)
             g_assert_cmpint (compat, == , equity_compat);
@@ -2676,7 +2692,7 @@ test_gnc_account_merge_children (Fixture *fixture, gconstpointer pData)
     auto msg = "[xaccSplitCommitEdit ()] Account grabbed split prematurely.";
     auto check = test_error_struct_new(logdomain, loglevel, msg);
     guint hdlr = g_log_set_handler (logdomain, loglevel,
-    			   (GLogFunc)test_null_handler, check);
+                           (GLogFunc)test_null_handler, check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check);
 
     sig1 = test_signal_new (QOF_INSTANCE (baz), QOF_EVENT_MODIFY, NULL);
@@ -2689,9 +2705,9 @@ test_gnc_account_merge_children (Fixture *fixture, gconstpointer pData)
     gnc_account_foreach_descendant (stocks, (AccountCb)print_account, NULL);
     g_assert_cmpint (gnc_account_n_descendants (stocks), ==, stocks_desc - 1);
     g_assert_cmpfloat (gnc_numeric_to_double (xaccAccountGetBalance (stocks)),
-    	       ==, stocks_balance);
+               ==, stocks_balance);
     g_assert_cmpfloat (gnc_numeric_to_double (xaccAccountGetBalance (baz)),
-    	       ==, baz_balance + baz2_balance);
+               ==, baz_balance + baz2_balance);
     test_signal_assert_hits (sig1, 0);
     test_signal_assert_hits (sig2, 0);
     test_signal_assert_hits (sig3, 1);
