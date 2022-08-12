@@ -32,7 +32,7 @@
 
 #include "dialog-doclink.h"
 #include "dialog-billterms.h"
-        /* depreciated: use coowner/customer functions */
+#include "dialog-distriblists.h"
 #include "dialog-doclink.h"
 #include "dialog-coowner.h"
 #include "dialog-customer.h"
@@ -149,6 +149,8 @@ static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
 static void gnc_plugin_business_cmd_billing_terms (GtkAction *action,
     GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
+    GncMainWindowActionData *data);
+static void gnc_plugin_business_cmd_distribution_lists (GtkAction *action,
     GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_doclink (GtkAction *action,
     GncMainWindowActionData *data);
@@ -370,6 +372,11 @@ static GtkActionEntry gnc_plugin_actions [] =
         "BusinessLinkedDocsAction", NULL, N_("Business Linked Documents"), NULL,
         N_("View all Linked Business Documents"),
         G_CALLBACK (gnc_plugin_business_cmd_doclink)
+    },
+    {
+        "DistributionListsOpenAction", NULL, N_("_Distribution Lists Editor"), NULL,
+        N_("View and edit the list of Distribution Lists"),
+        G_CALLBACK (gnc_plugin_business_cmd_distribution_lists)
     },
     {
         "ExportMenuAction", NULL, N_("E_xport"), NULL,
@@ -1035,7 +1042,6 @@ gnc_plugin_business_cmd_billing_terms (GtkAction *action,
     gnc_ui_billterms_window_new (GTK_WINDOW (mw->window), gnc_get_current_book());
 }
 
-
 static void
 gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
     GncMainWindowActionData *mw)
@@ -1046,6 +1052,15 @@ gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
     gnc_invoice_remind_bills_due (GTK_WINDOW (mw->window));
 }
 
+static void
+gnc_plugin_business_cmd_distribution_lists (GtkAction *action,
+    GncMainWindowActionData *mw)
+{
+    g_return_if_fail (mw != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
+
+    gnc_ui_distriblists_window_new (GTK_WINDOW (mw->window), gnc_get_current_book());
+}
 
 static void
 gnc_plugin_business_cmd_invoices_due_reminder (GtkAction *action,
@@ -1065,8 +1080,8 @@ gnc_plugin_business_cmd_test_search (GtkAction *action,
 }
 
 static void gnc_business_assign_payment (GtkWindow *parent,
-                                         Transaction *trans,
-                                         GncOwner *owner)
+    Transaction *trans,
+    GncOwner *owner)
 {
     g_return_if_fail(trans);
 
@@ -1078,7 +1093,8 @@ static void gnc_business_assign_payment (GtkWindow *parent,
     gnc_ui_payment_new_with_txn(parent, owner, trans);
 }
 
-static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
+static void
+gnc_plugin_business_cmd_assign_payment (GtkAction *action,
     GncMainWindowActionData *mw)
 {
     GncPluginBusiness *plugin_business;
@@ -1132,7 +1148,8 @@ static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
                                  trans, owner_p);
 }
 
-static const gchar *register_txn_actions[] =
+static const gchar
+*register_txn_actions[] =
 {
     "RegisterAssignPayment",
     NULL
@@ -1191,23 +1208,25 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
 }
 
 
-static void gnc_plugin_business_main_window_page_changed(GncMainWindow *window,
-        GncPluginPage *page,
-        gpointer user_data)
+static void
+gnc_plugin_business_main_window_page_changed(GncMainWindow *window,
+    GncPluginPage *page,
+    gpointer user_data)
 {
     gnc_plugin_business_update_menus(page);
     update_inactive_actions(page);
 }
 
 
-void gnc_plugin_business_split_reg_ui_update (GncPluginPage *plugin_page)
+void
+gnc_plugin_business_split_reg_ui_update (GncPluginPage *plugin_page)
 {
     gnc_plugin_business_main_window_page_changed(NULL, plugin_page, NULL);
 }
 
 static void
 gnc_plugin_business_cmd_coowner_test_init_data (GtkAction *action,
-                                                GncMainWindowActionData *data)
+    GncMainWindowActionData *data)
 {
     QofBook *book               = gnc_get_current_book();
     GncCoOwner *coowner         = gncCoOwnerCreate(book);
@@ -1282,7 +1301,7 @@ gnc_plugin_business_cmd_coowner_test_init_data (GtkAction *action,
 
 static void
 gnc_plugin_business_cmd_customer_test_init_data (GtkAction *action,
-                                                 GncMainWindowActionData *data)
+    GncMainWindowActionData *data)
 {
     QofBook *book           = gnc_get_current_book();
     GncCustomer *customer   = gncCustomerCreate(book);
@@ -1378,7 +1397,7 @@ static const gchar* readonly_inactive_actions[] =
 /* depreciated: use coowner/customer functions */
 static void
 gnc_plugin_business_cmd_test_init_data (GtkAction *action,
-                                                 GncMainWindowActionData *data)
+    GncMainWindowActionData *data)
 {
     QofBook *book           = gnc_get_current_book();
     GncCustomer *customer   = gncCustomerCreate(book);
@@ -1483,7 +1502,8 @@ static const char* extra_toolbar_actions[] =
 
 /* Bind the visibility of the extra toolbar buttons to the
  * enable_toolbuttons preference. */
-static void bind_toolbuttons_visibility (GncMainWindow *mainwindow)
+static void
+bind_toolbuttons_visibility (GncMainWindow *mainwindow)
 {
     GtkActionGroup *action_group;
     const char **iter;
@@ -1510,9 +1530,10 @@ static void bind_toolbuttons_visibility (GncMainWindow *mainwindow)
  *
  * Update the toolbar button visibility each time our plugin is added
  * to a new GncMainWindow. */
-static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
-        GncMainWindow *mainwindow,
-        GQuark type)
+static void
+gnc_plugin_business_add_to_window (GncPlugin *plugin,
+    GncMainWindow *mainwindow,
+    GQuark type)
 {
     bind_toolbuttons_visibility (mainwindow);
 

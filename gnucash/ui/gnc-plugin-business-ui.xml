@@ -61,6 +61,7 @@
 
         <menuitem name="TaxTablesOpen" action="TaxTablesOpenAction"/>
         <menuitem name="BillingTermsOpen" action="BillingTermsOpenAction"/>
+        <menuitem name="DistributionListsOpen" action="DistributionListsOpenAction"/>
 
         <placeholder name="BusinessPlaceholderMiddle"/>
         <placeholder name="BusinessPlaceholderBottom"/>
