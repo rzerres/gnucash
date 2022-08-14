@@ -67,6 +67,7 @@ add_engine_test(test-transaction-voiding test-transaction-voiding.cpp)
 add_engine_test(test-recurrence test-recurrence.c)
 add_engine_test(test-business test-business.c)
 add_engine_test(test-address test-address.c)
+add_engine_test(test-billterm test-billterm.c)
 add_engine_test(test-distriblist test-distriblist.c)
 add_engine_test(test-coowner test-coowner.c)
 add_engine_test(test-customer test-customer.c)
@@ -218,6 +219,7 @@ set(test_engine_SOURCES_DIST
         gtest-qofevent.cpp
         test-account-object.cpp
         test-address.c
+        test-billterm.c
         test-business.c
         test-commodities.cpp
         test-coowner.c
