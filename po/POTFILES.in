@@ -63,6 +63,7 @@ gnucash/gnome/dialog-coowner.c
 gnucash/gnome/dialog-customer.c
 gnucash/gnome/dialog-custom-report.c
 gnucash/gnome/dialog-date-close.c
+gnucash/gnome/dialog-distriblists.c
 gnucash/gnome/dialog-doclink.c
 gnucash/gnome/dialog-employee.c
 gnucash/gnome/dialog-fincalc.c
@@ -264,6 +265,7 @@ gnucash/gtkbuilder/dialog-customer.glade
 gnucash/gtkbuilder/dialog-customer-import-gui.glade
 gnucash/gtkbuilder/dialog-custom-report.glade
 gnucash/gtkbuilder/dialog-date-close.glade
+gnucash/gtkbuilder/dialog-distriblists.glade
 gnucash/gtkbuilder/dialog-doclink.glade
 gnucash/gtkbuilder/dialog-employee.glade
 gnucash/gtkbuilder/dialog-file-access.glade
@@ -566,6 +568,7 @@ libgnucash/backend/sql/gnc-budget-sql.cpp
 libgnucash/backend/sql/gnc-commodity-sql.cpp
 libgnucash/backend/sql/gnc-coowner-sql.cpp
 libgnucash/backend/sql/gnc-customer-sql.cpp
+libgnucash/backend/sql/gnc-distrib-list-sql.cpp
 libgnucash/backend/sql/gnc-employee-sql.cpp
 libgnucash/backend/sql/gnc-entry-sql.cpp
 libgnucash/backend/sql/gnc-invoice-sql.cpp
@@ -593,6 +596,7 @@ libgnucash/backend/xml/gnc-budget-xml-v2.cpp
 libgnucash/backend/xml/gnc-commodity-xml-v2.cpp
 libgnucash/backend/xml/gnc-coowner-xml-v2.cpp
 libgnucash/backend/xml/gnc-customer-xml-v2.cpp
+libgnucash/backend/xml/gnc-distriblist-xml-v2.cpp
 libgnucash/backend/xml/gnc-employee-xml-v2.cpp
 libgnucash/backend/xml/gnc-entry-xml-v2.cpp
 libgnucash/backend/xml/gnc-freqspec-xml-v2.cpp
@@ -647,6 +651,7 @@ libgnucash/engine/gncCoOwner.c
 libgnucash/engine/gncCustomer.c
 libgnucash/engine/gnc-date.cpp
 libgnucash/engine/gnc-datetime.cpp
+libgnucash/engine/gncDistributionList.c
 libgnucash/engine/gncEmployee.c
 libgnucash/engine/gnc-engine.c
 libgnucash/engine/gncEntry.c
