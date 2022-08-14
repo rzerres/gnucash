@@ -51,7 +51,8 @@ costs to be settled to this apartment unit (the devisor).
 @param  const char* descrition - Pointer to the description of the distribution list.
 @param  GncDistributionListType type - The type of the distribution list.
 @param  const char* label_stettlement - Label of the distribution list.
-@param  gint shares-total - Total shares (the numerator).
+@param  gint shares-total - Total shares per property unit (the numerator).
+@param  gint percentage-total - Total percentage per property unit (the numerator).
 */
 typedef struct _gncDistributionList GncDistributionList;
 
@@ -82,12 +83,13 @@ GType gnc_distriblist_get_type(void);
 
 /** @name DistributonList parameter names
  @{ */
-#define GNC_DISTRIBLIST_NAME "name"
 #define GNC_DISTRIBLIST_DESCRIPTION "description"
 #define GNC_DISTRIBLIST_LABEL_SETTLEMENT "label settlement"
+#define GNC_DISTRIBLIST_NAME "name"
+#define GNC_DISTRIBLIST_PERCENTAGE_TOTAL "percentage total"
+#define GNC_DISTRIBLIST_REFCOUNT "reference counter"
 #define GNC_DISTRIBLIST_SHARES_TOTAL "shares total"
 #define GNC_DISTRIBLIST_TYPE "distribution list type"
-#define GNC_DISTRIBLIST_REFCOUNT "reference count"
 /** @} */
 
 /**
@@ -96,27 +98,28 @@ GType gnc_distriblist_get_type(void);
  */
 #ifndef SWIG
 #define ENUM_DISTRIBLIST_TYPE(_)  \
- _(GNC_DISTRIBLIST_TYPE_SHARES,=1)
+ _(GNC_DISTRIBLIST_TYPE_SHARES,=1) \
+ _(GNC_DISTRIBLIST_TYPE_PERCENTAGE,)
 
 DEFINE_ENUM(GncDistributionListType, ENUM_DISTRIBLIST_TYPE)
 #else
 typedef enum
 {
-    GNC_DISTRBLIST_TYPE_SHARES = 1,
+    GNC_DISTRIBLIST_TYPE_SHARES = 1,
+    GNC_DISTRIBLIST_TYPE_PERCENTAGE,
 } GncDistributionListType;
 #endif
 
 /** @name Create/Destroy Functions
  @{ */
-void gncDistribListBeginEdit (GncDistributionList *distriblist);
-void gncDistribListChanged (GncDistributionList *distriblist);
-void gncDistribListCommitEdit (GncDistributionList *distriblist);
-
 GncDistributionList *gncDistribListCreate (QofBook *book);
 void gncDistribListDestroy (GncDistributionList *distriblist);
 void gncDistribListDecRef (GncDistributionList *distriblist);
 void gncDistribListIncRef (GncDistributionList *distriblist);
 
+void gncDistribListBeginEdit (GncDistributionList *distriblist);
+void gncDistribListChanged (GncDistributionList *distriblist);
+void gncDistribListCommitEdit (GncDistributionList *distriblist);
 /** @} */
 
 /** @name Set Functions
@@ -126,6 +129,7 @@ void gncDistribListSetDescription (GncDistributionList *distriblist, const char 
 void gncDistribListSetLabelSettlement (GncDistributionList *distriblist, const char *label_settlement);
 void gncDistribListSetName (GncDistributionList *distriblist, const char *name);
 void gncDistribListSetSharesTotal (GncDistributionList *distriblist, gint shares_total);
+void gncDistribListSetPercentageTotal (GncDistributionList *distriblist, gint percentage_total);
 void gncDistribListSetType (GncDistributionList *distriblist, GncDistributionListType type);
 
 /** @} */
@@ -136,8 +140,9 @@ const char *gncDistribListGetDescription (const GncDistributionList *distriblist
 const char *gncDistribListGetLabelSettlement (const GncDistributionList *distriblist);
 GList * gncDistribListGetLists (QofBook *book);
 const char *gncDistribListGetName (const GncDistributionList *distriblist);
-GncDistributionListType gncDistribListGetType (const GncDistributionList *distriblist);
+gint gncDistribListGetPercentageTotal (const GncDistributionList *distriblist);
 gint gncDistribListGetSharesTotal (const GncDistributionList *distriblist);
+GncDistributionListType gncDistribListGetType (const GncDistributionList *distriblist);
 
 GncDistributionList *gncDistribListGetParent (const GncDistributionList *distriblist);
 GncDistributionList *gncDistribListReturnChild (GncDistributionList *distriblist, gboolean make_new);
@@ -147,7 +152,7 @@ gint64 gncDistribListGetRefcount (const GncDistributionList *distriblist);
 
 /** @name Helper Functions
  @{ */
-/** Return a pointer to the instance `gncDistributoonList` that is identified
+/** Return a pointer to the instance `gncDistributionList` that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
  *  Equivalent function prototype is
@@ -157,6 +162,7 @@ static inline GncDistributionList *gncDistribListLookup (const QofBook *book, co
 {
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_DISTRIBLIST, GncDistributionList);
 }
+
 GncDistributionList *gncDistribListLookupByName (QofBook *book, const char *name);
 
 /** @name Comparison Functions
