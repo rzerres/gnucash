@@ -35,6 +35,7 @@ extern "C"
 #include "Split.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
+#include "gncDistributionList.h"
 #include "gncCoOwner.h"
 #include "gncCustomer.h"
 #include "gncEmployee.h"
@@ -52,8 +53,9 @@ compare_single_coowner (QofInstance* inst, gpointer user_data)
 {
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
     GncCoOwner* coowner_1 = GNC_COOWNER (inst);
-    GncCoOwner* coowner_2 = gncCoOwnerLookup (info->book_2,
-                                              qof_instance_get_guid (inst));
+    GncCoOwner* coowner_2 = gncCoOwnerLookup (
+        info->book_2,
+        qof_instance_get_guid (inst));
 
     if (!gncCoOwnerEqual (coowner_1, coowner_2))
     {
@@ -74,8 +76,9 @@ compare_single_customer (QofInstance* inst, gpointer user_data)
 {
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
     GncCustomer* cust_1 = GNC_CUSTOMER (inst);
-    GncCustomer* cust_2 = gncCustomerLookup (info->book_2,
-                                             qof_instance_get_guid (inst));
+    GncCustomer* cust_2 = gncCustomerLookup (
+        info->book_2,
+        qof_instance_get_guid (inst));
 
     if (!gncCustomerEqual (cust_1, cust_2))
     {
@@ -95,8 +98,9 @@ compare_single_employee (QofInstance* inst, gpointer user_data)
 {
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
     GncEmployee* emp_1 = GNC_EMPLOYEE (inst);
-    GncEmployee* emp_2 = gncEmployeeLookup (info->book_2,
-                                            qof_instance_get_guid (inst));
+    GncEmployee* emp_2 = gncEmployeeLookup (
+        info->book_2,
+        qof_instance_get_guid (inst));
 
     if (!gncEmployeeEqual (emp_1, emp_2))
     {
@@ -116,8 +120,9 @@ compare_single_invoice (QofInstance* inst, gpointer user_data)
 {
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
     GncInvoice* inv_1 = GNC_INVOICE (inst);
-    GncInvoice* inv_2 = gncInvoiceLookup (info->book_2,
-                                          qof_instance_get_guid (inst));
+    GncInvoice* inv_2 = gncInvoiceLookup (
+        info->book_2,
+        qof_instance_get_guid (inst));
 
     if (!gncInvoiceEqual (inv_1, inv_2))
     {
@@ -156,8 +161,9 @@ compare_single_vendor (QofInstance* inst, gpointer user_data)
 {
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
     GncVendor* vendor_1 = GNC_VENDOR (inst);
-    GncVendor* vendor_2 = gncVendorLookup (info->book_2,
-                                           qof_instance_get_guid (inst));
+    GncVendor* vendor_2 = gncVendorLookup (
+        info->book_2,
+        qof_instance_get_guid (inst));
 
     if (!gncVendorEqual (vendor_1, vendor_2))
     {
@@ -177,8 +183,9 @@ compare_single_billterm (QofInstance* inst, gpointer user_data)
 {
     CompareInfoStruct* info = (CompareInfoStruct*)user_data;
     GncBillTerm* bt_1 = GNC_BILLTERM (inst);
-    GncBillTerm* bt_2 = gncBillTermLookup (info->book_2,
-                                           qof_instance_get_guid (inst));
+    GncBillTerm* bt_2 = gncBillTermLookup (
+        info->book_2,
+        qof_instance_get_guid (inst));
 
     if (!gncBillTermEqual (bt_1, bt_2))
     {
@@ -191,6 +198,28 @@ compare_billterms (QofBook* book_1, QofBook* book_2)
 {
     do_compare (book_1, book_2, GNC_ID_BILLTERM, compare_single_billterm,
                 "Billterms lists match");
+}
+
+static void
+compare_single_distriblist (QofInstance* inst, gpointer user_data)
+{
+    CompareInfoStruct *info = (CompareInfoStruct*)user_data;
+    GncDistributionList *dl_1 = GNC_DISTRIBLIST (inst);
+    GncDistributionList *dl_2 = gncDistribListLookup (
+        info->book_2,
+        qof_instance_get_guid (inst));
+
+    if (!gncDistribListEqual (dl_1, dl_2))
+    {
+        info->result = FALSE;
+    }
+}
+
+static void
+compare_distriblists (QofBook* book_1, QofBook* book_2)
+{
+    do_compare (book_1, book_2, GNC_ID_DISTRIBLIST, compare_single_distriblist,
+                "Distribution lists match");
 }
 
 static void
@@ -219,6 +248,7 @@ compare_business_books (QofBook* book_1, QofBook* book_2)
 {
     compare_billterms (book_1, book_2);
     compare_taxtables (book_1, book_2);
+    compare_distriblists (book_1, book_2);
 
     compare_coowner (book_1, book_2);
     compare_customers (book_1, book_2);
