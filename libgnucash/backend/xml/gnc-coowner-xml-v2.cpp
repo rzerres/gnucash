@@ -57,7 +57,7 @@ static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar* coowner_version_string = "2.0.0";
 
-/* ids */
+/* constants */
 #define gnc_coowner_string "gnc:GncCoOwner"
 #define coowner_acl_string "coowner:acl"
 #define coowner_active_string "coowner:active"
@@ -73,13 +73,17 @@ const gchar* coowner_version_string = "2.0.0";
 #define coowner_language_string "coowner:language"
 #define coowner_name_string "coowner:name"
 #define coowner_notes_string "coowner:notes"
-#define coowner_shipaddr_string "coowner:shipaddr"
+#define coowner_ship_addr_string "coowner:ship_addr"
 #define coowner_slots_string "coowner:slots"
 #define coowner_taxincluded_string "coowner:taxincluded"
 #define coowner_taxtable_string "coowner:taxtable"
 #define coowner_taxtableoverride_string "coowner:use-tt"
 #define coowner_terms_string "coowner:terms"
-#define coowner_tenant_string "coowner:tenant"
+#define coowner_tenant_active_string "coowner:tenant_active"
+#define coowner_tenant_addr_string "coowner:tenant_addr"
+#define coowner_tenant_id_string "coowner:tenant_id"
+#define coowner_tenant_name_string "coowner:tenant_name"
+#define coowner_tenant_notes_string "coowner:tenant_notes"
 
 static xmlNodePtr
 coowner_dom_tree_create (GncCoOwner* coowner)
@@ -131,7 +135,7 @@ coowner_dom_tree_create (GncCoOwner* coowner)
     maybe_add_string (ret, coowner_notes_string,
         gncCoOwnerGetNotes (coowner));
 
-    xmlAddChild (ret, gnc_address_to_dom_tree (coowner_shipaddr_string,
+    xmlAddChild (ret, gnc_address_to_dom_tree (coowner_ship_addr_string,
         gncCoOwnerGetShipAddr (coowner)));
 
     /* xmlAddChild won't do anything with a NULL, so tests are superfluous. */
@@ -156,8 +160,20 @@ coowner_dom_tree_create (GncCoOwner* coowner)
         xmlAddChild (ret, guid_to_dom_tree (coowner_terms_string,
             qof_instance_get_guid (QOF_INSTANCE (term))));
 
-    xmlAddChild (ret, text_to_dom_tree (coowner_tenant_string,
-        gncCoOwnerGetTenant (coowner)));
+    xmlAddChild (ret, int_to_dom_tree (coowner_tenant_active_string,
+            gncCoOwnerGetTenantActive (coowner)));
+
+    xmlAddChild (ret, gnc_address_to_dom_tree (coowner_tenant_addr_string,
+        gncCoOwnerGetTenantAddr (coowner)));
+
+    xmlAddChild (ret, text_to_dom_tree (coowner_tenant_id_string,
+        gncCoOwnerGetTenantID (coowner)));
+
+    xmlAddChild (ret, text_to_dom_tree (coowner_tenant_name_string,
+        gncCoOwnerGetTenantName (coowner)));
+
+    xmlAddChild (ret, text_to_dom_tree (coowner_tenant_notes_string,
+        gncCoOwnerGetTenantNotes (coowner)));
 
     return ret;
 }
@@ -347,7 +363,7 @@ coowner_notes_handler (xmlNodePtr node, gpointer coowner_pdata)
 }
 
 static gboolean
-coowner_shipaddr_handler (xmlNodePtr node, gpointer coowner_pdata)
+coowner_ship_addr_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata* pdata = static_cast<decltype (pdata)> (coowner_pdata);
 
@@ -416,11 +432,42 @@ coowner_taxtableoverride_handler (xmlNodePtr node, gpointer coowner_pdata)
 }
 
 static gboolean
-coowner_tenant_handler (xmlNodePtr node, gpointer coowner_pdata)
+coowner_tenant_active_handler (xmlNodePtr node, gpointer coowner_pdata)
+{
+    struct coowner_pdata* pdata = static_cast<decltype (pdata)> (coowner_pdata);
+    return set_boolean (node, pdata->coowner, gncCoOwnerSetTenantActive);
+}
+
+static gboolean
+coowner_tenant_addr_handler (xmlNodePtr node, gpointer coowner_pdata)
+{
+    struct coowner_pdata* pdata = static_cast<decltype (pdata)> (coowner_pdata);
+
+    return gnc_dom_tree_to_address (node, gncCoOwnerGetTenantAddr (pdata->coowner));
+}
+
+static gboolean
+coowner_tenant_id_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
 
-    return set_string (node, pdata->coowner, gncCoOwnerSetTenant);
+    return set_string (node, pdata->coowner, gncCoOwnerSetTenantID);
+}
+
+static gboolean
+coowner_tenant_name_handler (xmlNodePtr node, gpointer coowner_pdata)
+{
+    struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
+
+    return set_string (node, pdata->coowner, gncCoOwnerSetTenantName);
+}
+
+static gboolean
+coowner_tenant_notes_handler (xmlNodePtr node, gpointer coowner_pdata)
+{
+    struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
+
+    return set_string (node, pdata->coowner, gncCoOwnerSetTenantNotes);
 }
 
 static gboolean
@@ -456,12 +503,16 @@ static struct dom_tree_handler coowner_handlers_v2[] =
     { coowner_language_string, coowner_language_handler, 1, 0 },
     { coowner_name_string, coowner_name_handler, 1, 0 },
     { coowner_notes_string, coowner_notes_handler, 0, 0 },
-    { coowner_shipaddr_string, coowner_shipaddr_handler, 1, 0 },
+    { coowner_ship_addr_string, coowner_ship_addr_handler, 1, 0 },
     { coowner_slots_string, coowner_slots_handler, 0, 0 },
     { coowner_taxincluded_string, coowner_taxincluded_handler, 1, 0 },
     { coowner_taxtable_string, coowner_taxtable_handler, 0, 0 },
     { coowner_taxtableoverride_string, coowner_taxtableoverride_handler, 0, 0 },
-    { coowner_tenant_string, coowner_tenant_handler, 0, 0 },
+    { coowner_tenant_active_string, coowner_tenant_active_handler, 0, 0 },
+    { coowner_tenant_addr_string, coowner_tenant_addr_handler, 0, 0 },
+    { coowner_tenant_id_string, coowner_tenant_id_handler, 0, 0 },
+    { coowner_tenant_name_string, coowner_tenant_name_handler, 0, 0 },
+    { coowner_tenant_notes_string, coowner_tenant_notes_handler, 0, 0 },
     { coowner_terms_string, coowner_terms_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
