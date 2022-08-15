@@ -50,25 +50,29 @@ Generic params (identical to all business objects, e.g. Customers, Employees, Ve
 @param  gnc_numeric balance;
 @param  Account* ccard_acc;
 @param  gnc_commodity *currency;
-@param  GList* jobs;
-@param  char* language;
-@param  char* notes;
-@param  char* name;
-@param  GncBillTerm* terms;
-@param  GncTaxTable* taxtable;
+@param  GList *jobs;
+@param  char *language;
+@param  char *notes;
+@param  char *name;
+@param  GncBillTerm *coowner_terms;
+@param  GncTaxTable *taxtable;
 @param  gboolean taxtable_override;
 @param  GncTaxIncluded tax_included;
 
 CoOwner specific params:
 
 @param  gnc_numeric apt_share;
-@param  gnc_numeric apt_unit;
+@param  char *apt_unit;
 @param  gnc_numeric credit;
 @param  gnc_numeric discount;
-@param  char* distibution_key;
-@param  char* property_unit;
-@param  GncAddress* shipaddr;
-@param  char* tenant;
+@param  char *distibution_key;
+@param  char *property_unit;
+@param  GncAddress *ship_addr;
+@param  gboolean tenant_active;
+@param  GncAddress *tenant_addr;
+@param  char *tenant_id;
+@param  char *tenant_name;
+@param  char *tenant_notes;
 */
 
 typedef struct _gncCoOwner GncCoOwner;
@@ -124,7 +128,11 @@ GncAddress * gncCoOwnerGetShipAddr (const GncCoOwner *coowner);
 GncBillTerm * gncCoOwnerGetTerms (const GncCoOwner *coowner);
 gboolean gncCoOwnerGetTaxTableOverride (const GncCoOwner *coowner);
 GncTaxTable* gncCoOwnerGetTaxTable (const GncCoOwner *coowner);
-const char * gncCoOwnerGetTenant (const GncCoOwner *coowner);
+gboolean gncCoOwnerGetTenantActive (const GncCoOwner *coowner);
+GncAddress * gncCoOwnerGetTenantAddr (const GncCoOwner *coowner);
+const char * gncCoOwnerGetTenantID (const GncCoOwner *coowner);
+const char * gncCoOwnerGetTenantName (const GncCoOwner *coowner);
+const char * gncCoOwnerGetTenantNotes (const GncCoOwner *coowner);
 //** @} */
 
 /** @name Set Functions
@@ -144,11 +152,15 @@ void gncCoOwnerSetLanguage (GncCoOwner *coowner, const char *language);
 void gncCoOwnerSetName (GncCoOwner *coowner, const char *name);
 void gncCoOwnerSetNotes (GncCoOwner *coowner, const char *notes);
 void qofCoOwnerSetShipAddr (GncCoOwner *coowner, QofInstance *shipaddr_ent);
-void gncCoOwnerSetTerms (GncCoOwner *coowner, GncBillTerm *terms);
+void gncCoOwnerSetTerms (GncCoOwner *coowner, GncBillTerm *coowner_terms);
 void gncCoOwnerSetTaxIncluded (GncCoOwner *coowner, GncTaxIncluded tax_included);
 void gncCoOwnerSetTaxTableOverride (GncCoOwner *coowner, gboolean override);
 void gncCoOwnerSetTaxTable (GncCoOwner *coowner, GncTaxTable *table);
-void gncCoOwnerSetTenant (GncCoOwner *coowner, const char *tenant);
+void gncCoOwnerSetTenantActive (GncCoOwner *coowner, gboolean tenant_active);
+void qofCoOwnerSetTenantAddr (GncCoOwner *coowner, QofInstance *addraddr_ent);
+void gncCoOwnerSetTenantID (GncCoOwner *coowner, const char *tenant_id);
+void gncCoOwnerSetTenantName (GncCoOwner *coowner, const char *tenant_name);
+void gncCoOwnerSetTenantNotes (GncCoOwner *coowner, const char *tenant_notes);
 
 void gncCoOwnerAddJob (GncCoOwner *coowner, GncJob *job);
 void gncCoOwnerBeginEdit (GncCoOwner *coowner);
@@ -174,25 +186,32 @@ static inline GncCoOwner * gncCoOwnerLookup (const QofBook *book, const GncGUID 
     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_COOWNER, GncCoOwner);
 }
 
+/** Constants used as identifier keys */
 #define COOWNER_ID                "id"
 #define COOWNER_ACL               "acl"
-#define COOWNER_ACTIVE            "is_active"
+#define COOWNER_ACTIVE            "active"
 #define COOWNER_ADDR              "addr"
 #define COOWNER_APT_SHARE         "apt_share"
 #define COOWNER_APT_UNIT          "apt_unit"
 #define COOWNER_CC                "credit_card_account"
 #define COOWNER_CREDIT            "credit"
+#define COOWNER_CURRENCY          "currency"
 #define COOWNER_DISCOUNT          "discount"
-#define COOWNER_DISTRIBUTION_KEY  "distribution key"
-#define COOWNER_LANGUAGE          "native language"
+#define COOWNER_DISTRIBUTION_KEY  "distribution_key"
+#define COOWNER_LANGUAGE          "language"
 #define COOWNER_NAME              "name"
 #define COOWNER_NOTES             "notes"
-#define COOWNER_SHIPADDR          "shipaddr"
-#define COOWNER_TERMS             "terms"
-#define COOWNER_TAX_INCLUDED      "tax included"
-#define COOWNER_TAXTABLE_OVERRIDE "tax table override"
-#define COOWNER_TAXTABLE          "tax table"
-#define COOWNER_TENANT            "tenant"
+#define COOWNER_SHIP_ADDRESS      "ship_addr"
+#define COOWNER_SLOTS             "values"
+#define COOWNER_TAX_INCLUDED      "tax_included"
+#define COOWNER_TAXTABLE_OVERRIDE "tax_table_override"
+#define COOWNER_TAXTABLE          "tax_table"
+#define COOWNER_TENANT_ACTIVE     "tenant_active"
+#define COOWNER_TENANT_ADDRESS    "tenant_addr"
+#define COOWNER_TENANT_ID         "tenant_id"
+#define COOWNER_TENANT_NAME       "tenant_name"
+#define COOWNER_TENANT_NOTES      "tenant_notes"
+#define COOWNER_TERMS             "coowner_terms"
 
 /** @deprecated functions, should be removed */
 #define gncCoOwnerGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
