@@ -47,6 +47,7 @@ G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define ADDRESS_MAX_NAME_LEN 1024
 #define ADDRESS_MAX_ADDRESS_LINE_LEN 1024
+#define ADDRESS_MAX_MOBILE_LEN 128
 #define ADDRESS_MAX_PHONE_LEN 128
 #define ADDRESS_MAX_FAX_LEN 128
 #define ADDRESS_MAX_EMAIL_LEN 256
@@ -64,6 +65,8 @@ static EntryVec col_table
     gnc_sql_make_table_entry<CT_STRING>(
         "addr4", ADDRESS_MAX_ADDRESS_LINE_LEN, COL_NNUL, "addr4"),
     gnc_sql_make_table_entry<CT_STRING>(
+        "mobile", ADDRESS_MAX_PHONE_LEN, COL_NNUL, "mobile"),
+    gnc_sql_make_table_entry<CT_STRING>(
         "phone", ADDRESS_MAX_PHONE_LEN, COL_NNUL, "phone"),
     gnc_sql_make_table_entry<CT_STRING>(
         "fax", ADDRESS_MAX_FAX_LEN, COL_NNUL, "fax" ),
@@ -75,10 +78,11 @@ typedef void (*AddressSetterFunc) (gpointer, GncAddress*);
 typedef GncAddress* (*AddressGetterFunc) (const gpointer);
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* sql_be,
-                                              GncSqlRow& row,
-                                              QofIdTypeConst obj_name,
-                                              gpointer pObject) const noexcept
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (
+    const GncSqlBackend* sql_be,
+    GncSqlRow& row,
+    QofIdTypeConst obj_name,
+    gpointer pObject) const noexcept
 {
     const gchar* s;
 
@@ -103,9 +107,10 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* sql_be,
             return;
         }
     }
-    set_parameter (pObject, addr,
-                   reinterpret_cast<AddressSetterFunc>(get_setter(obj_name)),
-                   m_gobj_param_name);
+    set_parameter (
+        pObject, addr,
+        reinterpret_cast<AddressSetterFunc>(get_setter(obj_name)),
+        m_gobj_param_name);
 }
 
 template<> void
@@ -124,17 +129,19 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_table(ColVec& vec) const noexcept
  * it to operator<<().
  */
 template<> void
-GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(QofIdTypeConst obj_name,
-                                                    const gpointer pObject,
-                                                    PairVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_ADDRESS>::add_to_query(
+    QofIdTypeConst obj_name,
+    const gpointer pObject,
+    PairVec& vec) const noexcept
 {
     auto addr(get_row_value_from_object<char*>(obj_name, pObject));
     if (addr == nullptr) return;
 
     for (auto const& subtable_row : col_table)
     {
-        auto s = subtable_row->get_row_value_from_object<char*>(GNC_ID_ADDRESS,
-                                                                addr);
+        auto s = subtable_row->get_row_value_from_object<char*>(
+            GNC_ID_ADDRESS,
+            addr);
         if (s == nullptr)
             continue;
         auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
