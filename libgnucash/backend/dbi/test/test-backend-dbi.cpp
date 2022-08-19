@@ -26,6 +26,7 @@ extern "C"
 #include <config.h>
 #include "qof.h"
 #include "cashobjects.h"
+#include "test-stuff.h"
 }
 extern void test_suite_gnc_backend_dbi ();
 
@@ -40,6 +41,8 @@ main (int   argc,
 {
     g_setenv ("GNC_UNINSTALLED", "1", TRUE);
     qof_init (); /* equally initializes gobject system */
+    /* Print out successfull tests */
+    set_success_print(TRUE);
     qof_log_init_filename_special ("stderr"); /* Init the log system */
     g_test_init (&argc, &argv, NULL);       /* initialize test program */
     g_test_bug_base ("https://bugs.gnucash.org/show_bug.cgi?id="); /* init the bugzilla URL */
