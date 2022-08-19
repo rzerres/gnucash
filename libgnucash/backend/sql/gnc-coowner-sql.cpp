@@ -108,7 +108,7 @@ static EntryVec col_table
     gnc_sql_make_table_entry<CT_STRING>(
         "notes", MAX_NAME_LEN, COL_NNUL, COOWNER_NOTES, true),
     gnc_sql_make_table_entry<CT_ADDRESS>(
-        "ship_addr", 0, 0, COOWNER_SHIP_ADDRESS),
+        "ship_addr", 0, 0, COOWNER_SHIP_ADDRESS, true),
     gnc_sql_make_table_entry<CT_BOOLEAN>(
         "tax_override", 0, COL_NNUL,
         COOWNER_TAXTABLE_OVERRIDE, true),
@@ -121,9 +121,9 @@ static EntryVec col_table
         (QofAccessFunc)gncCoOwnerGetTaxTable,
         (QofSetterFunc)gncCoOwnerSetTaxTable),
     gnc_sql_make_table_entry<CT_BOOLEAN>(
-        "tenant_active", 0, COL_NNUL, "tenant_active"),
+        "tenant_active", 0, COL_NNUL, COOWNER_TENANT_ACTIVE),
     gnc_sql_make_table_entry<CT_ADDRESS>(
-         "tenant_addr", 0, 0, COOWNER_TENANT_ADDRESS, true),
+        "tenant_addr", 0, 0, COOWNER_TENANT_ADDRESS, true),
     gnc_sql_make_table_entry<CT_STRING>(
         "tenant_id", MAX_TENANT_ID_LEN, COL_NNUL, COOWNER_TENANT_ID, true),
     gnc_sql_make_table_entry<CT_STRING>(
