@@ -55,7 +55,7 @@ static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar* entry_version_string = "2.0.0";
 
-/* ids */
+/* constants */
 #define gnc_entry_string "gnc:GncEntry"
 #define entry_guid_string "entry:guid"
 #define entry_date_string "entry:date"
@@ -65,7 +65,10 @@ const gchar* entry_version_string = "2.0.0";
 #define entry_notes_string "entry:notes"
 #define entry_qty_string "entry:qty"
 
-/* cust inv */
+/* coowner settlement */
+//#define entry_settlement_string "entry:c-settlement"
+
+/* customer/coowner invoice */
 #define entry_invacct_string "entry:i-acct"
 #define entry_iprice_string "entry:i-price"
 #define entry_idiscount_string "entry:i-discount"
@@ -75,7 +78,10 @@ const gchar* entry_version_string = "2.0.0";
 #define entry_itaxincluded_string "entry:i-taxincluded"
 #define entry_itaxtable_string "entry:i-taxtable"
 
-/* vend bill */
+/* employee bill */
+#define entry_billpayment_string "entry:b-pay"
+
+/* vendor bill */
 #define entry_billacct_string "entry:b-acct"
 #define entry_bprice_string "entry:b-price"
 #define entry_btaxable_string "entry:b-taxable"
@@ -83,9 +89,6 @@ const gchar* entry_version_string = "2.0.0";
 #define entry_btaxtable_string "entry:b-taxtable"
 #define entry_billable_string "entry:billable"
 #define entry_billto_string "entry:billto"
-
-/* emp bill */
-#define entry_billpayment_string "entry:b-pay"
 
 /* other stuff */
 #define entry_order_string "entry:order"
@@ -677,7 +680,10 @@ static struct dom_tree_handler entry_handlers_v2[] =
     { entry_notes_string, entry_notes_handler, 0, 0 },
     { entry_qty_string, entry_qty_handler, 0, 0 },
 
-    /* cust invoice */
+    /* coowner settlement */
+    //{ entry_settlement_string, entry_settlement_handler, 0, 0 },
+
+    /* customer/coowner invoice */
     { entry_invacct_string, entry_invacct_handler, 0, 0 },
     { entry_iprice_string, entry_iprice_handler, 0, 0 },
     { entry_idiscount_string, entry_idiscount_handler, 0, 0 },
@@ -687,6 +693,9 @@ static struct dom_tree_handler entry_handlers_v2[] =
     { entry_itaxincluded_string, entry_itaxincluded_handler, 0, 0 },
     { entry_itaxtable_string, entry_itaxtable_handler, 0, 0 },
 
+    /* employee stuff */
+    { entry_billpayment_string, entry_billpayment_handler, 0, 0 },
+
     /* vendor invoice */
     { entry_billacct_string, entry_billacct_handler, 0, 0 },
     { entry_bprice_string, entry_bprice_handler, 0, 0 },
@@ -695,9 +704,6 @@ static struct dom_tree_handler entry_handlers_v2[] =
     { entry_btaxtable_string, entry_btaxtable_handler, 0, 0 },
     { entry_billable_string, entry_billable_handler, 0, 0 },
     { entry_billto_string, entry_billto_handler, 0, 0 },
-
-    /* employee stuff */
-    { entry_billpayment_string, entry_billpayment_handler, 0, 0 },
 
     /* Other stuff */
     { entry_order_string, entry_order_handler, 0, 0 },
