@@ -110,12 +110,14 @@ test_distriblist (void)
             gncDistribListSetDescription, gncDistribListGetDescription);
         test_string_fcn (book, "Handle Name",
             gncDistribListSetName, gncDistribListGetName);
-        test_string_fcn (book, "Handle Label Settlement",
-            gncDistribListSetLabelSettlement, gncDistribListGetLabelSettlement);
-        test_int_fcn (book, "Handle Shares Total",
-            gncDistribListSetSharesTotal, gncDistribListGetSharesTotal);
+        test_string_fcn (book, "Handle Percentage Label Settlement",
+            gncDistribListSetPercentageLabelSettlement, gncDistribListGetPercentageLabelSettlement);
         test_int_fcn (book, "Handle Percentage Total",
             gncDistribListSetPercentageTotal, gncDistribListGetPercentageTotal);
+        test_string_fcn (book, "Handle Share Label Settlement",
+            gncDistribListSetSharesLabelSettlement, gncDistribListGetSharesLabelSettlement);
+        test_int_fcn (book, "Handle Shares Total",
+            gncDistribListSetSharesTotal, gncDistribListGetSharesTotal);
 
     }
 
