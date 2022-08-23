@@ -704,6 +704,9 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
               GNC_TREE_VIEW(tree_view), GNC_OWNER_TREE_ADDRESS_2_COL);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
     col = gnc_tree_view_find_column_by_name(
+              GNC_TREE_VIEW(tree_view), GNC_OWNER_TREE_MOBILE_COL);
+    g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+    col = gnc_tree_view_find_column_by_name(
               GNC_TREE_VIEW(tree_view), GNC_OWNER_TREE_PHONE_COL);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
     gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view));
