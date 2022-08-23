@@ -443,6 +443,11 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                   GNC_TREE_MODEL_OWNER_COL_ADDRESS_4,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
+    gnc_tree_view_add_text_column(view, _("Mobile"), GNC_OWNER_TREE_MOBILE_COL,
+                                  NULL, "+1-617-542-5999",
+                                  GNC_TREE_MODEL_OWNER_COL_MOBILE,
+                                  GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                  sort_by_string);
     gnc_tree_view_add_text_column(view, _("Phone"), GNC_OWNER_TREE_PHONE_COL,
                                   NULL, "+1-617-542-5942",
                                   GNC_TREE_MODEL_OWNER_COL_PHONE,
