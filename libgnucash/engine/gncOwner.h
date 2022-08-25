@@ -65,14 +65,19 @@ are still expected to be useful in making GncOwner transparent
 to QOF as they can be used by objects like GncInvoice.
 @{
 */
+
 /** return the type for the collection. */
 QofIdTypeConst qofOwnerGetType(const GncOwner *owner);
+
 /** return the type for the owner as an untranslated string. */
 const char * gncOwnerGetTypeString (const GncOwner *owner);
+
 /** return the owner itself as an entity. */
 QofInstance* qofOwnerGetOwner (const GncOwner *owner);
+
 /** set the owner from the entity. */
 void qofOwnerSetEntity (GncOwner *owner, QofInstance *ent);
+
 /** Check if entity is an owner kind. This function conveniently
  *  imitates the various GNC_IS_ checks on the other gnucash
  *  objects even though an owner is not really a true object. */
@@ -92,7 +97,7 @@ gncOwnerRegister(void);
 /** \struct GncOwner */
 struct _gncOwner
 {
-    GncOwnerType     type;      /**< Co-Owner, Customer, Employee, Job, Vendor or Undefined. */
+    GncOwnerType     type;      /**< from enum: Co-Owner, Customer, Employee, Job, None, Vendor or Undefined. */
     union
     {
         gpointer       undefined;
@@ -117,33 +122,40 @@ void gncOwnerInitJob (GncOwner *owner, GncJob *job);
 void gncOwnerInitVendor (GncOwner *owner, GncVendor *vendor);
 void gncOwnerInitUndefined (GncOwner *owner, gpointer obj);
 /** @} */
+
 /** \name Get routines.
 @{
 */
 /** If the given owner is of type GNC_OWNER_COOWNER, returns the pointer
  * to the co-owner object. Otherwise returns NULL. */
 GncCoOwner * gncOwnerGetCoOwner (const GncOwner *owner);
+
 /** If the given owner is of type GNC_OWNER_CUSTOMER, returns the pointer
  * to the customer object. Otherwise returns NULL. */
 GncCustomer * gncOwnerGetCustomer (const GncOwner *owner);
+
 /** If the given owner is of type GNC_OWNER_EMPLOYEE, returns the pointer
  * to the employee object. Otherwise returns NULL. */
 GncEmployee * gncOwnerGetEmployee (const GncOwner *owner);
+
 /** If the given owner is of type GNC_OWNER_JOB, returns the pointer
  * to the job object. Otherwise returns NULL. */
 GncJob * gncOwnerGetJob (const GncOwner *owner);
+
 /** If the given owner is of type GNC_OWNER_VENDOR, returns the pointer
  * to the vendor object. Otherwise returns NULL. */
 GncVendor * gncOwnerGetVendor (const GncOwner *owner);
+
 /** Returns the GncOwnerType of this owner. (Not to be confused with qofOwnerGetType().) */
 GncOwnerType gncOwnerGetType (const GncOwner *owner);
+
 /** If the given owner is of type GNC_OWNER_UNDEFINED, returns the undefined
  * pointer, which is usually NULL. Otherwise returns NULL. */
 gpointer gncOwnerGetUndefined (const GncOwner *owner);
+
 /** Returns TRUE if the given owner is one of the valid objects.
  * Returns FALSE if the owner is (still) undefined, or if it is NULL. */
 gboolean gncOwnerIsValid (const GncOwner *owner);
-
 
 const char * gncOwnerGetID (const GncOwner *owner);
 const char * gncOwnerGetName (const GncOwner *owner);
