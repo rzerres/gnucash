@@ -66,7 +66,7 @@ gnc_owner_to_dom_tree (const char* tag, const GncOwner* owner)
     switch (gncOwnerGetType (owner))
     {
     case GNC_OWNER_COOWNER:
-        type_str = GNC_ID_CUSTOMER;
+        type_str = GNC_ID_COOWNER;
         break;
     case GNC_OWNER_CUSTOMER:
         type_str = GNC_ID_CUSTOMER;
