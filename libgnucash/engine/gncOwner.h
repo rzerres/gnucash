@@ -72,6 +72,9 @@ QofIdTypeConst qofOwnerGetType(const GncOwner *owner);
 /** return the type for the owner as an untranslated string. */
 const char * gncOwnerGetTypeString (const GncOwner *owner);
 
+/** return the type for the owner as an untranslated string. */
+const char * gncOwnerTypeGetTypeString (GncOwnerType owner);
+
 /** return the owner itself as an entity. */
 QofInstance* qofOwnerGetOwner (const GncOwner *owner);
 
