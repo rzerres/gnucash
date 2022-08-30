@@ -124,18 +124,18 @@ static GncPluginPage
 
 /* Callbacks */
 static gboolean gnc_plugin_page_owner_tree_button_press_cb (
-        GtkWidget *widget,
-        GdkEventButton *event,
-        GncPluginPage *page);
+    GtkWidget *widget,
+    GdkEventButton *event,
+    GncPluginPage *page);
 static void gnc_plugin_page_owner_tree_double_click_cb (
-        GtkTreeView *treeview,
-        GtkTreePath *path,
-        GtkTreeViewColumn *col,
-        GncPluginPageOwnerTree *page);
+    GtkTreeView *treeview,
+    GtkTreePath *path,
+    GtkTreeViewColumn *col,
+    GncPluginPageOwnerTree *page);
 
 static void gnc_plugin_page_owner_tree_selection_changed_cb (
-        GtkTreeSelection *selection,
-        GncPluginPageOwnerTree *page);
+    GtkTreeSelection *selection,
+    GncPluginPageOwnerTree *page);
 
 /* Command callbacks */
 static void
