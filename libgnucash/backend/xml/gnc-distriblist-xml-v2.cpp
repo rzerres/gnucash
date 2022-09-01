@@ -46,6 +46,7 @@ extern "C"
 #include "gnc-xml.h"
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
+#include "gnc-owner-xml-v2.h"
 #include "gnc-distriblist-xml-v2.h"
 
 #include "xml-helpers.h"
@@ -67,10 +68,13 @@ const gchar* distriblist_version_string = "2.0.0";
 #define distriblist_parent_string "distriblist:parent"
 #define distriblist_child_string "distriblist:child"
 #define distriblist_slots_string "distriblist:slots"
+#define distriblist_owner_string "distriblist:owner"
 
 #define percentage_labelsettlement_string "dl-percentage:label_settlement"
+#define percentage_owner_string "distriblist:owner"
 #define percentage_percentagetotal_string "dl-percentage:percentage_total"
 #define shares_labelsettlement_string "dl-shares:label_settlement"
+#define shares_owner_string "distriblist:owner"
 #define shares_sharestotal_string "dl-shares:shares_total"
 
 #define gnc_distriblist_string "gnc:GncDistribList"
@@ -82,7 +86,7 @@ const gchar* distriblist_version_string = "2.0.0";
  * (assume C11 semantics, where order matters)
 \*************************************************/
 static void
-distblist_add_xml (QofInstance* distriblist_p, gpointer out_p);
+distriblist_add_xml (QofInstance* distriblist_p, gpointer out_p);
 static gboolean
 distriblist_child_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static gboolean
@@ -124,6 +128,8 @@ static gboolean
 distriblist_slots_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static sixtp* distriblist_sixtp_parser_create (void);
 static gboolean distriblist_write (FILE *out, QofBook *book);
+static gboolean
+owner_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static gboolean
 percentage_labelsettlement_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static gboolean
@@ -219,8 +225,9 @@ set_numeric (
 static xmlNodePtr
 distriblist_dom_tree_create (GncDistributionList* distriblist)
 {
-  xmlNodePtr ret;
+    xmlNodePtr ret;
     xmlNodePtr data;
+    GncOwner *owner;
 
     ret = xmlNewNode (NULL, BAD_CAST gnc_distriblist_string);
     xmlSetProp (ret, BAD_CAST "version", BAD_CAST distriblist_version_string);
@@ -241,9 +248,9 @@ distriblist_dom_tree_create (GncDistributionList* distriblist)
         gncDistribListGetInvisible (distriblist)));
 
     // xmlAddChild won't do anything with a NULL, so tests are superfluous.
-    xmlAddChild (ret, qof_instance_slots_to_dom_tree (
-       distriblist_slots_string,
-       QOF_INSTANCE (distriblist)));
+    // xmlAddChild (ret, qof_instance_slots_to_dom_tree (
+    //    distriblist_slots_string,
+    //    QOF_INSTANCE (distriblist)));
 
     /* We should not be our own child */
     if (gncDistribListGetChild (distriblist) != distriblist)
@@ -258,32 +265,55 @@ distriblist_dom_tree_create (GncDistributionList* distriblist)
             QOF_INSTANCE (gncDistribListGetParent (distriblist)));
     }
 
+    // write back the string value of the assigned owner type
+    // (GNC_ID_[OWNER] -> e.g "gncCoOwner")
+    // Hint: we do not reference to an owner guid , so id is empty
+    owner = gncDistribListGetOwner (distriblist);
+    DEBUG ("Write string value of owner '%s' ('%i')\n",
+           gncOwnerTypeToQofIdType(owner->type),
+           owner->type);
+    //if (owner && owner->owner.undefined != NULL)
+    if (owner)
+        xmlAddChild (ret, gnc_owner_to_dom_tree (percentage_owner_string, owner));
+
     switch (gncDistribListGetType (distriblist))
     {
     case GNC_DISTRIBLIST_TYPE_PERCENTAGE:
+    {
         data = xmlNewChild (
             ret, NULL, BAD_CAST gnc_percentagetype_string, NULL);
+
+        // write back the label to be used in settlements
         maybe_add_string (
             data,
             percentage_labelsettlement_string,
             gncDistribListGetPercentageLabelSettlement (distriblist));
+
+        // write back the percentage total value
         maybe_add_int (
             data,
             percentage_percentagetotal_string,
             gncDistribListGetPercentageTotal (distriblist));
         break;
+    }
     case GNC_DISTRIBLIST_TYPE_SHARES:
+    {
         data = xmlNewChild (
             ret, NULL, BAD_CAST gnc_sharestype_string, NULL);
+
+        // write back the label to be used in settlements
         maybe_add_string (
             data,
             shares_labelsettlement_string,
             gncDistribListGetSharesLabelSettlement (distriblist));
+
+        // write back the shares total value
         maybe_add_int (
             data,
             shares_sharestotal_string,
             gncDistribListGetSharesTotal (distriblist));
         break;
+    }
     }
 
     return ret;
@@ -359,6 +389,12 @@ dom_tree_handler distriblist_handlers_v2[] =
         0
     },
     {
+        distriblist_owner_string,
+        owner_handler,
+        0,
+        0
+    },
+    {
         distriblist_parent_string,
         distriblist_parent_handler,
         0,
@@ -391,6 +427,12 @@ dom_tree_handler distriblist_handlers_v2[] =
     { NULL, 0, 0, 0 }
 };
 
+/**
+ * Read in a dom tree to a distribution list structure.
+ *
+ * @param node - pointer to the node
+ * @param book - pointer to the book that is assigned to this distribution list.
+ */
 static GncDistributionList*
 dom_tree_to_distriblist (xmlNodePtr node, QofBook *book)
 {
@@ -447,8 +489,14 @@ dom_tree_to_shares_data (xmlNodePtr node, struct distriblist_pdata *pdata)
 }
 
 /* distriblist handler functions */
+/**
+ * Add an xml representation of a distribution list to a given file.
+ *
+ * @param distriblist_p - pointer to the distribution list struct.
+ * @param out_p - pointer to the filename that is used to store the data.
+ */
 static void
-distblist_add_xml (QofInstance *distriblist_p, gpointer out_p)
+distriblist_add_xml (QofInstance *distriblist_p, gpointer out_p)
 {
     xmlNodePtr node;
     GncDistributionList *distriblist = (GncDistributionList*) distriblist_p;
@@ -594,9 +642,9 @@ distriblist_invisible_handler (xmlNodePtr node, gpointer distriblist_pdata)
 {
     struct distriblist_pdata* pdata =
         static_cast<decltype (pdata)> (distriblist_pdata);
-    gint64 val;
+    guint val;
 
-    dom_tree_to_integer (node, &val);
+    dom_tree_to_guint (node, &val);
     if (val)
         gncDistribListMakeInvisible (pdata->distriblist);
     return TRUE;
@@ -648,10 +696,29 @@ distriblist_percentage_data_handler (xmlNodePtr node, gpointer distriblist_pdata
     //g_return_val_if_fail (
     //    gncDistribListGetType (pdata->distriblist) == 0, FALSE);
 
-//FIXME: ignoring the test and just set the tye works out as expected.
     gncDistribListSetType (pdata->distriblist, GNC_DISTRIBLIST_TYPE_PERCENTAGE);
     return dom_tree_to_percentage_data (node, pdata);
 }
+
+// static gboolean
+// distriblist_owner_data_handler (xmlNodePtr node, gpointer distriblist_pdata)
+// {
+//     struct distriblist_pdata* pdata =
+//         static_cast<decltype (pdata)> (distriblist_pdata);
+//     GncOwner owner;
+//     gboolean ret;
+
+//     ret = gnc_dom_tree_to_owner (node, &owner, pdata->book);
+//     if (ret)
+//         gncDistribListSetOwner (pdata->distriblist, &owner);
+
+//     return ret;
+
+//     // g_return_val_if_fail (node, FALSE);
+
+//     // gncDistribListSetOwner (pdata->distriblist, GNC_DISTRIBLIST_TYPE_PERCENTAGE);
+//     // return dom_tree_to_owner_data (node, pdata);
+// }
 
 static gboolean
 distriblist_refcount_handler (xmlNodePtr node, gpointer distriblist_pdata)
@@ -720,6 +787,8 @@ distriblist_scrub_cb (QofInstance* distriblist_p, gpointer list_p)
                 distriblist, gncDistribListGetSharesLabelSettlement (t));
             gncDistribListSetSharesTotal (
                 distriblist, gncDistribListGetSharesTotal (t));
+            gncDistribListSetOwner (
+                distriblist, gncDistribListGetOwner (t));
             gncDistribListCommitEdit (distriblist);
         }
         else
@@ -804,12 +873,37 @@ static sixtp
     return sixtp_dom_parser_new (distriblist_end_handler, NULL, NULL);
 }
 
+/**
+ * Write an xml representation of a distribution list to filesystem.
+ *
+ * @param out - pointer to the filename that is used to store the data.
+ * @param book - pointer to the book that is assigned to this distribution list.
+ */
 static gboolean
 distriblist_write (FILE *out, QofBook* book)
 {
     qof_object_foreach_sorted (
-        _GNC_MOD_NAME, book, distblist_add_xml, (gpointer) out);
+        _GNC_MOD_NAME, book, distriblist_add_xml, (gpointer) out);
     return ferror (out) == 0;
+}
+
+static gboolean
+owner_handler (xmlNodePtr node, gpointer distriblist_pdata)
+{
+    struct distriblist_pdata* pdata =
+        static_cast<decltype (pdata)> (distriblist_pdata);
+    GncOwner owner;
+    gboolean ret;
+
+    ret = gnc_dom_tree_to_owner (node, &owner, pdata->book);
+    if (ret)
+      gncDistribListSetOwner ( pdata->distriblist, &owner);
+
+    return ret;
+
+    // // Get the string representation of the owner type
+    // QofIdTypeConst ownertype_name = gncOwnerGetTypeString (
+    //     gncDistribListGetOwner (pdata->distriblist));
 }
 
 static gboolean
