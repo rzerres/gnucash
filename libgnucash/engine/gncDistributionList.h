@@ -50,7 +50,8 @@ costs to be settled to this apartment unit (the devisor).
 @param  const char *name - Pointer to the name of the distribution list.
 @param  const char *descrition - Pointer to the description of the distribution list.
 @param  GncDistributionListType type - The type of the distribution list.
-@param  GncOwnerType owner-type - The owner type that is assigned to selectable list members.
+//@param  GncOwnerType owner-type - The owner type that is assigned to selectable list members.
+@param  GncOwnerTypeName *owner-typename - Pointer to the owner typename that is assigned to selectable list members.
 @param  const char *percentage_label_stettlement - Label of the distribution list.
 @param  gint percentage-total - Total percentage per property unit (the numerator).
 @param  const char *shares_label_stettlement - Label of the distribution list.
@@ -89,7 +90,8 @@ GType gnc_distriblist_get_type(void);
  @{ */
 #define GNC_DISTRIBLIST_DESCRIPTION "description"
 #define GNC_DISTRIBLIST_NAME "name"
-#define GNC_DISTRIBLIST_OWNER "owner"
+//#define GNC_DISTRIBLIST_OWNER "owner"
+#define GNC_DISTRIBLIST_OWNER_TYPENAME "owner typename"
 #define GNC_DISTRIBLIST_PERCENTAGE_LABEL_SETTLEMENT "percentage label settlement"
 #define GNC_DISTRIBLIST_PERCENTAGE_TOTAL "percentage total"
 #define GNC_DISTRIBLIST_REFCOUNT "reference counter"
@@ -134,7 +136,8 @@ void gncDistribListCommitEdit (GncDistributionList *distriblist);
 */
 void gncDistribListSetDescription (GncDistributionList *distriblist, const char *name);
 void gncDistribListSetName (GncDistributionList *distriblist, const char *name);
-void gncDistribListSetOwner (GncDistributionList *distriblist, GncOwner *owner);
+// void gncDistribListSetOwner (GncDistributionList *distriblist, GncOwner *owner);
+void gncDistribListSetOwnerTypeName (GncDistributionList *distriblist, const char *owner_typename);
 //void gncDistribListSetOwners (GncDistributionList *distriblist, GList owners);
 void gncDistribListSetPercentageLabelSettlement (GncDistributionList *distriblist, const char *percentage_label_settlement);
 void gncDistribListSetPercentageTotal (GncDistributionList *distriblist, gint percentage_total);
@@ -150,8 +153,9 @@ void gncDistribListSetType (GncDistributionList *distriblist, GncDistributionLis
 const char *gncDistribListGetDescription (const GncDistributionList *distriblist);
 GList * gncDistribListGetLists (QofBook *book);
 const char *gncDistribListGetName (const GncDistributionList *distriblist);
-GncOwner *gncDistribListGetOwner (GncDistributionList *distriblist);
-//GList *gncDistribListGetOwners (GncOwner *owner);
+// GncOwner *gncDistribListGetOwner (GncDistributionList *distriblist);
+const char *gncDistribListGetOwnerTypeName (const GncDistributionList *distriblist);
+// GList *gncDistribListGetOwners (GncOwner *owner);
 GncDistributionList *gncDistribListGetParent (const GncDistributionList *distriblist);
 const char *gncDistribListGetPercentageLabelSettlement (const GncDistributionList *distriblist);
 gint gncDistribListGetPercentageTotal (const GncDistributionList *distriblist);
