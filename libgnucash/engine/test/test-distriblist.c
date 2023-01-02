@@ -96,8 +96,8 @@ test_distriblist (void)
     {
         GncGUID guid;
         GncDistributionListType type = GNC_DISTRIBLIST_TYPE_SHARES;
-        GncOwner *owner_1 = NULL;
-        GncOwner *owner_2 = gncOwnerNew();
+        /* GncOwner *owner_1 = NULL; */
+        /* GncOwner *owner_2 = gncOwnerNew(); */
         const char *owner_typename = "Co-Owner";
 
         guid_replace (&guid);
@@ -110,11 +110,21 @@ test_distriblist (void)
         gncDistribListSetType (distriblist, type);
         do_test (gncDistribListGetType (distriblist) == type, "Get type");
 
-        // Test with explicit owner_type
-        owner_2->type = GNC_OWNER_COOWNER;
-        gncOwnerTypeToQofIdType(owner_2->type);
+        gncDistribListSetOwnerTypeName (distriblist, owner_typename);
+        do_test (gncDistribListGetOwnerTypeName (distriblist) == owner_typename, "Get owner typename");
 
-        gncDistribListSetOwner (distriblist, owner_2);
+        // Test with explicit owner_type
+        /* do_test (g_strcmp0 (gncOwnerGetTypeString ( */
+        /*              gncDistribListGetOwner (distriblist)), */
+        /*              owner_typename) */
+        /*          == 0, */
+        /*          "Get owner typename"); */
+
+        /* owner_2->type = GNC_OWNER_COOWNER; */
+        /* gncOwnerTypeToQofIdType(owner_2->type); */
+
+        /* gncDistribListSetOwner (distriblist, owner_2); */
+
         /* printf ("Testvalue src (owner->typename): '%s'\n", owner_typename); */
         /* printf ("Testvalue dst (owner->typename): '%s' (owner->type '%d')\n", */
         /*         gncOwnerGetTypeString ( */
@@ -122,11 +132,11 @@ test_distriblist (void)
         /*         gncOwnerGetType ( */
         /*             gncDistribListGetOwner (distriblist))); */
 
-        do_test (g_strcmp0 (gncOwnerGetTypeString (
-                     gncDistribListGetOwner (distriblist)),
-                     owner_typename)
-                 == 0,
-                 "Get owner typename");
+        /* do_test (g_strcmp0 (gncOwnerGetTypeString ( */
+        /*              gncDistribListGetOwner (distriblist)), */
+        /*              owner_typename) */
+        /*          == 0, */
+        /*          "Get owner typename"); */
 
         test_string_fcn (book, "Handle Description",
             gncDistribListSetDescription, gncDistribListGetDescription);
