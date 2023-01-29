@@ -1077,6 +1077,10 @@ type_label_to_new_button(const gchar* type_label)
     {
         return _("New Bill");
     }
+    else if (g_strcmp0(type_label, _("Co-Owner")) == 0)
+    {
+        return _("New Co-Owner");
+    }
     else if (g_strcmp0(type_label, _("Customer")) == 0)
     {
         return _("New Customer");
