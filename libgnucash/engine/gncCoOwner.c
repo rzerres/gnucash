@@ -1488,7 +1488,7 @@ coowner_handle_qof_events (QofInstance *entity, QofEventId event_type,
             /* Pre-payment lots */
             end_owner = gncOwnerGetEndOwner (&lot_owner);
 
-if (gncOwnerGetType (end_owner) == GNC_OWNER_COOWNER)
+        if (gncOwnerGetType (end_owner) == GNC_OWNER_COOWNER)
         {
             /* Clear the cached balance */
             GncCoOwner* coowner = gncOwnerGetCoOwner (end_owner);
