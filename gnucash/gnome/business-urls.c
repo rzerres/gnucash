@@ -58,7 +58,7 @@
 
 #define HANDLE_TYPE(URL_TYPE_STR,OBJ_TYPE) {                                 \
   QofBook *book;                                                             \
-  GncGUID guid;                                                                 \
+  GncGUID guid;                                                              \
   QofCollection *coll;                                                       \
                                                                              \
   g_return_val_if_fail (location != NULL, FALSE);                            \
@@ -86,6 +86,21 @@
                 location);                                                   \
     return FALSE;                                                            \
   }                                                                          \
+}
+
+static gboolean
+coownerCB (const char *location, const char *label,
+            gboolean new_window, GNCURLResult * result)
+{
+    QofInstance *entity;
+    GncCoOwner *coowner;
+
+    /* href="...:coowner=<guid>" */
+    HANDLE_TYPE ("coowner=", GNC_ID_COOWNER);
+    coowner = (GncCoOwner *) entity;
+    gnc_ui_coowner_edit (result->parent, coowner);
+
+    return TRUE;
 }
 
 static gboolean
@@ -245,6 +260,15 @@ ownerreportCB (const char *location, const char *label,
     memset (&owner, 0, sizeof (owner));
     switch (*ownerptr)
     {
+    case 'o':
+    {
+        GncCoOwner *coowner =
+            gncCoOwnerLookup (gnc_get_current_book (), &guid);
+        DISABLE_REPORT_IF_NULL (coowner);
+        gncOwnerInitCoOwner (&owner, coowner);
+        etype = "Co-Owner";
+        break;
+    }
     case 'c':
     {
         GncCustomer *customer =
@@ -319,6 +343,7 @@ gnc_business_urls_initialize (void)
         GncHTMLUrlCB handler;
     } types[] =
     {
+        { GNC_ID_COOWNER, GNC_ID_COOWNER, coownerCB },
         { GNC_ID_CUSTOMER, GNC_ID_CUSTOMER, customerCB },
         { GNC_ID_VENDOR, GNC_ID_VENDOR, vendorCB },
         { GNC_ID_EMPLOYEE, GNC_ID_EMPLOYEE, employeeCB },
