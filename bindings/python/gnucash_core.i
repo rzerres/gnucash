@@ -64,6 +64,8 @@
 #include "gnc-environment.h"
 #include "gnc-lot.h"
 #include "gnc-numeric.h"
+#include "gncCoOwner.h"
+#include "gncCoOwnerP.h"
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
 #include "gncEmployee.h"
