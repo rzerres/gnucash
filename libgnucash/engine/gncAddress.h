@@ -77,6 +77,7 @@ extern "C" {
 @param  char*   second line of address
 @param  char*   third line of address
 @param  char*   fourth line of address
+@param  char*   mobile number
 @param  char*   phone number
 @param  char*   fax number
 @param  char*   email address
@@ -115,6 +116,7 @@ void gncAddressSetAddr1 (GncAddress *addr, const char *addr1);
 void gncAddressSetAddr2 (GncAddress *addr, const char *addr2);
 void gncAddressSetAddr3 (GncAddress *addr, const char *addr3);
 void gncAddressSetAddr4 (GncAddress *addr, const char *addr4);
+void gncAddressSetMobile (GncAddress *addr, const char *mobile);
 void gncAddressSetPhone (GncAddress *addr, const char *phone);
 void gncAddressSetFax (GncAddress *addr, const char *fax);
 void gncAddressSetEmail (GncAddress *addr, const char *email);
@@ -129,6 +131,7 @@ const char * gncAddressGetAddr1 (const GncAddress *addr);
 const char * gncAddressGetAddr2 (const GncAddress *addr);
 const char * gncAddressGetAddr3 (const GncAddress *addr);
 const char * gncAddressGetAddr4 (const GncAddress *addr);
+const char * gncAddressGetMobile (const GncAddress *addr);
 const char * gncAddressGetPhone (const GncAddress *addr);
 const char * gncAddressGetFax (const GncAddress *addr);
 const char * gncAddressGetEmail (const GncAddress *addr);
@@ -154,6 +157,7 @@ gboolean gncAddressEqual(const GncAddress *a, const GncAddress *b);
 #define ADDRESS_TWO     "street"
 #define ADDRESS_THREE   "locality"
 #define ADDRESS_FOUR    "city"
+#define ADDRESS_MOBILE  "mobile"
 #define ADDRESS_PHONE   "phone"
 #define ADDRESS_FAX     "fax"
 #define ADDRESS_EMAIL   "email"
