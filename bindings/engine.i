@@ -44,6 +44,7 @@
 #include "Account.hpp"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
 #include "gncEmployee.h"
 #include "gncEntry.h"
