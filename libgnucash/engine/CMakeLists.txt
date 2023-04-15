@@ -81,6 +81,8 @@ set (engine_HEADERS
   gncCoOwnerP.h
   gncCustomer.h
   gncCustomerP.h
+  gncDistributionList.h
+  gncDistributionListP.h
   gncEmployee.h
   gncEmployeeP.h
   gncEntry.h
@@ -185,6 +187,7 @@ set (engine_SOURCES
   gncBusiness.c
   gncCoOwner.c
   gncCustomer.c
+  gncDistributionList.c
   gncEmployee.c
   gncEntry.c
   gncIDSearch.c
