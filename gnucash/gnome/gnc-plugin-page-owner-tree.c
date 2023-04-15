@@ -91,7 +91,10 @@ typedef struct GncPluginPageOwnerTreePrivate
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageOwnerTree, gnc_plugin_page_owner_tree, GNC_TYPE_PLUGIN_PAGE)
 
 #define GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(o)  \
-   ((GncPluginPageOwnerTreePrivate*)gnc_plugin_page_owner_tree_get_instance_private((GncPluginPageOwnerTree*)o))
+   ((GncPluginPageOwnerTreePrivate*) \
+    g_type_instance_get_private( \
+        (GTypeInstance*)o, \
+        GNC_TYPE_PLUGIN_PAGE_OWNER_TREE))
 
 static GObjectClass *parent_class = NULL;
 
@@ -99,10 +102,14 @@ static GObjectClass *parent_class = NULL;
  *                        Prototypes                        *
  ************************************************************/
 /* Plugin Actions */
-static void gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass);
-static void gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page);
-static void gnc_plugin_page_owner_tree_finalize (GObject *object);
-static void gnc_plugin_page_owner_tree_selected (GObject *object, gpointer user_data);
+static void
+gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass);
+static void
+gnc_plugin_page_owner_tree_init (GncPluginPageOwnerTree *plugin_page);
+static void
+gnc_plugin_page_owner_tree_finalize (GObject *object);
+static void
+gnc_plugin_page_owner_tree_selected (GObject *object, gpointer user_data);
 
 static GtkWidget *gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_owner_tree_destroy_widget (GncPluginPage *plugin_page);
@@ -195,7 +202,8 @@ static const gchar *actions_requiring_owner_rw[] =
     "OTEditEmployeeAction",
     "OTEditVendorAction",
     "OTProcessPaymentAction",
-/* FIXME disabled due to crash    "EditDeleteOwnerAction", */
+// FIXME: disabled due to crash
+    //"EditDeleteOwnerAction",
     NULL
 };
 
@@ -211,7 +219,8 @@ static const gchar *actions_requiring_owner_always[] =
     NULL
 };
 
-/* This is the list of actions which are switched inactive in a read-only book. */
+/** This is the list of actions which are switched inactive in a
+ *  read-only book. */
 static const gchar* readonly_inactive_actions[] =
 {
     "OTNewBillAction",
@@ -244,7 +253,8 @@ static GncToolBarShortNames toolbar_labels[] =
     { "OTCustomerListingReportAction",  N_("Customer Listing") },
     { "OTVendorListingReportAction",    N_("Vendor Listing") },
     { "OTProcessPaymentAction",         N_("Process Payment") },
-/* FIXME disable due to crash   { "EditDeleteOwnerAction",   N_("Delete") },*/
+// FIXME: disable due to crash
+    //{ "EditDeleteOwnerAction",   N_("Delete") },*/
     { NULL, NULL },
 };
 
@@ -278,7 +288,8 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
         priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(plugin_page);
         if (priv->owner_type == owner_type)
         {
-            LEAVE("existing %s tree page %p", gncOwnerTypeToQofIdType(owner_type), plugin_page);
+            LEAVE("existing %s tree page %p",
+               gncOwnerTypeToQofIdType(owner_type), plugin_page);
             return GNC_PLUGIN_PAGE(plugin_page);
         }
     }
@@ -751,7 +762,12 @@ gnc_plugin_page_owner_tree_recreate_page (GtkWidget *window,
     return page;
 }
 
-/* Wrapper function to open the proper edit dialog, depending on the owner type */
+/** Wrapper function to open the proper edit dialog.
+ *  This depends on the given owner type./
+ *
+ *  @param parent The parent window of the edit dialog.
+ *
+ *  @param owner The owner type. */
 static void gnc_ui_owner_edit (GtkWindow *parent, GncOwner *owner)
 {
     if (NULL == owner) return;
@@ -810,10 +826,10 @@ gnc_plugin_page_owner_tree_button_press_cb (GtkWidget *widget,
     gnc_main_window_button_press_cb(widget, event, page);
     LEAVE(" ");
 
-    /* Always return FALSE.  This will let the tree view callback run as
-     * well which will select the item under the cursor.  By the time
-     * the user sees the menu both callbacks will have run and the menu
-     * actions will operate on the just-selected owner. */
+    // Always return FALSE.  This will let the tree view callback run
+    // as well which will select the item under the cursor.  By the
+    // time the user sees the menu both callbacks will have run and
+    // the menu actions will operate on the just-selected owner.
     return FALSE;
 }
 
@@ -846,7 +862,8 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
     {
         g_return_if_fail(GTK_IS_TREE_SELECTION(selection));
         view = gtk_tree_selection_get_tree_view (selection);
-        owner = gnc_tree_view_owner_get_selected_owner (GNC_TREE_VIEW_OWNER(view));
+        owner = gnc_tree_view_owner_get_selected_owner (
+            GNC_TREE_VIEW_OWNER(view));
         sensitive = (owner != NULL);
     }
 
@@ -902,29 +919,29 @@ build_aging_report (GncOwnerType owner_type)
     }
     }
 
-    /* Find report generator function in guile */
+    // Find report generator function in guile
     func = scm_c_eval_string (report_name);
     g_return_val_if_fail (scm_is_procedure (func), -1);
 
-    /* Option Show zero's ? - Yes for the listing report */
+    // Option Show zero's ? - Yes for the listing report
     arg = SCM_BOOL_T;
     args = scm_cons (arg, args);
     g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
-    /* Option Report title */
+    // Option Report title
     arg = scm_from_utf8_string (report_title);
     args = scm_cons (arg, args);
 
-    /* Option Account - Using False to select default account
-     *
-     * XXX I'm not sure if it would make sense to use another
-     *     account than default */
+    // Option Account - Using False to select default account
+    //
+    // FIXME: I'm not sure if it would make sense to use another
+    //        account than default */
     arg = SCM_BOOL_F;
     args = scm_cons (arg, args);
     g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
 
 
-    /* Apply the function to the args */
+    // Apply the function to the args
     arg = scm_apply (func, args, SCM_EOL);
     g_return_val_if_fail (scm_is_exact (arg), -1);
 
@@ -968,7 +985,7 @@ static int build_owner_report (GncOwner *owner, Account *acc)
     g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
     args = scm_cons (arg, args);
 
-    /* Apply the function to the args */
+    // Apply the function to the args
     arg = scm_apply (func, args, SCM_EOL);
     g_return_val_if_fail (scm_is_exact (arg), -1);
     return scm_to_int (arg);
@@ -1016,8 +1033,9 @@ gnc_plugin_page_owner_tree_cmd_new_owner (GSimpleAction *simple,
     }
     case GNC_OWNER_JOB :
     {
-        /* XXX currently not properly implemented, so disabled for now
-        gnc_ui_job_new (owner, gnc_get_current_book ()); */
+        // FIXME: currently job handling isn't properly implemented.
+        // disabled for now.
+        // gnc_ui_job_new (owner, gnc_get_current_book ());
         break;
     }
     case GNC_OWNER_VENDOR :
@@ -1047,12 +1065,11 @@ gnc_plugin_page_owner_tree_cmd_edit_owner (GSimpleAction *simple,
     LEAVE(" ");
 }
 
-#if 0 /* Disabled due to crash */
+#if 0 // Disabled due to crash
 static void
 gnc_plugin_page_owner_tree_cmd_delete_owner (GSimpleAction *simple,
                                              GVariant *parameter,
                                              gpointer user_data)
-
 {
     GncPluginPageOwnerTree *page = user_data;
     GncOwner *owner = gnc_plugin_page_owner_tree_get_current_owner (page);
@@ -1064,12 +1081,17 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GSimpleAction *simple,
 
     if (NULL == owner) return;
 
-    /* If the owner has objects referring to it, show the list - the owner can't be deleted until these
-       references are dealt with. */
-    list = qof_instance_get_referring_object_list(QOF_INSTANCE(gncOwnerGetUndefined(owner)));
+    // If the owner has objects referring to it, show the list
+    // - the owner can't be deleted until these references are dealt with.
+    list = qof_instance_get_referring_object_list(
+        QOF_INSTANCE(gncOwnerGetUndefined(owner)));
     if (list != NULL)
     {
-#define EXPLANATION "The list below shows objects which make use of the owner which you want to delete.\nBefore you can delete it, you must either delete those objects or else modify them so they make use\nof another owner"
+#define EXPLANATION "The list below shows objects which make use of the owner"
+      "which you want to delete.\n"
+      "Before you can delete it, you must either delete those objects or else "
+      "modify them so they make use\n"
+      "of another valid owner."
 
         gnc_ui_object_references_show( _(EXPLANATION), list);
         g_list_free(list);
@@ -1083,12 +1105,13 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GSimpleAction *simple,
         owner_name = g_strdup (_("(no name)"));
     }
 
-    /*
-     * Present a message to the user which specifies what will be
-     * deleted, then ask for verification.
-     */
+    // Present a message to the user which specifies what will be
+    // deleted, then ask for verification.
     {
-        char *message = g_strdup_printf(_("The owner %s will be deleted.\nAre you sure you want to do this?"), owner_name);
+        char *message = g_strdup_printf(
+            _("The owner %s will be deleted.\n"
+              "Are you sure you want to do this?"),
+            owner_name);
 
         dialog =  gtk_message_dialog_new(GTK_WINDOW(window),
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1106,8 +1129,9 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GSimpleAction *simple,
 
         if (GTK_RESPONSE_ACCEPT == response)
         {
-            /* FIXME The code below results in a crash.
-             *       The corresponding menu item/toolbar button is disabled until this is fixed. */
+// FIXME: The code below results in a crash.
+            // The corresponding menu item/toolbar button is disabled
+            // until this is fixed. */
             gnc_set_busy_cursor(NULL, TRUE);
             gnc_suspend_gui_refresh ();
             gncOwnerBeginEdit (owner);
@@ -1118,7 +1142,7 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GSimpleAction *simple,
     }
     g_free(owner_name);
 }
-#endif /* Disabled due to crash */
+#endif // Disabled due to crash
 
 /*********************/
 
@@ -1155,6 +1179,7 @@ gnc_plugin_page_owner_tree_cmd_refresh (GSimpleAction *simple,
 }
 
 static void
+
 gnc_plugin_page_owner_tree_cmd_edit_tax (GSimpleAction *simple,
                                          GVariant *parameter,
                                          gpointer user_data)
