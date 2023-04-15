@@ -1187,7 +1187,8 @@ const char
     GncInvoiceType type = gncInvoiceGetType (invoice);
     switch (type)
     {
-    case GNC_INVOICE_COOWNER_INVOICE:
+    case GNC_INVOICE_COOWNER_SETTLEMENT:
+	return _("Settlement");
     case GNC_INVOICE_CUST_INVOICE:
 	return _("Invoice");
     case GNC_INVOICE_VEND_INVOICE:
@@ -1195,8 +1196,8 @@ const char
     case GNC_INVOICE_EMPL_INVOICE:
 	return _("Expense");
     case GNC_INVOICE_CUST_CREDIT_NOTE:
-    case GNC_INVOICE_VEND_CREDIT_NOTE:
     case GNC_INVOICE_EMPL_CREDIT_NOTE:
+    case GNC_INVOICE_VEND_CREDIT_NOTE:
 	return _("Credit Note");
     default:
 	PWARN("Unknown invoice type");
@@ -1397,7 +1398,7 @@ gncInvoiceAmountPositive (const GncInvoice *invoice)
 {
     switch (gncInvoiceGetType (invoice))
     {
-    case GNC_INVOICE_COOWNER_INVOICE:
+    case GNC_INVOICE_COOWNER_SETTLEMENT:
     case GNC_INVOICE_CUST_INVOICE:
     case GNC_INVOICE_VEND_CREDIT_NOTE:
     case GNC_INVOICE_EMPL_CREDIT_NOTE:
