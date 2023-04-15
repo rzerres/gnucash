@@ -51,6 +51,7 @@
 (export gnc:html-transaction-doclink-anchor)
 (export gnc:html-invoice-doclink-anchor)
 (export gnc:html-price-anchor)
+(export gnc:coowner-anchor-text)
 (export gnc:customer-anchor-text)
 (export gnc:job-anchor-text)
 (export gnc:vendor-anchor-text)
@@ -112,14 +113,14 @@
 (define (guid-ref idstr type guid)
   (gnc-build-url type (string-append idstr guid) ""))
 
+(define (gnc:coowner-anchor-text coowner)
+  (guid-ref "coowner=" URL-TYPE-COOWNER (gncCoOwnerReturnGUID coowner)))
+
 (define (gnc:customer-anchor-text customer)
   (guid-ref "customer=" URL-TYPE-CUSTOMER (gncCustomerReturnGUID customer)))
 
 (define (gnc:job-anchor-text job)
   (guid-ref "job=" URL-TYPE-JOB (gncJobReturnGUID job)))
-
-(define (gnc:vendor-anchor-text vendor)
-  (guid-ref "vendor=" URL-TYPE-VENDOR (gncVendorReturnGUID vendor)))
 
 (define (gnc:employee-anchor-text employee)
   (guid-ref "employee=" URL-TYPE-EMPLOYEE (gncEmployeeReturnGUID employee)))
@@ -127,17 +128,23 @@
 (define (gnc:invoice-anchor-text invoice)
   (guid-ref "invoice=" URL-TYPE-INVOICE (gncInvoiceReturnGUID invoice)))
 
+(define (gnc:vendor-anchor-text vendor)
+  (guid-ref "vendor=" URL-TYPE-VENDOR (gncVendorReturnGUID vendor)))
+
 (define (gnc:owner-anchor-text owner)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
+      ((eqv? type GNC-OWNER-COOWNER)
+       (gnc:coowner-anchor-text (gncOwnerGetCoOwner owner)))
+
       ((eqv? type GNC-OWNER-CUSTOMER)
        (gnc:customer-anchor-text (gncOwnerGetCustomer owner)))
 
-      ((eqv? type GNC-OWNER-VENDOR)
-       (gnc:vendor-anchor-text (gncOwnerGetVendor owner)))
-
       ((eqv? type GNC-OWNER-EMPLOYEE)
        (gnc:employee-anchor-text (gncOwnerGetEmployee owner)))
+
+      ((eqv? type GNC-OWNER-VENDOR)
+       (gnc:vendor-anchor-text (gncOwnerGetVendor owner)))
 
       ((eqv? type GNC-OWNER-JOB)
        (gnc:job-anchor-text (gncOwnerGetJob owner)))
@@ -151,9 +158,10 @@
     (gnc-build-url
      URL-TYPE-OWNERREPORT
      (string-append
-      (cond ((eqv? type GNC-OWNER-CUSTOMER) "owner=c:")
-            ((eqv? type GNC-OWNER-VENDOR) "owner=v:")
+      (cond ((eqv? type GNC-OWNER-COOWNER) "owner=o:")
+            ((eqv? type GNC-OWNER-CUSTOMER) "owner=c:")
             ((eqv? type GNC-OWNER-EMPLOYEE) "owner=e:")
+            ((eqv? type GNC-OWNER-VENDOR) "owner=v:")
             (else "unknown-type="))
       (gncOwnerReturnGUID end-owner)
       (if date (format #f "&enddate=~a" date) "")
@@ -179,7 +187,6 @@
           (let ((id (gnc:make-report reportname options)))
             (gnc:report-anchor-text id)))
         (warn "gnc:make-report-anchor: No such report: " reportname))))
-
 
 ;; returns the account name as html-text and anchor to the register.
 (define (gnc:html-account-anchor acct)
