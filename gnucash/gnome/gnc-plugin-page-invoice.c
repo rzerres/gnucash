@@ -535,9 +535,8 @@ gnc_plugin_page_invoice_update_menus (
     invoice_type = gnc_invoice_get_type_from_window(priv->iw);
 
     switch (invoice_type) {
-        case GNC_INVOICE_COOWNER_INVOICE:
+        case GNC_INVOICE_COOWNER_SETTLEMENT:
             label_list = invoice_action_labels;
-            tooltip_list = invoice_action_tooltips;
             break;
         case GNC_INVOICE_CUST_INVOICE:
             label_list = invoice_action_labels;
@@ -560,10 +559,9 @@ gnc_plugin_page_invoice_update_menus (
 
     // layout actions
     switch (invoice_type) {
-        case GNC_INVOICE_COOWNER_INVOICE:
+        case GNC_INVOICE_COOWNER_SETTLEMENT:
         case GNC_INVOICE_COOWNER_CREDIT_NOTE:
             label_layout_list = invoice_action_layout_labels;
-            tooltip_layout_list = invoice_action_layout_tooltips;
             break;
         case GNC_INVOICE_CUST_INVOICE:
         case GNC_INVOICE_CUST_CREDIT_NOTE:
