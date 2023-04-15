@@ -60,10 +60,15 @@ extern "C"
 static QofLogModule log_module = G_LOG_DOMAIN;
 
 #define MAX_ACL_LEN 2048
+#define MAX_APT_UNIT_LEN 2048
 #define MAX_ID_LEN 2048
+#define MAX_DISTRIB_KEY_LEN 2048
 #define MAX_LANGUAGE_LEN 2048
 #define MAX_NAME_LEN 2048
-#define MAX_TENANT_LEN 2048
+#define MAX_NOTES_LEN 4096
+#define MAX_TENANT_ID_LEN 2048
+#define MAX_TENANT_NAME_LEN 2048
+#define MAX_TENANT_NOTES_LEN 4096
 
 #define TABLE_NAME "coowner"
 #define TABLE_VERSION 2
@@ -105,7 +110,8 @@ static EntryVec col_table
     gnc_sql_make_table_entry<CT_ADDRESS>(
         "ship_addr", 0, 0, COOWNER_SHIP_ADDRESS),
     gnc_sql_make_table_entry<CT_BOOLEAN>(
-        "tax_override", 0, COL_NNUL, COOWNER_TAXTABLE_OVERRIDE, true),
+        "tax_override", 0, COL_NNUL,
+        COOWNER_TAXTABLE_OVERRIDE, true),
     gnc_sql_make_table_entry<CT_INT>(
         "tax_included", 0, 0,
         (QofAccessFunc)gncCoOwnerGetTaxIncluded,
@@ -130,8 +136,9 @@ static EntryVec col_table
 });
 
 GncSqlCoOwnerBackend::GncSqlCoOwnerBackend() :
-    GncSqlObjectBackend(TABLE_VERSION, GNC_ID_COOWNER,
-                        TABLE_NAME, col_table) {}
+    GncSqlObjectBackend(
+        TABLE_VERSION, GNC_ID_COOWNER,
+        TABLE_NAME, col_table) {}
 
 static GncCoOwner*
 load_single_coowner (GncSqlBackend* sql_be, GncSqlRow& row)
@@ -175,8 +182,9 @@ GncSqlCoOwnerBackend::load_all (GncSqlBackend* sql_be)
     std::string pkey(col_table[0]->name());
     sql = "SELECT DISTINCT ";
     sql += pkey + " FROM " TABLE_NAME;
-    gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
-                                         (BookLookupFn)gnc_coowner_lookup);
+    gnc_sql_slots_load_for_sql_subquery (
+        sql_be, sql,
+        (BookLookupFn)gnc_coowner_lookup);
 }
 
 
@@ -241,8 +249,9 @@ GncSqlCoOwnerBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
 
     if (is_ok)
     {
-        is_ok = sql_be->do_db_operation(op, TABLE_NAME, GNC_ID_COOWNER, coowner,
-                                        col_table);
+        is_ok = sql_be->do_db_operation(
+            op, TABLE_NAME, GNC_ID_COOWNER, coowner,
+            col_table);
     }
 
     if (is_ok)
