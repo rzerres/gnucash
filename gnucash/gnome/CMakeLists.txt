@@ -1,4 +1,3 @@
-
 add_subdirectory(test)
 
 set (gnc_gnome_noinst_HEADERS
@@ -13,6 +12,7 @@ set (gnc_gnome_noinst_HEADERS
   dialog-doclink.h
   dialog-billterms.h
   dialog-choose-owner.h
+  dialog-coowner.h
   dialog-customer.h
   dialog-custom-report.h
   dialog-date-close.h
@@ -77,6 +77,7 @@ set (gnc_gnome_SOURCES
   dialog-billterms.c
   dialog-choose-owner.c
   dialog-commodities.c
+  dialog-coowner.c
   dialog-customer.c
   dialog-custom-report.c
   dialog-date-close.c

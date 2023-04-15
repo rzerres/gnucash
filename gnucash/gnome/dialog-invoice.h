@@ -105,28 +105,28 @@ GtkWidget *gnc_invoice_get_notes(InvoiceWindow *iw);
 /* definitions for CB functions */
 void gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data);
 
-void gnc_invoice_window_new_invoice_cb (GtkWindow* parent, gpointer data);
-void gnc_invoice_window_printCB (GtkWindow* parent, gpointer data);
+void gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_cancelCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_cut_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_copy_cb (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_paste_cb (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_editCB (GtkWindow* parent, gpointer data);
-void gnc_invoice_window_duplicateInvoiceCB (GtkWindow* parent, gpointer data);
-void gnc_invoice_window_postCB (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_unpostCB (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_recordCB (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_cancelCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_payment_cb (GtkWindow *parent, gpointer data);
-void gnc_invoice_window_report_owner_cb (GtkWindow *parent, gpointer data);
-
-void gnc_invoice_window_save_document_layout_to_user_state (InvoiceWindow *iw);
-void gnc_invoice_window_reset_document_layout_and_clear_user_state (InvoiceWindow *iw);
-gboolean gnc_invoice_window_document_has_user_state (InvoiceWindow *iw);
-
+void gnc_invoice_window_duplicateInvoiceCB (GtkWindow* parent, gpointer data);
+void gnc_invoice_window_editCB (GtkWindow* parent, gpointer data);
 void gnc_invoice_window_entryUpCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_new_invoice_cb (GtkWindow* parent, gpointer data);
+void gnc_invoice_window_paste_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_payment_cb (GtkWindow *parent, gpointer data);
+void gnc_invoice_window_postCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_printCB (GtkWindow* parent, gpointer data);
+void gnc_invoice_window_recordCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_report_owner_cb (GtkWindow *parent, gpointer data);
+void gnc_invoice_window_unpostCB (GtkWidget *widget, gpointer data);
+
+gboolean gnc_invoice_window_document_has_user_state (InvoiceWindow *iw);
+void gnc_invoice_window_reset_document_layout_and_clear_user_state (InvoiceWindow *iw);
+void gnc_invoice_window_save_document_layout_to_user_state (InvoiceWindow *iw);
+
 void gnc_invoice_window_entryDownCB (GtkWidget *widget, gpointer data);
 
 #endif /* GNC_DIALOG_INVOICE_H_ */
