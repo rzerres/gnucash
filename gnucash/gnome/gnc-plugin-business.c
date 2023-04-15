@@ -32,7 +32,7 @@
 
 #include "dialog-doclink.h"
 #include "dialog-billterms.h"
-        /* depreciated: use coowner/customer functions */
+#include "dialog-distriblists.h"
 #include "dialog-doclink.h"
 #include "dialog-coowner.h"
 #include "dialog-customer.h"
@@ -165,6 +165,8 @@ static void gnc_plugin_business_cmd_assign_payment (GtkAction *action,
 static void gnc_plugin_business_cmd_billing_terms (GtkAction *action,
     GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
+    GncMainWindowActionData *data);
+static void gnc_plugin_business_cmd_distribution_lists (GtkAction *action,
     GncMainWindowActionData *data);
 static void gnc_plugin_business_cmd_doclink (GtkAction *action,
     GncMainWindowActionData *data);
@@ -1024,7 +1026,6 @@ gnc_plugin_business_cmd_billing_terms (GSimpleAction *simple,
     gnc_ui_billterms_window_new (GTK_WINDOW (mw->window), gnc_get_current_book());
 }
 
-
 static void
 gnc_plugin_business_cmd_bills_due_reminder (GSimpleAction *simple,
                                             GVariant      *parameter,
@@ -1037,6 +1038,15 @@ gnc_plugin_business_cmd_bills_due_reminder (GSimpleAction *simple,
     gnc_invoice_remind_bills_due (GTK_WINDOW (mw->window));
 }
 
+static void
+gnc_plugin_business_cmd_distribution_lists (GtkAction *action,
+    GncMainWindowActionData *mw)
+{
+    g_return_if_fail (mw != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
+
+    gnc_ui_distriblists_window_new (GTK_WINDOW (mw->window), gnc_get_current_book());
+}
 
 static void
 gnc_plugin_business_cmd_invoices_due_reminder (GSimpleAction *simple,
@@ -1130,7 +1140,8 @@ gnc_plugin_business_cmd_assign_payment (GSimpleAction *simple,
                                  trans, owner_p);
 }
 
-static const gchar *register_txn_actions[] =
+static const gchar
+*register_txn_actions[] =
 {
     "RegisterAssignPayment",
     NULL
@@ -1396,7 +1407,7 @@ update_inactive_actions (GncPluginPage *plugin_page)
 /* depreciated: use coowner/customer functions */
 static void
 gnc_plugin_business_cmd_test_init_data (GtkAction *action,
-                                                 GncMainWindowActionData *data)
+    GncMainWindowActionData *data)
 {
     QofBook *book           = gnc_get_current_book();
     GncCustomer *customer   = gncCustomerCreate(book);
