@@ -72,7 +72,7 @@ static EntryVec col_table
 ({
     gnc_sql_make_table_entry<CT_STRING>("acl", MAX_ACL_LEN, COL_NNUL, "acl"),
     gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL, "active"),
-    gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, "address"),
+    gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, "addr"),
     gnc_sql_make_table_entry<CT_NUMERIC>("apt_share", 0, COL_NNUL, "apt_share"),
     gnc_sql_make_table_entry<CT_NUMERIC>("apt_unit", 0, COL_NNUL, "apt_unit"),
     gnc_sql_make_table_entry<CT_ACCOUNTREF>(
@@ -130,6 +130,7 @@ load_single_coowner (GncSqlBackend* sql_be, GncSqlRow& row)
 
     return pCoOwner;
 }
+
 /* Because gncCoOwnerLookup has the arguments backwards: */
 static inline GncCoOwner*
 gnc_coowner_lookup (const GncGUID *guid, const QofBook *book)
