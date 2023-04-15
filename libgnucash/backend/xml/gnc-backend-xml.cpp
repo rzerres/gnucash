@@ -84,6 +84,7 @@
 
 #include "gnc-address-xml-v2.h"
 #include "gnc-bill-term-xml-v2.h"
+#include "gnc-coowner-xml-v2.h"
 #include "gnc-customer-xml-v2.h"
 #include "gnc-employee-xml-v2.h"
 #include "gnc-entry-xml-v2.h"
@@ -108,7 +109,6 @@ struct QofXmlBackendProvider : public QofBackendProvider
     ~QofXmlBackendProvider () = default;
     QofBackend* create_backend(void) { return new GncXmlBackend; }
     bool type_check(const char* type);
-
 };
 
 bool
@@ -171,6 +171,7 @@ business_core_xml_init (void)
     /* Initialize our pointers into the backend subsystem */
     gnc_address_xml_initialize ();
     gnc_billterm_xml_initialize ();
+    gnc_coowner_xml_initialize ();
     gnc_customer_xml_initialize ();
     gnc_employee_xml_initialize ();
     gnc_entry_xml_initialize ();
