@@ -1,5 +1,5 @@
 /********************************************************************
- * test_qofbook.c: GLib g_test test suite for qofbook.		    *
+ * test_qofbook.c: GLib g_test test suite for qofbook.              *
  * Copyright 2012 Christian Stimming <christian@cstimming.de>       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -33,6 +33,7 @@ void test_suite_gncInvoice ( void );
 typedef struct
 {
     gboolean is_cn;
+    gboolean is_coowner_doc;
     gboolean is_cust_doc;
     gnc_numeric quantity;
     gnc_numeric price;
@@ -44,6 +45,7 @@ typedef struct
     Account *account;
     Account *account2;
     GncOwner owner;
+    GncCoOwner *coowner;
     GncCustomer *customer;
     GncVendor *vendor;
     gnc_commodity *commodity;
@@ -67,7 +69,12 @@ setup( Fixture *fixture, gconstpointer pData )
     xaccAccountSetCommodity(fixture->account, fixture->commodity);
     xaccAccountSetCommodity(fixture->account2, fixture->commodity);
 
-    if (data->is_cust_doc)
+    if (data->is_coowner_doc)
+    {
+        fixture->coowner = gncCoOwnerCreate(fixture->book);
+        gncOwnerInitCoOwner(&fixture->owner, fixture->coowner);
+    }
+    else if (data->is_cust_doc)
     {
         xaccAccountSetType (fixture->account2, ACCT_TYPE_RECEIVABLE);
         fixture->customer = gncCustomerCreate(fixture->book);
@@ -98,7 +105,12 @@ teardown( Fixture *fixture, gconstpointer pData )
     xaccAccountBeginEdit(fixture->account2);
     xaccAccountDestroy(fixture->account2);
 
-    if (data->is_cust_doc)
+    if (data->is_coowner_doc)
+    {
+        gncCoOwnerBeginEdit(fixture->coowner);
+        gncCoOwnerDestroy(fixture->coowner);
+    }
+    else if (data->is_cust_doc)
     {
         gncCustomerBeginEdit(fixture->customer);
         gncCustomerDestroy(fixture->customer);
@@ -348,7 +360,12 @@ test_invoice_posted_trans ( Fixture *fixture, gconstpointer pData )
     acct2_balance = xaccAccountGetBalance(fixture->account2);
 
     // Handle sign reversals (document values vs balance values)
-    if (data->is_cn != !data->is_cust_doc)
+    if (data->is_cn != !data->is_coowner_doc)
+    {
+        g_assert (gnc_numeric_equal (gnc_numeric_neg(acct_balance), total));
+        g_assert (gnc_numeric_equal (acct2_balance, total));
+    }
+    else if (data->is_cn != !data->is_cust_doc)
     {
         g_assert (gnc_numeric_equal (gnc_numeric_neg(acct_balance), total));
         g_assert (gnc_numeric_equal (acct2_balance, total));
@@ -382,13 +399,19 @@ test_xaccTransGetTxnTypeLink (Fixture *fixture, gconstpointer pData)
 void
 test_suite_gncInvoice ( void )
 {
-    static InvoiceData pData = { FALSE, FALSE, { 1000, 100 }, { 2000, 100 } };  // Vendor bill
+    static InvoiceData pData = { FALSE, FALSE, FALSE, { 1000, 100 }, { 2000, 100 } };  // Vendor bill
     GNC_TEST_ADD( suitename, "post/unpost", Fixture, &pData, setup, test_invoice_post, teardown );
-
     GNC_TEST_ADD( suitename, "doclink", Fixture, &pData, setup, test_invoice_doclink, teardown );
+
     GNC_TEST_ADD( suitename, "post trans - vendor bill", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
     pData.is_cn = TRUE;   // Vendor credit note
     GNC_TEST_ADD( suitename, "post trans - vendor credit note", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
+
+    pData.is_coowner_doc = TRUE;   // CoOwner credit note
+    GNC_TEST_ADD( suitename, "post trans - coowner creditnote", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
+    pData.is_cn = FALSE;   // CoOwner invoice
+    GNC_TEST_ADD( suitename, "post trans - coowner invoice", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
+
     pData.is_cust_doc = TRUE;   // Customer credit note
     GNC_TEST_ADD( suitename, "post trans - customer creditnote", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
     pData.is_cn = FALSE;   // Customer invoice

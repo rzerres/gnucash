@@ -1,7 +1,7 @@
 /********************************************************************
  * test-engine-kvp-properties.c: GLib g_test test suite for         *
  * KVP-based properties in several engine classes.                  *
- * Copyright 2013 John Ralls <jralls@ceridwen.us>		    *
+ * Copyright 2013 John Ralls <jralls@ceridwen.us>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -36,6 +36,7 @@
 #include "../Split.h"
 #include "../Account.h"
 #include "../SchedXaction.h"
+#include "../gncCoOwner.h"
 #include "../gncCustomer.h"
 #include "../gncEmployee.h"
 #include "../gncJob.h"
@@ -45,14 +46,15 @@ typedef struct
 {
     union
     {
-	Account      *acct;
-	Transaction  *trans;
-	Split        *split;
-	GNCLot       *lot;
-	GncCustomer  *cust;
-	GncEmployee  *emp;
-	GncJob       *job;
-	GncVendor    *vend;
+        Account      *acct;
+        Transaction  *trans;
+        Split        *split;
+        GNCLot       *lot;
+        GncCoOwner   *coowner;
+        GncCustomer  *cust;
+        GncEmployee  *emp;
+        GncJob       *job;
+        GncVendor    *vend;
     };
     GSList *hdlrs;
 } Fixture;
@@ -91,6 +93,13 @@ setup_lot (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_book_new ();
     fixture->lot = gnc_lot_new (book);
+}
+
+static void
+setup_coowner (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_book_new ();
+    fixture->coowner = gncCoOwnerCreate (book);
 }
 
 static void
@@ -149,27 +158,27 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     xaccAccountBeginEdit (fixture->acct);
     qof_instance_set (QOF_INSTANCE (fixture->acct),
-		      "lot-next-id", next_id,
-		      "online-id", online_id,
-		      "ofx-income-account", ofx_income_acct,
-		      "ab-account-id", ab_acct_id,
-		      "ab-bank-code", ab_bank_code,
-		      "ab-account-uid", ab_acct_uid,
-		      "ab-trans-retrieval", &trans_retr,
-		      NULL);
+                      "lot-next-id", next_id,
+                      "online-id", online_id,
+                      "ofx-income-account", ofx_income_acct,
+                      "ab-account-id", ab_acct_id,
+                      "ab-bank-code", ab_bank_code,
+                      "ab-account-uid", ab_acct_uid,
+                      "ab-trans-retrieval", &trans_retr,
+                      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->acct)));
     qof_instance_mark_clean (QOF_INSTANCE (fixture->acct));
 
     qof_instance_get (QOF_INSTANCE (fixture->acct),
-		      "lot-next-id", &next_id_r,
-		      "online-id", &online_id_r,
-		      "ofx-income-account", &ofx_income_acct_r,
-		      "ab-account-id", &ab_acct_id_r,
-		      "ab-bank-code", &ab_bank_code_r,
-		      "ab-account-uid", &ab_acct_uid_r,
-		      "ab-trans-retrieval", &trans_retr_r,
-		      NULL);
+                      "lot-next-id", &next_id_r,
+                      "online-id", &online_id_r,
+                      "ofx-income-account", &ofx_income_acct_r,
+                      "ab-account-id", &ab_acct_id_r,
+                      "ab-bank-code", &ab_bank_code_r,
+                      "ab-account-uid", &ab_acct_uid_r,
+                      "ab-trans-retrieval", &trans_retr_r,
+                      NULL);
     g_assert_cmpint (next_id, ==, next_id_r);
     g_assert_cmpstr (online_id, ==, online_id_r);
     g_assert (guid_equal (ofx_income_acct, ofx_income_acct_r));
@@ -194,19 +203,19 @@ test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     xaccTransBeginEdit (fixture->trans);
     qof_instance_set (QOF_INSTANCE (fixture->trans),
-		      "invoice", invoice,
-		      "from-sched-xaction", from_sx,
-		      "online-id", online_id,
-		      NULL);
+                      "invoice", invoice,
+                      "from-sched-xaction", from_sx,
+                      "online-id", online_id,
+                      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->trans)));
     qof_instance_mark_clean (QOF_INSTANCE (fixture->trans));
 
     qof_instance_get (QOF_INSTANCE (fixture->trans),
-		      "invoice", &invoice_r,
-		      "from-sched-xaction", &from_sx_r,
-		      "online-id", &online_id_r,
-		      NULL);
+                      "invoice", &invoice_r,
+                      "from-sched-xaction", &from_sx_r,
+                      "online-id", &online_id_r,
+                      NULL);
     g_assert (guid_equal (invoice, invoice_r));
     g_assert (guid_equal (from_sx, from_sx_r));
     g_assert_cmpstr (online_id, ==, online_id_r);
@@ -235,27 +244,27 @@ test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     qof_begin_edit (QOF_INSTANCE (fixture->split));
     qof_instance_set (QOF_INSTANCE (fixture->split),
-		      "sx-debit-formula", debit_formula,
-		      "sx-debit-numeric", &debit_numeric,
-		      "sx-credit-formula", credit_formula,
-		      "sx-credit-numeric", &credit_numeric,
-		      "sx-account", sx_account,
-		      "sx-shares", sx_shares,
-		      "online-id", online_id,
-		      NULL);
+                      "sx-debit-formula", debit_formula,
+                      "sx-debit-numeric", &debit_numeric,
+                      "sx-credit-formula", credit_formula,
+                      "sx-credit-numeric", &credit_numeric,
+                      "sx-account", sx_account,
+                      "sx-shares", sx_shares,
+                      "online-id", online_id,
+                      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->split)));
     qof_instance_mark_clean (QOF_INSTANCE (fixture->split));
 
     qof_instance_get (QOF_INSTANCE (fixture->split),
-		      "sx-debit-formula", &debit_formula_r,
-		      "sx-debit-numeric", &debit_numeric_r,
-		      "sx-credit-formula", &credit_formula_r,
-		      "sx-credit-numeric", &credit_numeric_r,
-		      "sx-account", &sx_account_r,
-		      "sx-shares", &sx_shares_r,
-		      "online-id", &online_id_r,
-		      NULL);
+                      "sx-debit-formula", &debit_formula_r,
+                      "sx-debit-numeric", &debit_numeric_r,
+                      "sx-credit-formula", &credit_formula_r,
+                      "sx-credit-numeric", &credit_numeric_r,
+                      "sx-account", &sx_account_r,
+                      "sx-shares", &sx_shares_r,
+                      "online-id", &online_id_r,
+                      NULL);
     g_assert_cmpstr (debit_formula, ==, debit_formula_r);
     g_assert (gnc_numeric_equal (debit_numeric, *debit_numeric_r));
     g_assert_cmpstr (credit_formula, ==, credit_formula_r);
@@ -270,11 +279,11 @@ test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
     g_free (credit_numeric_r);
     qof_begin_edit (QOF_INSTANCE (fixture->split));
     qof_instance_set (QOF_INSTANCE (fixture->split),
-		      "sx-credit-formula", NULL,
-		      NULL);
+                      "sx-credit-formula", NULL,
+                      NULL);
     qof_instance_get (QOF_INSTANCE (fixture->split),
-		      "sx-credit-formula", &credit_numeric_r,
-		      NULL);
+                      "sx-credit-formula", &credit_numeric_r,
+                      NULL);
     g_assert (credit_numeric_r == NULL);
     g_free (sx_shares_r);
     g_free (online_id_r);
@@ -294,19 +303,19 @@ test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     qof_begin_edit (QOF_INSTANCE (fixture->lot));
     qof_instance_set (QOF_INSTANCE (fixture->lot),
-		      "invoice", invoice,
-		      GNC_OWNER_TYPE, owner_type,
-		      GNC_OWNER_GUID, owner,
-		      NULL);
+                      "invoice", invoice,
+                      GNC_OWNER_TYPE, owner_type,
+                      GNC_OWNER_GUID, owner,
+                      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->lot)));
     qof_instance_mark_clean (QOF_INSTANCE (fixture->lot));
 
     qof_instance_get (QOF_INSTANCE (fixture->lot),
-		      "invoice", &invoice_r,
-		      GNC_OWNER_TYPE, &owner_type_r,
-		      GNC_OWNER_GUID, &owner_r,
-		      NULL);
+                      "invoice", &invoice_r,
+                      GNC_OWNER_TYPE, &owner_type_r,
+                      GNC_OWNER_GUID, &owner_r,
+                      NULL);
     g_assert (guid_equal (invoice, invoice_r));
     g_assert_cmpint (owner_type, ==, owner_type_r);
     g_assert (guid_equal (owner, owner_r));
@@ -315,6 +324,41 @@ test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
     guid_free (invoice_r);
     guid_free (owner);
     guid_free (owner_r);
+}
+
+static void
+test_coowner_kvp_properties (Fixture *fixture, gconstpointer pData)
+{
+    gchar *pdf_dir = "/foo/bar/baz";
+    gchar *pdf_dir_r;
+    GncGUID *inv_acct = guid_malloc ();
+    GncGUID *pmt_acct = guid_malloc ();
+    GncGUID *inv_acct_r, *pmt_acct_r;
+
+    qof_begin_edit (QOF_INSTANCE (fixture->cust));
+    qof_instance_set (QOF_INSTANCE (fixture->cust),
+                      "export-pdf-dir", pdf_dir,
+                      "invoice-last-posted-account", inv_acct,
+                      "payment-last-account", pmt_acct,
+                      NULL);
+
+    g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->coowner)));
+    qof_instance_mark_clean (QOF_INSTANCE (fixture->cust));
+
+    qof_instance_get (QOF_INSTANCE (fixture->coowner),
+                      "export-pdf-dir", &pdf_dir_r,
+                      "invoice-last-posted-account", &inv_acct_r,
+                      "payment-last-account", &pmt_acct_r,
+                      NULL);
+
+    g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
+    g_assert (guid_equal (inv_acct, inv_acct_r));
+    g_assert (guid_equal (pmt_acct, pmt_acct_r));
+    guid_free (inv_acct);
+    guid_free (inv_acct_r);
+    guid_free (pmt_acct);
+    guid_free (pmt_acct_r);
+    g_free (pdf_dir_r);
 }
 
 static void
@@ -328,19 +372,19 @@ test_customer_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     qof_begin_edit (QOF_INSTANCE (fixture->cust));
     qof_instance_set (QOF_INSTANCE (fixture->cust),
-		      "export-pdf-dir", pdf_dir,
-		      "invoice-last-posted-account", inv_acct,
-		      "payment-last-account", pmt_acct,
-		      NULL);
+                      "export-pdf-dir", pdf_dir,
+                      "invoice-last-posted-account", inv_acct,
+                      "payment-last-account", pmt_acct,
+                      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->cust)));
     qof_instance_mark_clean (QOF_INSTANCE (fixture->cust));
 
     qof_instance_get (QOF_INSTANCE (fixture->cust),
-		      "export-pdf-dir", &pdf_dir_r,
-		      "invoice-last-posted-account", &inv_acct_r,
-		      "payment-last-account", &pmt_acct_r,
-		      NULL);
+                      "export-pdf-dir", &pdf_dir_r,
+                      "invoice-last-posted-account", &inv_acct_r,
+                      "payment-last-account", &pmt_acct_r,
+                      NULL);
 
     g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
     g_assert (guid_equal (inv_acct, inv_acct_r));
@@ -350,7 +394,6 @@ test_customer_kvp_properties (Fixture *fixture, gconstpointer pData)
     guid_free (pmt_acct);
     guid_free (pmt_acct_r);
     g_free (pdf_dir_r);
-
 }
 
 static void
@@ -364,19 +407,19 @@ test_employee_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     qof_begin_edit (QOF_INSTANCE (fixture->emp));
     qof_instance_set (QOF_INSTANCE (fixture->emp),
-		      "export-pdf-dir", pdf_dir,
-		      "invoice-last-posted-account", inv_acct,
-		      "payment-last-account", pmt_acct,
-		      NULL);
+                      "export-pdf-dir", pdf_dir,
+                      "invoice-last-posted-account", inv_acct,
+                      "payment-last-account", pmt_acct,
+                      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->emp)));
     qof_instance_mark_clean (QOF_INSTANCE (fixture->emp));
 
     qof_instance_get (QOF_INSTANCE (fixture->emp),
-		      "export-pdf-dir", &pdf_dir_r,
-		      "invoice-last-posted-account", &inv_acct_r,
-		      "payment-last-account", &pmt_acct_r,
-		      NULL);
+                      "export-pdf-dir", &pdf_dir_r,
+                      "invoice-last-posted-account", &inv_acct_r,
+                      "payment-last-account", &pmt_acct_r,
+                      NULL);
 
     g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
     g_assert (guid_equal (inv_acct, inv_acct_r));
@@ -386,7 +429,6 @@ test_employee_kvp_properties (Fixture *fixture, gconstpointer pData)
     guid_free (pmt_acct);
     guid_free (pmt_acct_r);
     g_free (pdf_dir_r);
-
 }
 
 static void
@@ -397,19 +439,18 @@ test_job_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     qof_begin_edit (QOF_INSTANCE (fixture->job));
     qof_instance_set (QOF_INSTANCE (fixture->job),
-		      "export-pdf-dir", pdf_dir,
-		      NULL);
+                      "export-pdf-dir", pdf_dir,
+                      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->job)));
     qof_instance_mark_clean (QOF_INSTANCE (fixture->job));
 
     qof_instance_get (QOF_INSTANCE (fixture->job),
-		      "export-pdf-dir", &pdf_dir_r,
-		      NULL);
+                      "export-pdf-dir", &pdf_dir_r,
+                      NULL);
 
     g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
     g_free (pdf_dir_r);
-
 }
 
 static void
@@ -423,19 +464,19 @@ test_vendor_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     qof_begin_edit (QOF_INSTANCE (fixture->vend));
     qof_instance_set (QOF_INSTANCE (fixture->vend),
-		      "export-pdf-dir", pdf_dir,
-		      "invoice-last-posted-account", inv_acct,
-		      "payment-last-account", pmt_acct,
-		      NULL);
+                      "export-pdf-dir", pdf_dir,
+                      "invoice-last-posted-account", inv_acct,
+                      "payment-last-account", pmt_acct,
+                      NULL);
 
     g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->vend)));
     qof_instance_mark_clean (QOF_INSTANCE (fixture->vend));
 
     qof_instance_get (QOF_INSTANCE (fixture->vend),
-		      "export-pdf-dir", &pdf_dir_r,
-		      "invoice-last-posted-account", &inv_acct_r,
-		      "payment-last-account", &pmt_acct_r,
-		      NULL);
+                      "export-pdf-dir", &pdf_dir_r,
+                      "invoice-last-posted-account", &inv_acct_r,
+                      "payment-last-account", &pmt_acct_r,
+                      NULL);
 
     g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
     g_assert (guid_equal (inv_acct, inv_acct_r));
@@ -445,7 +486,6 @@ test_vendor_kvp_properties (Fixture *fixture, gconstpointer pData)
     guid_free (pmt_acct);
     guid_free (pmt_acct_r);
     g_free (pdf_dir_r);
-
 }
 
 void test_suite_engine_kvp_properties (void)
@@ -454,6 +494,7 @@ void test_suite_engine_kvp_properties (void)
     GNC_TEST_ADD (suitename, "Transaction", Fixture, NULL, setup_trans, test_trans_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Split", Fixture, NULL, setup_split, test_split_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Lot", Fixture, NULL, setup_lot, test_lot_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "CoOwner", Fixture, NULL, setup_coowner, test_coowner_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Customer", Fixture, NULL, setup_customer, test_customer_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Employee", Fixture, NULL, setup_employee, test_employee_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Job", Fixture, NULL, setup_job, test_job_kvp_properties, teardown);

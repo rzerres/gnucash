@@ -29,9 +29,10 @@
 #include <qof.h>
 #include <qofinstance-p.h>
 
-#include "gncJobP.h"
-#include "gncInvoiceP.h"
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
+#include "gncInvoiceP.h"
+#include "gncJobP.h"
 #include "gncOwner.h"
 #include "test-stuff.h"
 
@@ -120,6 +121,29 @@ test_job (void)
         res = qof_object_printable (GNC_ID_JOB, job);
         do_test (res != NULL, "Printable NULL?");
         do_test (g_strcmp0 (str, res) == 0, "Printable equals");
+    }
+    {
+        GList *list;
+        GncOwner owner;
+        GncCoOwner *coowner = gncCoOwnerCreate (book);
+
+        gncOwnerInitCoOwner (&owner, coowner);
+
+        do_test (gncCoOwnerGetJoblist (coowner, TRUE) == NULL, "empty list at start");
+        gncJobSetOwner (job, &owner);
+        list = gncCoOwnerGetJoblist (coowner, FALSE);
+        do_test (list != NULL, "added to coowner");
+        do_test (g_list_length (list) == 1, "correct joblist length");
+        do_test (list->data == job, "verify job in list");
+        gncJobSetActive (job, FALSE);
+        list = gncCoOwnerGetJoblist (coowner, FALSE);
+        do_test (list == NULL, "no active jobs");
+        list = gncCoOwnerGetJoblist (coowner, TRUE);
+        do_test (list != NULL, "all jobs");
+        gncJobBeginEdit (job);
+        gncJobDestroy (job);
+        list = gncCoOwnerGetJoblist (coowner, TRUE);
+        do_test (list == NULL, "no more jobs");
     }
     {
         GList *list;
@@ -256,12 +280,12 @@ int
 main (int argc, char **argv)
 {
     qof_init();
+    do_test (gncCoOwnerRegister(), "Cannot register GncCoOwner");
+    do_test (gncCustomerRegister(), "Cannot register GncCustomer");
     do_test (gncInvoiceRegister(), "Cannot register GncInvoice");
     do_test (gncJobRegister (),  "Cannot register GncJob");
-    do_test (gncCustomerRegister(), "Cannot register GncCustomer");
     test_job();
     print_test_results();
     qof_close();
     return get_rv();
 }
-
