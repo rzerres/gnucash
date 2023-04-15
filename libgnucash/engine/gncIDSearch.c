@@ -30,6 +30,7 @@ typedef enum
     COOWNER,
     CUSTOMER,
     INVOICE,
+    SETTLEMENT,
     VENDOR
 }GncSearchType;
 
@@ -112,7 +113,7 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
     qof_query_set_book (q, book);
     // Search only the id field
     string_pred_data = qof_query_string_predicate (QOF_COMPARE_EQUAL, id, QOF_STRING_MATCH_NORMAL, FALSE);
-    if (type == COOWNER)
+    if (type == COOWNER || type == SETTLEMENT )
     {
         qof_query_search_for(q,GNC_COOWNER_MODULE_NAME);
         qof_query_add_term (q, qof_query_build_param_list("COOWNER_ID"), string_pred_data, QOF_QUERY_AND);
@@ -151,13 +152,13 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
                 object = c;
                 break;
             }
-            else if (type == CUSTOMER && strcmp(id, gncCustomerGetID(c)) == 0)
+            else if (type == SETTLEMENT && strcmp(id, gncCoOwnerGetID(c)) == 0)
             {
                 object = c;
                 break;
             }
-            else if (type == INVOICE && strcmp(id, gncInvoiceGetID(c)) == 0
-                        && gncInvoiceGetType(c) == GNC_INVOICE_COOWNER_INVOICE)
+            else if (type == SETTLEMENT && strcmp(id, gncInvoiceGetID(c)) == 0
+                        && gncInvoiceGetType(c) == GNC_INVOICE_COOWNER_SETTLEMENT)
             {
                 object = c;
                 break;
@@ -165,12 +166,6 @@ static void * search(QofBook * book, const gchar *id, void * object, GncSearchTy
             else if (type == CUSTOMER && strcmp(id, gncCustomerGetID(c)) == 0)
             {
                 // correct id found
-                object = c;
-                break;
-            }
-            else if (type == INVOICE && strcmp(id, gncInvoiceGetID(c)) == 0
-                        && gncInvoiceGetType(c) == GNC_INVOICE_COOWNER_INVOICE)
-            {
                 object = c;
                 break;
             }
