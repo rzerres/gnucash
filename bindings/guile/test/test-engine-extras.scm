@@ -608,6 +608,13 @@
                   (gncInvoiceSetCurrency inv-8 USD)
                   inv-8))
 
+         ;; TODO: add Co-Owner test (Settlement && Credit-Note)
+         ;; inv-9 coowner-credit-note
+         ;;(inv-9 (let ((inv-9 (gncInvoiceCopy inv-1)))
+         ;;         (gncInvoiceSetIsCreditNote inv-9 #t)
+         ;;         (gncInvoiceSetCurrency inv-9 USD)
+         ;;         inv-9))
+
          (standard-vat-sales-tt
           (let ((tt (gncTaxTableCreate (gnc-get-current-book))))
             (gncTaxTableIncRef tt)
