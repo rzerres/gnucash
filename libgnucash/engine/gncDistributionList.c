@@ -41,8 +41,9 @@ struct _gncDistributionList
     const char *name;
     const char *description;
     GncDistributionListType type;
-    const char *label_settlement;
+    const char *percentage_label_settlement;
     gint percentage_total;
+    const char *shares_label_settlement;
     gint shares_total;
 
     // Internal management fields
@@ -291,8 +292,9 @@ GncDistributionList
     distriblist->name = CACHE_INSERT ("");
     distriblist->description = CACHE_INSERT ("");
     distriblist->type = GNC_DISTRIBLIST_TYPE_SHARES;
-    distriblist->label_settlement = CACHE_INSERT ("");
+    distriblist->percentage_label_settlement = CACHE_INSERT ("");
     distriblist->percentage_total = 0;
+    distriblist->shares_label_settlement = CACHE_INSERT ("");
     distriblist->shares_total = 0;
 
     addObj (distriblist);
@@ -323,6 +325,8 @@ gncDistribListFree (
     qof_event_gen (&distriblist->inst,  QOF_EVENT_DESTROY, NULL);
     CACHE_REMOVE (distriblist->name);
     CACHE_REMOVE (distriblist->description);
+    CACHE_REMOVE (distriblist->percentage_label_settlement);
+    CACHE_REMOVE (distriblist->shares_label_settlement);
     remObj (distriblist);
 
     if (!qof_instance_get_destroying(distriblist))
@@ -396,6 +400,18 @@ void qofDistributionListSetType (
     gncDistribListSetType(distriblist, type);
 }
 
+void
+gncDistribListSetPercentageLabelSettlement (
+    GncDistributionList *distriblist,
+    const char *percentage_label_settlement)
+{
+    if (!distriblist) return;
+    SET_STR (distriblist, distriblist->percentage_label_settlement, percentage_label_settlement);
+    mark_distriblist (distriblist);
+    maybe_resort_list (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
 void gncDistribListSetPercentageTotal (
     GncDistributionList *distriblist,
     gint percentage_total)
@@ -408,6 +424,18 @@ void gncDistribListSetPercentageTotal (
     gncDistribListCommitEdit (distriblist);
 }
 
+void
+gncDistribListSetSharesLabelSettlement (
+    GncDistributionList *distriblist,
+    const char *shares_label_settlement)
+{
+    if (!distriblist) return;
+    SET_STR (distriblist, distriblist->shares_label_settlement, shares_label_settlement);
+    mark_distriblist (distriblist);
+    maybe_resort_list (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
 void gncDistribListSetSharesTotal (
     GncDistributionList *distriblist,
     gint shares_total)
@@ -417,18 +445,6 @@ void gncDistribListSetSharesTotal (
     gncDistribListBeginEdit (distriblist);
     distriblist->shares_total = shares_total;
     mark_distriblist (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void
-gncDistribListSetLabelSettlement (
-    GncDistributionList *distriblist,
-    const char *label_settlement)
-{
-    if (!distriblist) return;
-    SET_STR (distriblist, distriblist->label_settlement, label_settlement);
-    mark_distriblist (distriblist);
-    maybe_resort_list (distriblist);
     gncDistribListCommitEdit (distriblist);
 }
 
@@ -565,7 +581,9 @@ static GncDistributionList
     gncDistribListSetDescription (new_distriblist, distriblist->description);
 
     new_distriblist->type = distriblist->type;
-    new_distriblist->label_settlement = distriblist->label_settlement;
+    new_distriblist->percentage_label_settlement = distriblist->percentage_label_settlement;
+    new_distriblist->percentage_total = distriblist->percentage_total;
+    new_distriblist->shares_label_settlement = distriblist->shares_label_settlement;
     new_distriblist->shares_total = distriblist->shares_total;
 
     mark_distriblist (new_distriblist);
@@ -624,11 +642,11 @@ static const char
 }
 
 const char
-*gncDistribListGetLabelSettlement (
+*gncDistribListGetPercentageLabelSettlement (
     const GncDistributionList *distriblist)
 {
     if (!distriblist) return 0;
-    return distriblist->label_settlement;
+    return distriblist->percentage_label_settlement;
 }
 
 gint
@@ -637,6 +655,14 @@ gncDistribListGetPercentageTotal (
 {
     if (!distriblist) return 0;
     return distriblist->percentage_total;
+}
+
+const char
+*gncDistribListGetSharesLabelSettlement (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return 0;
+    return distriblist->shares_label_settlement;
 }
 
 gint
@@ -746,9 +772,27 @@ gncDistribListEqual(
         return FALSE;
     }
 
-    if (a->type != b->type)
+    if (a->invisible != b->invisible)
     {
-        PWARN("Types differ");
+        PWARN("Invisible flags differ");
+        return FALSE;
+    }
+
+    if (a->percentage_label_settlement != b->percentage_label_settlement)
+    {
+        PWARN("Percentage label settlement differ: %s vs %s", a->percentage_label_settlement, b->percentage_label_settlement);
+        return FALSE;
+    }
+
+    if (a->percentage_total != b->percentage_total)
+    {
+        PWARN("Percentage total differ: %d vs %d", a->percentage_total, b->percentage_total);
+        return FALSE;
+    }
+
+    if (a->shares_label_settlement != b->shares_label_settlement)
+    {
+        PWARN("Shares label settlement differ: %s vs %s", a->shares_label_settlement, b->shares_label_settlement);
         return FALSE;
     }
 
@@ -758,15 +802,9 @@ gncDistribListEqual(
         return FALSE;
     }
 
-    if (a->label_settlement != b->label_settlement)
+    if (a->type != b->type)
     {
-        PWARN("Discount days differ: %s vs %s", a->label_settlement, b->label_settlement);
-        return FALSE;
-    }
-
-    if (a->invisible != b->invisible)
-    {
-        PWARN("Invisible flags differ");
+        PWARN("Types differ");
         return FALSE;
     }
 
@@ -858,16 +896,16 @@ gncDistribListRegister (void)
             (QofSetterFunc)gncDistribListSetDescription
         },
         {
-            GNC_DISTRIBLIST_LABEL_SETTLEMENT,
-            QOF_TYPE_STRING,
-            (QofAccessFunc)gncDistribListGetLabelSettlement,
-            (QofSetterFunc)gncDistribListSetLabelSettlement
-        },
-        {
             GNC_DISTRIBLIST_NAME,
             QOF_TYPE_STRING,
             (QofAccessFunc)gncDistribListGetName,
             (QofSetterFunc)gncDistribListSetName
+        },
+        {
+            GNC_DISTRIBLIST_PERCENTAGE_LABEL_SETTLEMENT,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)gncDistribListGetPercentageLabelSettlement,
+            (QofSetterFunc)gncDistribListSetPercentageLabelSettlement
         },
         {
             GNC_DISTRIBLIST_PERCENTAGE_TOTAL,
@@ -880,6 +918,12 @@ gncDistribListRegister (void)
             QOF_TYPE_INT64,
             (QofAccessFunc)gncDistribListGetRefcount,
             NULL
+        },
+        {
+            GNC_DISTRIBLIST_SHARES_LABEL_SETTLEMENT,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)gncDistribListGetSharesLabelSettlement,
+            (QofSetterFunc)gncDistribListSetSharesLabelSettlement
         },
         {
             GNC_DISTRIBLIST_SHARES_TOTAL,
