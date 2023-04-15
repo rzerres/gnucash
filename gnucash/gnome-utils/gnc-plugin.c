@@ -63,7 +63,7 @@ typedef struct GncPluginPrivate
 } GncPluginPrivate;
 
 GNC_DEFINE_TYPE_WITH_CODE(GncPlugin, gnc_plugin, G_TYPE_OBJECT,
-		        G_ADD_PRIVATE(GncPlugin))
+                        G_ADD_PRIVATE(GncPlugin))
 
 #define GNC_PLUGIN_GET_PRIVATE(o)  \
    ((GncPluginPrivate*)gnc_plugin_get_instance_private((GncPlugin*)o))

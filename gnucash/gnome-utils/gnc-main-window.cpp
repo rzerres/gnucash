@@ -2769,7 +2769,7 @@ gnc_main_window_init (GncMainWindow *window, void *data)
 
     gnc_main_window_setup_window (window);
     gnc_gobject_tracking_remember(G_OBJECT(window),
-                          G_OBJECT_CLASS(klass));
+                                  G_OBJECT_CLASS(klass));
 }
 
 
@@ -3129,7 +3129,7 @@ gnc_main_window_disconnect (GncMainWindow *window,
                sometimes  forgets to cancel before deleting the object.  See
                <https://bugs.webkit.org/show_bug.cgi?id=119003>.   Get around this
                by flushing all events to get rid of the timer interrupt. */
-            while (gtk_events_pending())
+while (gtk_events_pending())
                 gtk_main_iteration();
         }
     }
