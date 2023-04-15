@@ -70,25 +70,40 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static EntryVec col_table
 ({
-    gnc_sql_make_table_entry<CT_STRING>("acl", MAX_ACL_LEN, COL_NNUL, "acl"),
-    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL, "active"),
-    gnc_sql_make_table_entry<CT_ADDRESS>("addr", 0, 0, "addr"),
-    gnc_sql_make_table_entry<CT_NUMERIC>("apt_share", 0, COL_NNUL, "apt_share"),
-    gnc_sql_make_table_entry<CT_NUMERIC>("apt_unit", 0, COL_NNUL, "apt_unit"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "acl", MAX_ACL_LEN, COL_NNUL, COOWNER_ACL),
+    gnc_sql_make_table_entry<CT_BOOLEAN>(
+        "active", 0, COL_NNUL, QOF_PARAM_ACTIVE, true),
+    gnc_sql_make_table_entry<CT_ADDRESS>(
+        "addr", 0, 0, COOWNER_ADDR, true),
+    gnc_sql_make_table_entry<CT_NUMERIC>(
+        "apt_share", 0, COL_NNUL, COOWNER_APT_SHARE),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "apt_unit", MAX_APT_UNIT_LEN, COL_NNUL, COOWNER_APT_UNIT),
     gnc_sql_make_table_entry<CT_ACCOUNTREF>(
         "ccard_guid", 0, 0, "credit-card-account"),
     gnc_sql_make_table_entry<CT_COMMODITYREF>(
-        "currency", 0, COL_NNUL, "currency"),
+        "currency", 0, COL_NNUL, COOWNER_CURRENCY),
     gnc_sql_make_table_entry<CT_NUMERIC>(
-        "distribution_key", 0, COL_NNUL, "distribution_key"),
-    gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+        "discount", 0, COL_NNUL, COOWNER_DISCOUNT, true),
+    gnc_sql_make_table_entry<CT_NUMERIC>(
+        "credit", 0, COL_NNUL, COOWNER_CREDIT, true),
     gnc_sql_make_table_entry<CT_STRING>(
-        "language", MAX_LANGUAGE_LEN, COL_NNUL, "language"),
-    gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL, "id"),
-    gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
-    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NAME_LEN, COL_NNUL,
-                                        "notes"),
-    gnc_sql_make_table_entry<CT_ADDRESS>("ship_addr", 0, 0, "ship_addr"),
+        "distribution_key", MAX_DISTRIB_KEY_LEN, COL_NNUL,
+        COOWNER_DISTRIBUTION_KEY),
+    gnc_sql_make_table_entry<CT_GUID>(
+        "guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "language", MAX_LANGUAGE_LEN, COL_NNUL,
+        COOWNER_LANGUAGE),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "id", MAX_ID_LEN, COL_NNUL, COOWNER_ID, true),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "name", MAX_NAME_LEN, COL_NNUL, COOWNER_NAME),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "notes", MAX_NAME_LEN, COL_NNUL, COOWNER_NOTES, true),
+    gnc_sql_make_table_entry<CT_ADDRESS>(
+        "ship_addr", 0, 0, COOWNER_SHIP_ADDRESS),
     gnc_sql_make_table_entry<CT_BOOLEAN>(
         "tax_override", 0, COL_NNUL, COOWNER_TAXTABLE_OVERRIDE, true),
     gnc_sql_make_table_entry<CT_INT>(
@@ -102,9 +117,16 @@ static EntryVec col_table
     gnc_sql_make_table_entry<CT_BOOLEAN>(
         "tenant_active", 0, COL_NNUL, "tenant_active"),
     gnc_sql_make_table_entry<CT_ADDRESS>(
-        "tenant_addr", 0, 0, "tenant_addr"),
+         "tenant_addr", 0, 0, COOWNER_TENANT_ADDRESS, true),
     gnc_sql_make_table_entry<CT_STRING>(
-        "tenant", MAX_TENANT_LEN, COL_NNUL, "tenant"),
+        "tenant_id", MAX_TENANT_ID_LEN, COL_NNUL, COOWNER_TENANT_ID, true),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "tenant_name", MAX_TENANT_NAME_LEN, COL_NNUL, COOWNER_TENANT_NAME),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "tenant_notes", MAX_TENANT_NOTES_LEN, COL_NNUL,
+        COOWNER_TENANT_NOTES),
+    gnc_sql_make_table_entry<CT_BILLTERMREF>(
+        "terms", 0, 0, COOWNER_TERMS, true),
 });
 
 GncSqlCoOwnerBackend::GncSqlCoOwnerBackend() :
