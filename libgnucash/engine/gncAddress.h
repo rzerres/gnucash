@@ -66,17 +66,17 @@ extern "C" {
 /** \struct GncAddress
 
 @param  QofInstance The address instance.
-@param	QofBook*	  Copy of the book pointer.
-@param	QofInstance* parent entity.
-@param	gboolean	dirty flag
-@param	char*	name of addressee
-@param	char*	first line of address
-@param	char*	second line of address
-@param	char*	third line of address
-@param	char*	fourth line of address
-@param	char*	phone number
-@param	char*	fax number
-@param	char*	email address
+@param  QofBook*          Copy of the book pointer.
+@param  QofInstance* parent entity.
+@param  gboolean        dirty flag
+@param  char*   name of addressee
+@param  char*   first line of address
+@param  char*   second line of address
+@param  char*   third line of address
+@param  char*   fourth line of address
+@param  char*   phone number
+@param  char*   fax number
+@param  char*   email address
 */
 typedef struct _gncAddress GncAddress;
 typedef struct _gncAddressClass GncAddressClass;
@@ -147,10 +147,10 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b);
 gboolean gncAddressEqual(const GncAddress *a, const GncAddress *b);
 
 #define ADDRESS_NAME    "name"
-#define ADDRESS_ONE		"number"
-#define ADDRESS_TWO		"street"
+#define ADDRESS_ONE     "number"
+#define ADDRESS_TWO     "street"
 #define ADDRESS_THREE   "locality"
-#define ADDRESS_FOUR	"city"
+#define ADDRESS_FOUR    "city"
 #define ADDRESS_PHONE   "phone"
 #define ADDRESS_FAX     "fax"
 #define ADDRESS_EMAIL   "email"
