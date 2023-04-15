@@ -1314,41 +1314,27 @@ gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner)
 
     /* Fill in the address values */
     coowner_addr = gncCoOwnerGetAddr (coowner);
-    gncAddressSetName (coowner_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_addrname), 0, -1));
-    gncAddressSetAddr1 (coowner_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_addr1), 0, -1));
-    gncAddressSetAddr2 (coowner_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_addr2), 0, -1));
-    gncAddressSetAddr3 (coowner_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_addr3), 0, -1));
-    gncAddressSetAddr4 (coowner_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_addr4), 0, -1));
-    gncAddressSetMobile (coowner_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_mobile), 0, -1));
-    gncAddressSetPhone (coowner_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_phone), 0, -1));
-    gncAddressSetFax (coowner_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_fax), 0, -1));
-    gncAddressSetEmail (coowner_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_email), 0, -1));
+    gncAddressSetAddr1 (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_addr1)));
+    gncAddressSetAddr2 (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_addr2)));
+    gncAddressSetAddr3 (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_addr3)));
+    gncAddressSetAddr4 (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_addr4)));
+    gncAddressSetMobile (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_mobile)));
+    gncAddressSetPhone (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_phone)));
+    gncAddressSetFax (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_fax)));
+    gncAddressSetEmail (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_email)));
 
     /* Fill in the distribution key */
     // FIXME: switch to distriblist reference once its finished
-    gncCoOwnerSetDistributionKey (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_distribution_key), 0, -1));
+    gncCoOwnerSetDistributionKey (coowner, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_distribution_key)));
 
     /* Fill in the coowner identification key */
-    gncCoOwnerSetID (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_id), 0, -1));
+    gncCoOwnerSetID (coowner, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_id)));
 
     /* Fill in the coowner identification name */
-    gncCoOwnerSetName (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_name), 0, -1));
+    gncCoOwnerSetName (coowner, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_name)));
 
     /* Fill in the language */
-    gncCoOwnerSetLanguage (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_language), 0, -1));
+    gncCoOwnerSetLanguage (coowner, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_language)));
 
     /* Fill in extra coowner notes */
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_coowner_text));
@@ -1396,33 +1382,22 @@ gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner)
         (GTK_TOGGLE_BUTTON (ow->coowner_checkbutton_tenant_active)));
 
     /* Fill in the tenant identification key */
-    gncCoOwnerSetTenantID (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_id), 0, -1));
+    gncCoOwnerSetTenantID (coowner, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_id)));
 
     /* Fill in the tenant name */
-    gncCoOwnerSetTenantName (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_name), 0, -1));
+    gncCoOwnerSetTenantName (coowner, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_name)));
 
     /* Fill in the tenant address */
     tenant_addr = gncCoOwnerGetTenantAddr (coowner);
-    gncAddressSetName (tenant_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_addrname), 0, -1));
-    gncAddressSetAddr1 (tenant_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_addr1), 0, -1));
-    gncAddressSetAddr2 (tenant_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_addr2), 0, -1));
-    gncAddressSetAddr3 (tenant_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_addr3), 0, -1));
-    gncAddressSetAddr4 (tenant_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_addr4), 0, -1));
-    gncAddressSetMobile (tenant_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_mobile), 0, -1));
-    gncAddressSetPhone (tenant_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_phone), 0, -1));
-    gncAddressSetFax (tenant_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_fax), 0, -1));
-    gncAddressSetEmail (tenant_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant_email), 0, -1));
+    gncAddressSetName (tenant_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_addrname)));
+    gncAddressSetAddr1 (tenant_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_addr1)));
+    gncAddressSetAddr2 (tenant_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_addr2)));
+    gncAddressSetAddr3 (tenant_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_addr3)));
+    gncAddressSetAddr4 (tenant_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_addr4)));
+    gncAddressSetMobile (tenant_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_mobile)));
+    gncAddressSetPhone (tenant_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_phone)));
+    gncAddressSetFax (tenant_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_fax)));
+    gncAddressSetEmail (tenant_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_email)));
 
     /* Fill in tenant extra notes */
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_tenant_text));
@@ -1436,24 +1411,15 @@ gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner)
 
     /* Fill in the shipping address */
     ship_addr = gncCoOwnerGetShipAddr (coowner);
-    gncAddressSetName (ship_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_ship_addrname), 0, -1));
-    gncAddressSetAddr1 (ship_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_ship_addr1), 0, -1));
-    gncAddressSetAddr2 (ship_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_ship_addr2), 0, -1));
-    gncAddressSetAddr3 (ship_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_ship_addr3), 0, -1));
-    gncAddressSetAddr4 (ship_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_ship_addr4), 0, -1));
-    gncAddressSetPhone (ship_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_ship_phone), 0, -1));
-    gncAddressSetMobile (ship_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_ship_mobile), 0, -1));
-    gncAddressSetFax (ship_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_ship_fax), 0, -1));
-    gncAddressSetEmail (ship_addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_ship_email), 0, -1));
+    gncAddressSetName (ship_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_ship_addrname)));
+    gncAddressSetAddr1 (ship_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_ship_addr1)));
+    gncAddressSetAddr2 (ship_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_ship_addr2)));
+    gncAddressSetAddr3 (ship_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_ship_addr3)));
+    gncAddressSetAddr4 (ship_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_ship_addr4)));
+    gncAddressSetMobile (ship_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_ship_mobile)));
+    gncAddressSetPhone (ship_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_ship_phone)));
+    gncAddressSetFax (ship_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_ship_fax)));
+    gncAddressSetEmail (ship_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_ship_email)));
 
     /*
      * Save to persistent store
