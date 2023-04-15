@@ -21,7 +21,7 @@
 \*********************************************************************/
 
 /*
- * Copyright (C) 2020 Ralf Zerres
+ * Copyright (C) 2022 Ralf Zerres
  * Author: Ralf Zerres <ralf.zerres@mail.de>
  */
 
@@ -31,6 +31,7 @@
 #include <qofinstance-p.h>
 
 #include "gnc-engine.h"
+#include "gncOwnerP.h"
 #include "gncDistributionListP.h"
 
 struct _gncDistributionList
@@ -41,6 +42,7 @@ struct _gncDistributionList
     const char *name;
     const char *description;
     GncDistributionListType type;
+    GncOwner owner;
     const char *percentage_label_settlement;
     gint percentage_total;
     const char *shares_label_settlement;
@@ -64,7 +66,8 @@ struct _gncDistributionListClass
 
 struct _book_info
 {
-    GList *lists;                    // visible distribution lists
+    // visible distribution lists
+    GList *lists;
 };
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
@@ -449,6 +452,7 @@ static GncDistributionList
     gncDistribListSetDescription (new_distriblist, distriblist->description);
 
     new_distriblist->type = distriblist->type;
+    new_distriblist->owner = distriblist->owner;
     new_distriblist->percentage_label_settlement = distriblist->percentage_label_settlement;
     new_distriblist->percentage_total = distriblist->percentage_total;
     new_distriblist->shares_label_settlement = distriblist->shares_label_settlement;
@@ -556,6 +560,12 @@ gncDistribListRegister (void)
             (QofSetterFunc)gncDistribListSetName
         },
         {
+            GNC_DISTRIBLIST_OWNER,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)gncDistribListGetOwner,
+            NULL
+        },
+        {
             GNC_DISTRIBLIST_PERCENTAGE_LABEL_SETTLEMENT,
             QOF_TYPE_STRING,
             (QofAccessFunc)gncDistribListGetPercentageLabelSettlement,
@@ -640,6 +650,7 @@ GncDistributionList
     distriblist->name = CACHE_INSERT ("");
     distriblist->description = CACHE_INSERT ("");
     distriblist->type = GNC_DISTRIBLIST_TYPE_SHARES;
+    //distriblist->owner = GNC_OWNER_NONE;
     distriblist->percentage_label_settlement = CACHE_INSERT ("");
     distriblist->percentage_total = 0;
     distriblist->shares_label_settlement = CACHE_INSERT ("");
@@ -654,7 +665,8 @@ void
 gncDistribListDecRef (GncDistributionList *distriblist)
 {
     if (!distriblist) return;
-    if (distriblist->parent || distriblist->invisible) return;        /* children dont need refcounts */
+    // children don't need refcounts
+    if (distriblist->parent || distriblist->invisible) return;
     g_return_if_fail (distriblist->refcount >= 1);
     gncDistribListBeginEdit (distriblist);
     distriblist->refcount--;
@@ -678,7 +690,8 @@ void
 gncDistribListIncRef (GncDistributionList *distriblist)
 {
     if (!distriblist) return;
-    if (distriblist->parent || distriblist->invisible) return;        /* children dont need refcounts */
+    // children don't need refcounts
+    if (distriblist->parent || distriblist->invisible) return;
     gncDistribListBeginEdit (distriblist);
     distriblist->refcount++;
     mark_distriblist (distriblist);
@@ -710,12 +723,27 @@ gncDistribListSetName (GncDistributionList *distriblist, const char *name)
 }
 
 void
+gncDistribListSetOwner (
+    GncDistributionList *distriblist,
+    GncOwner *owner)
+{
+    if (!distriblist || !owner) return;
+    if (gncOwnerEqual (&distriblist->owner, owner)) return;
+
+    gncDistribListBeginEdit (distriblist);
+    gncOwnerCopy (owner, &distriblist->owner);
+    mark_distriblist (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
 gncDistribListSetPercentageLabelSettlement (
     GncDistributionList *distriblist,
     const char *percentage_label_settlement)
 {
     if (!distriblist) return;
-    SET_STR (distriblist, distriblist->percentage_label_settlement, percentage_label_settlement);
+    SET_STR (distriblist, distriblist->percentage_label_settlement,
+             percentage_label_settlement);
     mark_distriblist (distriblist);
     maybe_resort_list (distriblist);
     gncDistribListCommitEdit (distriblist);
@@ -739,7 +767,8 @@ gncDistribListSetSharesLabelSettlement (
     const char *shares_label_settlement)
 {
     if (!distriblist) return;
-    SET_STR (distriblist, distriblist->shares_label_settlement, shares_label_settlement);
+    SET_STR (distriblist, distriblist->shares_label_settlement,
+             shares_label_settlement);
     mark_distriblist (distriblist);
     maybe_resort_list (distriblist);
     gncDistribListCommitEdit (distriblist);
@@ -810,6 +839,14 @@ const char
 /*     owner_info = qof_owner_get_data (owner, _GNC_MOD_NAME); */
 /*     return owner_info->lists; */
 /* } */
+
+GncOwner
+*gncDistribListGetOwner (
+    GncDistributionList *distriblist)
+{
+  if (!distriblist) return NULL;
+  return &distriblist->owner;
+}
 
 GncDistributionList
 *gncDistribListGetParent (
@@ -935,6 +972,9 @@ gncDistribListEqual(
     const GncDistributionList *a,
     const GncDistributionList *b)
 {
+    const char * owner_typename_a;
+    const char * owner_typename_b;
+
     if (a == NULL && b == NULL) return TRUE;
     if (a == NULL || b == NULL) return FALSE;
 
@@ -959,27 +999,40 @@ gncDistribListEqual(
         return FALSE;
     }
 
+    owner_typename_a = gncOwnerGetTypeString(&a->owner);
+    owner_typename_b = gncOwnerGetTypeString(&b->owner);
+    if (owner_typename_a != owner_typename_b)
+    {
+        PWARN("Percentage owner typename differ: %s vs %s",
+              owner_typename_a, owner_typename_b);
+        return FALSE;
+    }
+
     if (a->percentage_label_settlement != b->percentage_label_settlement)
     {
-        PWARN("Percentage label settlement differ: %s vs %s", a->percentage_label_settlement, b->percentage_label_settlement);
+        PWARN("Percentage label settlement differ: %s vs %s",
+              a->percentage_label_settlement, b->percentage_label_settlement);
         return FALSE;
     }
 
     if (a->percentage_total != b->percentage_total)
     {
-        PWARN("Percentage total differ: %d vs %d", a->percentage_total, b->percentage_total);
+        PWARN("Percentage total differ: %d vs %d",
+              a->percentage_total, b->percentage_total);
         return FALSE;
     }
 
     if (a->shares_label_settlement != b->shares_label_settlement)
     {
-        PWARN("Shares label settlement differ: %s vs %s", a->shares_label_settlement, b->shares_label_settlement);
+        PWARN("Shares label settlement differ: %s vs %s",
+              a->shares_label_settlement, b->shares_label_settlement);
         return FALSE;
     }
 
     if (a->shares_total != b->shares_total)
     {
-        PWARN("Shares total differ: %d vs %d", a->shares_total, b->shares_total);
+        PWARN("Shares total differ: %d vs %d",
+              a->shares_total, b->shares_total);
         return FALSE;
     }
 
