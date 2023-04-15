@@ -101,8 +101,8 @@ distriblist_end_handler (
     GSList *data_from_children, GSList* sibling_data,
     gpointer parent_data, gpointer global_data,
     gpointer *result, const gchar* tag);
-static GncDistributionList
-*distriblist_find_senior (GncDistributionList *distriblist);
+//static GncDistributionList
+//*distriblist_find_senior (GncDistributionList *distriblist);
 static gboolean
 distriblist_guid_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static gboolean
@@ -210,19 +210,19 @@ set_string (
     return TRUE;
 }
 
-static gboolean
-set_numeric (
-    xmlNodePtr node,
-    GncDistributionList* distriblist,
-    void (*func) (GncDistributionList*, gnc_numeric))
-{
-    gnc_numeric *num = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (num, FALSE);
+// static gboolean
+// set_numeric (
+//     xmlNodePtr node,
+//     GncDistributionList* distriblist,
+//     void (*func) (GncDistributionList*, gnc_numeric))
+// {
+//     gnc_numeric *num = dom_tree_to_gnc_numeric (node);
+//     g_return_val_if_fail (num, FALSE);
 
-    func (distriblist, *num);
-    g_free (num);
-    return TRUE;
-}
+//     func (distriblist, *num);
+//     g_free (num);
+//     return TRUE;
+// }
 
 /* private dom tree functions */
 static xmlNodePtr
@@ -579,40 +579,40 @@ distriblist_end_handler (
     return distriblist != NULL;
 }
 
-static GncDistributionList
-*distriblist_find_senior (GncDistributionList *distriblist)
-{
-    GncDistributionList *temp, *parent, *gp = NULL;
+// static GncDistributionList
+// *distriblist_find_senior (GncDistributionList *distriblist)
+// {
+//     GncDistributionList *temp, *parent, *gp = NULL;
 
-    temp = distriblist;
-    do
-    {
-        // See if "temp" is a grandchild
-        parent = gncDistribListGetParent (temp);
-        if (!parent)
-            break;
-        gp = gncDistribListGetParent (parent);
-        if (!gp)
-            break;
+//     temp = distriblist;
+//     do
+//     {
+//         // See if "temp" is a grandchild
+//         parent = gncDistribListGetParent (temp);
+//         if (!parent)
+//             break;
+//         gp = gncDistribListGetParent (parent);
+//         if (!gp)
+//             break;
 
-        // Yep, this is a grandchild. Move up one generation and try again
-        temp = parent;
-    }
-    while (TRUE);
+//         // Yep, this is a grandchild. Move up one generation and try again
+//         temp = parent;
+//     }
+//     while (TRUE);
 
-    /* Ok, at this point temp points to the most senior child and parent
-     * should point to the top distriblist (and gp should be NULL).  If
-     * parent is NULL then we are the most senior child (and have no
-     * children), so do nothing.  If temp == distriblist then there is no
-     * grandparent, so do nothing.
-     *
-     * Do something if parent != NULL && temp != distriblist
-     */
-    g_assert (gp == NULL);
+//     /* Ok, at this point temp points to the most senior child and parent
+//      * should point to the top distriblist (and gp should be NULL).  If
+//      * parent is NULL then we are the most senior child (and have no
+//      * children), so do nothing.  If temp == distriblist then there is no
+//      * grandparent, so do nothing.
+//      *
+//      * Do something if parent != NULL && temp != distriblist
+//      */
+//     g_assert (gp == NULL);
 
-    // return the most senior distriblist
-    return temp;
-}
+//     // return the most senior distriblist
+//     return temp;
+// }
 
 static int
 distriblist_get_count (QofBook* book)
