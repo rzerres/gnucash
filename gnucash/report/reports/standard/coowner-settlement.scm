@@ -313,8 +313,8 @@ option like this.")
        (gnc:make-html-text
         (gnc:html-markup-p
          (gnc:html-markup/format
-          (G_ "This is a sample GnuCash report. \
-See the guile (scheme) source code in the scm/report directory \
+          (G_ "This is a WIP Co-Owner report. \
+See the guile (scheme) source code in the ~scm/report directory \
 for details on writing your own reports, \
 or extending existing reports.")))
         (gnc:html-markup-p
@@ -461,15 +461,13 @@ new, totally cool report, consult the mailing list ~a.")
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define reportname (N_ "Co-Owner Settlement"))
-(define reporttip (N_ "Create a settlement for a Co-Owner regarding its property share"))
-;; create a new guid with: uuidgen | sed -e 's/-//g'
+(define reporttip (N_ "Create a settlement for a selected Co-Owner that respects the property share value"))
 (define coowner-settlement-report-guid "4100d227013b45f5b77c87ae1ceaa3c3")
 
 (gnc:define-report
  'version 1
  'name reportname
  'report-guid coowner-settlement-report-guid
- ;; 'menu-path (list gnc:menuname-business-menu)
  'menu-path (list gnc:menuname-property-management)
  'menu-tip reporttip
  'options-generator options-generator
