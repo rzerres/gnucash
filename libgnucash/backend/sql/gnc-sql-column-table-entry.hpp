@@ -83,7 +83,8 @@ enum GncSqlObjectType
     CT_INVOICEREF,
     CT_ORDERREF,
     CT_OWNERREF,
-    CT_TAXTABLEREF
+    CT_TAXTABLEREF,
+    CT_DISTRIBLISTREF,
 };
 
 static inline std::string

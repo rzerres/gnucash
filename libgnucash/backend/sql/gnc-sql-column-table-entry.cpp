@@ -1,25 +1,25 @@
-/********************************************************************
- * gnc-sql-column-table-entry.cpp: Implement GncSqlColumnTableEntry *
- *                                                                  *
- * Copyright 2016 John Ralls <jralls@ceridwen.us>                   *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
-\********************************************************************/
+/*********************************************************************\
+ * gnc-sql-column-table-entry.cpp: Implement GncSqlColumnTableEntry  *
+ *                                                                   *
+ * Copyright 2016 John Ralls <jralls@ceridwen.us>                    *
+ *                                                                   *
+ * This program is free software; you can redistribute it and/or     *
+ * modify it under the terms of the GNU General Public License as    *
+ * published by the Free Software Foundation; either version 2 of    *
+ * the License, or (at your option) any later version.               *
+ *                                                                   *
+ * This program is distributed in the hope that it will be useful,   *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     *
+ * GNU General Public License for more details.                      *
+ *                                                                   *
+ * You should have received a copy of the GNU General Public License *
+ * along with this program; if not, contact:                         *
+ *                                                                   *
+ * Free Software Foundation           Voice:  +1-617-542-5942        *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652        *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                    *
+\*********************************************************************/
 
 #include <config.h>
 #include <qof.h>
@@ -717,7 +717,7 @@ GncSqlColumnTableEntry::get_row_value_from_object<int>(QofIdTypeConst obj_name,
     int result = 0;
     if (m_gobj_param_name != nullptr)
         g_object_get(const_cast<void*>(pObject), m_gobj_param_name, &result,
-		     nullptr);
+                     nullptr);
     else
     {
         QofAccessFunc getter = get_getter(obj_name);
