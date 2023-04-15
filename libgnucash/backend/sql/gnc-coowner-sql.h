@@ -1,5 +1,5 @@
 /*
- * gnc-customer-sql.h -- customer sql backend
+ * gnc-coowner-sql.h -- co-owner sql backend
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,27 +19,27 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-/** @file gnc-customer-sql.h
- *  @brief load and save customer data to SQL
- *  @author Copyright (c) 2007-2008 Phil Longstaff <plongstaff@rogers.com>
+/** @file gnc-coowner-sql.h
+ *  @brief load and save coowner data to SQL
+ *  @author Copyright (c) 2022 Ralf Zerres <ralf.zerres@mail.de>
  *
  * This file implements the top-level QofBackend API for saving/
  * restoring data to/from an SQL database
  */
 
-#ifndef GNC_CUSTOMER_SQL_H
-#define GNC_CUSTOMER_SQL_H
+#ifndef GNC_COOWNER_SQL_H
+#define GNC_COOWNER_SQL_H
 
 #include "gnc-sql-object-backend.hpp"
 
-class GncSqlCustomerBackend : public GncSqlObjectBackend
+class GncSqlCoOwnerBackend : public GncSqlObjectBackend
 {
 public:
-    GncSqlCustomerBackend();
+    GncSqlCoOwnerBackend();
     void load_all(GncSqlBackend*) override;
     void create_tables(GncSqlBackend*) override;
     bool commit(GncSqlBackend*, QofInstance*) override;
     bool write(GncSqlBackend*) override;
 };
 
-#endif /* GNC_CUSTOMER_SQL_H */
+#endif /* GNC_COONWER_SQL_H */
