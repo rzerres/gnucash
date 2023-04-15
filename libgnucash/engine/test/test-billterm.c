@@ -35,12 +35,12 @@
 static int count = 0;
 
 // function header definitions
-static void
-test_bool_fcn (
-    QofBook *book,
-    const char *message,
-    void (*set) (GncBillTerm *, gboolean),
-    gboolean (*get) (const GncBillTerm *));
+/* static void */
+/* test_bool_fcn ( */
+/*     QofBook *book, */
+/*     const char *message, */
+/*     void (*set) (GncBillTerm *, gboolean), */
+/*     gboolean (*get) (const GncBillTerm *)); */
 
 static void
 test_int_fcn (
@@ -117,6 +117,8 @@ test_billterm (void)
             gncBillTermSetDiscount, gncBillTermGetDiscount);
         test_int_fcn (book, "Handle Cutoff-Days",
             gncBillTermSetCutoff, gncBillTermGetCutoff);
+        //test_bool_fcn (book, "Handle Invisibility",
+        //    gncBillTermGetInvisible);
 
     }
 
@@ -124,26 +126,23 @@ test_billterm (void)
     {
         GList *list;
         const char *name = "Test BillTerm";
-        const char *res = NULL;
+        //const char *res = NULL;
 
         // gncBillTermCreate() and each test-function call do
         // increment the counter. Result: count => should be 7.
         list = gncBillTermGetTerms (book);
-        do_test (list != NULL, "Get lists: all");
         //printf ("list count: '%d'\n", g_list_length (list));
-        //printf ("count: '%d'\n", count);
+        do_test (list != NULL, "Get lists: all");
         do_test (g_list_length (list) == count, "Compare list length: all");
-        g_list_free (list);
 
         gncBillTermSetName (billterm, name);
-        res = gncBillTermGetName (billterm);
-        list = gncBillTermGetTerms (book);
-        // FIXME: billterm shouldn't be Null after assignment.
-        billterm = gncBillTermLookupByName (book, name);
+        //res = gncBillTermGetName (billterm);
         //printf ("name: '%s'\n", name);
         //printf ("res: '%s'\n", res);
-        do_test (billterm == NULL, "Lookup list: by name");
-        g_list_free (list);
+        list = gncBillTermGetTerms (book);
+        // billterm shouldn't be Null after assignment.
+        billterm = gncBillTermLookupByName (book, name);
+        do_test (billterm != NULL, "Lookup list: by name");
     }
 
     // Test the Entity Table
@@ -161,33 +160,33 @@ test_billterm (void)
  * Helper functions
  */
 
-static void
-test_bool_fcn (
-    QofBook *book,
-    const char *message,
-    void (*set) (GncBillTerm *, gboolean),
-    gboolean (*get) (const GncBillTerm *))
-{
-    GncBillTerm *billterm = gncBillTermCreate (book);
-    gboolean num = get_random_boolean ();
+/* static void */
+/* test_bool_fcn ( */
+/*     QofBook *book, */
+/*     const char *message, */
+/*     void (*set) (GncBillTerm *, gboolean), */
+/*     gboolean (*get) (const GncBillTerm *)) */
+/* { */
+/*     GncBillTerm *billterm = gncBillTermCreate (book); */
+/*     gboolean num = get_random_boolean (); */
 
-    do_test (!gncBillTermIsDirty (billterm), "test if start dirty");
-    gncBillTermBeginEdit (billterm);
-    set (billterm, FALSE);
-    set (billterm, TRUE);
-    set (billterm, num);
-    /* Billterm record should be dirty */
-    do_test (gncBillTermIsDirty (billterm), "test dirty later");
-    gncBillTermCommitEdit (billterm);
-    /* Billterm record should not be dirty */
-    /* Skip, because will always fail without a backend.
-     * It's not possible to load a backend in the engine code
-     * without having circular dependencies.
-     */
-    // do_test (!gncBillTermIsDirty (billterm), "test dirty after commit");
-    do_test (get (billterm) == num, message);
-    count++;
-}
+/*     do_test (!gncBillTermIsDirty (billterm), "test if start dirty"); */
+/*     gncBillTermBeginEdit (billterm); */
+/*     set (billterm, FALSE); */
+/*     set (billterm, TRUE); */
+/*     set (billterm, num); */
+/*     /\* Billterm record should be dirty *\/ */
+/*     do_test (gncBillTermIsDirty (billterm), "test dirty later"); */
+/*     gncBillTermCommitEdit (billterm); */
+/*     /\* Billterm record should not be dirty *\/ */
+/*     /\* Skip, because will always fail without a backend. */
+/*      * It's not possible to load a backend in the engine code */
+/*      * without having circular dependencies. */
+/*      *\/ */
+/*     // do_test (!gncBillTermIsDirty (billterm), "test dirty after commit"); */
+/*     do_test (get (billterm) == num, message); */
+/*     count++; */
+/* } */
 
 static void
 test_int_fcn (
