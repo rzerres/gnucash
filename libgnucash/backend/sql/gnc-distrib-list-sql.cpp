@@ -90,23 +90,29 @@ static EntryVec col_table
         COL_NNUL,
         (QofAccessFunc)gncDistribListGetInvisible,
         (QofSetterFunc)set_invisible),
-    gnc_sql_make_table_entry<CT_STRING>(
-        "label_settlement",
-        MAX_LABEL_SETTLEMENT_LEN,
-        COL_NNUL,
-        GNC_DISTRIBLIST_LABEL_SETTLEMENT,
-        true),
     gnc_sql_make_table_entry<CT_GUID>(
         "parent",
         0,
         0,
         (QofAccessFunc)distriblist_get_parent,
         (QofSetterFunc)distriblist_set_parent),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "percentage_label_settlement",
+        MAX_LABEL_SETTLEMENT_LEN,
+        COL_NNUL,
+        GNC_DISTRIBLIST_PERCENTAGE_LABEL_SETTLEMENT,
+        true),
     gnc_sql_make_table_entry<CT_INT>(
         "percentage_total",
         0,
         0,
         GNC_DISTRIBLIST_PERCENTAGE_TOTAL,
+        true),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "shares_label_settlement",
+        MAX_LABEL_SETTLEMENT_LEN,
+        COL_NNUL,
+        GNC_DISTRIBLIST_SHARES_LABEL_SETTLEMENT,
         true),
     gnc_sql_make_table_entry<CT_INT>(
         "shares_total",
