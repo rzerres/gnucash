@@ -1297,7 +1297,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     store = gtk_combo_box_get_model (GTK_COMBO_BOX(pw->owner_type_combo));
     gtk_tree_model_get_iter_first (store, &iter);
     gtk_list_store_set (GTK_LIST_STORE(store), &iter,
-                        COL_OWNER_TYPE_NAME, _("COOWNER"),
+                        COL_OWNER_TYPE_NAME, _("Co-Owner"),
                         COL_OWNER_TYPE_NUM, GNC_OWNER_COOWNER, -1);
     gtk_tree_model_iter_next (store, &iter);
     gtk_list_store_set (GTK_LIST_STORE(store), &iter,
