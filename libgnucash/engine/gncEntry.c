@@ -1460,71 +1460,93 @@ gncEntryRecomputeValues (GncEntry *entry)
 
 /* The "Int" functions below are for internal use only.
  * Outside this file, use the "Doc" or "Bal" variants found below instead. */
-static gnc_numeric gncEntryGetIntValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
+static gnc_numeric
+gncEntryGetIntValue (
+    GncEntry *entry,
+    gboolean round,
+    gboolean is_owner_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
     if (round)
-        return (is_cust_doc ? entry->i_value_rounded : entry->b_value_rounded);
+      return (is_owner_doc ? entry->i_value_rounded : entry->b_value_rounded);
     else
-        return (is_cust_doc ? entry->i_value : entry->b_value);
+      return (is_owner_doc ? entry->i_value : entry->b_value);
 }
 
-static gnc_numeric gncEntryGetIntTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
+static gnc_numeric
+gncEntryGetIntTaxValue (
+    GncEntry *entry,
+    gboolean round,
+    gboolean is_owner_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
     if (round)
-        return (is_cust_doc ? entry->i_tax_value_rounded : entry->b_tax_value_rounded);
+      return (is_owner_doc ? entry->i_tax_value_rounded
+              : entry->b_tax_value_rounded);
     else
-        return (is_cust_doc ? entry->i_tax_value : entry->b_tax_value);
+      return ((is_owner_doc) ? entry->i_tax_value : entry->b_tax_value);
 }
 
-/* Careful: the returned list is managed by the entry, and will only be valid for a short time */
-static AccountValueList * gncEntryGetIntTaxValues (GncEntry *entry, gboolean is_cust_doc)
+// Careful: the returned list is managed by the entry, and will only
+// be valid for a short time
+static AccountValueList
+*gncEntryGetIntTaxValues (
+    GncEntry *entry,
+    gboolean is_owner_doc)
 {
     if (!entry) return NULL;
     gncEntryRecomputeValues (entry);
-    return (is_cust_doc ? entry->i_tax_values : entry->b_tax_values);
+    return (is_owner_doc ? entry->i_tax_values : entry->b_tax_values);
 }
 
-static gnc_numeric gncEntryGetIntDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
+static gnc_numeric
+gncEntryGetIntDiscountValue (
+    GncEntry *entry,
+    gboolean round,
+    gboolean is_owner_doc)
 {
     if (!entry) return gnc_numeric_zero();
     gncEntryRecomputeValues (entry);
     if (round)
-        return (is_cust_doc ? entry->i_disc_value_rounded : gnc_numeric_zero());
+        return (is_owner_doc ? entry->i_disc_value_rounded : gnc_numeric_zero());
     else
-        return (is_cust_doc ? entry->i_disc_value : gnc_numeric_zero());
+        return (is_owner_doc ? entry->i_disc_value : gnc_numeric_zero());
 }
 
 /* Note contrary to the GetDoc*Value and GetBal*Value functions below
  * this function will always round the net price to the entry's
  * currency denominator (being the invoice/bill denom or 100000 if not
  * included in a bill or invoice) */
-gnc_numeric gncEntryGetPrice (const GncEntry *entry, gboolean cust_doc, gboolean net)
+gnc_numeric
+gncEntryGetPrice (
+    const GncEntry *entry,
+    gboolean is_owner_doc,
+    gboolean net)
 {
     gnc_numeric result;
     int denom;
 
     if (!entry) return gnc_numeric_zero();
-    if (!net) return (cust_doc ? entry->i_price : entry->b_price);
+    if (!net) return (is_owner_doc ? entry->i_price : entry->b_price);
 
-
-    /* Compute the net price */
-    if (cust_doc)
-        gncEntryComputeValueInt (entry->quantity, entry->i_price,
-                                 (entry->i_taxable ? entry->i_tax_table : NULL),
-                                 entry->i_taxincluded,
-                                 entry->i_discount, entry->i_disc_type,
-                                 entry->i_disc_how,
-                                 NULL, NULL, NULL, &result);
+    // Compute the net price
+    if (is_owner_doc)
+        gncEntryComputeValueInt (
+            entry->quantity, entry->i_price,
+            (entry->i_taxable ? entry->i_tax_table : NULL),
+            entry->i_taxincluded,
+            entry->i_discount, entry->i_disc_type,
+            entry->i_disc_how,
+            NULL, NULL, NULL, &result);
     else
-        gncEntryComputeValueInt (entry->quantity, entry->b_price,
-                                 (entry->b_taxable ? entry->b_tax_table : NULL),
-                                 entry->b_taxincluded,
-                                 gnc_numeric_zero(), GNC_AMT_TYPE_VALUE, GNC_DISC_PRETAX,
-                                 NULL, NULL, NULL, &result);
+        gncEntryComputeValueInt (
+            entry->quantity, entry->b_price,
+            (entry->b_taxable ? entry->b_tax_table : NULL),
+            entry->b_taxincluded,
+            gnc_numeric_zero(), GNC_AMT_TYPE_VALUE, GNC_DISC_PRETAX,
+            NULL, NULL, NULL, &result);
 
     /* Determine the commodity denominator */
     denom = get_entry_commodity_denom (entry);
@@ -1573,14 +1595,18 @@ gnc_numeric gncEntryGetDocDiscountValue (GncEntry *entry, gboolean round, gboole
 
 gnc_numeric gncEntryGetBalValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
-    gnc_numeric value = gncEntryGetIntValue (entry, round, is_cust_doc);
-    return (is_cust_doc ? gnc_numeric_neg (value) : value);
+    gnc_numeric value = gncEntryGetIntValue (entry, round, is_owner_doc);
+    return (is_owner_doc ? gnc_numeric_neg (value) : value);
 }
 
-gnc_numeric gncEntryGetBalTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
+gnc_numeric
+gncEntryGetBalTaxValue (
+    GncEntry *entry,
+    gboolean round,
+    gboolean is_owner_doc)
 {
-    gnc_numeric value = gncEntryGetIntTaxValue (entry, round, is_cust_doc);
-    return (is_cust_doc ? gnc_numeric_neg (value) : value);
+    gnc_numeric value = gncEntryGetIntTaxValue (entry, round, is_owner_doc);
+    return (is_owner_doc ? gnc_numeric_neg (value) : value);
 }
 
 /* Careful: the returned list is NOT owned by the entry and should be freed by the caller */
@@ -1593,9 +1619,10 @@ AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_do
     for (node = int_values; node; node = node->next)
     {
         GncAccountValue *acct_val = node->data;
-        values = gncAccountValueAdd (values, acct_val->account,
-                                     (is_cust_doc ? gnc_numeric_neg (acct_val->value)
-                                      : acct_val->value));
+        values = gncAccountValueAdd (
+            values, acct_val->account,
+            (is_owner_doc ? gnc_numeric_neg (acct_val->value)
+             : acct_val->value));
     }
 
     return values;
@@ -1603,8 +1630,8 @@ AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_do
 
 gnc_numeric gncEntryGetBalDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
 {
-    gnc_numeric value = gncEntryGetIntDiscountValue (entry, round, is_cust_doc);
-    return (is_cust_doc ? gnc_numeric_neg (value) : value);
+    gnc_numeric value = gncEntryGetIntDiscountValue (entry, round, is_owner_doc);
+    return (is_owner_doc ? gnc_numeric_neg (value) : value);
 }
 
 /* XXX this existence of this routine is just wrong */
