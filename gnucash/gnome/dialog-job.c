@@ -79,7 +79,7 @@ struct _job_window
     GtkWidget *desc_entry;
     GtkWidget *dialog;
     GtkWidget *entry_billing_id;
-    GtkWidget *entry_id;
+    GtkWidget *entry_job_id;
     GtkWidget *entry_name;
     GtkWidget *entry_owner;
     GtkWidget *entry_rate;
@@ -92,8 +92,6 @@ struct _job_window
     gboolean job_type_is_coowner;
     GncOwner owner;
     GncJob *created_job;
-
-
 };
 
 /*******************************************************************************/
@@ -130,7 +128,7 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
         if (! gncOwnerEqual (old, &(jw->owner)))
             gncJobSetOwner (job, &(jw->owner));
         gncJobSetID (job, gtk_editable_get_chars (
-            GTK_EDITABLE (jw->entry_id), 0, -1));
+            GTK_EDITABLE (jw->entry_job_id), 0, -1));
         gncJobSetName (job, gtk_editable_get_chars (
             GTK_EDITABLE (jw->entry_name), 0, -1));
         gncJobSetReference (job, gtk_editable_get_chars (
@@ -150,11 +148,11 @@ gnc_job_verify_ok (JobWindow *jw)
     gchar *string;
 
     /* Set a valid id if one was not created */
-    res = gtk_entry_get_text (GTK_ENTRY (jw->entry_id));
+    res = gtk_entry_get_text (GTK_ENTRY (jw->entry_job_id));
     if (g_strcmp0 (res, "") == 0)
     {
         string = gncJobNextID(jw->book, &(jw->owner));
-        gtk_entry_set_text (GTK_ENTRY (jw->entry_id), string);
+        gtk_entry_set_text (GTK_ENTRY (jw->entry_job_id), string);
         g_free(string);
     }
 
@@ -192,11 +190,11 @@ gnc_job_verify_ok (JobWindow *jw)
     }
 
     /* Set a valid id if one was not created */
-    res = gtk_entry_get_text (GTK_ENTRY (jw->entry_id));
+    res = gtk_entry_get_text (GTK_ENTRY (jw->entry_job_id));
     if (g_strcmp0 (res, "") == 0)
     {
         string = gncJobNextID(jw->book, &(jw->owner));
-        gtk_entry_set_text (GTK_ENTRY (jw->entry_id), string);
+        gtk_entry_set_text (GTK_ENTRY (jw->entry_job_id), string);
         g_free(string);
     }
 
@@ -280,11 +278,11 @@ gnc_job_name_changed_cb (GtkWidget *widget, gpointer data)
     const char *header = (jw->dialog_type == EDIT_JOB) ?
         _("Edit Job") : _("New Job");
 
-    const char *name = gtk_entry_get_text (GTK_ENTRY (jw->name_entry));
+    const char *name = gtk_entry_get_text (GTK_ENTRY (jw->entry_name));
     if (!name || *name == '\0')
         name = _("<No name>");
 
-    const char *id = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
+    const char *id = gtk_entry_get_text (GTK_ENTRY (jw->entry_job_id));
     if (id && *id)
         title = g_strdup_printf ("%s - %s (%s)", header, name, id);
     else
@@ -355,10 +353,15 @@ gnc_job_window_new (GtkWindow *parent, JobDialogType dialog_type, QofBook *bookp
 {
     JobWindow *jw = NULL;
     GtkBuilder *builder = NULL;
-    GtkWidget *amount_rate, *entry_billing_id, *entry_owner, *entry_rate, *label_owner,
-      *radiobutton_active, *radiobutton_owner;
+    GtkWidget *amount_rate;
+    //GtkWidget *entry_billing_id;
+    GtkWidget *entry_owner;
+    GtkWidget *entry_rate;
+    GtkWidget *label_owner;
+    //GtkWidget *radiobutton_active;
+    //GtkWidget *radiobutton_owner;
 
-    //g_assert (dialog_type == NEW_JOB || dialog_type == MOD_JOB || dialog_type == DUP_JOB);
+    g_assert (dialog_type == NEW_JOB || dialog_type == MOD_JOB || dialog_type == DUP_JOB);
 
     /*
      * Find an existing window for this job.  If found, bring it to
@@ -384,12 +387,12 @@ gnc_job_window_new (GtkWindow *parent, JobDialogType dialog_type, QofBook *bookp
     jw->book = bookp;
     jw->dialog_type = NEW_JOB;
     jw->job_guid = *gncJobGetGUID (job);
+    /* The default GUI activates radiobutton "Customer", change if needed */
     jw->job_type_is_coowner = gncJobGetTypeIsCoOwner (job);
 
-    /* The default GUI activates radiobutton "Customer", change if needed */
     if (dialog_type == DUP_JOB)
     {
-        GtkWidget *radiobutton_owner = GTK_WIDGET (gtk_builder_get_object (builder, "radiobutton_coowner"));
+        GtkWidget *radiobutton_owner = GTK_WIDGET (gtk_builder_get_object (builder, "radiobutton_customer"));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(radiobutton_owner), gncJobGetTypeIsCoOwner (job));
     }
 
@@ -410,13 +413,13 @@ gnc_job_window_new (GtkWindow *parent, JobDialogType dialog_type, QofBook *bookp
 
     /* Get entry points */
     jw->radiobutton_active = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_active"));
-    jw->entry_id  = GTK_WIDGET(gtk_builder_get_object (builder, "entry_job_id"));
+    jw->entry_job_id  = GTK_WIDGET(gtk_builder_get_object (builder, "entry_job_id"));
     jw->entry_name = GTK_WIDGET(gtk_builder_get_object (builder, "entry_job_name"));
     jw->entry_billing_id = GTK_WIDGET(gtk_builder_get_object (builder, "entry_billing_id"));
 
     label_owner = GTK_WIDGET(gtk_builder_get_object (builder, "label_owner"));
     entry_owner = GTK_WIDGET(gtk_builder_get_object (builder, "entry_owner"));
-    radiobutton_owner = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_customer"));
+    //radiobutton_owner = GTK_WIDGET(gtk_builder_get_object (builder, "radiobutton_customer"));
 
     amount_rate = gnc_amount_edit_new();
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount_rate), TRUE);
@@ -441,7 +444,7 @@ gnc_job_window_new (GtkWindow *parent, JobDialogType dialog_type, QofBook *bookp
         jw->entry_owner = gnc_owner_edit_create (label_owner, entry_owner,
                                                  bookp, owner);
 
-        gtk_entry_set_text (GTK_ENTRY (jw->entry_id), gncJobGetID (job));
+        gtk_entry_set_text (GTK_ENTRY (jw->entry_job_id), gncJobGetID (job));
         gtk_entry_set_text (GTK_ENTRY (jw->entry_name), gncJobGetName (job));
         gtk_entry_set_text (GTK_ENTRY (jw->entry_billing_id), gncJobGetReference (job));
         gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (jw->entry_rate),
@@ -524,7 +527,7 @@ gnc_ui_job_duplicate (GtkWindow *parent, GncJob *old_job, gboolean open_properti
     JobWindow *jw = NULL;
     GncJob *new_job = NULL;
     GncOwner *owner = NULL;
-    time64 entry_date;
+    //time64 entry_date;
 
     g_assert(old_job);
 
@@ -547,7 +550,7 @@ gnc_ui_job_duplicate (GtkWindow *parent, GncJob *old_job, gboolean open_properti
         // Open the newly created job in the "edit" window
         jw = gnc_ui_job_edit (parent, owner, new_job);
         // Check the ID; set one if necessary
-        if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (jw->entry_id)), "") == 0)
+        if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (jw->entry_job_id)), "") == 0)
         {
             gncJobSetID (new_job, gncJobNextID(jw->book, &(jw->owner)));
         }
@@ -573,6 +576,7 @@ gnc_ui_job_new (GtkWindow *parent, GncOwner *ownerp, QofBook *bookp)
                               (gncOwnerGetType (ownerp) == GNC_OWNER_CUSTOMER) ||
                               (gncOwnerGetType (ownerp) == GNC_OWNER_VENDOR),
                               NULL);
+        /* Copy pointer values of given ownerp to be assessible inside the new job window struct (owner) */
         gncOwnerCopy (ownerp, &owner);
     }
     else
@@ -588,15 +592,15 @@ gnc_ui_job_new (GtkWindow *parent, GncOwner *ownerp, QofBook *bookp)
     return jw;
 }
 
-static JobWindow *
-gnc_ui_job_modify (GtkWindow *parent, GncJob *job)
-{
-    JobWindow *jw;
-    if (!job) return NULL;
+/* static JobWindow * */
+/* gnc_ui_job_modify (GtkWindow *parent, GncJob *job) */
+/* { */
+/*     JobWindow *jw; */
+/*     if (!job) return NULL; */
 
-    jw = gnc_job_window_new (parent, MOD_JOB, NULL, NULL, job);
-    return jw;
-}
+/*     jw = gnc_job_window_new (parent, MOD_JOB, NULL, NULL, job); */
+/*     return jw; */
+/* } */
 
 /* Search functionality */
 
