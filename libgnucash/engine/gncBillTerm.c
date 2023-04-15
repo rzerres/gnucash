@@ -39,8 +39,8 @@ struct _gncBillTerm
     QofInstance     inst;
 
     /* 'visible' data fields directly manipulated by user */
-    const char *    name;
-    const char *    desc;
+    const char      *name;
+    const char      *desc;
     GncBillTermType type;
     gint            due_days;
     gint            disc_days;
@@ -50,11 +50,11 @@ struct _gncBillTerm
     /* Internal management fields */
     /* See src/doc/business.txt for an explanation of the following */
     /* Code that handles this is *identical* to that in gncTaxTable */
-    gint64          refcount;
-    GncBillTerm *   parent;      /* if non-null, we are an immutable child */
-    GncBillTerm *   child;       /* if non-null, we have not changed */
-    gboolean        invisible;
-    GList *         children;    /* list of children for disconnection */
+    gint64      refcount;
+    GncBillTerm *parent;      /* if non-null, we are an immutable child */
+    GncBillTerm *child;       /* if non-null, we have not changed */
+    gboolean    invisible;
+    GList       *children;    /* list of children for disconnection */
 };
 
 struct _gncBillTermClass
@@ -64,7 +64,7 @@ struct _gncBillTermClass
 
 struct _book_info
 {
-    GList *         terms;        /* visible terms */
+    GList * terms;        /* visible terms */
 };
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
@@ -157,10 +157,11 @@ gnc_billterm_finalize(GObject* btp)
 }
 
 static void
-gnc_billterm_get_property (GObject         *object,
-                           guint            prop_id,
-                           GValue          *value,
-                           GParamSpec      *pspec)
+gnc_billterm_get_property (
+    GObject *object,
+    guint prop_id,
+    GValue *value,
+    GParamSpec *pspec)
 {
     GncBillTerm *bt;
 
@@ -179,10 +180,11 @@ gnc_billterm_get_property (GObject         *object,
 }
 
 static void
-gnc_billterm_set_property (GObject         *object,
-                           guint            prop_id,
-                           const GValue          *value,
-                           GParamSpec      *pspec)
+gnc_billterm_set_property (
+    GObject *object,
+    guint prop_id,
+    const GValue *value,
+    GParamSpec *pspec)
 {
     GncBillTerm *bt;
 
@@ -256,7 +258,7 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
     term->desc = CACHE_INSERT ("");
     term->discount = gnc_numeric_zero ();
     addObj (term);
-    qof_event_gen (&term->inst,  QOF_EVENT_CREATE, NULL);
+    qof_event_gen (&term->inst, QOF_EVENT_CREATE, NULL);
     return term;
 }
 
