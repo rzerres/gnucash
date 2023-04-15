@@ -53,12 +53,14 @@ Generic params (identical to all business objects, e.g. Customers, Employees, Ve
 
 DistributionList specific params:
 
-@param  const char *descrpition - Pointer to the description of the distribution list.
+@param  const char *description - Pointer to the description of the distribution list.
 @param  GncDistributionListType type - The type of the distribution list.
-@param  const char* label_stettlement - Label of the distribution list.
+@param  GncOwner owner - The owner struct that is assigned to selectable list members.
+@param  const char *percentage_label_stettlement - Label of the distribution list.
+@param  gint percentage-total - Total percentage per property unit (the numerator).
+@param  const char *shares_label_stettlement - Label of the distribution list.
 @param  gint shares-total - Total shares per property unit (the numerator).
-//@param  gint percentage-total - Total percentage per property unit (the numerator).
-//@param  Glist owners-assigned - List of assigned owner entities considerd when calculationg the costs to be settled.
+@param  Glist owners-assigned - List of assigned owner entities considerd when calculationg the costs to be settled.
 
 */
 typedef struct _gncDistributionList GncDistributionList;
@@ -95,10 +97,11 @@ GType gnc_distriblist_get_type(void);
 /** @name DistributonList parameter names
  @{ */
 #define GNC_DISTRIBLIST_DESCRIPTION "description"
-#define GNC_DISTRIBLIST_LABEL_SETTLEMENT "label settlement"
 #define GNC_DISTRIBLIST_NAME "name"
+#define GNC_DISTRIBLIST_PERCENTAGE_LABEL_SETTLEMENT "percentage label settlement"
 #define GNC_DISTRIBLIST_PERCENTAGE_TOTAL "percentage total"
 #define GNC_DISTRIBLIST_REFCOUNT "reference counter"
+#define GNC_DISTRIBLIST_SHARES_LABEL_SETTLEMENT "shares label settlement"
 #define GNC_DISTRIBLIST_SHARES_TOTAL "shares total"
 #define GNC_DISTRIBLIST_TYPE "distribution list type"
 /** @} */
@@ -137,10 +140,11 @@ void gncDistribListCommitEdit (GncDistributionList *distriblist);
 /** @name Set Functions
  @{ */
 void gncDistribListSetDescription (GncDistributionList *distriblist, const char *name);
-void gncDistribListSetLabelSettlement (GncDistributionList *distriblist, const char *label_settlement);
 void gncDistribListSetName (GncDistributionList *distriblist, const char *name);
-void gncDistribListSetSharesTotal (GncDistributionList *distriblist, gint shares_total);
 void gncDistribListSetPercentageTotal (GncDistributionList *distriblist, gint percentage_total);
+void gncDistribListSetPercentageLabelSettlement (GncDistributionList *distriblist, const char *percentage_label_settlement);
+void gncDistribListSetSharesLabelSettlement (GncDistributionList *distriblist, const char *shares_label_settlement);
+void gncDistribListSetSharesTotal (GncDistributionList *distriblist, gint shares_total);
 void gncDistribListSetType (GncDistributionList *distriblist, GncDistributionListType type);
 
 /** @} */
@@ -148,10 +152,11 @@ void gncDistribListSetType (GncDistributionList *distriblist, GncDistributionLis
 /** @name Get Functions
  @{ */
 const char *gncDistribListGetDescription (const GncDistributionList *distriblist);
-const char *gncDistribListGetLabelSettlement (const GncDistributionList *distriblist);
 GList * gncDistribListGetLists (QofBook *book);
 const char *gncDistribListGetName (const GncDistributionList *distriblist);
+const char *gncDistribListGetPercentageLabelSettlement (const GncDistributionList *distriblist);
 gint gncDistribListGetPercentageTotal (const GncDistributionList *distriblist);
+const char *gncDistribListGetSharesLabelSettlement (const GncDistributionList *distriblist);
 gint gncDistribListGetSharesTotal (const GncDistributionList *distriblist);
 GncDistributionListType gncDistribListGetType (const GncDistributionList *distriblist);
 
