@@ -675,7 +675,8 @@ gnc_payment_dialog_owner_type_changed (PaymentWindow *pw)
      * a refund field. Internally they are treated as credit or debit depending
      * on the owner type.
      */
-    if (pw->owner_type == GNC_OWNER_CUSTOMER)
+    if (pw->owner_type == GNC_OWNER_COOWNER ||
+        pw->owner_type == GNC_OWNER_CUSTOMER)
     {
         debit_box = pw->amount_refund_box;
         credit_box = pw->amount_payment_box;
@@ -724,8 +725,8 @@ gnc_payment_dialog_remember_account (PaymentWindow *pw, Account *acc)
     guid = xaccAccountGetGUID(acc);
     qof_begin_edit (owner);
     qof_instance_set (owner,
-		      "payment-last-account", guid,
-		      NULL);
+                      "payment-last-account", guid,
+                      NULL);
     qof_commit_edit (owner);
 }
 
@@ -736,25 +737,31 @@ gnc_payment_update_style_classes (PaymentWindow *pw)
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(pw->dialog));
     const gchar *style_label = NULL;
 
+    if (gtk_style_context_has_class (stylectxt, "gnc-class-coowners"))
+        gtk_style_context_remove_class (stylectxt, "gnc-class-coowners");
+
     if (gtk_style_context_has_class (stylectxt, "gnc-class-customers"))
         gtk_style_context_remove_class (stylectxt, "gnc-class-customers");
-
-    if (gtk_style_context_has_class (stylectxt, "gnc-class-vendors"))
-        gtk_style_context_remove_class (stylectxt, "gnc-class-vendors");
 
     if (gtk_style_context_has_class (stylectxt, "gnc-class-employees"))
         gtk_style_context_remove_class (stylectxt, "gnc-class-employees");
 
+    if (gtk_style_context_has_class (stylectxt, "gnc-class-vendors"))
+        gtk_style_context_remove_class (stylectxt, "gnc-class-vendors");
+
     switch (pw->owner_type)
     {
+        case GNC_OWNER_COOWNER:
+            style_label = "gnc-class-coowners";
+            break;
         case GNC_OWNER_CUSTOMER:
             style_label = "gnc-class-customers";
             break;
-        case GNC_OWNER_VENDOR:
-            style_label = "gnc-class-vendors";
-            break;
         case GNC_OWNER_EMPLOYEE:
             style_label = "gnc-class-employees";
+            break;
+        case GNC_OWNER_VENDOR:
+            style_label = "gnc-class-vendors";
             break;
         default:
             style_label = "gnc-class-unknown";
@@ -773,6 +780,7 @@ gnc_payment_set_owner_type (PaymentWindow *pw, GncOwnerType owner_type)
 
     switch (owner_type)
     {
+        case GNC_OWNER_COOWNER:
         case GNC_OWNER_CUSTOMER:
         case GNC_OWNER_EMPLOYEE:
         case GNC_OWNER_VENDOR:
@@ -852,11 +860,14 @@ gnc_payment_dialog_owner_type_changed_cb (G_GNUC_UNUSED GtkWidget *widget, gpoin
         {
             switch (pw->owner_type)
             {
-                case GNC_OWNER_VENDOR:
-                    gncOwnerInitVendor (&pw->owner, NULL);
+                case GNC_OWNER_COOWNER:
+                    gncOwnerInitCoOwner (&pw->owner, NULL);
                     break;
                 case GNC_OWNER_EMPLOYEE:
                     gncOwnerInitEmployee (&pw->owner, NULL);
+                    break;
+                case GNC_OWNER_VENDOR:
+                    gncOwnerInitVendor (&pw->owner, NULL);
                     break;
                 default:
                     gncOwnerInitCustomer (&pw->owner, NULL);
@@ -1021,7 +1032,8 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
         }
 
         /* Perform the payment */
-        if (gncOwnerGetType (&(pw->owner)) == GNC_OWNER_CUSTOMER)
+        if (gncOwnerGetType (&(pw->owner)) == GNC_OWNER_COOWNER ||
+            gncOwnerGetType (&(pw->owner)) == GNC_OWNER_CUSTOMER)
             auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY);
         else
             auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
@@ -1285,16 +1297,20 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     store = gtk_combo_box_get_model (GTK_COMBO_BOX(pw->owner_type_combo));
     gtk_tree_model_get_iter_first (store, &iter);
     gtk_list_store_set (GTK_LIST_STORE(store), &iter,
+                        COL_OWNER_TYPE_NAME, _("COOWNER"),
+                        COL_OWNER_TYPE_NUM, GNC_OWNER_COOWNER, -1);
+    gtk_tree_model_iter_next (store, &iter);
+    gtk_list_store_set (GTK_LIST_STORE(store), &iter,
                         COL_OWNER_TYPE_NAME, _("Customer"),
                         COL_OWNER_TYPE_NUM, GNC_OWNER_CUSTOMER, -1);
     gtk_tree_model_iter_next (store, &iter);
     gtk_list_store_set (GTK_LIST_STORE(store), &iter,
-                        COL_OWNER_TYPE_NAME, _("Vendor"),
-                        COL_OWNER_TYPE_NUM, GNC_OWNER_VENDOR, -1);
-    gtk_tree_model_iter_next (store, &iter);
-    gtk_list_store_set (GTK_LIST_STORE(store), &iter,
                         COL_OWNER_TYPE_NAME, _("Employee"),
                         COL_OWNER_TYPE_NUM, GNC_OWNER_EMPLOYEE, -1);
+    gtk_tree_model_iter_next (store, &iter);
+    gtk_list_store_set (GTK_LIST_STORE(store), &iter,
+                        COL_OWNER_TYPE_NAME, _("Vendor"),
+                        COL_OWNER_TYPE_NUM, GNC_OWNER_VENDOR, -1);
 
     pw->owner_box = GTK_WIDGET (gtk_builder_get_object (builder, "owner_box"));
 

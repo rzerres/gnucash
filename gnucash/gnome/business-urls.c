@@ -32,18 +32,20 @@
 #include "qof.h"
 #include "stdint.h"
 
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
-#include "gncJob.h"
-#include "gncVendor.h"
 #include "gncEmployee.h"
 #include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncVendor.h"
 
 #include "business-urls.h"
+#include "dialog-coowner.h"
 #include "dialog-customer.h"
 #include "dialog-employee.h"
-#include "dialog-vendor.h"
 #include "dialog-invoice.h"
 #include "dialog-job.h"
+#include "dialog-vendor.h"
 
 #define HANDLE_TYPE(URL_TYPE_STR,OBJ_TYPE) {                                 \
   QofBook *book;                                                             \

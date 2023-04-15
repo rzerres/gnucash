@@ -58,7 +58,7 @@
 #define GNC_PREFS_GROUP_SEARCH "dialogs.business.customer-search"
 
 void gnc_customer_taxtable_check_cb (GtkToggleButton *togglebutton,
-                                     gpointer user_data);
+    gpointer user_data);
 
 void gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_window_cancel_cb (GtkWidget *widget, gpointer data);
@@ -69,41 +69,41 @@ void gnc_customer_terms_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_taxincluded_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_taxtable_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_addr2_insert_cb(GtkEditable *editable,
-                                  gchar *new_text, gint new_text_length,
-                                  gint *position, gpointer user_data);
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data);
 void gnc_customer_addr3_insert_cb(GtkEditable *editable,
-                                  gchar *new_text, gint new_text_length,
-                                  gint *position, gpointer user_data);
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data);
 void gnc_customer_addr4_insert_cb(GtkEditable *editable,
-                                  gchar *new_text, gint new_text_length,
-                                  gint *position, gpointer user_data);
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data);
 void gnc_customer_shipaddr2_insert_cb(GtkEditable *editable,
-                                      gchar *new_text, gint new_text_length,
-                                      gint *position, gpointer user_data);
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data);
 void gnc_customer_shipaddr3_insert_cb(GtkEditable *editable,
-                                      gchar *new_text, gint new_text_length,
-                                      gint *position, gpointer user_data);
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data);
 void gnc_customer_shipaddr4_insert_cb(GtkEditable *editable,
-                                      gchar *new_text, gint new_text_length,
-                                      gint *position, gpointer user_data);
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data);
 gboolean
 gnc_customer_addr2_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                 gpointer user_data );
+    gpointer user_data );
 gboolean
 gnc_customer_addr3_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                 gpointer user_data );
+    gpointer user_data );
 gboolean
 gnc_customer_addr4_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                 gpointer user_data );
+    gpointer user_data );
 gboolean
 gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                     gpointer user_data );
+    gpointer user_data );
 gboolean
 gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                     gpointer user_data );
+    gpointer user_data );
 gboolean
 gnc_customer_shipaddr4_key_press_cb( GtkEntry *entry, GdkEventKey *event,
-                                     gpointer user_data );
+    gpointer user_data );
 
 #define ADDR_QUICKFILL "GncAddress-Quickfill"
 
@@ -121,50 +121,50 @@ struct _customer_select_window
 
 struct _customer_window
 {
-    GtkWidget *	dialog;
+    GtkWidget *dialog;
 
-    GtkWidget *	id_entry;
-    GtkWidget *	company_entry;
+    GtkWidget *id_entry;
+    GtkWidget *company_entry;
 
-    GtkWidget *	name_entry;
-    GtkWidget *	addr1_entry;
-    GtkWidget *	addr2_entry;
-    GtkWidget *	addr3_entry;
-    GtkWidget *	addr4_entry;
-    GtkWidget *	phone_entry;
-    GtkWidget *	fax_entry;
-    GtkWidget *	email_entry;
+    GtkWidget *name_entry;
+    GtkWidget *addr1_entry;
+    GtkWidget *addr2_entry;
+    GtkWidget *addr3_entry;
+    GtkWidget *addr4_entry;
+    GtkWidget *phone_entry;
+    GtkWidget *fax_entry;
+    GtkWidget *email_entry;
 
-    GtkWidget *	shipname_entry;
-    GtkWidget *	shipaddr1_entry;
-    GtkWidget *	shipaddr2_entry;
-    GtkWidget *	shipaddr3_entry;
-    GtkWidget *	shipaddr4_entry;
-    GtkWidget *	shipphone_entry;
-    GtkWidget *	shipfax_entry;
-    GtkWidget *	shipemail_entry;
+    GtkWidget *shipname_entry;
+    GtkWidget *shipaddr1_entry;
+    GtkWidget *shipaddr2_entry;
+    GtkWidget *shipaddr3_entry;
+    GtkWidget *shipaddr4_entry;
+    GtkWidget *shipphone_entry;
+    GtkWidget *shipfax_entry;
+    GtkWidget *shipemail_entry;
 
-    GtkWidget *	currency_edit;
-    GtkWidget *	terms_menu;
-    GtkWidget *	discount_amount;
-    GtkWidget *	credit_amount;
+    GtkWidget *currency_edit;
+    GtkWidget *terms_menu;
+    GtkWidget *discount_amount;
+    GtkWidget *credit_amount;
 
-    GtkWidget *	active_check;
-    GtkWidget *	taxincluded_menu;
-    GtkWidget *	notes_text;
+    GtkWidget *active_check;
+    GtkWidget *taxincluded_menu;
+    GtkWidget *notes_text;
 
-    GtkWidget *	taxtable_check;
-    GtkWidget *	taxtable_menu;
+    GtkWidget *taxtable_check;
+    GtkWidget *taxtable_menu;
 
     GncTaxIncluded taxincluded;
-    GncBillTerm *	terms;
-    CustomerDialogType	dialog_type;
-    GncGUID		customer_guid;
-    gint		component_id;
-    QofBook *	book;
-    GncCustomer *	created_customer;
+    GncBillTerm *terms;
+    CustomerDialogType dialog_type;
+    GncGUID customer_guid;
+    gint component_id;
+    QofBook *book;
+    GncCustomer *created_customer;
 
-    GncTaxTable *	taxtable;
+    GncTaxTable *taxtable;
 
     /* stored data for the description quickfill selection function */
     QuickFill *addr2_quickfill;
@@ -213,28 +213,47 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
     if (cw->dialog_type == NEW_CUSTOMER)
         qof_event_gen(QOF_INSTANCE(cust), QOF_EVENT_ADD, NULL);
 
-    gncCustomerSetID (cust, gtk_entry_get_text (GTK_ENTRY (cw->id_entry)));
-    gncCustomerSetName (cust, gtk_entry_get_text (GTK_ENTRY (cw->company_entry)));
+    gncCustomerSetID (cust, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->id_entry), 0, -1));
+    gncCustomerSetName (cust, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->company_entry), 0, -1));
 
-    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (cw->name_entry)));
-    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr1_entry)));
-    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr2_entry)));
-    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr3_entry)));
-    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (cw->addr4_entry)));
-    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (cw->phone_entry)));
-    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (cw->fax_entry)));
-    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (cw->email_entry)));
-    gncAddressSetName (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipname_entry)));
-    gncAddressSetAddr1 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr1_entry)));
-    gncAddressSetAddr2 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr2_entry)));
-    gncAddressSetAddr3 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr3_entry)));
-    gncAddressSetAddr4 (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipaddr4_entry)));
-    gncAddressSetPhone (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipphone_entry)));
-    gncAddressSetFax (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipfax_entry)));
-    gncAddressSetEmail (shipaddr, gtk_entry_get_text (GTK_ENTRY (cw->shipemail_entry)));
+    gncAddressSetName (addr, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->name_entry), 0, -1));
+    gncAddressSetAddr1 (addr, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->addr1_entry), 0, -1));
+    gncAddressSetAddr2 (addr, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->addr2_entry), 0, -1));
+    gncAddressSetAddr3 (addr, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->addr3_entry), 0, -1));
+    gncAddressSetAddr4 (addr, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->addr4_entry), 0, -1));
+    gncAddressSetPhone (addr, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->phone_entry), 0, -1));
+    gncAddressSetFax (addr, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->fax_entry), 0, -1));
+    gncAddressSetEmail (addr, gtk_editable_get_chars
+       (GTK_EDITABLE (cw->email_entry), 0, -1));
+
+    gncAddressSetName (shipaddr, gtk_editable_get_chars
+        (GTK_EDITABLE (cw->shipname_entry), 0, -1));
+    gncAddressSetAddr1 (shipaddr, gtk_editable_get_chars
+        (GTK_EDITABLE (cw->shipaddr1_entry), 0, -1));
+    gncAddressSetAddr2 (shipaddr, gtk_editable_get_chars
+        (GTK_EDITABLE (cw->shipaddr2_entry), 0, -1));
+    gncAddressSetAddr3 (shipaddr, gtk_editable_get_chars
+        (GTK_EDITABLE (cw->shipaddr3_entry), 0, -1));
+    gncAddressSetAddr4 (shipaddr, gtk_editable_get_chars
+        (GTK_EDITABLE (cw->shipaddr4_entry), 0, -1));
+    gncAddressSetPhone (shipaddr, gtk_editable_get_chars
+        (GTK_EDITABLE (cw->shipphone_entry), 0, -1));
+    gncAddressSetFax (shipaddr, gtk_editable_get_chars
+        (GTK_EDITABLE (cw->shipfax_entry), 0, -1));
+    gncAddressSetEmail (shipaddr, gtk_editable_get_chars
+        (GTK_EDITABLE (cw->shipemail_entry), 0, -1));
 
     gncCustomerSetActive (cust, gtk_toggle_button_get_active
-                          (GTK_TOGGLE_BUTTON (cw->active_check)));
+        (GTK_TOGGLE_BUTTON (cw->active_check)));
     gncCustomerSetTaxIncluded (cust, cw->taxincluded);
 
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(cw->notes_text));
@@ -244,16 +263,16 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 
     /* Parse and set the currency, terms, discount, and credit amounts */
     gncCustomerSetCurrency (cust,
-                            gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT
-                                    (cw->currency_edit)));
+        gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT
+        (cw->currency_edit)));
     gncCustomerSetTerms (cust, cw->terms);
     gncCustomerSetDiscount (cust, gnc_amount_edit_get_amount
-                            (GNC_AMOUNT_EDIT (cw->discount_amount)));
+        (GNC_AMOUNT_EDIT (cw->discount_amount)));
     gncCustomerSetCredit (cust, gnc_amount_edit_get_amount
-                          (GNC_AMOUNT_EDIT (cw->credit_amount)));
+        (GNC_AMOUNT_EDIT (cw->credit_amount)));
 
-    gncCustomerSetTaxTableOverride
-    (cust, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (cw->taxtable_check)));
+    gncCustomerSetTaxTableOverride (cust, gtk_toggle_button_get_active
+        (GTK_TOGGLE_BUTTON (cw->taxtable_check)));
     gncCustomerSetTaxTable (cust, cw->taxtable);
 
     gncCustomerCommitEdit (cust);

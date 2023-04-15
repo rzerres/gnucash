@@ -32,8 +32,32 @@ typedef struct _job_window JobWindow;
 #include "dialog-search.h"
 
 /* Create or Edit a job */
-JobWindow * gnc_ui_job_edit (GtkWindow *parent, GncJob *job);
-JobWindow * gnc_ui_job_new (GtkWindow *parent, GncOwner *owner, QofBook *book);
+JobWindow *gnc_ui_job_edit (GtkWindow *parent, GncOwner *owner, GncJob *job);
+JobWindow *gnc_ui_job_new (GtkWindow *parent, GncOwner *owner, QofBook *book);
+
+/** Create a new job as a duplicate of the given existing job.
+ *
+ * \param old_job The job which is being duplicated
+ * \param open_properties If TRUE, open the "job properties" dialog window after creating the new job
+ * \param new_date If non-NULL, use this date as the date for the "opening date" and also as date for all job entries.
+ *
+ * \return The Job Window structure that contains a whole lot of things,
+ * among others the "created_job" as a GncJob* pointer on the newly
+ * created job.
+ */
+JobWindow* gnc_ui_job_duplicate (GtkWindow* parent, GncJob* old_job, gboolean open_properties, const GDate* new_date);
+
+/** Create a new job as a duplicate of the given existing job.
+ *
+ * \param old_job The job which is being duplicated
+ * \param open_properties If TRUE, open the "job properties" dialog window after creating the new job
+ * \param new_date If non-NULL, use this date as the date for the "opening date" and also as date for all job entries.
+ *
+ * \return The Job Window structure that contains a whole lot of things,
+ * among others the "created_job" as a GncJob* pointer on the newly
+ * created job.
+ */
+JobWindow* gnc_ui_job_duplicate (GtkWindow* parent, GncJob* old_job, gboolean open_properties, const GDate* new_date);
 
 /* Search for Jobs */
 GNCSearchWindow * gnc_job_search (GtkWindow *parent, GncJob *start,
@@ -47,5 +71,13 @@ GNCSearchWindow * gnc_job_search (GtkWindow *parent, GncJob *start,
  */
 GNCSearchWindow * gnc_job_search_select (GtkWindow *parent, gpointer start, gpointer book);
 GNCSearchWindow * gnc_job_search_edit (GtkWindow *parent, gpointer start, gpointer book);
+
+/* definitions for CB functions */
+void gnc_job_name_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_job_type_toggled_cb (GtkWidget *widget, gpointer data);
+void gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data);
+void gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data);
+void gnc_job_window_help_cb (GtkWidget *widget, gpointer data);
+void gnc_job_window_ok_cb (GtkWidget *widget, gpointer data);
 
 #endif /* GNC_DIALOG_JOB_H_ */
