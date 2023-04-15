@@ -67,8 +67,10 @@ const gchar* distriblist_version_string = "2.0.0";
 #define distriblist_child_string "distriblist:child"
 #define distriblist_slots_string "distriblist:slots"
 
+#define gnc_percentagetype_string "distriblist:percentage"
 #define gnc_sharestype_string "distriblist:shares"
 #define shares_labelsettlement_string "dl-shares:label_settlement"
+#define shares_percentagetotal_string "dl-shares:percentage_total"
 #define shares_sharestotal_string "dl-shares:shares_total"
 
 static xmlNodePtr
@@ -121,11 +123,22 @@ distriblist_dom_tree_create (GncDistributionList* distriblist)
             data,
             shares_sharestotal_string,
             gncDistribListGetSharesTotal (distriblist));
-        // TODO:
-        // maybe_add_string (
-        //     data,
-        //     shares_labelsettlement_string,
-        //     gncDistribListGetLabelSettlement (distriblist));
+        maybe_add_string (
+            data,
+            shares_labelsettlement_string,
+            gncDistribListGetLabelSettlement (distriblist));
+        break;
+    case GNC_DISTRIBLIST_TYPE_PERCENTAGE:
+        data = xmlNewChild (
+            ret, NULL, BAD_CAST gnc_percentagetype_string, NULL);
+        maybe_add_int (
+            data,
+            shares_percentagetotal_string,
+            gncDistribListGetPercentageTotal (distriblist));
+        maybe_add_string (
+            data,
+            shares_labelsettlement_string,
+            gncDistribListGetLabelSettlement (distriblist));
         break;
     }
 
@@ -199,6 +212,33 @@ shares_sharestotal_handler (xmlNodePtr node, gpointer distriblist_pdata)
         node, pdata->distriblist, gncDistribListSetSharesTotal);
 }
 
+static gboolean
+shares_percentagetotal_handler (xmlNodePtr node, gpointer distriblist_pdata)
+{
+    struct distriblist_pdata* pdata =
+        static_cast<decltype (pdata)> (distriblist_pdata);
+    return set_int (
+        node, pdata->distriblist, gncDistribListSetPercentageTotal);
+}
+
+static struct
+dom_tree_handler percentage_data_handlers_v2[] =
+{
+    {
+        shares_labelsettlement_string,
+        shares_labelsettlement_handler,
+        0,
+        0
+    },
+    {
+        shares_percentagetotal_string,
+        shares_percentagetotal_handler,
+        0,
+        0
+    },
+    { NULL, 0, 0, 0 }
+};
+
 static struct
 dom_tree_handler shares_data_handlers_v2[] =
 {
@@ -216,6 +256,20 @@ dom_tree_handler shares_data_handlers_v2[] =
     },
     { NULL, 0, 0, 0 }
 };
+
+static gboolean
+dom_tree_to_percentage_data (xmlNodePtr node, struct distriblist_pdata* pdata)
+{
+    gboolean successful;
+
+    successful = dom_tree_generic_parse (
+        node, percentage_data_handlers_v2, pdata);
+
+    if (!successful)
+        PERR ("failed to parse distribution list percentage data");
+
+    return successful;
+}
 
 static gboolean
 dom_tree_to_shares_data (xmlNodePtr node, struct distriblist_pdata* pdata)
@@ -344,6 +398,20 @@ distriblist_child_handler (xmlNodePtr node, gpointer distriblist_pdata)
 }
 
 static gboolean
+distriblist_percentage_data_handler (xmlNodePtr node, gpointer distriblist_pdata)
+{
+    struct distriblist_pdata* pdata =
+        static_cast<decltype (pdata)> (distriblist_pdata);
+
+    g_return_val_if_fail (node, FALSE);
+    g_return_val_if_fail (
+        gncDistribListGetType (pdata->distriblist) == 0, FALSE);
+
+    gncDistribListSetType (pdata->distriblist, GNC_DISTRIBLIST_TYPE_PERCENTAGE);
+    return dom_tree_to_percentage_data (node, pdata);
+}
+
+static gboolean
 distriblist_shares_data_handler (xmlNodePtr node, gpointer distriblist_pdata)
 {
     struct distriblist_pdata* pdata =
@@ -414,6 +482,12 @@ dom_tree_handler distriblist_handlers_v2[] =
     {
         distriblist_slots_string,
         distriblist_slots_handler,
+        0,
+        0
+    },
+    {
+        gnc_percentagetype_string,
+        distriblist_percentage_data_handler,
         0,
         0
     },
@@ -680,7 +754,7 @@ distriblist_scrub (QofBook* book)
     GHashTable *ht = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     DEBUG ("scrubbing distriblists...");
-    qof_object_foreach (GNC_ID_DISTRIBLIST, book, distriblist_scrub_cb, ht);
+    qof_object_foreach (GNC_ID_DISTRIBLIST, book, distriblist_scrub_cb, &list);
     // TODO: once we integrate the distriblist into coowner
     //qof_object_foreach (GNC_ID_COOWNER, book, distriblist_scrub_coowner, ht);
 
