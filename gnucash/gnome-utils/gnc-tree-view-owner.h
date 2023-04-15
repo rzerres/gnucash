@@ -92,6 +92,7 @@ typedef struct
 #define GNC_OWNER_TREE_ADDRESS_2_COL            "address-2"
 #define GNC_OWNER_TREE_ADDRESS_3_COL            "address-3"
 #define GNC_OWNER_TREE_ADDRESS_4_COL            "address-4"
+#define GNC_OWNER_TREE_MOBILE_COL               "mobile"
 #define GNC_OWNER_TREE_PHONE_COL                "phone"
 #define GNC_OWNER_TREE_FAX_COL                  "fax"
 #define GNC_OWNER_TREE_EMAIL_COL                "email"
