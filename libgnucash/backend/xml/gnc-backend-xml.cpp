@@ -169,9 +169,10 @@ det_exit:
 static void
 business_core_xml_init (void)
 {
-    /* Initialize our pointers into the backend subsystem */
+    /* Initialize valid pointers into the backend subsystem */
     gnc_address_xml_initialize ();
     gnc_billterm_xml_initialize ();
+    gnc_distriblist_xml_initialize ();
     gnc_coowner_xml_initialize ();
     gnc_customer_xml_initialize ();
     gnc_employee_xml_initialize ();
