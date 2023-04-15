@@ -138,7 +138,7 @@ GncSqlCustomerBackend::load_all (GncSqlBackend* sql_be)
     sql = "SELECT DISTINCT ";
     sql += pkey + " FROM " TABLE_NAME;
     gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
-					 (BookLookupFn)gnc_customer_lookup);
+                                         (BookLookupFn)gnc_customer_lookup);
 }
 
 /* ================================================================= */
@@ -163,6 +163,64 @@ GncSqlCustomerBackend::create_tables (GncSqlBackend* sql_be)
         PINFO ("Customers table upgraded from version 1 to version %d\n",
                TABLE_VERSION);
     }
+}
+
+/* ================================================================= */
+bool
+GncSqlCustomerBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
+{
+    GncCustomer* customer;
+    const GncGUID* guid;
+    E_DB_OPERATION op;
+    gboolean is_infant;
+    gboolean is_ok = TRUE;
+
+    g_return_val_if_fail (inst != NULL, FALSE);
+    g_return_val_if_fail (GNC_IS_CUSTOMER (inst), FALSE);
+    g_return_val_if_fail (sql_be != NULL, FALSE);
+
+    customer = GNC_CUSTOMER (inst);
+
+    is_infant = qof_instance_get_infant (inst);
+    if (qof_instance_get_destroying (inst))
+    {
+        op = OP_DB_DELETE;
+    }
+    else if (sql_be->pristine() || is_infant)
+    {
+        op = OP_DB_INSERT;
+    }
+    else
+    {
+        op = OP_DB_UPDATE;
+    }
+    if (op != OP_DB_DELETE)
+    {
+        // Ensure the commodity is in the db
+        is_ok = sql_be->save_commodity(gncCustomerGetCurrency (customer));
+    }
+
+    if (is_ok)
+    {
+        is_ok = sql_be->do_db_operation(op, TABLE_NAME, GNC_ID_CUSTOMER, customer,
+                                        col_table);
+    }
+
+    if (is_ok)
+    {
+        // Now, commit or delete any slots
+        guid = qof_instance_get_guid (inst);
+        if (!qof_instance_get_destroying (inst))
+        {
+            is_ok = gnc_sql_slots_save (sql_be, guid, is_infant, inst);
+        }
+        else
+        {
+            is_ok = gnc_sql_slots_delete (sql_be, guid);
+        }
+    }
+
+    return is_ok;
 }
 
 /* ================================================================= */
