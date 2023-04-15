@@ -101,6 +101,9 @@ typedef struct _new_billterms
 } NewBillTerm;
 
 
+/***********************************************************\
+ * Private functions
+\***********************************************************/
 static GtkWidget *
 read_widget (GtkBuilder *builder, char *name, gboolean read_only)
 {
@@ -780,6 +783,9 @@ find_handler (gpointer find_data, gpointer data)
     return (btw != NULL && btw->book == book);
 }
 
+/***********************************************************\
+ * Public fuctions
+\***********************************************************/
 /* Create a billterms window */
 BillTermsWindow *
 gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
