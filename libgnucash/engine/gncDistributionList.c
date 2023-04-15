@@ -42,7 +42,8 @@ struct _gncDistributionList
     const char *name;
     const char *description;
     GncDistributionListType type;
-    GncOwner owner;
+    //GncOwner *owner;
+    const char *owner_typename;
     const char *percentage_label_settlement;
     gint percentage_total;
     const char *shares_label_settlement;
@@ -261,7 +262,7 @@ gnc_distriblist_class_init (GncDistributionListClass *klass)
          "DistributionList Name",
          "The distribution list name is an arbitrary string "
          "assigned by the user. It is intended to "
-         "be short string (10 to 30 character) "
+         "be a short string (10 to 30 character) "
          "that is displayed by the GUI identified with the "
          "distriblist mnemonic.",
          NULL,
@@ -452,7 +453,8 @@ static GncDistributionList
     gncDistribListSetDescription (new_distriblist, distriblist->description);
 
     new_distriblist->type = distriblist->type;
-    new_distriblist->owner = distriblist->owner;
+    //new_distriblist->owner = distriblist->owner;
+    new_distriblist->owner_typename = distriblist->owner_typename;
     new_distriblist->percentage_label_settlement = distriblist->percentage_label_settlement;
     new_distriblist->percentage_total = distriblist->percentage_total;
     new_distriblist->shares_label_settlement = distriblist->shares_label_settlement;
@@ -559,10 +561,17 @@ gncDistribListRegister (void)
             (QofAccessFunc)gncDistribListGetName,
             (QofSetterFunc)gncDistribListSetName
         },
+        /* { */
+        /*     GNC_DISTRIBLIST_OWNER, */
+        /*     QOF_TYPE_INT32, */
+        /*     (QofAccessFunc)gncDistribListGetOwner, */
+        /*     NULL */
+        /* }, */
         {
-            GNC_DISTRIBLIST_OWNER,
+            GNC_DISTRIBLIST_OWNER_TYPENAME,
             QOF_TYPE_STRING,
-            (QofAccessFunc)gncDistribListGetOwner,
+            (QofAccessFunc)gncDistribListGetOwnerTypeName,
+            (QofSetterFunc)gncDistribListSetOwnerTypeName,
             NULL
         },
         {
@@ -650,7 +659,8 @@ GncDistributionList
     distriblist->name = CACHE_INSERT ("");
     distriblist->description = CACHE_INSERT ("");
     distriblist->type = GNC_DISTRIBLIST_TYPE_SHARES;
-    //distriblist->owner = GNC_OWNER_NONE;
+    //distriblist->owner = gncOwnerNew();
+    distriblist->owner_typename = CACHE_INSERT ("");
     distriblist->percentage_label_settlement = CACHE_INSERT ("");
     distriblist->percentage_total = 0;
     distriblist->shares_label_settlement = CACHE_INSERT ("");
@@ -722,16 +732,30 @@ gncDistribListSetName (GncDistributionList *distriblist, const char *name)
     gncDistribListCommitEdit (distriblist);
 }
 
-void
-gncDistribListSetOwner (
-    GncDistributionList *distriblist,
-    GncOwner *owner)
-{
-    if (!distriblist || !owner) return;
-    if (gncOwnerEqual (&distriblist->owner, owner)) return;
+/* void */
+/* gncDistribListSetOwner ( */
+/*     GncDistributionList *distriblist, */
+/*     GncOwner *owner) */
+/* { */
+/*     if (!distriblist || !owner) return; */
+/*     if (gncOwnerEqual (distriblist->owner, owner)) return; */
 
-    gncDistribListBeginEdit (distriblist);
-    gncOwnerCopy (owner, &distriblist->owner);
+/*     gncDistribListBeginEdit (distriblist); */
+/*     gncOwnerCopy (owner, distriblist->owner); */
+/*     mark_distriblist (distriblist); */
+/*     gncDistribListCommitEdit (distriblist); */
+/* } */
+
+void
+gncDistribListSetOwnerTypeName (
+    GncDistributionList *distriblist,
+    const char *owner_typename)
+{
+    if (!distriblist || !owner_typename) return;
+    SET_STR (distriblist, distriblist->owner_typename,
+             owner_typename);
+    mark_distriblist (distriblist);
+    maybe_resort_list (distriblist);
     mark_distriblist (distriblist);
     gncDistribListCommitEdit (distriblist);
 }
@@ -840,12 +864,20 @@ const char
 /*     return owner_info->lists; */
 /* } */
 
-GncOwner
-*gncDistribListGetOwner (
-    GncDistributionList *distriblist)
+/* GncOwner */
+/* *gncDistribListGetOwner ( */
+/*     GncDistributionList *distriblist) */
+/* { */
+/*   if (!distriblist) return NULL; */
+/*   return distriblist->owner; */
+/* } */
+
+const char
+*gncDistribListGetOwnerTypeName (
+    const GncDistributionList *distriblist)
 {
-  if (!distriblist) return NULL;
-  return &distriblist->owner;
+    if (!distriblist) return 0;
+    return distriblist->owner_typename;
 }
 
 GncDistributionList
@@ -972,9 +1004,6 @@ gncDistribListEqual(
     const GncDistributionList *a,
     const GncDistributionList *b)
 {
-    const char * owner_typename_a;
-    const char * owner_typename_b;
-
     if (a == NULL && b == NULL) return TRUE;
     if (a == NULL || b == NULL) return FALSE;
 
@@ -999,12 +1028,12 @@ gncDistribListEqual(
         return FALSE;
     }
 
-    owner_typename_a = gncOwnerGetTypeString(&a->owner);
-    owner_typename_b = gncOwnerGetTypeString(&b->owner);
-    if (owner_typename_a != owner_typename_b)
+    //owner_a = gncOwnerGetTypeString(a->owner);
+    //owner_b = gncOwnerGetTypeString(b->owner);
+    if (a->owner_typename != b->owner_typename)
     {
-        PWARN("Percentage owner typename differ: %s vs %s",
-              owner_typename_a, owner_typename_b);
+        PWARN("Owner typename differ: %s vs %s",
+              a->owner_typename, b->owner_typename);
         return FALSE;
     }
 
