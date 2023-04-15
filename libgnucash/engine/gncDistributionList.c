@@ -1,24 +1,24 @@
-/********************************************************************\
- * gncDistributionList.c -- the Gnucash Distirbuton List interface  *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
- *                                                                  *
-\********************************************************************/
+/*********************************************************************\
+ * gncDistributionList.c -- the Gnucash Distirbuton List interface   *
+ *                                                                   *
+ * This program is free software; you can redistribute it and/or     *
+ * modify it under the terms of the GNU General Public License as    *
+ * published by the Free Software Foundation; either version 2 of    *
+ * the License, or (at your option) any later version.               *
+ *                                                                   *
+ * This program is distributed in the hope that it will be useful,   *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     *
+ * GNU General Public License for more details.                      *
+ *                                                                   *
+ * You should have received a copy of the GNU General Public License *
+ * along with this program; if not, contact:                         *
+ *                                                                   *
+ * Free Software Foundation           Voice:  +1-617-542-5942        *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652        *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                    *
+ *                                                                   *
+\*********************************************************************/
 
 /*
  * Copyright (C) 2020 Ralf Zerres
@@ -42,6 +42,7 @@ struct _gncDistributionList
     const char *description;
     GncDistributionListType type;
     const char *label_settlement;
+    gint percentage_total;
     gint shares_total;
 
     // Internal management fields
@@ -61,7 +62,7 @@ struct _gncDistributionListClass
 
 struct _book_info
 {
-  GList *distriblists;          // visible distribution lists
+    GList *lists;                    // visible distribution lists
 };
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
@@ -94,16 +95,27 @@ static inline void maybe_resort_list (GncDistributionList *distriblist)
     if (distriblist->parent || distriblist->invisible) return;
     book_info = qof_book_get_data (
         qof_instance_get_book(distriblist), _GNC_MOD_NAME);
-    book_info->distriblists = g_list_sort (
-        book_info->distriblists, (GCompareFunc)gncDistribListCompare);
+    book_info->lists = g_list_sort (
+        book_info->lists, (GCompareFunc)gncDistribListCompare);
 }
 
 static inline void addObj (GncDistributionList *distriblist)
 {
+    //FIXME: pointer book_info has invalid address after assignment. Why?
     struct _book_info *book_info;
+    //FIXME: why is book_info <null>?
     book_info = qof_book_get_data (qof_instance_get_book(distriblist), _GNC_MOD_NAME);
-    book_info->distriblists = g_list_insert_sorted (book_info->distriblists, distriblist,
-                                      (GCompareFunc)gncDistribListCompare);
+    if (book_info != NULL)
+    {
+        book_info->lists = g_list_insert_sorted (
+           book_info->lists,
+           distriblist,
+           (GCompareFunc)gncDistribListCompare);
+    }
+    else
+    {
+        PERR("Book info is NULL!\n");
+    }
 }
 
 static inline void
@@ -112,8 +124,16 @@ remObj (GncDistributionList *distriblist)
     struct _book_info *book_info;
     book_info = qof_book_get_data (
         qof_instance_get_book(distriblist), _GNC_MOD_NAME);
-    book_info->distriblists = g_list_remove (
-        book_info->distriblists, distriblist);
+    if (book_info != NULL)
+    {
+        book_info->lists = g_list_remove (
+            book_info->lists, distriblist);
+
+    }
+    else
+    {
+        PERR("Book info is NULL!\n");
+    }
 }
 
 static inline void
@@ -145,7 +165,7 @@ G_DEFINE_TYPE(GncDistributionList, gnc_distriblist, QOF_TYPE_INSTANCE);
 
 static void
 gnc_distriblist_init(
-    GncDistributionList *distriblist_type)
+    GncDistributionList *distriblist)
 {
 }
 
@@ -170,15 +190,15 @@ gnc_distriblist_get_property (
     GValue *value,
     GParamSpec *pspec)
 {
-    GncDistributionList *distriblist_type;
+    GncDistributionList *distriblist;
 
     g_return_if_fail(GNC_IS_DISTRIBLIST(object));
 
-    distriblist_type = GNC_DISTRIBLIST(object);
+    distriblist = GNC_DISTRIBLIST(object);
     switch (prop_id)
     {
     case PROP_NAME:
-        g_value_set_string(value, distriblist_type->name);
+        g_value_set_string(value, distriblist->name);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -193,18 +213,18 @@ gnc_distriblist_set_property (
     const GValue *value,
     GParamSpec *pspec)
 {
-    GncDistributionList *distriblist_type;
+    GncDistributionList *distriblist;
 
     g_return_if_fail(GNC_IS_DISTRIBLIST(object));
 
-    distriblist_type = GNC_DISTRIBLIST(object);
-    g_assert (qof_instance_get_editlevel(distriblist_type));
+    distriblist = GNC_DISTRIBLIST(object);
+    g_assert (qof_instance_get_editlevel(distriblist));
 
     switch (prop_id)
     {
     case PROP_NAME:
         gncDistribListSetName(
-            distriblist_type, g_value_get_string(value));
+            distriblist, g_value_get_string(value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -268,11 +288,13 @@ GncDistributionList
 
     distriblist = g_object_new (GNC_TYPE_DISTRIBLIST, NULL);
     qof_instance_init_data(&distriblist->inst, _GNC_MOD_NAME, book);
-    distriblist->description = CACHE_INSERT ("");
-    distriblist->label_settlement = CACHE_INSERT ("");
     distriblist->name = CACHE_INSERT ("");
+    distriblist->description = CACHE_INSERT ("");
+    distriblist->type = GNC_DISTRIBLIST_TYPE_SHARES;
+    distriblist->label_settlement = CACHE_INSERT ("");
+    distriblist->percentage_total = 0;
     distriblist->shares_total = 0;
-    distriblist->type = 1;
+
     addObj (distriblist);
     qof_event_gen (&distriblist->inst,  QOF_EVENT_CREATE, NULL);
     return distriblist;
@@ -325,7 +347,8 @@ gncDistribListFree (
 /* ============================================================== */
 /* Set Functions */
 
-void gncDistribListSetName (GncDistributionList *distriblist, const char *name)
+void
+gncDistribListSetName (GncDistributionList *distriblist, const char *name)
 {
     if (!distriblist || !name) return;
     SET_STR (distriblist, distriblist->name, name);
@@ -334,7 +357,8 @@ void gncDistribListSetName (GncDistributionList *distriblist, const char *name)
     gncDistribListCommitEdit (distriblist);
 }
 
-void gncDistribListSetDescription (
+void
+gncDistribListSetDescription (
     GncDistributionList *distriblist,
     const char *description)
 {
@@ -345,7 +369,8 @@ void gncDistribListSetDescription (
     gncDistribListCommitEdit (distriblist);
 }
 
-void gncDistribListSetType (
+void
+gncDistribListSetType (
     GncDistributionList *distriblist,
     GncDistributionListType type)
 {
@@ -371,6 +396,18 @@ void qofDistributionListSetType (
     gncDistribListSetType(distriblist, type);
 }
 
+void gncDistribListSetPercentageTotal (
+    GncDistributionList *distriblist,
+    gint percentage_total)
+{
+    if (!distriblist) return;
+    if (distriblist->percentage_total == percentage_total) return;
+    gncDistribListBeginEdit (distriblist);
+    distriblist->percentage_total = percentage_total;
+    mark_distriblist (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
 void gncDistribListSetSharesTotal (
     GncDistributionList *distriblist,
     gint shares_total)
@@ -383,7 +420,8 @@ void gncDistribListSetSharesTotal (
     gncDistribListCommitEdit (distriblist);
 }
 
-void gncDistribListSetLabelSettlement (
+void
+gncDistribListSetLabelSettlement (
     GncDistributionList *distriblist,
     const char *label_settlement)
 {
@@ -397,7 +435,8 @@ void gncDistribListSetLabelSettlement (
 // TODO: Is the parent/child relationship a double-linked list?
 //       Do we still need an explicite set-parent/set-child method?
 //       Any misuse could goof up -> can't we asure to make it atomic?
-void gncDistribListSetParent (
+void
+gncDistribListSetParent (
     GncDistributionList *distriblist,
     GncDistributionList *parent)
 {
@@ -417,7 +456,8 @@ void gncDistribListSetParent (
     gncDistribListCommitEdit (distriblist);
 }
 
-void gncDistribListSetChild (GncDistributionList *distriblist, GncDistributionList *child)
+void
+gncDistribListSetChild (GncDistributionList *distriblist, GncDistributionList *child)
 {
     if (!distriblist) return;
     gncDistribListBeginEdit (distriblist);
@@ -426,7 +466,8 @@ void gncDistribListSetChild (GncDistributionList *distriblist, GncDistributionLi
     gncDistribListCommitEdit (distriblist);
 }
 
-void gncDistribListIncRef (GncDistributionList *distriblist)
+void
+gncDistribListIncRef (GncDistributionList *distriblist)
 {
     if (!distriblist) return;
     if (distriblist->parent || distriblist->invisible) return;        /* children dont need refcounts */
@@ -436,7 +477,8 @@ void gncDistribListIncRef (GncDistributionList *distriblist)
     gncDistribListCommitEdit (distriblist);
 }
 
-void gncDistribListDecRef (GncDistributionList *distriblist)
+void
+gncDistribListDecRef (GncDistributionList *distriblist)
 {
     if (!distriblist) return;
     if (distriblist->parent || distriblist->invisible) return;        /* children dont need refcounts */
@@ -447,7 +489,8 @@ void gncDistribListDecRef (GncDistributionList *distriblist)
     gncDistribListCommitEdit (distriblist);
 }
 
-void gncDistribListSetRefcount (GncDistributionList *distriblist, gint64 refcount)
+void
+gncDistribListSetRefcount (GncDistributionList *distriblist, gint64 refcount)
 {
     if (!distriblist) return;
     gncDistribListBeginEdit (distriblist);
@@ -456,7 +499,8 @@ void gncDistribListSetRefcount (GncDistributionList *distriblist, gint64 refcoun
     gncDistribListCommitEdit (distriblist);
 }
 
-void gncDistribListMakeInvisible (GncDistributionList *distriblist)
+void
+gncDistribListMakeInvisible (GncDistributionList *distriblist)
 {
     if (!distriblist) return;
     gncDistribListBeginEdit (distriblist);
@@ -466,7 +510,8 @@ void gncDistribListMakeInvisible (GncDistributionList *distriblist)
     gncDistribListCommitEdit (distriblist);
 }
 
-void gncDistribListChanged (GncDistributionList *distriblist)
+void
+gncDistribListChanged (GncDistributionList *distriblist)
 {
     if (!distriblist) return;
     distriblist->child = NULL;
@@ -477,19 +522,22 @@ void gncDistribListBeginEdit (GncDistributionList *distriblist)
     qof_begin_edit(&distriblist->inst);
 }
 
-static void gncDistribListOnError (QofInstance *inst, QofBackendError errcode)
+static void
+gncDistribListOnError (QofInstance *inst, QofBackendError errcode)
 {
     PERR("DistributionList QofBackend Failure: %d", errcode);
     gnc_engine_signal_commit_error( errcode );
 }
 
-static void distriblist_free (QofInstance *inst)
+static void
+distriblist_free (QofInstance *inst)
 {
     GncDistributionList *distriblist = (GncDistributionList *) inst;
     gncDistribListFree(distriblist);
 }
 
-static void on_done (QofInstance *inst) {}
+static void
+on_done (QofInstance *inst) {}
 
 void
 gncDistribListCommitEdit (
@@ -506,24 +554,24 @@ static GncDistributionList
 *gncDistribListCopy (
     const GncDistributionList *distriblist)
 {
-    GncDistributionList *dl;
+    GncDistributionList *new_distriblist;
 
     if (!distriblist) return NULL;
-    dl = gncDistribListCreate (qof_instance_get_book(distriblist));
+    new_distriblist = gncDistribListCreate (qof_instance_get_book(distriblist));
 
-    gncDistribListBeginEdit(dl);
+    gncDistribListBeginEdit(new_distriblist);
 
-    gncDistribListSetName (dl, distriblist->name);
-    gncDistribListSetDescription (dl, distriblist->description);
+    gncDistribListSetName (new_distriblist, distriblist->name);
+    gncDistribListSetDescription (new_distriblist, distriblist->description);
 
-    dl->type = distriblist->type;
-    dl->label_settlement = distriblist->label_settlement;
-    dl->shares_total = distriblist->shares_total;
+    new_distriblist->type = distriblist->type;
+    new_distriblist->label_settlement = distriblist->label_settlement;
+    new_distriblist->shares_total = distriblist->shares_total;
 
-    mark_distriblist (dl);
-    gncDistribListCommitEdit(dl);
+    mark_distriblist (new_distriblist);
+    gncDistribListCommitEdit(new_distriblist);
 
-    return dl;
+    return new_distriblist;
 }
 
 GList
@@ -534,7 +582,7 @@ GList
     if (!book) return NULL;
 
     book_info = qof_book_get_data (book, _GNC_MOD_NAME);
-    return book_info->distriblists;
+    return book_info->lists;
 }
 
 const char
@@ -581,6 +629,14 @@ const char
 {
     if (!distriblist) return 0;
     return distriblist->label_settlement;
+}
+
+gint
+gncDistribListGetPercentageTotal (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return 0;
+    return distriblist->percentage_total;
 }
 
 gint
@@ -642,14 +698,16 @@ gncDistribListGetRefcount (
     return distriblist->refcount;
 }
 
-gboolean gncDistribListGetInvisible (
+gboolean
+gncDistribListGetInvisible (
     const GncDistributionList *distriblist)
 {
     if (!distriblist) return FALSE;
     return distriblist->invisible;
 }
 
-int gncDistribListCompare (
+int
+gncDistribListCompare (
     const GncDistributionList *a,
     const GncDistributionList *b)
 {
@@ -665,7 +723,8 @@ int gncDistribListCompare (
     return g_strcmp0 (a->description, b->description);
 }
 
-gboolean gncDistribListEqual(
+gboolean
+gncDistribListEqual(
     const GncDistributionList *a,
     const GncDistributionList *b)
 {
@@ -714,7 +773,8 @@ gboolean gncDistribListEqual(
     return TRUE;
 }
 
-gboolean gncDistribListIsFamily (
+gboolean
+gncDistribListIsFamily (
     const GncDistributionList *a,
     const GncDistributionList *b)
 {
@@ -724,26 +784,29 @@ gboolean gncDistribListIsFamily (
         return FALSE;
 }
 
-gboolean gncDistribListIsDirty (const GncDistributionList *distriblist)
+gboolean
+gncDistribListIsDirty (const GncDistributionList *distriblist)
 {
     if (!distriblist) return FALSE;
     return qof_instance_get_dirty_flag(distriblist);
 }
 
 
-/* Private functions */
-
-static void _gncDistribListCreate (QofBook *book)
+// Private functions
+static void
+_gncDistribListCreate (QofBook *book)
 {
     struct _book_info *book_info;
 
     if (!book) return;
 
+    // allocate a book structure
     book_info = g_new0 (struct _book_info, 1);
     qof_book_set_data (book, _GNC_MOD_NAME, book_info);
 }
 
-static void _gncDistribListDestroy (QofBook *book)
+static void
+_gncDistribListDestroy (QofBook *book)
 {
     struct _book_info *book_info;
 
@@ -751,11 +814,12 @@ static void _gncDistribListDestroy (QofBook *book)
 
     book_info = qof_book_get_data (book, _GNC_MOD_NAME);
 
-    g_list_free (book_info->distriblists);
+    g_list_free (book_info->lists);
     g_free (book_info);
 }
 
-static QofObject gncDistribListDescription =
+static QofObject
+gncDistribListDescription =
 {
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) _GNC_MOD_NAME,
@@ -770,46 +834,11 @@ static QofObject gncDistribListDescription =
     DI(.version_cmp       = ) (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
-gboolean gncDistribListRegister (void)
+gboolean
+gncDistribListRegister (void)
 {
     static QofParam params[] =
     {
-        {
-            GNC_DISTRIBLIST_NAME,
-            QOF_TYPE_STRING,
-            (QofAccessFunc)gncDistribListGetName,
-            (QofSetterFunc)gncDistribListSetName
-        },
-        {
-            GNC_DISTRIBLIST_DESCRIPTION,
-            QOF_TYPE_STRING,
-            (QofAccessFunc)gncDistribListGetDescription,
-            (QofSetterFunc)gncDistribListSetDescription
-        },
-        {
-            GNC_DISTRIBLIST_TYPE,
-            QOF_TYPE_STRING,
-            (QofAccessFunc)qofDistributionListGetType,
-            (QofSetterFunc)qofDistributionListSetType
-        },
-        {
-            GNC_DISTRIBLIST_LABEL_SETTLEMENT,
-            QOF_TYPE_STRING,
-            (QofAccessFunc)gncDistribListGetLabelSettlement,
-            (QofSetterFunc)gncDistribListSetLabelSettlement
-        },
-        {
-            GNC_DISTRIBLIST_SHARES_TOTAL,
-            QOF_TYPE_INT32,
-            (QofAccessFunc)gncDistribListGetSharesTotal,
-            (QofSetterFunc)gncDistribListSetSharesTotal
-        },
-        {
-            GNC_DISTRIBLIST_REFCOUNT,
-            QOF_TYPE_INT64,
-            (QofAccessFunc)gncDistribListGetRefcount,
-            NULL
-        },
         {
             QOF_PARAM_BOOK,
             QOF_ID_BOOK,
@@ -821,6 +850,48 @@ gboolean gncDistribListRegister (void)
             QOF_TYPE_GUID,
             (QofAccessFunc)qof_instance_get_guid,
             NULL
+        },
+        {
+            GNC_DISTRIBLIST_DESCRIPTION,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)gncDistribListGetDescription,
+            (QofSetterFunc)gncDistribListSetDescription
+        },
+        {
+            GNC_DISTRIBLIST_LABEL_SETTLEMENT,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)gncDistribListGetLabelSettlement,
+            (QofSetterFunc)gncDistribListSetLabelSettlement
+        },
+        {
+            GNC_DISTRIBLIST_NAME,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)gncDistribListGetName,
+            (QofSetterFunc)gncDistribListSetName
+        },
+        {
+            GNC_DISTRIBLIST_PERCENTAGE_TOTAL,
+            QOF_TYPE_INT32,
+            (QofAccessFunc)gncDistribListGetPercentageTotal,
+            (QofSetterFunc)gncDistribListSetPercentageTotal
+        },
+        {
+            GNC_DISTRIBLIST_REFCOUNT,
+            QOF_TYPE_INT64,
+            (QofAccessFunc)gncDistribListGetRefcount,
+            NULL
+        },
+        {
+            GNC_DISTRIBLIST_SHARES_TOTAL,
+            QOF_TYPE_INT32,
+            (QofAccessFunc)gncDistribListGetSharesTotal,
+            (QofSetterFunc)gncDistribListSetSharesTotal
+        },
+        {
+            GNC_DISTRIBLIST_TYPE,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)qofDistributionListGetType,
+            (QofSetterFunc)qofDistributionListSetType
         },
         { NULL },
     };
