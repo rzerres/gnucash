@@ -37,10 +37,11 @@
 
 static int count = 0;
 
+/* function header definitions */
 static void
-test_string_fcn (QofBook *book, const char *message,
-                 void (*set) (GncCoOwner *, const char *str),
-                 const char * (*get)(const GncCoOwner *));
+test_bool_fcn (QofBook *book, const char *message,
+               void (*set) (GncCoOwner *, gboolean),
+               gboolean (*get) (const GncCoOwner *));
 
 static void
 test_numeric_fcn (QofBook *book, const char *message,
@@ -48,9 +49,13 @@ test_numeric_fcn (QofBook *book, const char *message,
                   gnc_numeric (*get)(const GncCoOwner *));
 
 static void
-test_bool_fcn (QofBook *book, const char *message,
-               void (*set) (GncCoOwner *, gboolean),
-               gboolean (*get) (const GncCoOwner *));
+test_string_fcn (QofBook *book, const char *message,
+                 void (*set) (GncCoOwner *, const char *str),
+                 const char * (*get)(const GncCoOwner *));
+
+/*
+ * CoOwner Tests
+ */
 
 static void
 test_coowner (void)
@@ -72,23 +77,26 @@ test_coowner (void)
         success ("create/destroy");
     }
 
-    /* Test setting/getting routines; does the active flag get set right? */
+    /* Test set and get functions */
     {
         GncGUID guid;
 
+        test_bool_fcn (book, "Active", gncCoOwnerSetActive, gncCoOwnerGetActive);
+        do_test (gncCoOwnerGetAddr (coowner) != NULL, "Addr");
+        test_numeric_fcn (book, "Apartment Share", gncCoOwnerSetAptShare, gncCoOwnerGetAptShare);
+        test_string_fcn (book, "Apartment Unit", gncCoOwnerSetAptUnit, gncCoOwnerGetAptUnit);
+        test_numeric_fcn (book, "Credit", gncCoOwnerSetCredit, gncCoOwnerGetCredit);
+        test_numeric_fcn (book, "Discount", gncCoOwnerSetDiscount, gncCoOwnerGetDiscount);
+        test_string_fcn (book, "DistributionKey", gncCoOwnerSetDistributionKey, gncCoOwnerGetDistributionKey);
         test_string_fcn (book, "Id", gncCoOwnerSetID, gncCoOwnerGetID);
         test_string_fcn (book, "Language", gncCoOwnerSetLanguage, gncCoOwnerGetLanguage);
         test_string_fcn (book, "Name", gncCoOwnerSetName, gncCoOwnerGetName);
         test_string_fcn (book, "Notes", gncCoOwnerSetNotes, gncCoOwnerGetNotes);
+        do_test (gncCoOwnerGetShipAddr (coowner) != NULL, "ShipAddr");
+        test_string_fcn (book, "Tenant", gncCoOwnerSetTenant, gncCoOwnerGetTenant);
 
+        /* TODO: Terms tests */
         //test_string_fcn (book, "Terms", gncCoOwnerSetTerms, gncCoOwnerGetTerms);
-
-        test_numeric_fcn (book, "Discount", gncCoOwnerSetDiscount, gncCoOwnerGetDiscount);
-        test_numeric_fcn (book, "Credit", gncCoOwnerSetCredit, gncCoOwnerGetCredit);
-
-        test_bool_fcn (book, "Active", gncCoOwnerSetActive, gncCoOwnerGetActive);
-
-        /* TODO: apt unit tests */
 
         guid_replace (&guid);
         coowner = gncCoOwnerCreate (book);
@@ -138,7 +146,8 @@ test_coowner (void)
         do_test (g_strcmp0 (CoOwnerAptUnit, res) == 0, "AptUnit match string");
     }
 
-    /* TODO */
+
+    /* TODO: Job-list test */
     // do_test (gncCoOwnerGetJoblist (coowner, TRUE) == NULL, "joblist empty");
 
     /* Test the Entity Table */
@@ -153,27 +162,33 @@ test_coowner (void)
     qof_book_destroy (book);
 }
 
+/*
+ * Helper functions
+ */
+
 static void
-test_string_fcn (QofBook *book, const char *message,
-                 void (*set) (GncCoOwner *, const char *str),
-                 const char * (*get)(const GncCoOwner *))
+test_bool_fcn (QofBook *book, const char *message,
+               void (*set) (GncCoOwner *, gboolean),
+               gboolean (*get) (const GncCoOwner *))
 {
     GncCoOwner *coowner = gncCoOwnerCreate (book);
-    char const *str = get_random_string ();
+    gboolean num = get_random_boolean ();
 
     do_test (!gncCoOwnerIsDirty (coowner), "test if start dirty");
     gncCoOwnerBeginEdit (coowner);
-    set (coowner, str);
+    set (coowner, FALSE);
+    set (coowner, TRUE);
+    set (coowner, num);
     /* CoOwner record should be dirty */
     do_test (gncCoOwnerIsDirty (coowner), "test dirty later");
     gncCoOwnerCommitEdit (coowner);
-    /* CoOwner record shouldn't be dirty */
+    /* CoOwner record should be not dirty */
     /* Skip, because will always fail without a backend.
      * It's not possible to load a backend in the engine code
      * without having circular dependencies.
      */
     // do_test (!gncCoOwnerIsDirty (coowner), "test dirty after commit");
-    do_test (g_strcmp0 (get (coowner), str) == 0, message);
+    do_test (get (coowner) == num, message);
     gncCoOwnerSetActive (coowner, FALSE);
     count++;
 }
@@ -204,28 +219,26 @@ test_numeric_fcn (QofBook *book, const char *message,
 }
 
 static void
-test_bool_fcn (QofBook *book, const char *message,
-               void (*set) (GncCoOwner *, gboolean),
-               gboolean (*get) (const GncCoOwner *))
+test_string_fcn (QofBook *book, const char *message,
+                 void (*set) (GncCoOwner *, const char *str),
+                 const char * (*get)(const GncCoOwner *))
 {
     GncCoOwner *coowner = gncCoOwnerCreate (book);
-    gboolean num = get_random_boolean ();
+    char const *str = get_random_string ();
 
     do_test (!gncCoOwnerIsDirty (coowner), "test if start dirty");
     gncCoOwnerBeginEdit (coowner);
-    set (coowner, FALSE);
-    set (coowner, TRUE);
-    set (coowner, num);
+    set (coowner, str);
     /* CoOwner record should be dirty */
     do_test (gncCoOwnerIsDirty (coowner), "test dirty later");
     gncCoOwnerCommitEdit (coowner);
-    /* CoOwner record should be not dirty */
+    /* CoOwner record shouldn't be dirty */
     /* Skip, because will always fail without a backend.
      * It's not possible to load a backend in the engine code
      * without having circular dependencies.
      */
     // do_test (!gncCoOwnerIsDirty (coowner), "test dirty after commit");
-    do_test (get (coowner) == num, message);
+    do_test (g_strcmp0 (get (coowner), str) == 0, message);
     gncCoOwnerSetActive (coowner, FALSE);
     count++;
 }
