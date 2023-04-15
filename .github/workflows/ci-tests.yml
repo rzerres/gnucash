@@ -6,10 +6,10 @@ on:
   push:
     branches:
       # we need to use `master`, since github pages can't handle other branches
-      - maint
-      - coowner
+      - stable
+      - coowner-4
+      - wip-coowner-5
 
->>>>>>> dbed86d7d6 ([.github/workflows] Update gh action sources)
 jobs:
   ci_tests_ubuntu-22:
     runs-on: ubuntu-22.04
