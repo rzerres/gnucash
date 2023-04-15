@@ -62,7 +62,7 @@ extern "C" {
 #define DL_USAGE_EMPLOYEE    "busnss-emply"
 #define DL_USAGE_INVOICE     "busnss-ar-invoices1"
 #define DL_USAGE_JOB         "busnss-ar-jobs1"
-#define HL_USAGE_SETTLEMENT  "busnss-coowner-newsettlement"
+#define DL_USAGE_SETTLEMENT  "busnss-coowner-newsettlement"
 #define DL_USAGE_VENDOR      "busnss-ap-vendors1"
 #define DL_USAGE_VOUCHER     "busnss-emply-newvchr"
 #define DL_ACC               "acct-create"
