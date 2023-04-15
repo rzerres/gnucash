@@ -6,8 +6,10 @@ on:
   push:
     branches:
       # we need to use `master`, since github pages can't handle other branches
-      - maint
-      - coowner
+      - stable
+      - coowner-4
+      - wip-coowner-5
+
   # trigger manually trigger from the Actions tab
   workflow_dispatch:
 
