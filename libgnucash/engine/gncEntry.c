@@ -1557,22 +1557,36 @@ gncEntryGetPrice (
     return result;
 }
 
-gnc_numeric gncEntryGetDocValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+gnc_numeric
+gncEntryGetDocValue (
+    GncEntry *entry,
+    gboolean round,
+    gboolean is_owner_doc,
+    gboolean is_cn)
 {
-    gnc_numeric value = gncEntryGetIntValue (entry, round, is_cust_doc);
+    gnc_numeric value = gncEntryGetIntValue (entry, round, is_owner_doc);
     return (is_cn ? gnc_numeric_neg (value) : value);
 }
 
-gnc_numeric gncEntryGetDocTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+gnc_numeric
+gncEntryGetDocTaxValue (
+    GncEntry *entry,
+    gboolean round,
+    gboolean is_owner_doc,
+    gboolean is_cn)
 {
-    gnc_numeric value = gncEntryGetIntTaxValue (entry, round, is_cust_doc);
+    gnc_numeric value = gncEntryGetIntTaxValue (entry, round, is_owner_doc);
     return (is_cn ? gnc_numeric_neg (value) : value);
 }
 
 /* Careful: the returned list is NOT owned by the entry and should be freed by the caller */
-AccountValueList * gncEntryGetDocTaxValues (GncEntry *entry, gboolean is_cust_doc, gboolean is_cn)
+AccountValueList
+*gncEntryGetDocTaxValues (
+    GncEntry *entry,
+    gboolean is_owner_doc,
+    gboolean is_cn)
 {
-    AccountValueList *int_values = gncEntryGetIntTaxValues (entry, is_cust_doc);
+    AccountValueList *int_values = gncEntryGetIntTaxValues (entry, is_owner_doc);
     AccountValueList *values = NULL, *node;
 
     /* Make a copy of the list with negated values if necessary. */
@@ -1587,13 +1601,22 @@ AccountValueList * gncEntryGetDocTaxValues (GncEntry *entry, gboolean is_cust_do
     return values;
 }
 
-gnc_numeric gncEntryGetDocDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn)
+gnc_numeric
+gncEntryGetDocDiscountValue (
+    GncEntry *entry,
+    gboolean round,
+    gboolean is_owner_doc,
+    gboolean is_cn)
 {
-    gnc_numeric value = gncEntryGetIntDiscountValue (entry, round, is_cust_doc);
+    gnc_numeric value = gncEntryGetIntDiscountValue (entry, round, is_owner_doc);
     return (is_cn ? gnc_numeric_neg (value) : value);
 }
 
-gnc_numeric gncEntryGetBalValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
+gnc_numeric
+gncEntryGetBalValue (
+    GncEntry *entry,
+    gboolean round,
+    gboolean is_owner_doc)
 {
     gnc_numeric value = gncEntryGetIntValue (entry, round, is_owner_doc);
     return (is_owner_doc ? gnc_numeric_neg (value) : value);
@@ -1610,9 +1633,12 @@ gncEntryGetBalTaxValue (
 }
 
 /* Careful: the returned list is NOT owned by the entry and should be freed by the caller */
-AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_doc)
+AccountValueList
+*gncEntryGetBalTaxValues (
+    GncEntry *entry,
+    gboolean is_owner_doc)
 {
-    AccountValueList *int_values = gncEntryGetIntTaxValues (entry, is_cust_doc);
+    AccountValueList *int_values = gncEntryGetIntTaxValues (entry, is_owner_doc);
     AccountValueList *values = NULL, *node;
 
     /* Make a copy of the list with negated values if necessary. */
@@ -1628,7 +1654,11 @@ AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_do
     return values;
 }
 
-gnc_numeric gncEntryGetBalDiscountValue (GncEntry *entry, gboolean round, gboolean is_cust_doc)
+gnc_numeric
+gncEntryGetBalDiscountValue (
+    GncEntry *entry,
+    gboolean round,
+    gboolean is_owner_doc)
 {
     gnc_numeric value = gncEntryGetIntDiscountValue (entry, round, is_owner_doc);
     return (is_owner_doc ? gnc_numeric_neg (value) : value);
