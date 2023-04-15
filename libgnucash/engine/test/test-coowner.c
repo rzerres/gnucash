@@ -93,8 +93,8 @@ test_coowner (void)
         test_string_fcn (book, "Name", gncCoOwnerSetName, gncCoOwnerGetName);
         test_string_fcn (book, "Notes", gncCoOwnerSetNotes, gncCoOwnerGetNotes);
         do_test (gncCoOwnerGetShipAddr (coowner) != NULL, "Ship Address");
-        //test_bool_fcn (book, "Tenant Active", gncCoOwnerSetTenantActive, gncCoOwnerGetTenantActive);
-        //do_test (gncCoOwnerGetTenantAddr (coowner) != NULL, "Tenant Address");
+        test_bool_fcn (book, "Tenant Active", gncCoOwnerSetTenantActive, gncCoOwnerGetTenantActive);
+        do_test (gncCoOwnerGetTenantAddr (coowner) != NULL, "Tenant Address");
         test_string_fcn (book, "Tenant Id", gncCoOwnerSetTenantID, gncCoOwnerGetTenantID);
         test_string_fcn (book, "Tenant Name", gncCoOwnerSetTenantName, gncCoOwnerGetTenantName);
         test_string_fcn (book, "Tenant Notes", gncCoOwnerSetTenantNotes, gncCoOwnerGetTenantNotes);
@@ -256,7 +256,7 @@ main (int argc, char **argv)
 {
     qof_init();
     /* Print out successfull tests */
-    // set_success_print(TRUE);
+    set_success_print(TRUE);
     do_test (cashobjects_register(), "Cannot register cash objects");
     /* These three registrations are done during cashobjects_register,
        so trying to register them again naturally fails. */
