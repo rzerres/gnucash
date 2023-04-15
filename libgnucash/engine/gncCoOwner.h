@@ -1,24 +1,24 @@
-/********************************************************************\
- * gncCoOwner.h -- the Core CoOwner Interface                       *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
- *                                                                  *
-\********************************************************************/
+/*********************************************************************\
+ * gncCoOwner.h -- the Core CoOwner Interface                        *
+ *                                                                   *
+ * This program is free software; you can redistribute it and/or     *
+ * modify it under the terms of the GNU General Public License as    *
+ * published by the Free Software Foundation; either version 2 of    *
+ * the License, or (at your option) any later version.               *
+ *                                                                   *
+ * This program is distributed in the hope that it will be useful,   *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     *
+ * GNU General Public License for more details.                      *
+ *                                                                   *
+ * You should have received a copy of the GNU General Public License *
+ * along with this program; if not, contact:                         *
+ *                                                                   *
+ * Free Software Foundation           Voice:  +1-617-542-5942        *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652        *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                    *
+ *                                                                   *
+\*********************************************************************/
 /** @addtogroup Business
     @{ */
 /** @addtogroup CoOwner
@@ -27,7 +27,6 @@ Implements CoOwner objects.
 You may create new entities, or edit exiting ones.
 Deletion isn't allowed, as soon as transactions are assined to a
 given entity (e.g. invoices, settlements, credit notes or jobs ).
-
 
     @{ */
 /** @file gncCoOwner.h
@@ -73,8 +72,8 @@ CoOwner specific params:
 @param  char *tenant_id;
 @param  char *tenant_name;
 @param  char *tenant_notes;
-*/
 
+*/
 typedef struct _gncCoOwner GncCoOwner;
 typedef struct _gncCoOwnerClass GncCoOwnerClass;
 
@@ -82,6 +81,10 @@ typedef struct _gncCoOwnerClass GncCoOwnerClass;
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
 #include "gncJob.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define GNC_ID_COOWNER "gncCoOwner"
 
@@ -103,10 +106,20 @@ GType gnc_coowner_get_type(void);
  @{ */
 GncCoOwner *gncCoOwnerCreate (QofBook *book);
 void gncCoOwnerDestroy (GncCoOwner *coowner);
-//** @} */
+/** @} */
 
 /** @name Get Functions
  @{ */
+
+/** Return a pointer to the instance gncCoOwner that is identified
+ *  by the guid, and is residing in the book. Returns NULL if the
+ *  instance can not be found.
+ */
+static inline GncCoOwner * gncCoOwnerLookup (const QofBook *book, const GncGUID *guid)
+{
+    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_COOWNER, GncCoOwner);
+}
+
 QofBook * gncCoOwnerGetBook (GncCoOwner *coowner);
 const char * gncCoOwnerGetID (const GncCoOwner *coowner);
 const char * gncCoOwnerGetAcl (const GncCoOwner *coowner);
@@ -133,6 +146,7 @@ GncAddress * gncCoOwnerGetTenantAddr (const GncCoOwner *coowner);
 const char * gncCoOwnerGetTenantID (const GncCoOwner *coowner);
 const char * gncCoOwnerGetTenantName (const GncCoOwner *coowner);
 const char * gncCoOwnerGetTenantNotes (const GncCoOwner *coowner);
+
 //** @} */
 
 /** @name Set Functions
@@ -166,6 +180,7 @@ void gncCoOwnerAddJob (GncCoOwner *coowner, GncJob *job);
 void gncCoOwnerBeginEdit (GncCoOwner *coowner);
 void gncCoOwnerCommitEdit (GncCoOwner *coowner);
 void gncCoOwnerRemoveJob (GncCoOwner *coowner, GncJob *job);
+
 //** @} */
 
 /** Return values:
@@ -174,17 +189,6 @@ void gncCoOwnerRemoveJob (GncCoOwner *coowner, GncJob *job);
  *   NULL => a equals b
  */
 int gncCoOwnerCompare (const GncCoOwner *a, const GncCoOwner *b);
-
-/** Return a pointer to the instance gncCoOwner that is identified
- *  by the guid, and is residing in the book. Returns NULL if the
- *  instance can not be found.
- *  Equivalent function prototype is
- *  GncCoOwner * gncCoOwnerLookup (QofBook *book, const GncGUID *guid);
- */
-static inline GncCoOwner * gncCoOwnerLookup (const QofBook *book, const GncGUID *guid)
-{
-    QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_COOWNER, GncCoOwner);
-}
 
 /** Constants used as identifier keys */
 #define COOWNER_ID                "id"
@@ -219,11 +223,14 @@ static inline GncCoOwner * gncCoOwnerLookup (const QofBook *book, const GncGUID 
 #define gncCoOwnerGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 #define gncCoOwnerLookupDirect(g,b) gncCoOwnerLookup((b), &(g))
 
-
 /** Test support function, used by test-dbi-business-stuff.c */
 gboolean gncCoOwnerEqual(const GncCoOwner* e1, const GncCoOwner* e2);
 GList * gncCoOwnerGetJoblist (const GncCoOwner *coowner, gboolean show_all);
 gboolean gncCoOwnerIsDirty (const GncCoOwner *coowner);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_COOWNER_H_ */
 /** @} */
