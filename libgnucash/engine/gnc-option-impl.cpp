@@ -40,12 +40,14 @@ const std::string GncOptionMultichoiceValue::c_list_string{"multiple values"};
 static inline GncOwnerType
 ui_type_to_owner_type(GncOptionUIType ui_type)
 {
+    if (ui_type == GncOptionUIType::COOWNER)
+        return GNC_OWNER_COOWNER;
     if (ui_type == GncOptionUIType::CUSTOMER)
         return GNC_OWNER_CUSTOMER;
-    if (ui_type == GncOptionUIType::VENDOR)
-        return GNC_OWNER_VENDOR;
     if (ui_type == GncOptionUIType::EMPLOYEE)
         return GNC_OWNER_EMPLOYEE;
+    if (ui_type == GncOptionUIType::VENDOR)
+        return GNC_OWNER_VENDOR;
     return GNC_OWNER_NONE;
 }
 
@@ -669,20 +671,23 @@ qof_instance_from_guid(GncGUID* guid, GncOptionUIType type)
         case GncOptionUIType::BUDGET:
             qof_type = "Budget";
             break;
-        case GncOptionUIType::JOB:
-            qof_type = "gncJob";
+        case GncOptionUIType::COOWNER:
+            qof_type = "gncCoOwner";
             break;
         case GncOptionUIType::CUSTOMER:
             qof_type = "gncCustomer";
-            break;
-        case GncOptionUIType::VENDOR:
-            qof_type = "gncVendor";
             break;
         case GncOptionUIType::EMPLOYEE:
             qof_type = "gncEmployee";
             break;
         case GncOptionUIType::INVOICE:
             qof_type = "gncInvoice";
+            break;
+        case GncOptionUIType::JOB:
+            qof_type = "gncJob";
+            break;
+        case GncOptionUIType::VENDOR:
+            qof_type = "gncVendor";
             break;
         case GncOptionUIType::TAX_TABLE:
             qof_type = "gncTaxTable";
