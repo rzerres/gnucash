@@ -63,6 +63,30 @@ def vendorToDict(vendor):
 
         return simple_vendor
 
+def coownerToDict(coowner):
+
+    if coowner is None:
+        return None
+    else:
+        simple_coowner = {}
+        simple_coowner['name'] = coowner.GetName()
+        simple_coowner['id'] = coowner.GetID()
+        simple_coowner['guid'] = coowner.GetGUID().to_string()
+        simple_coowner['notes'] = coowner.GetNotes()
+        simple_coowner['active'] = coowner.GetActive()
+        simple_coowner['discount'] = coowner.GetDiscount().to_double()
+        simple_coowner['credit'] = coowner.GetCredit().to_double()
+        simple_coowner['currency'] = coowner.GetCurrency().get_mnemonic()
+        # simple_coowner['tax_table_override'] = coowner.GetTaxTableOverride()
+        simple_coowner['address'] = addressToDict(coowner.GetAddr())
+        simple_coowner['shipping_address'] = addressToDict(
+            coowner.GetShipAddr())
+        simple_coowner['tenant_address'] = addressToDict(
+            coowner.GetTenantAddr())
+        simple_coowner['tax_included'] = coowner.GetTaxIncluded()
+
+        return simple_coowner
+
 def customerToDict(customer):
 
     if customer is None:
