@@ -84,6 +84,7 @@
 
 #include "gnc-address-xml-v2.h"
 #include "gnc-bill-term-xml-v2.h"
+#include "gnc-distriblist-xml-v2.h"
 #include "gnc-coowner-xml-v2.h"
 #include "gnc-customer-xml-v2.h"
 #include "gnc-employee-xml-v2.h"
