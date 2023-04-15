@@ -75,12 +75,16 @@ test_distriblist (void)
 
     /* Test creation/destruction */
     {
-        do_test (gncDistribListCreate (NULL) == NULL, "distriblist create NULL");
+        do_test (gncDistribListCreate (NULL) == NULL, "Create - NULL");
+
         distriblist = gncDistribListCreate (book);
-        do_test (distriblist != NULL, "distriblist create");
+        do_test (distriblist != NULL, "Create - book");
 
         // Do we need this deprecated function any more?
-        do_test (gncDistribListGetBook (distriblist) == book, "getbook");
+        //do_test (qof_instance_get_book(QOF_INSTANCE(distriblist)) == book,
+        //    "getbook");
+
+        do_test (gncDistribListGetBook (distriblist) == book, "Get book");
 
         gncDistribListBeginEdit (distriblist);
         gncDistribListDestroy (distriblist);
@@ -90,47 +94,67 @@ test_distriblist (void)
     // Test set and get functions
     {
         GncGUID guid;
+        GncDistributionListType type = GNC_DISTRIBLIST_TYPE_SHARES;
 
         guid_replace (&guid);
         distriblist = gncDistribListCreate (book);
         count++;
         gncDistribListSetGUID (distriblist, &guid);
-        do_test (guid_equal (&guid, gncDistribListGetGUID (distriblist)), "Compare guid");
+        do_test (guid_equal (
+            &guid, gncDistribListGetGUID (distriblist)), "Compare guid");
 
-        //do_test (gncDistribListGetType (distriblist) != NULL, "Type");
+        gncDistribListSetType (distriblist, type);
+        do_test (gncDistribListGetType (distriblist) == type, "Get type");
 
-        test_string_fcn (book, "Handle Description", gncDistribListSetDescription, gncDistribListGetDescription);
-        test_string_fcn (book, "Handle Name", gncDistribListSetName, gncDistribListGetName);
-        test_string_fcn (book, "Handle Label Settlement", gncDistribListSetLabelSettlement, gncDistribListGetLabelSettlement);
-        test_int_fcn (book, "Handle Shares Total", gncDistribListSetSharesTotal, gncDistribListGetSharesTotal);
+        test_string_fcn (book, "Handle Description",
+            gncDistribListSetDescription, gncDistribListGetDescription);
+        test_string_fcn (book, "Handle Name",
+            gncDistribListSetName, gncDistribListGetName);
+        test_string_fcn (book, "Handle Label Settlement",
+            gncDistribListSetLabelSettlement, gncDistribListGetLabelSettlement);
+        test_int_fcn (book, "Handle Shares Total",
+            gncDistribListSetSharesTotal, gncDistribListGetSharesTotal);
+        test_int_fcn (book, "Handle Percentage Total",
+            gncDistribListSetPercentageTotal, gncDistribListGetPercentageTotal);
 
     }
-    /* { */
-    /*     GList *list; */
 
-    /*     list = gncBusinessGetList (book, GNC_ID_DISTRIBLIST, TRUE); */
-    /*     do_test (list != NULL, "getList all"); */
-    /*     do_test (g_list_length (list) == count, "correct length: all"); */
-    /*     g_list_free (list); */
+    // Test name and length of lists
+    {
+        GList *list;
+        const char *name = "Test-DistributionList";
+        const char *res = NULL;
 
-    /*     list = gncBusinessGetList (book, GNC_ID_DISTRIBLIST, FALSE); */
-    /*     do_test (list != NULL, "getList active"); */
-    /*     do_test (g_list_length (list) == 1, "correct length: active"); */
-    /*     g_list_free (list); */
-    /* } */
+        //list = gncDistribListGetLists (book);
+        // gncDistribListCreate() and each test-function call do
+        // increment the counter. Result: count => should be 6.
+        list = gncBusinessGetList (book, GNC_ID_DISTRIBLIST, TRUE);
+        do_test (list != NULL, "Get lists: all");
+        do_test (g_list_length (list) == count, "Compare list length: all");
+        g_list_free (list);
+
+        gncDistribListSetName (distriblist, name);
+        res = gncDistribListGetName (distriblist);
+        list = gncDistribListGetLists (book);
+        distriblist = gncDistribListLookupByName (book, name);
+        //printf ("name: '%s'\n", name);
+        //printf ("res: '%s'\n", res);
+        do_test (g_strcmp0 (name, res) == 0, "Lookup list: by name");
+        g_list_free (list);
+    }
     {
         //  Match random string after committing
         const char *str = get_random_string();
         const char *res;
 
-        printf ("Random string: '%s'\n", str);
+        //printf ("Random string: '%s'\n", str);
         res = NULL;
         gncDistribListBeginEdit(distriblist);
         gncDistribListSetName (distriblist, str);
         gncDistribListCommitEdit(distriblist);
         res = qof_object_printable (GNC_ID_DISTRIBLIST, distriblist);
-        printf ("Test string: '%s'\n", res);
-        printf ("distriblist string: '%s'\n", res);
+        //printf ("Test string: '%s'\n", str);
+        //printf ("distriblist string: '%s'\n", res);
         //FIXME: do_test (res != NULL, "Assert Printable 'NULL' string match ");
         //FIXME: do_test (g_strcmp0 (str, res) == 0, "Assert Printable string match");
     }
@@ -142,12 +166,12 @@ test_distriblist (void)
 
         res = NULL;
         gncDistribListBeginEdit (distriblist);
-        printf ("DistriblistTestString: '%s'\n", DistriblistTestString);
+        //printf ("DistriblistTestString: '%s'\n", DistriblistTestString);
         gncDistribListSetName (distriblist, DistriblistTestString);
         gncDistribListCommitEdit (distriblist);
 
         res = qof_object_printable (GNC_ID_DISTRIBLIST, distriblist);
-        printf ("res from distriblist: '%s'\n", res);
+        //printf ("res from distriblist: '%s'\n", res);
         //FIXME: do_test (res != NULL, "Test String non NULL");
         //FIXME: do_test (g_strcmp0 (DistriblistTestString, res) == 0, "Test string match");
     }
@@ -277,16 +301,16 @@ int
 main (int argc, char **argv)
 {
     // Print out successfull tests
-    // set_success_print(TRUE);
+    set_success_print(TRUE);
 
     qof_init();
     // FIXME: cashobjects
-    //do_test (cashobjects_register(), "Register cash objects");
+    do_test (cashobjects_register(), "Register cash objects");
     /* Registration is done during cashobjects_register,
        so trying to register again naturally fails. */
-//#if 0
+#if 0
     do_test (gncDistribListRegister(), "Cannot register GncDistributionList");
-//#endif
+#endif
     test_distriblist();
     print_test_results();
     qof_close ();
