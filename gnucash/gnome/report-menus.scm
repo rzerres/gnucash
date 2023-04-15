@@ -2,7 +2,7 @@
 ;;  report-menus.scm
 ;;  code to initialize the report menus
 ;;
-;;  Copyright (c) 2001 Linux Developers Group, Inc. 
+;;  Copyright (c) 2001 Linux Developers Group, Inc.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This program is free software; you can redistribute it and/or
@@ -70,20 +70,22 @@
 (define (gnc:report-menu-setup)
   (define asset-liability-menu
     (gnc:make-menu gnc:menuname-asset-liability (list gnc:menuname-reports)))
-  (define income-expense-menu
-    (gnc:make-menu gnc:menuname-income-expense (list gnc:menuname-reports)))
+  (define business-menu
+    (gnc:make-menu gnc:menuname-business-reports (list gnc:menuname-reports)))
   (define budget-menu
     (gnc:make-menu gnc:menuname-budget (list gnc:menuname-reports)))
   (define example-menu
     (gnc:make-menu gnc:menuname-example (list gnc:menuname-reports)))
   (define experimental-menu
     (gnc:make-menu gnc:menuname-experimental (list gnc:menuname-reports)))
+  (define income-expense-menu
+    (gnc:make-menu gnc:menuname-income-expense (list gnc:menuname-reports)))
   (define multicolumn-menu
     (gnc:make-menu gnc:menuname-multicolumn (list gnc:menuname-reports)))
+  (define property-management-menu
+    (gnc:make-menu gnc:menuname-property-management (list gnc:menuname-reports)))
   (define tax-menu
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
-  (define business-menu
-    (gnc:make-menu gnc:menuname-business-reports (list gnc:menuname-reports)))
 
   (gnc-add-scm-extension
    (gnc:make-menu-item
@@ -95,14 +97,15 @@
       (gnc:debug "called into custom report dialog, window is " window)
       (gnc-ui-custom-report window))))
 
-  ;; (gnc-add-scm-extension tax-menu)
-  (gnc-add-scm-extension income-expense-menu)
   (gnc-add-scm-extension asset-liability-menu)
   (gnc-add-scm-extension budget-menu)
+  (gnc-add-scm-extension business-menu)
   (gnc-add-scm-extension example-menu)
   (gnc-add-scm-extension experimental-menu)
+  (gnc-add-scm-extension income-expense-menu)
+  (gnc-add-scm-extension property-management-menu)
   (gnc-add-scm-extension multicolumn-menu)
-  (gnc-add-scm-extension business-menu)
+  ;; (gnc-add-scm-extension tax-menu)
 
   ;; run report-hook danglers
   (gnc-hook-run HOOK-REPORT '())
