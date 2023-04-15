@@ -35,21 +35,23 @@
 #include "gnc-component-manager.h"
 #include "gnc-gtk-utils.h"
 
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
-#include "gncJob.h"
-#include "gncVendor.h"
-#include "gncOwner.h"
 #include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncOwner.h"
+#include "gncVendor.h"
 
 #include "gnc-general-search.h"
 #include "qof.h"
 #include "qofbook.h"
 #include "business-gnome-utils.h"
+#include "dialog-coowner.h"
 #include "dialog-customer.h"
-#include "dialog-job.h"
-#include "dialog-vendor.h"
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
+#include "dialog-job.h"
+#include "dialog-vendor.h"
 
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
@@ -207,12 +209,28 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     case GNC_OWNER_UNDEFINED:
         return NULL;
 
+    case GNC_OWNER_COOWNER:
+        if (type == GNCSEARCH_TYPE_SELECT)
+            search_cb = gnc_coowner_search_select;
+        else
+            search_cb = gnc_coowner_search_edit;
+        type_name = GNC_COOWNER_MODULE_NAME;
+        break;
+
     case GNC_OWNER_CUSTOMER:
         if (type == GNCSEARCH_TYPE_SELECT)
             search_cb = gnc_customer_search_select;
         else
             search_cb = gnc_customer_search_edit;
         type_name = GNC_CUSTOMER_MODULE_NAME;
+        break;
+
+    case GNC_OWNER_EMPLOYEE:
+        if (type == GNCSEARCH_TYPE_SELECT)
+            search_cb = gnc_employee_search_select;
+        else
+            search_cb = gnc_employee_search_edit;
+        type_name = GNC_EMPLOYEE_MODULE_NAME;
         break;
 
     case GNC_OWNER_JOB:
@@ -231,14 +249,6 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
         type_name = GNC_VENDOR_MODULE_NAME;
         break;
 
-    case GNC_OWNER_EMPLOYEE:
-        if (type == GNCSEARCH_TYPE_SELECT)
-            search_cb = gnc_employee_search_select;
-        else
-            search_cb = gnc_employee_search_edit;
-        type_name = GNC_EMPLOYEE_MODULE_NAME;
-        break;
-
     default:
         g_warning ("Unknown type");
         return NULL;
@@ -249,7 +259,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
         return NULL;
 
     gnc_general_search_set_selected (GNC_GENERAL_SEARCH (edit),
-                                     owner->owner.undefined);
+        owner->owner.undefined);
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
     if (label)
         gtk_label_set_text (GTK_LABEL (label), _(qof_object_get_type_label (type_name)));
@@ -347,11 +357,14 @@ gnc_invoice_select_search_set_label(GncISI* isi)
     /* Translators:  See comments in dialog-invoice.c:gnc_invoice_search() */
     switch (owner_type)
     {
-    case GNC_OWNER_VENDOR:
-        label = _("Bill");
+    case GNC_OWNER_COOWNER:
+        label = _("Settlement");
         break;
     case GNC_OWNER_EMPLOYEE:
         label = _("Voucher");
+        break;
+    case GNC_OWNER_VENDOR:
+        label = _("Bill");
         break;
     default:
         label = _("Invoice");
