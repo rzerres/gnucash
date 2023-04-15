@@ -1,6 +1,6 @@
 /********************************************************************
- * test_qofbook.c: GLib g_test test suite for qofbook.		    *
- * Copyright 2011 John Ralls <jralls@ceridwen.us>		    *
+ * test_qofbook.c: GLib g_test test suite for qofbook.              *
+ * Copyright 2011 John Ralls <jralls@ceridwen.us>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -124,6 +124,7 @@ test_book_readonly( Fixture *fixture, gconstpointer pData )
     qof_book_mark_readonly( fixture->book );
     g_assert_true( qof_book_is_readonly( fixture->book ) );
 }
+
 static void
 test_book_normalize_counter( void )
 {
