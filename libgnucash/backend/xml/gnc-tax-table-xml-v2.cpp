@@ -604,6 +604,23 @@ taxtable_scrub_entries (QofInstance* entry_p, gpointer ht_p)
 }
 
 static void
+taxtable_scrub_coowner (QofInstance* coowner_p, gpointer ht_p)
+{
+    GHashTable* ht = static_cast<decltype (ht)> (ht_p);
+    GncCoOwner* coowner = GNC_COOWNER (coowner_p);
+    GncTaxTable* table;
+    gint32 count;
+
+    table = gncCoOwnerGetTaxTable (coowner);
+    if (table)
+    {
+        count = GPOINTER_TO_INT (g_hash_table_lookup (ht, table));
+        count++;
+        g_hash_table_insert (ht, table, GINT_TO_POINTER (count));
+    }
+}
+
+static void
 taxtable_scrub_cust (QofInstance* cust_p, gpointer ht_p)
 {
     GHashTable* ht = static_cast<decltype (ht)> (ht_p);
@@ -663,6 +680,7 @@ taxtable_scrub (QofBook* book)
     GHashTable* ht = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     qof_object_foreach (GNC_ID_ENTRY, book, taxtable_scrub_entries, ht);
+    qof_object_foreach (GNC_ID_COOWNER, book, taxtable_scrub_cust, ht);
     qof_object_foreach (GNC_ID_CUSTOMER, book, taxtable_scrub_cust, ht);
     qof_object_foreach (GNC_ID_VENDOR, book, taxtable_scrub_vendor, ht);
     qof_object_foreach (GNC_ID_TAXTABLE, book, taxtable_scrub_cb, &list);

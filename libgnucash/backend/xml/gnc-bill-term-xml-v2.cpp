@@ -640,6 +640,31 @@ billterm_scrub_invoices (QofInstance* invoice_p, gpointer ht_p)
 }
 
 static void
+billterm_scrub_coowner (QofInstance* coowner_p, gpointer ht_p)
+{
+    GHashTable* ht = static_cast<decltype (ht)> (ht_p);
+    GncCoOwner* coowner = GNC_COOWNER (coowner_p);
+    GncBillTerm* term;
+    gint32 count;
+
+    term = gncCoOwnerGetTerms (coowner);
+    if (term)
+    {
+        count = GPOINTER_TO_INT (g_hash_table_lookup (ht, term));
+        count++;
+        g_hash_table_insert (ht, term, GINT_TO_POINTER (count));
+        if (billterm_is_grandchild (term))
+        {
+            gchar coownerstr[GUID_ENCODING_LENGTH + 1];
+            gchar termstr[GUID_ENCODING_LENGTH + 1];
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (coowner)), coownerstr);
+            guid_to_string_buff (qof_instance_get_guid (QOF_INSTANCE (term)), termstr);
+            PWARN ("co-owner %s has grandchild billterm %s\n", coownerstr, termstr);
+        }
+    }
+}
+
+static void
 billterm_scrub_cust (QofInstance* cust_p, gpointer ht_p)
 {
     GHashTable* ht = static_cast<decltype (ht)> (ht_p);
@@ -714,10 +739,11 @@ billterm_scrub (QofBook* book)
     GHashTable* ht = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     DEBUG ("scrubbing billterms...");
-    qof_object_foreach (GNC_ID_INVOICE,  book, billterm_scrub_invoices, ht);
-    qof_object_foreach (GNC_ID_CUSTOMER, book, billterm_scrub_cust, ht);
-    qof_object_foreach (GNC_ID_VENDOR,   book, billterm_scrub_vendor, ht);
     qof_object_foreach (GNC_ID_BILLTERM, book, billterm_scrub_cb, &list);
+    qof_object_foreach (GNC_ID_COOWNER, book, billterm_scrub_cust, ht);
+    qof_object_foreach (GNC_ID_CUSTOMER, book, billterm_scrub_cust, ht);
+    qof_object_foreach (GNC_ID_INVOICE,  book, billterm_scrub_invoices, ht);
+    qof_object_foreach (GNC_ID_VENDOR,   book, billterm_scrub_vendor, ht);
 
     /* destroy the list of "grandchildren" bill terms */
     for (node = list; node; node = node->next)
