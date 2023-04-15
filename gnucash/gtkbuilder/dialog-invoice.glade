@@ -1,733 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkListStore" id="invoice_liststore_terms">
-    <columns>
-      <!-- column-name label -->
-      <column type="gchararray"/>
-      <!-- column-name rowdata -->
-      <column type="gpointer"/>
-    </columns>
-  </object>
-  <object class="GtkDialog" id="invoice_new_dialog">
-    <property name="can-focus">False</property>
-    <property name="title" translatable="yes">New Invoice</property>
-    <property name="type-hint">dialog</property>
-    <signal name="destroy" handler="gnc_invoice_window_destroy_cb" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="invoice_new_vbox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">8</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="invoice_new_action_area">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="layout-style">end</property>
-            <child>
-              <object class="GtkButton" id="invoice_new_button_help">
-                <property name="label" translatable="yes">_Help</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_invoice_window_help_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="invoice_new_button_cancel">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_invoice_window_cancel_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="invoice_new_button_ok">
-                <property name="label" translatable="yes">_OK</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="gnc_invoice_window_ok_cb" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="invoice_new_vbox_invoice">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkFrame" id="invoice_new_frame_invoice_info">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="border-width">3</property>
-                <property name="label-xalign">0</property>
-                <child>
-                  <!-- n-columns=2 n-rows=3 -->
-                  <object class="GtkGrid" id="invoice_new_grid_invoice_info">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="border-width">6</property>
-                    <property name="row-spacing">6</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="invoice_new_label_type">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">Type</property>
-                        <property name="justify">right</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="invoice_new_label_invoice_id">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">Invoice ID</property>
-                        <property name="justify">right</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="invoice_new_label_date_opened">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">Date Opened</property>
-                        <property name="justify">right</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="invoice_new_hbox_date_opened">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="invoice_new_entry_invoice_id">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="tooltip-text" translatable="yes">The invoice ID number. If left blank a reasonable number will be chosen for you.</property>
-                        <property name="hexpand">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="primary-icon-activatable">False</property>
-                        <property name="secondary-icon-activatable">False</property>
-                        <signal name="changed" handler="gnc_invoice_id_changed_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="invoice_new_hbox_type">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <child>
-                          <object class="GtkBox" id="invoice_new_selected_type_hbox">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <child>
-                              <object class="GtkLabel" id="invoice_new_selected_type">
-                                <property name="can-focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="margin-start">3</property>
-                                <property name="margin-end">3</property>
-                                <property name="margin-top">3</property>
-                                <property name="margin-bottom">3</property>
-                                <property name="label" translatable="yes">Invoice</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <style>
-                              <class name="frame"/>
-                            </style>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="invoice_new_hbox_choice_type">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <child>
-                              <object class="GtkRadioButton" id="invoice_new_button_type_invoice">
-                                <property name="label" translatable="yes">Invoice</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
-                                <property name="halign">start</property>
-                                <property name="active">True</property>
-                                <property name="draw-indicator">True</property>
-                                <signal name="toggled" handler="gnc_invoice_type_toggled_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkRadioButton" id="invoice_new_button_type_creditnote">
-                                <property name="label" translatable="yes">Credit Note</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
-                                <property name="halign">start</property>
-                                <property name="draw-indicator">True</property>
-                                <property name="group">invoice_new_button_type_invoice</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="invoice_new_label_invoice_info">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Invoice Information</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFrame" id="invoice_new_frame_billing">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="border-width">3</property>
-                <property name="label-xalign">0</property>
-                <child>
-                  <!-- n-columns=2 n-rows=4 -->
-                  <object class="GtkGrid" id="invoice_new_grid_billing">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="border-width">6</property>
-                    <property name="row-spacing">3</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="invoice_new_label_owner">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label">Owner</property>
-                        <property name="justify">right</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="invoice_new_label_job">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">Job</property>
-                        <property name="justify">right</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="invoice_new_label_billing_id">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">Billing ID</property>
-                        <property name="justify">right</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="invoice_new_label_terms">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">Terms</property>
-                        <property name="justify">right</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="invoice_new_hbox_owner">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="invoice_new_hbox_job">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="invoice_new_entry_billing_id">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="primary-icon-activatable">False</property>
-                        <property name="secondary-icon-activatable">False</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="invoice_new_combobox_terms">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="model">invoice_liststore_terms</property>
-                        <signal name="changed" handler="gnc_invoice_terms_changed_cb" swapped="no"/>
-                        <child>
-                          <object class="GtkCellRendererText" id="invoice_new_cell_renderer_text"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="invoice_new_label_billing_info">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Billing Information</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFrame" id="invoice_new_frame_project">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label-xalign">0</property>
-                <child>
-                  <!-- n-columns=2 n-rows=2 -->
-                  <object class="GtkGrid" id="invoice_new_grid_project">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="border-width">6</property>
-                    <property name="row-spacing">3</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="invoice_new_label_project_owner">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">Owner</property>
-                        <property name="justify">right</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="invoice_new_label_project_job">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">Job</property>
-                        <property name="justify">right</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="invoice_new_hbox_project_owner">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="invoice_new_hbox_project_job">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="invoice_new_label_project_info">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Default Chargeback Project</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFrame" id="invoice_new_frame_notes">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="border-width">3</property>
-                <property name="label-xalign">0</property>
-                <child>
-                  <object class="GtkScrolledWindow" id="invoice_new_scrolledwindow_notes">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="border-width">3</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <property name="shadow-type">in</property>
-                    <child>
-                      <object class="GtkTextView" id="invoice_new_entry_notes">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="margin-start">3</property>
-                        <property name="margin-end">3</property>
-                        <property name="wrap-mode">word</property>
-                        <property name="accepts-tab">False</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="invoice_new_label_notes">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Notes</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-11">invoice_new_button_help</action-widget>
-      <action-widget response="-6">invoice_new_button_cancel</action-widget>
-      <action-widget response="-5">invoice_new_button_ok</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkDialog" id="invoice_unpost_dialog">
-    <property name="can-focus">False</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="type-hint">dialog</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="invoice_unpost_vbox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="invoice_unpost_action_area">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="layout-style">end</property>
-            <child>
-              <object class="GtkButton" id="invoice_unpost_button_cancel">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="invoice_unpost_button_ok">
-                <property name="label" translatable="yes">_OK</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="invoice_unpost_vbox_unpost">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="homogeneous">True</property>
-            <child>
-              <object class="GtkBox" id="invoice_unpost_hbox_unpost">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <object class="GtkImage" id="q_pixmap">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">dialog-question</property>
-                    <property name="icon_size">3</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">10</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label32">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Unposting this Invoice will delete the posted transaction.
-Are you sure you want to unpost it?</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">5</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFrame" id="invoice_unpost_frame_taxtable_reset">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="border-width">3</property>
-                <property name="label-xalign">0</property>
-                <child>
-                  <object class="GtkBox" id="invoice_unpost_hbox_taxtable_reset">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkRadioButton" id="invoice_unpost_radiobutton_taxtable_reset_yes">
-                        <property name="label" translatable="yes">Yes, reset the Tax Tables</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <signal name="toggled" handler="on_yes_tt_reset_toggled" object="Invoice Entry Window" swapped="yes"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="invoice_unpost_radiobutton_taxtable_reset_no">
-                        <property name="label" translatable="yes">No, keep them as they are</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">invoice_unpost_radiobutton_taxtable_reset_yes</property>
-                        <signal name="toggled" handler="on_no_tt_reset_toggled" object="Invoice Entry Window" swapped="yes"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="invoice_unpost_label_taxtable_reset">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Reset Tax Tables to present Values?</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="padding">6</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-6">invoice_unpost_button_cancel</action-widget>
-      <action-widget response="-5">invoice_unpost_button_ok</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkWindow" id="invoice_window">
+  <object class="GtkWindow" id="invoice_entry_window">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Invoice</property>
@@ -916,7 +191,7 @@ Are you sure you want to unpost it?</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="Invoice_hbox_type">
+                      <object class="GtkBox" id="invoice_hbox_type">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
@@ -1352,5 +627,856 @@ Are you sure you want to unpost it?</property>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="invoice_liststore_terms">
+    <columns>
+      <!-- column-name label -->
+      <column type="gchararray"/>
+      <!-- column-name rowdata -->
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkDialog" id="invoice_new_dialog">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes">New Invoice</property>
+    <property name="type-hint">dialog</property>
+    <signal name="destroy" handler="gnc_invoice_window_destroy_cb" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="invoice_new_vbox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">8</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="invoice_new_action_area">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="invoice_new_button_help">
+                <property name="label" translatable="yes">_Help</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="gnc_invoice_window_help_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="invoice_new_button_cancel">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="gnc_invoice_window_cancel_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="invoice_new_button_ok">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="gnc_invoice_window_ok_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="invoice_new_vbox_invoice">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkFrame" id="invoice_new_frame_invoice_info">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">3</property>
+                <property name="label-xalign">0</property>
+                <child>
+                  <!-- n-columns=2 n-rows=3 -->
+                  <object class="GtkGrid" id="invoice_new_grid_invoice_info">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="border-width">6</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="invoice_new_label_type">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Type</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="invoice_new_label_invoice_id">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Invoice ID</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="invoice_new_label_date_opened">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Date Opened</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="invoice_new_hbox_date_opened">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="invoice_new_entry_invoice_id">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">The invoice ID number. If left blank a reasonable number will be chosen for you.</property>
+                        <property name="hexpand">True</property>
+                        <property name="activates-default">True</property>
+                        <property name="primary-icon-activatable">False</property>
+                        <property name="secondary-icon-activatable">False</property>
+                        <signal name="changed" handler="gnc_invoice_id_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="invoice_new_hbox_type">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <child>
+                          <object class="GtkBox" id="invoice_new_hbox_selected_type">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <child>
+                              <object class="GtkLabel" id="invoice_new_selected_type">
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="margin-start">3</property>
+                                <property name="margin-end">3</property>
+                                <property name="margin-top">3</property>
+                                <property name="margin-bottom">3</property>
+                                <property name="label" translatable="yes">Invoice</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <style>
+                              <class name="frame"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="invoice_new_hbox_choice_type">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <child>
+                              <object class="GtkRadioButton" id="invoice_new_button_type_invoice">
+                                <property name="label" translatable="yes">Invoice</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="halign">start</property>
+                                <property name="active">True</property>
+                                <property name="draw-indicator">True</property>
+                                <signal name="toggled" handler="gnc_invoice_type_toggled_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="invoice_new_button_type_creditnote">
+                                <property name="label" translatable="yes">Credit Note</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="halign">start</property>
+                                <property name="draw-indicator">True</property>
+                                <property name="group">invoice_new_button_type_invoice</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="invoice_new_label_invoice_info">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Invoice Information</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="invoice_new_frame_billing">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">3</property>
+                <property name="label-xalign">0</property>
+                <child>
+                  <!-- n-columns=2 n-rows=4 -->
+                  <object class="GtkGrid" id="invoice_new_grid_billing">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="border-width">6</property>
+                    <property name="row-spacing">3</property>
+                    <property name="column-spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="invoice_new_label_owner">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label">(owner)</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="invoice_new_label_job">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Job</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="invoice_new_label_billing_id">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Billing ID</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="invoice_new_label_terms">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Terms</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="invoice_new_hbox_owner">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="invoice_new_hbox_job">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="invoice_new_entry_billing_id">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="primary-icon-activatable">False</property>
+                        <property name="secondary-icon-activatable">False</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="invoice_new_combobox_terms">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="model">invoice_liststore_terms</property>
+                        <signal name="changed" handler="gnc_invoice_terms_changed_cb" swapped="no"/>
+                        <child>
+                          <object class="GtkCellRendererText" id="invoice_new_cell_renderer_text"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="invoice_new_label_billing_info">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Billing Information</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="invoice_new_frame_project">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label-xalign">0</property>
+                <child>
+                  <!-- n-columns=2 n-rows=2 -->
+                  <object class="GtkGrid" id="invoice_new_grid_project">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="border-width">6</property>
+                    <property name="row-spacing">3</property>
+                    <property name="column-spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="invoice_new_label_project_owner">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Owner</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="invoice_new_label_project_job">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Job</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="invoice_new_hbox_project_owner">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="invoice_new_hbox_project_job">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="invoice_new_label_project_info">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Default Chargeback Project</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="invoice_new_frame_notes">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">3</property>
+                <property name="label-xalign">0</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="invoice_new_scrolledwindow_notes">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="border-width">3</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkTextView" id="invoice_new_entry_notes">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="margin-start">3</property>
+                        <property name="margin-end">3</property>
+                        <property name="wrap-mode">word</property>
+                        <property name="accepts-tab">False</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="invoice_new_label_notes">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Notes</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-11">invoice_new_button_help</action-widget>
+      <action-widget response="-6">invoice_new_button_cancel</action-widget>
+      <action-widget response="-5">invoice_new_button_ok</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="invoice_print_dialog">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes">Report template</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="cancel_button">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok_button">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="invoice_print_vbox_print">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-top">6</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="invoice_print_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Use template report</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="invoice_print_hbox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="invoice_print_label_template_choosetemplate_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Choose a different report template before timeout</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkProgressBar" id="invoice_print_progressbar">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">24</property>
+                <property name="margin-end">24</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancel_button</action-widget>
+      <action-widget response="-5">ok_button</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="invoice_unpost_dialog">
+    <property name="can-focus">False</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="invoice_unpost_vbox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="invoice_unpost_action_area">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="invoice_unpost_button_cancel">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="invoice_unpost_button_ok">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="invoice_unpost_vbox_unpost">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="homogeneous">True</property>
+            <child>
+              <object class="GtkBox" id="invoice_unpost_hbox_unpost">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <child>
+                  <object class="GtkImage" id="q_pixmap">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">dialog-question</property>
+                    <property name="icon_size">3</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="padding">10</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label32">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Unposting this Invoice will delete the posted transaction.
+Are you sure you want to unpost it?</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="padding">5</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="invoice_unpost_frame_taxtable_reset">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="border-width">3</property>
+                <property name="label-xalign">0</property>
+                <child>
+                  <object class="GtkBox" id="invoice_unpost_hbox_taxtable_reset">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkRadioButton" id="invoice_unpost_radiobutton_taxtable_reset_yes">
+                        <property name="label" translatable="yes">Yes, reset the Tax Tables</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <signal name="toggled" handler="on_yes_tt_reset_toggled" object="Invoice Entry Window" swapped="yes"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="invoice_unpost_radiobutton_taxtable_reset_no">
+                        <property name="label" translatable="yes">No, keep them as they are</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">invoice_unpost_radiobutton_taxtable_reset_yes</property>
+                        <signal name="toggled" handler="on_no_tt_reset_toggled" object="Invoice Entry Window" swapped="yes"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="invoice_unpost_label_taxtable_reset">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Reset Tax Tables to present Values?</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="padding">6</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">invoice_unpost_button_cancel</action-widget>
+      <action-widget response="-5">invoice_unpost_button_ok</action-widget>
+    </action-widgets>
   </object>
 </interface>
