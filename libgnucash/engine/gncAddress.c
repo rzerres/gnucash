@@ -48,6 +48,7 @@ struct _gncAddress
     const char *addr2;
     const char *addr3;
     const char *addr4;
+    const char *mobile;
     const char *phone;
     const char *fax;
     const char *email;
@@ -81,6 +82,7 @@ enum
     PROP_ADDR2,
     PROP_ADDR3,
     PROP_ADDR4,
+    PROP_MOBILE,
     PROP_PHONE,
     PROP_FAX,
     PROP_EMAIL
@@ -134,6 +136,9 @@ gnc_address_get_property (GObject *object,
     case PROP_ADDR4:
         g_value_set_string(value, address->addr4);
         break;
+    case PROP_MOBILE:
+        g_value_set_string(value, address->mobile);
+        break;
     case PROP_PHONE:
         g_value_set_string(value, address->phone);
         break;
@@ -176,6 +181,9 @@ gnc_address_set_property (GObject *object,
         break;
     case PROP_ADDR4:
         gncAddressSetAddr4(address, g_value_get_string(value));
+        break;
+    case PROP_MOBILE:
+        gncAddressSetMobile(address, g_value_get_string(value));
         break;
     case PROP_PHONE:
         gncAddressSetPhone(address, g_value_get_string(value));
@@ -278,10 +286,19 @@ gnc_address_class_init (GncAddressClass *klass)
 
     g_object_class_install_property
     (gobject_class,
+     PROP_MOBILE,
+     g_param_spec_string ("mobile",
+                          "Mobile",
+                          "Stores the mobile phone number for this address.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
      PROP_PHONE,
      g_param_spec_string ("phone",
                           "Phone",
-                          "The phone number is the number at this address.",
+                          "Stores the phone number for this address.",
                           NULL,
                           G_PARAM_READWRITE));
 
@@ -324,6 +341,7 @@ gncAddressCreate (QofBook *book, QofInstance *prnt)
     addr->addr2 = CACHE_INSERT ("");
     addr->addr3 = CACHE_INSERT ("");
     addr->addr4 = CACHE_INSERT ("");
+    addr->mobile = CACHE_INSERT ("");
     addr->phone = CACHE_INSERT ("");
     addr->fax = CACHE_INSERT ("");
     addr->email = CACHE_INSERT ("");
@@ -382,6 +400,7 @@ gncAddressFree (GncAddress *addr)
     CACHE_REMOVE (addr->addr2);
     CACHE_REMOVE (addr->addr3);
     CACHE_REMOVE (addr->addr4);
+    CACHE_REMOVE (addr->mobile);
     CACHE_REMOVE (addr->phone);
     CACHE_REMOVE (addr->fax);
     CACHE_REMOVE (addr->email);
@@ -441,6 +460,15 @@ void gncAddressSetAddr4 (GncAddress *addr, const char *addr4)
     if (!addr) return;
     if (!addr4) return;
     SET_STR(addr, addr->addr4, addr4);
+    mark_address (addr);
+    gncAddressCommitEdit (addr);
+}
+
+void gncAddressSetMobile (GncAddress *addr, const char *mobile)
+{
+    if (!addr) return;
+    if (!mobile) return;
+    SET_STR(addr, addr->mobile, mobile);
     mark_address (addr);
     gncAddressCommitEdit (addr);
 }
@@ -536,6 +564,12 @@ const char * gncAddressGetAddr4 (const GncAddress *addr)
     return addr->addr4;
 }
 
+const char * gncAddressGetMobile (const GncAddress *addr)
+{
+    if (!addr) return NULL;
+    return addr->mobile;
+}
+
 const char * gncAddressGetPhone (const GncAddress *addr)
 {
     if (!addr) return NULL;
@@ -609,6 +643,11 @@ gncAddressEqual(const GncAddress* a, const GncAddress* b)
         PWARN("address lines 4 differ: %s vs %s", a->addr4, b->addr4);
         return FALSE;
     }
+    if (g_strcmp0(a->mobile, b->mobile) != 0)
+    {
+        PWARN("mobile numbers differ: %s vs %s", a->mobile, b->mobile);
+        return FALSE;
+    }
     if (g_strcmp0(a->phone, b->phone) != 0)
     {
         PWARN("phone numbers differ: %s vs %s", a->phone, b->phone);
@@ -667,6 +706,10 @@ gboolean gncAddressRegister (void)
         {
             ADDRESS_FOUR,  QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr4,
             (QofSetterFunc)gncAddressSetAddr4
+        },
+        {
+            ADDRESS_MOBILE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetMobile,
+            (QofSetterFunc)gncAddressSetMobile
         },
         {
             ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone,
