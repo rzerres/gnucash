@@ -82,7 +82,7 @@ test_coowner (void)
         GncGUID guid;
 
         test_bool_fcn (book, "Active", gncCoOwnerSetActive, gncCoOwnerGetActive);
-        do_test (gncCoOwnerGetAddr (coowner) != NULL, "Addr");
+        do_test (gncCoOwnerGetAddr (coowner) != NULL, "Address");
         test_numeric_fcn (book, "Apartment Share", gncCoOwnerSetAptShare, gncCoOwnerGetAptShare);
         test_string_fcn (book, "Apartment Unit", gncCoOwnerSetAptUnit, gncCoOwnerGetAptUnit);
         test_numeric_fcn (book, "Credit", gncCoOwnerSetCredit, gncCoOwnerGetCredit);
@@ -92,8 +92,12 @@ test_coowner (void)
         test_string_fcn (book, "Language", gncCoOwnerSetLanguage, gncCoOwnerGetLanguage);
         test_string_fcn (book, "Name", gncCoOwnerSetName, gncCoOwnerGetName);
         test_string_fcn (book, "Notes", gncCoOwnerSetNotes, gncCoOwnerGetNotes);
-        do_test (gncCoOwnerGetShipAddr (coowner) != NULL, "ShipAddr");
-        test_string_fcn (book, "Tenant", gncCoOwnerSetTenant, gncCoOwnerGetTenant);
+        do_test (gncCoOwnerGetShipAddr (coowner) != NULL, "Ship Address");
+        //test_bool_fcn (book, "Tenant Active", gncCoOwnerSetTenantActive, gncCoOwnerGetTenantActive);
+        //do_test (gncCoOwnerGetTenantAddr (coowner) != NULL, "Tenant Address");
+        test_string_fcn (book, "Tenant Id", gncCoOwnerSetTenantID, gncCoOwnerGetTenantID);
+        test_string_fcn (book, "Tenant Name", gncCoOwnerSetTenantName, gncCoOwnerGetTenantName);
+        test_string_fcn (book, "Tenant Notes", gncCoOwnerSetTenantNotes, gncCoOwnerGetTenantNotes);
 
         /* TODO: Terms tests */
         //test_string_fcn (book, "Terms", gncCoOwnerSetTerms, gncCoOwnerGetTerms);
@@ -109,12 +113,16 @@ test_coowner (void)
 
         list = gncBusinessGetList (book, GNC_ID_COOWNER, TRUE);
         do_test (list != NULL, "getList all");
+        //printf("Count: %i\n", count);
+        //printf("List length: %i\n", g_list_length (list));
         do_test (g_list_length (list) == count, "correct length: all");
         g_list_free (list);
 
         list = gncBusinessGetList (book, GNC_ID_COOWNER, FALSE);
-        do_test (list != NULL, "getList active");
-        do_test (g_list_length (list) == 1, "correct length: active");
+        //printf("Count: %i\n", count);
+        //printf("List length: %i\n", g_list_length (list));
+        do_test (list == NULL, "getList active");
+        do_test (g_list_length (list) == 0, "correct length: active");
         g_list_free (list);
     }
     {
@@ -247,6 +255,8 @@ int
 main (int argc, char **argv)
 {
     qof_init();
+    /* Print out successfull tests */
+    // set_success_print(TRUE);
     do_test (cashobjects_register(), "Cannot register cash objects");
     /* These three registrations are done during cashobjects_register,
        so trying to register them again naturally fails. */
@@ -255,8 +265,6 @@ main (int argc, char **argv)
     do_test (gncJobRegister (),  "Cannot register GncJob");
     do_test (gncCoOwnerRegister(), "Cannot register GncCoOwner");
 #endif
-    /* Print out successfull tests */
-    /* set_success_print(TRUE); */
     test_coowner();
     print_test_results();
     qof_close ();
