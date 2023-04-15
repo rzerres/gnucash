@@ -96,6 +96,7 @@ void gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_type_toggled_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_terms_changed_cb (GtkWidget *widget, gpointer data);
+static int gnc_invoice_project_owner_changed_cb (GtkWidget *widget, gpointer data);
 
 static gboolean doclink_button_cb (GtkLinkButton *button, InvoiceWindow *iw);
 static void edit_invoice_cb (GtkWindow *dialog, gpointer inv, gpointer user_data);
@@ -148,26 +149,26 @@ struct _invoice_window
     const gchar * page_state_name;    /* Used for loading open state information */
 
     /* Summary Bar Widgets */
-    GtkWidget  * total_label;
-    GtkWidget  * total_cash_label;
-    GtkWidget  * total_charge_label;
-    GtkWidget  * total_subtotal_label;
-    GtkWidget  * total_tax_label;
+    GtkWidget  * label_total;
+    GtkWidget  * label_total_cash;
+    GtkWidget  * label_total_charge;
+    GtkWidget  * label_total_subtotal;
+    GtkWidget  * label_total_tax;
 
     /* Data Widgets */
-    GtkWidget  * info_label; /*Default in glade is "Invoice Information"*/
-    GtkWidget  * id_label; /* Default in glade is Invoice ID */
-    GtkWidget  * type_label;
-    GtkWidget  * type_label_hbox;
+    GtkWidget  * label_info; /*Default in glade is "Invoice Information"*/
+    GtkWidget  * label_id; /* Default in glade is Invoice ID */
+    GtkWidget  * label_type;
+    GtkWidget  * label_type_hbox;
     GtkWidget  * type_hbox;
     GtkWidget  * type_choice;
-    GtkWidget  * id_entry;
+    GtkWidget  * entry_id;
     GtkWidget  * notes_text;
     GtkWidget  * opened_date;
     GtkWidget  * posted_date_hbox;
     GtkWidget  * posted_date;
     GtkWidget  * active_check;
-    GtkWidget  * paid_label;
+    GtkWidget  * label_paid;
 
     GtkWidget  * doclink_button;
 
@@ -182,8 +183,8 @@ struct _invoice_window
 
     /* Project Widgets (used for Bills only) */
     GtkWidget  * proj_frame;
-    GtkWidget  * proj_cust_box;
-    GtkWidget  * proj_cust_choice;
+    GtkWidget  * proj_owner_box;
+    GtkWidget  * proj_owner_choice;
     GtkWidget  * proj_job_box;
     GtkWidget  * proj_job_choice;
 
@@ -407,8 +408,8 @@ gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
     // Only set these values for NEW/MOD INVOICE types
     if (iw->dialog_type != EDIT_INVOICE)
     {
-        gncInvoiceSetID (invoice, gtk_entry_get_text (GTK_ENTRY (iw->id_entry)));
-        gncInvoiceSetBillingID (invoice, gtk_entry_get_text (GTK_ENTRY (iw->billing_id_entry)));
+        gncInvoiceSetID (invoice, gtk_entry_get_text (GTK_ENTRY (iw->entry_id)));
+        gncInvoiceSetBillingID (invoice, gtk_entry_get_text (GTK_ENTRY (iw->billing_entry_id)));
         gncInvoiceSetTerms (invoice, iw->terms);
 
         gncInvoiceSetDateOpened (invoice, time);
@@ -470,7 +471,7 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
         return FALSE;
 
     // Check the Owner
-    gnc_owner_get_owner (iw->choice_owner, &(iw->owner));
+    gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
     res = gncOwnerGetName (&(iw->owner));
     if (res == NULL || g_strcmp0 (res, "") == 0)
     {
@@ -486,14 +487,14 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
     }
 
     /* Check the ID; set one if necessary */
-    res = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
+    res = gtk_entry_get_text (GTK_ENTRY (iw->entry_id));
     if (g_strcmp0 (res, "") == 0)
     {
       // Invoices and bills have separate counters.  Therefore we pass
       // the GncOwer to gncInvoiceNextID so it knows whether we
       // are creating a bill or an invoice. */
         string = gncInvoiceNextID(iw->book, &(iw->owner));
-        gtk_entry_set_text (GTK_ENTRY (iw->id_entry), string);
+        gtk_entry_set_text (GTK_ENTRY (iw->entry_id), string);
         g_free(string);
     }
 
@@ -556,7 +557,7 @@ gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
     switch(iw->owner.type)
     {
         case GNC_OWNER_COOWNER:
-           gnc_gnome_help (GTK_WINDOW(iw->dialog), HF_HELP, HL_USAGE_SETTLEMENT);
+           gnc_gnome_help (GTK_WINDOW(iw->dialog), DF_MANUAL, DL_USAGE_SETTLEMENT);
            break;
         case GNC_OWNER_CUSTOMER:
            gnc_gnome_help (GTK_WINDOW(iw->dialog), DF_MANUAL, DL_USAGE_INVOICE);
@@ -1626,30 +1627,30 @@ gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
 {
     GtkWidget *summarybar;
 
-    iw->total_label           = NULL;
-    iw->total_cash_label      = NULL;
-    iw->total_charge_label    = NULL;
-    iw->total_subtotal_label  = NULL;
-    iw->total_tax_label       = NULL;
+    iw->label_total           = NULL;
+    iw->label_total_cash      = NULL;
+    iw->label_total_charge    = NULL;
+    iw->label_total_subtotal  = NULL;
+    iw->label_total_tax       = NULL;
 
     summarybar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
     gtk_box_set_homogeneous (GTK_BOX (summarybar), FALSE);
     gtk_widget_set_name (summarybar, "gnc-id-summarybar");
 
-    iw->total_label           = add_summary_label (summarybar, _("Total:"));
+    iw->label_total           = add_summary_label (summarybar, _("Total:"));
 
     switch (gncOwnerGetType (&iw->owner))
     {
     case GNC_OWNER_COOWNER:
     case GNC_OWNER_CUSTOMER:
     case GNC_OWNER_VENDOR:
-        iw->total_subtotal_label = add_summary_label (summarybar, _("Subtotal:"));
-        iw->total_tax_label     = add_summary_label (summarybar, _("Tax:"));
+        iw->label_total_subtotal = add_summary_label (summarybar, _("Subtotal:"));
+        iw->label_total_tax     = add_summary_label (summarybar, _("Tax:"));
         break;
 
     case GNC_OWNER_EMPLOYEE:
-        iw->total_cash_label    = add_summary_label (summarybar, _("Total Cash:"));
-        iw->total_charge_label  = add_summary_label (summarybar, _("Total Charge:"));
+        iw->label_total_cash    = add_summary_label (summarybar, _("Total Cash:"));
+        iw->label_total_charge  = add_summary_label (summarybar, _("Total Charge:"));
         break;
 
     default:
@@ -1814,7 +1815,7 @@ gnc_invoice_update_project_job (InvoiceWindow *iw)
         {
             iw->proj_job_choice =
                 gnc_general_search_new (GNC_JOB_MODULE_NAME, _("Select…"), TRUE,
-                                        gnc_invoice_select_proj_job_cb, iw, iw->book);
+                                        gnc_invoice_select_project_job_cb, iw, iw->book);
 
             gnc_general_search_set_selected (GNC_GENERAL_SEARCH(iw->proj_job_choice),
                                              gncOwnerGetJob (&iw->proj_job));
@@ -1824,7 +1825,7 @@ gnc_invoice_update_project_job (InvoiceWindow *iw)
                                 TRUE, TRUE, 0);
 
             g_signal_connect (G_OBJECT (iw->proj_job_choice), "changed",
-                              G_CALLBACK (gnc_invoice_proj_job_changed_cb), iw);
+                              G_CALLBACK (gnc_invoice_project_job_changed_cb), iw);
         }
         break;
     }
@@ -1900,13 +1901,13 @@ gnc_invoice_project_owner_changed_cb (GtkWidget *widget, gpointer data)
     if (iw->dialog_type == VIEW_INVOICE)
         return FALSE;
 
-    gncOwnerCopy (&(iw->proj_cust), &owner);
-    gnc_owner_get_owner (iw->proj_cust_choice, &owner);
+    gncOwnerCopy (&(iw->proj_owner), &owner);
+    gnc_owner_get_owner (iw->proj_owner_choice, &owner);
 
     /* If this owner really changed, then reset ourselves */
-    if (!gncOwnerEqual (&owner, &(iw->proj_cust)))
+    if (!gncOwnerEqual (&owner, &(iw->proj_owner)))
     {
-        gncOwnerCopy (&owner, &(iw->proj_cust));
+        gncOwnerCopy (&owner, &(iw->proj_owner));
         gncOwnerInitJob (&(iw->proj_job), NULL);
     gncOwnerCopy (&(iw->proj_owner), &owner);
     gnc_owner_get_owner (iw->proj_owner_choice, &owner);
@@ -1950,7 +1951,7 @@ gnc_invoice_window_close_handler (gpointer user_data)
 }
 
 static void
-gnc_invoice_reset_total_label (
+gnc_invoice_reset_label_total (
     GtkLabel *label,
     gnc_numeric amt,
     gnc_commodity *com)
@@ -1987,25 +1988,25 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
     currency = gncInvoiceGetCurrency (invoice);
 
-    if (iw->total_label)
+    if (iw->label_total)
     {
         amount = gncInvoiceGetTotal (invoice);
-        gnc_invoice_reset_total_label (
-            GTK_LABEL (iw->total_label), amount, currency);
+        gnc_invoice_reset_label_total (
+            GTK_LABEL (iw->label_total), amount, currency);
     }
 
-    if (iw->total_subtotal_label)
+    if (iw->label_total_subtotal)
     {
         amount = gncInvoiceGetTotalSubtotal (invoice);
-        gnc_invoice_reset_total_label (
-            GTK_LABEL (iw->total_subtotal_label), amount, currency);
+        gnc_invoice_reset_label_total (
+            GTK_LABEL (iw->label_total_subtotal), amount, currency);
     }
 
-    if (iw->total_tax_label)
+    if (iw->label_total_tax)
     {
         amount = gncInvoiceGetTotalTax (invoice);
-        gnc_invoice_reset_total_label (
-            GTK_LABEL (iw->total_tax_label), amount, currency);
+        gnc_invoice_reset_label_total (
+            GTK_LABEL (iw->label_total_tax), amount, currency);
     }
 
     /* Deal with extra items for the expense voucher */
@@ -2016,22 +2017,22 @@ gnc_invoice_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
         to_charge_amt = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(iw->to_charge_edit));
     }
 
-    if (iw->total_cash_label)
+    if (iw->label_total_cash)
     {
         amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CASH);
         amount = gnc_numeric_sub (amount, to_charge_amt,
             gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND_HALF_UP);
-        gnc_invoice_reset_total_label (
-            GTK_LABEL (iw->total_cash_label), amount, currency);
+        gnc_invoice_reset_label_total (
+            GTK_LABEL (iw->label_total_cash), amount, currency);
     }
 
-    if (iw->total_charge_label)
+    if (iw->label_total_charge)
     {
         amount = gncInvoiceGetTotalOf (invoice, GNC_PAYMENT_CARD);
         amount = gnc_numeric_add (amount, to_charge_amt,
             gnc_commodity_get_fraction (currency), GNC_HOW_RND_ROUND_HALF_UP);
-        gnc_invoice_reset_total_label (
-            GTK_LABEL (iw->total_charge_label), amount, currency);
+        gnc_invoice_reset_label_total (
+            GTK_LABEL (iw->label_total_charge), amount, currency);
     }
 }
 
@@ -2086,7 +2087,7 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
     // Copy the billto information into our window
     owner = gncInvoiceGetBillTo (invoice);
     gncOwnerCopy (gncOwnerGetEndOwner (owner), &iw->proj_owner);
-    gncOwnerInitJob (&iw->project_job, gncOwnerGetJob (owner));
+    gncOwnerInitJob (&iw->proj_job, gncOwnerGetJob (owner));
 
     // Finally, refresh ourselves
     gnc_invoice_update_window (iw, NULL);
@@ -2115,7 +2116,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     if (iw->owner_choice)
         gtk_container_remove (GTK_CONTAINER (iw->owner_box), iw->owner_choice);
 
-    if (iw->proj_cust_choice)
+    if (iw->proj_owner_choice)
         gtk_container_remove (GTK_CONTAINER (iw->proj_owner_box),
                               iw->proj_owner_choice);
 
@@ -2126,7 +2127,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         iw->owner_choice =
             gnc_owner_edit_create (iw->owner_label, iw->owner_box, iw->book,
                                    &(iw->owner));
-        iw->proj_cust_choice =
+        iw->proj_owner_choice =
             gnc_owner_edit_create (NULL, iw->proj_owner_box, iw->book,
                                    &(iw->proj_owner));
         break;
@@ -2136,7 +2137,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         iw->owner_choice =
             gnc_owner_select_create (iw->owner_label, iw->owner_box, iw->book,
                                      &(iw->owner));
-        iw->proj_cust_choice =
+        iw->proj_owner_choice =
             gnc_owner_select_create (NULL, iw->proj_owner_box, iw->book,
                                      &(iw->proj_owner));
 
@@ -2144,7 +2145,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
                           G_CALLBACK (gnc_invoice_owner_changed_cb), iw);
 
         g_signal_connect (G_OBJECT (iw->proj_owner_choice), "changed",
-                          G_CALLBACK (gnc_invoice_proj_owner_changed_cb), iw);
+                          G_CALLBACK (gnc_invoice_project_owner_changed_cb), iw);
 
         break;
     }
@@ -2163,14 +2164,10 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
 
     // Hide the project frame for coowner invoices
     if (iw->owner.type == GNC_OWNER_COOWNER)
-        gtk_widget_hide (iw->frame_project);
+        gtk_widget_hide (iw->proj_frame);
 
     // Hide the project frame for customer invoices
     if (iw->owner.type == GNC_OWNER_CUSTOMER)
-        gtk_widget_hide (iw->proj_frame);
-
-    /* Hide the project frame for coowner invoices */
-    if (iw->owner.type == GNC_OWNER_COOWNER)
         gtk_widget_hide (iw->proj_frame);
 
     // Hide the "job" label and entry for employee invoices
@@ -2189,9 +2186,9 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         gchar * tmp_string;
         time64 time;
 
-        gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
+        gtk_entry_set_text (GTK_ENTRY (iw->entry_id), gncInvoiceGetID (invoice));
 
-        gtk_entry_set_text (GTK_ENTRY (iw->billing_id_entry),
+        gtk_entry_set_text (GTK_ENTRY (iw->billing_entry_id),
                             gncInvoiceGetBillingID (invoice));
 
         string = gncInvoiceGetNotes (invoice);
@@ -2331,8 +2328,8 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
 
         /* Setup viewer for read-only access */
         gtk_widget_set_sensitive (acct_entry, FALSE);
-        gtk_widget_set_sensitive (iw->id_entry, FALSE); /* XXX: why set FALSE and then TRUE? */
-        gtk_widget_set_sensitive (iw->id_entry, TRUE);
+        gtk_widget_set_sensitive (iw->entry_id, FALSE); /* XXX: why set FALSE and then TRUE? */
+        gtk_widget_set_sensitive (iw->entry_id, TRUE);
         gtk_widget_set_sensitive (iw->terms_menu, FALSE);
         gtk_widget_set_sensitive (iw->owner_box, TRUE);
         gtk_widget_set_sensitive (iw->job_box, TRUE);
@@ -2353,9 +2350,9 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
 
     // Translators: This is a label to show whether the invoice is paid or not.
     if(gncInvoiceIsPaid (invoice))
-        gtk_label_set_text(GTK_LABEL(iw->paid_label),  _("PAID"));
+        gtk_label_set_text(GTK_LABEL(iw->label_paid),  _("PAID"));
     else
-        gtk_label_set_text(GTK_LABEL(iw->paid_label),  _("UNPAID"));
+        gtk_label_set_text(GTK_LABEL(iw->label_paid),  _("UNPAID"));
 
     if (widget)
         gtk_widget_show (widget);
@@ -2482,8 +2479,8 @@ gchar
         break;
     }
 
-    if (iw->id_entry)
-        id = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
+    if (iw->entry_id)
+        id = gtk_entry_get_text (GTK_ENTRY (iw->entry_id));
     if (id && *id)
         return g_strconcat (wintitle, " - ", id, (char *)NULL);
     return g_strdup (wintitle);
@@ -2605,7 +2602,7 @@ static InvoiceWindow
     gncOwnerInitJob (&(iw->job), gncOwnerGetJob (owner));
 
     billto = gncInvoiceGetBillTo (invoice);
-    gncOwnerCopy (gncOwnerGetEndOwner (billto), &(iw->proj_cust));
+    gncOwnerCopy (gncOwnerGetEndOwner (billto), &(iw->proj_owner));
     gncOwnerInitJob (&iw->proj_job, gncOwnerGetJob (billto));
 
     // Now create the plugin page using the invoice structure data
@@ -2763,7 +2760,8 @@ GtkWidget
 *gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 {
     GtkBuilder *builder;
-    GtkWidget *dialog, *hbox;
+    GtkWidget *dialog;
+    GtkWidget *hbox;
     GncEntryLedger *entry_ledger = NULL;
     GncOwnerType owner_type;
     GncEntryLedgerType ledger_type;
@@ -2779,7 +2777,7 @@ GtkWidget
 
     // Read in glade dialog definition: "invoice_window"
     iw->builder = builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "terms_store");
+    gnc_builder_add_from_file (builder, "dialog-invoice.glade", "invoice_liststore_terms");
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "invoice_entry_vbox");
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoice_entry_vbox"));
 
@@ -2793,10 +2791,10 @@ GtkWidget
         (builder, "invoice_selecte_type"));
 
     /* Grab the widgets */
-    iw->id_label = GTK_WIDGET (gtk_builder_get_object (builder, "label3"));
+    iw->label_id = GTK_WIDGET (gtk_builder_get_object (builder, "label3"));
     iw->type_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_type_label"));
-    iw->info_label = GTK_WIDGET (gtk_builder_get_object (builder, "label25"));
-    iw->id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "page_id_entry"));
+    iw->label_info = GTK_WIDGET (gtk_builder_get_object (builder, "label25"));
+    iw->entry_id = GTK_WIDGET (gtk_builder_get_object (builder, "page_entry_id"));
     iw->billing_id_entry = GTK_WIDGET (gtk_builder_get_object (builder, "page_billing_id_entry"));
     iw->terms_menu = GTK_WIDGET (gtk_builder_get_object (builder, "page_terms_menu"));
     iw->notes_text = GTK_WIDGET (gtk_builder_get_object (builder, "page_notes_text"));
@@ -2805,7 +2803,7 @@ GtkWidget
     iw->owner_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_owner_label"));
     iw->job_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_label"));
     iw->job_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_hbox"));
-    iw->paid_label = GTK_WIDGET (gtk_builder_get_object (builder, "paid_label"));
+    iw->label_paid = GTK_WIDGET (gtk_builder_get_object (builder, "label_paid"));
 
     iw->doclink_button = GTK_WIDGET(gtk_builder_get_object (builder, "doclink_button"));
     g_signal_connect (G_OBJECT (iw->doclink_button), "activate-link",
@@ -2827,11 +2825,11 @@ GtkWidget
         gtk_widget_hide (GTK_WIDGET (iw->doclink_button));
 
     // Add a style context for this label so it can be easily manipulated with css
-    gnc_widget_style_context_add_class (GTK_WIDGET(iw->paid_label), "gnc-class-highlight");
+    gnc_widget_style_context_add_class (GTK_WIDGET(iw->label_paid), "gnc-class-highlight");
 
     /* grab the project widgets */
     iw->proj_frame = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_frame"));
-    iw->proj_owner_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_cust_hbox")); // TODO: rename to page_proj_owner_hbox
+    iw->proj_owner_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_owner_hbox")); // TODO: rename to page_proj_owner_hbox
     iw->proj_job_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_job_hbox"));
     {
         GtkWidget *edit;
@@ -2943,21 +2941,21 @@ GtkWidget
     switch (owner_type)
     {
         case GNC_OWNER_COOWNER:
-            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Settlement Information"));
+            gtk_label_set_text (GTK_LABEL(iw->label_info),  _("Settlement Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Settlement"));
-            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Settlement ID"));
+            gtk_label_set_text (GTK_LABEL(iw->label_id),  _("Settlement ID"));
             style_label = "gnc-class-coowners";
             break;
         case GNC_OWNER_EMPLOYEE:
-            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Voucher Information"));
+            gtk_label_set_text (GTK_LABEL(iw->label_info),  _("Voucher Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Voucher"));
-            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Voucher ID"));
+            gtk_label_set_text (GTK_LABEL(iw->label_id),  _("Voucher ID"));
             style_label = "gnc-class-employees";
             break;
         case GNC_OWNER_VENDOR:
-            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Bill Information"));
+            gtk_label_set_text (GTK_LABEL(iw->label_info),  _("Bill Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill"));
-            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID"));
+            gtk_label_set_text (GTK_LABEL(iw->label_id),  _("Bill ID"));
             style_label = "gnc-class-vendors";
             break;
         default:
@@ -3189,8 +3187,8 @@ static InvoiceWindow
     g_warning ("[gnc_invoice_window_new_invoice] grep glade values for invoice information widgets\n");
     iw->type_label = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_label"));
     iw->type_label_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_label_hbox"));
-    iw->id_label = GTK_WIDGET (gtk_builder_get_object (builder, "label14"));
-    iw->info_label = GTK_WIDGET (gtk_builder_get_object (builder, "label1"));
+    iw->label_id = GTK_WIDGET (gtk_builder_get_object (builder, "label14"));
+    iw->label_info = GTK_WIDGET (gtk_builder_get_object (builder, "label1"));
     invoice_radio = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_invoice_type"));
 
     iw->type_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_type_choice_hbox"));
@@ -3239,15 +3237,15 @@ static InvoiceWindow
 
     // Grep the project widgets
     g_warning ("[gnc_invoice_window_new_invoice] grep glade values for project information ui widgets\n");
-    iw->frame_project = GTK_WIDGET (gtk_builder_get_object
+    iw->proj_frame = GTK_WIDGET (gtk_builder_get_object
         (builder, "invoice_new_frame_project"));
     iw->label_project_owner = GTK_WIDGET (gtk_builder_get_object
         (builder, "invoice_new_label_project_owner"));
     iw->entry_project_owner = GTK_WIDGET (gtk_builder_get_object
         (builder, "invoice_new_hbox_project_owner"));
-    iw->label_project_job = GTK_WIDGET (gtk_builder_get_object
+    iw->label_proj_job = GTK_WIDGET (gtk_builder_get_object
         (builder, "invoice_new_label_project_owner"));
-    iw->entry_project_job = GTK_WIDGET (gtk_builder_get_object
+    iw->entry_proj_job = GTK_WIDGET (gtk_builder_get_object
         (builder, "invoice_new_hbox_project_job"));
 
     // If this is a new invoice, reset the notes widget to read/write
@@ -3262,24 +3260,24 @@ static InvoiceWindow
     switch (iw->owner.type)
     {
         case GNC_OWNER_COOWNER:
-            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Settlement Information"));
+            gtk_label_set_text (GTK_LABEL(iw->label_info),  _("Settlement Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Settlement"));
             gtk_button_set_label (GTK_BUTTON(invoice_radio),  _("Settlement"));
-            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Settlement ID"));
+            gtk_label_set_text (GTK_LABEL(iw->label_id),  _("Settlement ID"));
             style_label = "gnc-class-coowners";
             break;
         case GNC_OWNER_EMPLOYEE:
-            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Voucher Information"));
+            gtk_label_set_text (GTK_LABEL(iw->label_info),  _("Voucher Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Voucher"));
             gtk_button_set_label (GTK_BUTTON(invoice_radio),  _("Voucher"));
-            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Voucher ID"));
+            gtk_label_set_text (GTK_LABEL(iw->label_id),  _("Voucher ID"));
             style_label = "gnc-class-employees";
             break;
         case GNC_OWNER_VENDOR:
-            gtk_label_set_text (GTK_LABEL(iw->info_label),  _("Bill Information"));
+            gtk_label_set_text (GTK_LABEL(iw->label_info),  _("Bill Information"));
             gtk_label_set_text (GTK_LABEL(iw->type_label),  _("Bill"));
             gtk_button_set_label (GTK_BUTTON(invoice_radio),  _("Bill"));
-            gtk_label_set_text (GTK_LABEL(iw->id_label),  _("Bill ID"));
+            gtk_label_set_text (GTK_LABEL(iw->label_id),  _("Bill ID"));
             style_label = "gnc-class-vendors";
             break;
         default:
@@ -3323,7 +3321,7 @@ static InvoiceWindow
 
     /* Grab the project widgets */
     iw->proj_frame = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_proj_frame"));
-    iw->proj_cust_box = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_proj_cust_hbox"));
+    iw->proj_owner_box = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_proj_owner_hbox"));
     iw->proj_job_box = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_proj_job_hbox"));
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_date_opened_hbox"));
@@ -3570,29 +3568,6 @@ struct multi_edit_invoice_data
     gpointer user_data;
     GtkWindow *parent;
 };
-
-static void
-multi_duplicate_invoice_one(gpointer data, gpointer user_data)
-{
-    GncInvoice *old_invoice = data;
-    struct multi_duplicate_invoice_data *dup_user_data = user_data;
-
-    g_assert(dup_user_data);
-    if (old_invoice)
-    {
-        GncInvoice *new_invoice;
-        // In this simplest form, we just use the existing duplication
-        // algorithm, only without opening the "edit invoice" window for editing
-        // the number etc. for each of the invoices.
-        InvoiceWindow *iw = gnc_ui_invoice_duplicate(
-            dup_user_data->parent, old_invoice, FALSE, &dup_user_data->date);
-
-        // FIXME: Now we could use this invoice and manipulate further data.
-        g_assert(iw);
-        new_invoice = iw_get_invoice(iw);
-        g_assert(new_invoice);
-    }
-}
 
 static void
 multi_edit_invoice_one (gpointer inv, gpointer user_data)
@@ -4231,6 +4206,8 @@ DialogQueryView
     // For vendor bills we want to find all invoices where:
     //      invoice -> is_posted == TRUE
     // AND  invoice -> lot -> is_closed? == FALSE
+    // AND  invoice -> type != coowner invoice
+    // AND  invoice -> type != coowner credit note
     // AND  invoice -> type != customer invoice
     // AND  invoice -> type != customer credit note
     // AND  invoice -> due <= (today + days_in_advance)
@@ -4257,6 +4234,19 @@ DialogQueryView
 
     if (duetype == DUE_FOR_VENDOR)
     {
+        // Select bills assignable to given vendor
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_COOWNER_SETTLEMENT);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_COOWNER_CREDIT_NOTE);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+
         pred_data = qof_query_int32_predicate
             (QOF_COMPARE_NEQ, GNC_INVOICE_CUST_INVOICE);
         qof_query_add_term (
@@ -4265,6 +4255,45 @@ DialogQueryView
 
         pred_data = qof_query_int32_predicate
             (QOF_COMPARE_NEQ, GNC_INVOICE_CUST_CREDIT_NOTE);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+    }
+    else if (duetype == DUE_FOR_COOWNER)
+    {
+        // Select settlements that are assignable to coowners
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_VEND_INVOICE);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_VEND_CREDIT_NOTE);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_CUST_INVOICE);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_CUST_CREDIT_NOTE);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_EMPL_INVOICE);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_EMPL_CREDIT_NOTE);
         qof_query_add_term (
             q, g_slist_prepend(NULL, INVOICE_TYPE),
             pred_data, QOF_QUERY_AND);
@@ -4279,6 +4308,18 @@ DialogQueryView
 
         pred_data = qof_query_int32_predicate
             (QOF_COMPARE_NEQ, GNC_INVOICE_VEND_CREDIT_NOTE);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_COOWNER_SETTLEMENT);
+        qof_query_add_term (
+            q, g_slist_prepend(NULL, INVOICE_TYPE),
+            pred_data, QOF_QUERY_AND);
+
+        pred_data = qof_query_int32_predicate
+            (QOF_COMPARE_NEQ, GNC_INVOICE_COOWNER_CREDIT_NOTE);
         qof_query_add_term (
             q, g_slist_prepend(NULL, INVOICE_TYPE),
             pred_data, QOF_QUERY_AND);
