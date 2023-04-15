@@ -43,6 +43,7 @@
 #include <config.h>
 #include "qof.h"
 #include "gncInvoice.h"
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
 #include "gncEmployee.h"
 #include "gncJob.h"
