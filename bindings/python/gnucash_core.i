@@ -211,6 +211,8 @@ static const GncGUID * gncEntryGetGUID(GncEntry *x);
 
 //core business includes
 %include <gncOwner.h>
+%include <gncCoOwner.h>
+%include <gncCoOwnerP.h>
 %include <gncCustomer.h>
 %include <gncCustomerP.h>
 %include <gncEmployee.h>
