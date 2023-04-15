@@ -29,7 +29,7 @@
 
 #include "Account.h"
 #include "gnc-ui-util.h"
-#include "qof.h"	/* for g_strcmp0 */
+#include "qof.h"        /* for g_strcmp0 */
 
 #include "datecell.h"
 #include "checkboxcell.h"
@@ -285,7 +285,7 @@ static const char * get_pric_entry (VirtualLocation virt_loc,
     GNCPrintAmountInfo print_info;
 
     entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-    if (ledger->is_cust_doc)
+    if (ledger->is_cust_doc || ledger->is_coowner_doc)
         price = gncEntryGetInvPrice (entry);
     else
         price = gncEntryGetBillPrice (entry);
@@ -327,7 +327,7 @@ static const char * get_taxable_entry (VirtualLocation virt_loc,
     gboolean taxable;
 
     entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-    if (ledger->is_cust_doc)
+    if (ledger->is_cust_doc || ledger->is_coowner_doc)
         taxable = gncEntryGetInvTaxable (entry);
     else
         taxable = gncEntryGetBillTaxable (entry);
@@ -380,7 +380,7 @@ static const char * get_taxtable_entry (VirtualLocation virt_loc,
     }
 
     entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-    if (ledger->is_cust_doc)
+    if (ledger->is_cust_doc | ledger->is_coowner_doc)
         table = gncEntryGetInvTaxTable (entry);
     else
         table = gncEntryGetBillTaxTable (entry);
@@ -408,7 +408,7 @@ static const char * get_taxincluded_entry (VirtualLocation virt_loc,
     }
 
     entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-    if (ledger->is_cust_doc)
+    if (ledger->is_cust_doc || ledger->is_coowner_doc)
         taxincluded = gncEntryGetInvTaxIncluded (entry);
     else
         taxincluded = gncEntryGetBillTaxIncluded (entry);
@@ -462,7 +462,10 @@ static const char * get_value_entry (VirtualLocation virt_loc,
         /* Ledger should display values with the same sign as on the document
          * so get the document value instead of the internal value here.
          */
-        value = gncEntryGetDocValue (entry, TRUE, ledger->is_cust_doc, ledger->is_credit_note);
+        if (ledger->is_coowner_doc)
+            value = gncEntryGetDocValue (entry, TRUE, ledger->is_coowner_doc, ledger->is_credit_note);
+        else if (ledger->is_cust_doc)
+            value = gncEntryGetDocValue (entry, TRUE, ledger->is_cust_doc, ledger->is_credit_note);
     }
 
     return xaccPrintAmount (value, gnc_default_print_info (FALSE));
@@ -495,7 +498,10 @@ static const char * get_taxval_entry (VirtualLocation virt_loc,
         /* Ledger should display values with the same sign as on the document
          * so get the document value instead of the internal value here.
          */
-        value = gncEntryGetDocTaxValue (entry, TRUE, ledger->is_cust_doc, ledger->is_credit_note);
+        if (ledger->is_coowner_doc)
+            value = gncEntryGetDocValue (entry, TRUE, ledger->is_coowner_doc, ledger->is_credit_note);
+        else if (ledger->is_cust_doc)
+            value = gncEntryGetDocValue (entry, TRUE, ledger->is_cust_doc, ledger->is_credit_note);
     }
 
     return xaccPrintAmount (value, gnc_default_print_info (FALSE));
@@ -734,6 +740,8 @@ static char * get_inv_help (VirtualLocation virt_loc, gpointer user_data)
     case GNCENTRY_BILL_VIEWER:
     case GNCENTRY_EXPVOUCHER_ENTRY:
     case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_SETTLEMENT_ENTRY:
+    case GNCENTRY_SETTLEMENT_VIEWER:
         help = _("Is this entry invoiced?");
         break;
     case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
@@ -746,6 +754,8 @@ static char * get_inv_help (VirtualLocation virt_loc, gpointer user_data)
     case GNCENTRY_INVOICE_VIEWER:
         help = _("Include this entry on this invoice?");
         break;
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
         help = _("Include this entry on this credit note?");
@@ -810,6 +820,7 @@ static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
     case GNCENTRY_ORDER_ENTRY:
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_SETTLEMENT_ENTRY:
     {
         GncEntry *entry =
             gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
@@ -897,7 +908,7 @@ static CellIOFlags get_qty_io_flags (VirtualLocation virt_loc, gpointer user_dat
     CellIOFlags flags = get_standard_io_flags (virt_loc, user_data);
 
     /* If this isn't an invoice, or the flags are already read-only ... */
-    if (!ledger->is_cust_doc || flags == XACC_CELL_ALLOW_SHADOW)
+    if (!ledger->is_coowner_doc || !ledger->is_cust_doc || flags == XACC_CELL_ALLOW_SHADOW)
         return flags;
 
     /* ok, if this is an invoice ledger AND this entry is attached to a
@@ -1107,7 +1118,7 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 
         if (gnc_entry_ledger_get_numeric (ledger, ENTRY_PRIC_CELL, &amount))
         {
-            if (ledger->is_cust_doc)
+            if (ledger->is_cust_doc || ledger->is_coowner_doc)
                 gncEntrySetInvPrice (entry, amount);
             else
                 gncEntrySetBillPrice (entry, amount);
@@ -1120,7 +1131,7 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
         gboolean taxable;
 
         taxable = gnc_entry_ledger_get_checkmark (ledger, ENTRY_TAXABLE_CELL);
-        if (ledger->is_cust_doc)
+        if (ledger->is_cust_doc | ledger->is_coowner_doc)
             gncEntrySetInvTaxable (entry, taxable);
         else
             gncEntrySetBillTaxable (entry, taxable);
@@ -1135,7 +1146,7 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
         table = gnc_entry_ledger_get_taxtable (ledger, ENTRY_TAXTABLE_CELL);
         if (table)
         {
-            if (ledger->is_cust_doc)
+            if (ledger->is_cust_doc || ledger->is_coowner_doc)
                 gncEntrySetInvTaxTable (entry, table);
             else
                 gncEntrySetBillTaxTable (entry, table);
@@ -1149,7 +1160,7 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 
         taxincluded = gnc_entry_ledger_get_checkmark (ledger,
                       ENTRY_TAXINCLUDED_CELL);
-        if (ledger->is_cust_doc)
+        if (ledger->is_cust_doc || ledger->is_coowner_doc)
             gncEntrySetInvTaxIncluded (entry, taxincluded);
         else
             gncEntrySetBillTaxIncluded (entry, taxincluded);
@@ -1243,13 +1254,15 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
 
     switch (type)
     {
-    case GNCENTRY_ORDER_VIEWER:
-    case GNCENTRY_INVOICE_VIEWER:
     case GNCENTRY_BILL_VIEWER:
-    case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
-    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
     case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_ORDER_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_SETTLEMENT_VIEWER:
         /* make this table read-only */
         gnc_table_model_set_read_only (model, TRUE);
         break;
