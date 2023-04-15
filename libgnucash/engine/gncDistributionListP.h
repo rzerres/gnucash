@@ -33,7 +33,7 @@
 
 gboolean gncDistribListRegister (void);
 
-#define gncDistribListSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
+#define gncDistribListSetGUID(D,G) qof_instance_set_guid(QOF_INSTANCE(D),(G))
 
 void gncDistribListSetParent (GncDistributionList *distriblist, GncDistributionList *parent);
 void gncDistribListSetChild (GncDistributionList *distriblist, GncDistributionList *child);
