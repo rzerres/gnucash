@@ -90,6 +90,12 @@ static EntryVec col_table
         COL_NNUL,
         (QofAccessFunc)gncDistribListGetInvisible,
         (QofSetterFunc)set_invisible),
+    gnc_sql_make_table_entry<CT_INT>(
+        "owner_type",
+        0,
+        COL_NNUL,
+        (QofAccessFunc)gncDistribListGetOwnerType,
+        (QofSetterFunc)gncDistribListSetOwnerType),
     gnc_sql_make_table_entry<CT_GUID>(
         "parent",
         0,
