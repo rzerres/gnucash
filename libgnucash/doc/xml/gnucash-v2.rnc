@@ -1,6 +1,7 @@
 # Aug 2012: A RELAX NG Compact schema for gnucash "v2" XML files.
 # Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>
 # Copyright (C) 2012 Baptiste Carvello <devel@baptiste-carvello.net>
+# Copyright (C) 2022 Ralf Zerres <rzerres@mail.de>
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -12,6 +13,9 @@
 # schema, not the file. The schema was last updated for gnucash trunk, rev 22330.
 
 # http://relaxng.org/compact-tutorial-20030326.html
+
+# extended: gnucash maint, v4.11 (CoOwner)
+# versions >= 3.0 moved source to libgnucash/backend/xml/*.<h|c>
 
 # from write_v2_header in src/backend/xml/io-gncxml-v2.c
 
@@ -39,6 +43,7 @@ namespace owner = "http://www.gnucash.org/XML/owner"
 namespace billterm = "http://www.gnucash.org/XML/billterm"
 namespace bt-days = "http://www.gnucash.org/XML/bt-days"
 namespace bt-prox = "http://www.gnucash.org/XML/bt-prox"
+namespace coowner = "http://www.gnucash.org/XML/coowner"
 namespace cust = "http://www.gnucash.org/XML/cust"
 namespace employee = "http://www.gnucash.org/XML/employee"
 namespace entry = "http://www.gnucash.org/XML/entry"
@@ -91,6 +96,7 @@ Book = element gnc:book {
 # plugins (those with a get_count slot)
 
   element gnc:count-data { attribute cd:type { "gnc:GncBillTerm" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncCoOwner" }, xsd:int }?,
   element gnc:count-data { attribute cd:type { "gnc:GncCustomer" }, xsd:int }?,
   element gnc:count-data { attribute cd:type { "gnc:GncEmployee" }, xsd:int }?,
   element gnc:count-data { attribute cd:type { "gnc:GncEntry" }, xsd:int }?,
@@ -111,6 +117,7 @@ Book = element gnc:book {
 # plugins (those with a write slot)
 
   BillTerm*,
+  CoOwner*,
   Customer*,
   Employee*,
   Entry*,
@@ -234,7 +241,7 @@ Account = element gnc:account {
                    | "MONEYMRKT"
                    | "CREDITLINE" },
 
-  ( element act:commodity { 
+  ( element act:commodity {
       element cmdty:space { text },
       element cmdty:id { text }
     },
@@ -319,17 +326,17 @@ ScheduledTransaction = element gnc:schedxaction {
   | element sx:end { GDate }
   )?,
   element sx:templ-acct { attribute type { "guid" }, GUID },
-  element sx:schedule { 
+  element sx:schedule {
     element gnc:recurrence { RecurrenceContent }*
   },
   DeferredInstance*,
-  element sx:slots { KvpSlot+ }? 
+  element sx:slots { KvpSlot+ }?
 }
 
 DeferredInstance = element sx:deferredInstance {
   element sx:last { GDate }?,
   element sx:rem-occur { xsd:int },
-  element sx:instanceCount { xsd:int } 
+  element sx:instanceCount { xsd:int }
 }
 
 # from recurrence_to_dom_tree in src/backend/xml/gnc-recurrence-xml-v2.c
@@ -391,6 +398,39 @@ BillTerm = element gnc:GncBillTerm {
       element bt-prox:cutoff-day { xsd:int }?
     }
   )
+}
+
+# from coowner_dom_tree_create in src/backend/xml/gnc-coowner-xml-v2.c
+
+CoOwner = element gnc:GncCoOwner {
+  attribute version { "2.0.0" },
+  element coowner:acl { text },
+  element coowner:active { xsd:boolean { pattern = "[01]" } },
+  element coowner:addr { AddressContent },
+  element coowner:apt_share { GncNumeric },
+  element coowner:apt_unit { text },
+  element coowner:credit { GncNumeric },
+  element coowner:currency {
+    element cmdty:space { text },
+    element cmdty:id { text }
+  },
+  element coowner:discount { GncNumeric },
+  element coowner:distribution_key { text },
+  element coowner:guid { attribute type { "guid" }, GUID },
+  element coowner:id { text },
+  element coowner:language { text },
+  element coowner:name { text },
+  element coowner:notes { text }?,
+  element coowner:shipaddr { AddressContent },
+  element coowner:terms { attribute type { "guid" }, GUID }?,
+
+# from gncTaxIncludedTypeToString in src/engine/gncTaxTable.c
+
+  element coowner:taxincluded { "YES" | "NO" | "USEGLOBAL"},
+
+  element coowner:use-tt { xsd:boolean { pattern = "[01]" } },
+  element coowner:taxtable { attribute type { "guid" }, GUID }?,
+  element coowner:slots { KvpSlot+ }?
 }
 
 # from customer_dom_tree_create in src/backend/xml/gnc-customer-xml-v2.c
@@ -586,7 +626,7 @@ TaxTableEntry = element gnc:GncTaxTableEntry {
 
 # from gncAmountTypeToString in src/engine/gncTaxTable.c
 
-  element tte:type { "VALUE" | "PERCENT" } 
+  element tte:type { "VALUE" | "PERCENT" }
 }
 
 # from vendor_dom_tree_create in src/backend/xml/gnc-vendor-xml-v2.c
@@ -613,4 +653,3 @@ Vendor = element gnc:GncVendor {
   element vendor:taxtable { attribute type { "guid" }, GUID }?,
   element vendor:slots { KvpSlot+ }?
 }
-
