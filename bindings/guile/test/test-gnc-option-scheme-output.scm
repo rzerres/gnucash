@@ -501,7 +501,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
   ((lambda (o) (if o (gnc:option-set-value o '~a))) option))
 
 " value))
- 
+
   (test-begin "test-gnc-query-option-to-scheme")
   (let ((odb (gnc:new-options))
         (query-scm '(query-v2
@@ -597,6 +597,23 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
                     (test-template (cons (gncOwnerGetType owner)
                                          (gncOwnerReturnGUID owner)))
                     (gnc:generate-restore-forms odb "options"))
+      )
+      (gnc:register-option cdb
+                           (gnc:make-owner-option "foo" "bar" "a" "baz"
+                                                  (lambda () '()) (lambda () #t)
+                                                  GNC-OWNER-COOWNER))
+      (test-equal "owner unchanged" test-unchanged-section-output-template
+                  (gnc:generate-restore-forms cdb "options"))
+      (let* ((option (gnc:lookup-option odb "foo" "bar"))
+            (test-template test-list-output-template)
+            (book (gnc-get-current-book))
+            (owner (gncOwnerNew)))
+        (gncOwnerInitCoOwner owner (gncCoOwnerCreate book))
+        (gnc:option-set-value option owner)
+        (test-equal "owner form"
+                    (test-template (cons (gncOwnerGetType owner)
+                                         (gncOwnerReturnGUID owner)))
+                    (gnc:generate-restore-forms cdb "options"))
         ))
     (test-end  "test-gnc-owner-option-to-scheme"))
 
