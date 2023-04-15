@@ -1,7 +1,7 @@
 /********************************************************************
  * test-engine-kvp-properties.c: GLib g_test test suite for         *
  * KVP-based properties in several engine classes.                  *
- * Copyright 2013 John Ralls <jralls@ceridwen.us>		    *
+ * Copyright 2013 John Ralls <jralls@ceridwen.us>                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -36,6 +36,7 @@
 #include "../Split.h"
 #include "../Account.h"
 #include "../SchedXaction.h"
+#include "../gncCoOwner.h"
 #include "../gncCustomer.h"
 #include "../gncEmployee.h"
 #include "../gncJob.h"
@@ -49,6 +50,7 @@ typedef struct
 	Transaction  *trans;
 	Split        *split;
 	GNCLot       *lot;
+	GncCoOwner   *coowner;
 	GncCustomer  *cust;
 	GncEmployee  *emp;
 	GncJob       *job;
@@ -91,6 +93,13 @@ setup_lot (Fixture *fixture, gconstpointer pData)
 {
     QofBook *book = qof_book_new ();
     fixture->lot = gnc_lot_new (book);
+}
+
+static void
+setup_coowner (Fixture *fixture, gconstpointer pData)
+{
+    QofBook *book = qof_book_new ();
+    fixture->coowner = gncCoOwnerCreate (book);
 }
 
 static void
@@ -312,6 +321,41 @@ test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
 }
 
 static void
+test_coowner_kvp_properties (Fixture *fixture, gconstpointer pData)
+{
+    gchar *pdf_dir = "/foo/bar/baz";
+    gchar *pdf_dir_r;
+    GncGUID *inv_acct = guid_malloc ();
+    GncGUID *pmt_acct = guid_malloc ();
+    GncGUID *inv_acct_r, *pmt_acct_r;
+
+    qof_begin_edit (QOF_INSTANCE (fixture->cust));
+    qof_instance_set (QOF_INSTANCE (fixture->cust),
+		      "export-pdf-dir", pdf_dir,
+		      "invoice-last-posted-account", inv_acct,
+		      "payment-last-account", pmt_acct,
+		      NULL);
+
+    g_assert (qof_instance_is_dirty (QOF_INSTANCE (fixture->coowner)));
+    qof_instance_mark_clean (QOF_INSTANCE (fixture->cust));
+
+    qof_instance_get (QOF_INSTANCE (fixture->coowner),
+		      "export-pdf-dir", &pdf_dir_r,
+		      "invoice-last-posted-account", &inv_acct_r,
+		      "payment-last-account", &pmt_acct_r,
+		      NULL);
+
+    g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
+    g_assert (guid_equal (inv_acct, inv_acct_r));
+    g_assert (guid_equal (pmt_acct, pmt_acct_r));
+    guid_free (inv_acct);
+    guid_free (inv_acct_r);
+    guid_free (pmt_acct);
+    guid_free (pmt_acct_r);
+    g_free (pdf_dir_r);
+}
+
+static void
 test_customer_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
     gchar *pdf_dir = "/foo/bar/baz";
@@ -344,7 +388,6 @@ test_customer_kvp_properties (Fixture *fixture, gconstpointer pData)
     guid_free (pmt_acct);
     guid_free (pmt_acct_r);
     g_free (pdf_dir_r);
-
 }
 
 static void
@@ -380,7 +423,6 @@ test_employee_kvp_properties (Fixture *fixture, gconstpointer pData)
     guid_free (pmt_acct);
     guid_free (pmt_acct_r);
     g_free (pdf_dir_r);
-
 }
 
 static void
@@ -403,7 +445,6 @@ test_job_kvp_properties (Fixture *fixture, gconstpointer pData)
 
     g_assert_cmpstr (pdf_dir, ==, pdf_dir_r);
     g_free (pdf_dir_r);
-
 }
 
 static void
@@ -439,7 +480,6 @@ test_vendor_kvp_properties (Fixture *fixture, gconstpointer pData)
     guid_free (pmt_acct);
     guid_free (pmt_acct_r);
     g_free (pdf_dir_r);
-
 }
 
 static void
@@ -504,6 +544,7 @@ void test_suite_engine_kvp_properties (void)
     GNC_TEST_ADD (suitename, "Split online_id accessors", Fixture, NULL, setup_split, test_split_online_id_accessors, teardown);
     GNC_TEST_ADD (suitename, "Account online_id accessors", Fixture, NULL, setup_account, test_account_online_id_accessors, teardown);
     GNC_TEST_ADD (suitename, "Lot", Fixture, NULL, setup_lot, test_lot_kvp_properties, teardown);
+    GNC_TEST_ADD (suitename, "CoOwner", Fixture, NULL, setup_coowner, test_coowner_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Customer", Fixture, NULL, setup_customer, test_customer_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Employee", Fixture, NULL, setup_employee, test_employee_kvp_properties, teardown);
     GNC_TEST_ADD (suitename, "Job", Fixture, NULL, setup_job, test_job_kvp_properties, teardown);

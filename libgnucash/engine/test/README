@@ -1,5 +1,4 @@
-
-This directory contains unit test cases to exercise basic 
+This directory contains unit test cases to exercise basic
 GnuCash engine functions.
 
 To run the tests, just do 'make check'
@@ -8,6 +7,7 @@ To run the tests, just do 'make check'
 Notes on test of dirty/clean flag:
 ---------------------------------
 This test is currently performed in part in
+test-coowner
 test-customer
 test-employee
 test-job
@@ -30,11 +30,11 @@ between gnucash modules.
 Just for completeness, this was said on the dirty flag tests before
 these test cases got moved to the engine:
 "An object cannot be marked 'clean' unless it has actually
-been saved to a file or sql db.  (Or, in the case of the file 
+been saved to a file or sql db.  (Or, in the case of the file
 backend, the 'dirtiness' of the data has been duly noted, and
-will be taken care of for the next file save. 
-Until its saved, it lives in perpetual dirtiness.  Thus, the 
-test cases need to specify a backend, then do the commit, 
+will be taken care of for the next file save.
+Until its saved, it lives in perpetual dirtiness.  Thus, the
+test cases need to specify a backend, then do the commit,
 then test the dirty flag.
 
 Actually, the use of the dirty flag in gnucash is, at this time,
