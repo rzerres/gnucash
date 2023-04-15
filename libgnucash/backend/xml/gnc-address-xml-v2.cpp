@@ -52,6 +52,7 @@ const gchar* address_version_string = "2.0.0";
 #define addr_addr2_string   "addr:addr2"
 #define addr_addr3_string   "addr:addr3"
 #define addr_addr4_string   "addr:addr4"
+#define addr_mobile_string  "addr:mobile"
 #define addr_phone_string   "addr:phone"
 #define addr_fax_string     "addr:fax"
 #define addr_email_string   "addr:email"
@@ -79,6 +80,7 @@ gnc_address_to_dom_tree (const char* tag, GncAddress* addr)
     maybe_add_string (ret, addr_addr3_string, gncAddressGetAddr3 (addr));
     maybe_add_string (ret, addr_addr4_string, gncAddressGetAddr4 (addr));
 
+    maybe_add_string (ret, addr_mobile_string, gncAddressGetMobile (addr));
     maybe_add_string (ret, addr_phone_string, gncAddressGetPhone (addr));
     maybe_add_string (ret, addr_fax_string, gncAddressGetFax (addr));
     maybe_add_string (ret, addr_email_string, gncAddressGetEmail (addr));
@@ -151,6 +153,14 @@ address_addr4_handler (xmlNodePtr node, gpointer addr_pdata)
 }
 
 static gboolean
+address_mobile_handler (xmlNodePtr node, gpointer addr_pdata)
+{
+    struct address_pdata* pdata = static_cast<decltype (pdata)> (addr_pdata);
+
+    return set_string (node, pdata->address, gncAddressSetMobile);
+}
+
+static gboolean
 address_phone_handler (xmlNodePtr node, gpointer addr_pdata)
 {
     struct address_pdata* pdata = static_cast<decltype (pdata)> (addr_pdata);
@@ -188,6 +198,7 @@ static struct dom_tree_handler address_handlers_v2[] =
     { addr_addr2_string, address_addr2_handler, 0, 0 },
     { addr_addr3_string, address_addr3_handler, 0, 0 },
     { addr_addr4_string, address_addr4_handler, 0, 0 },
+    { addr_mobile_string, address_mobile_handler, 0, 0 },
     { addr_phone_string, address_phone_handler, 0, 0 },
     { addr_fax_string, address_fax_handler, 0, 0 },
     { addr_email_string, address_email_handler, 0, 0 },
