@@ -29,6 +29,7 @@
 #include <qofinstance-p.h>
 
 #include "cashobjects.h"
+#include "gncOwner.h"
 #include "gncDistributionListP.h"
 #include "test-stuff.h"
 
@@ -95,6 +96,9 @@ test_distriblist (void)
     {
         GncGUID guid;
         GncDistributionListType type = GNC_DISTRIBLIST_TYPE_SHARES;
+        GncOwner *owner_1 = NULL;
+        GncOwner *owner_2 = gncOwnerNew();
+        const char *owner_typename = "Co-Owner";
 
         guid_replace (&guid);
         distriblist = gncDistribListCreate (book);
@@ -106,19 +110,38 @@ test_distriblist (void)
         gncDistribListSetType (distriblist, type);
         do_test (gncDistribListGetType (distriblist) == type, "Get type");
 
+        // Test with explicit owner_type
+        owner_2->type = GNC_OWNER_COOWNER;
+        gncOwnerTypeToQofIdType(owner_2->type);
+
+        gncDistribListSetOwner (distriblist, owner_2);
+        /* printf ("Testvalue src (owner->typename): '%s'\n", owner_typename); */
+        /* printf ("Testvalue dst (owner->typename): '%s' (owner->type '%d')\n", */
+        /*         gncOwnerGetTypeString ( */
+        /*             gncDistribListGetOwner (distriblist)), */
+        /*         gncOwnerGetType ( */
+        /*             gncDistribListGetOwner (distriblist))); */
+
+        do_test (g_strcmp0 (gncOwnerGetTypeString (
+                     gncDistribListGetOwner (distriblist)),
+                     owner_typename)
+                 == 0,
+                 "Get owner typename");
+
         test_string_fcn (book, "Handle Description",
             gncDistribListSetDescription, gncDistribListGetDescription);
         test_string_fcn (book, "Handle Name",
             gncDistribListSetName, gncDistribListGetName);
         test_string_fcn (book, "Handle Percentage Label Settlement",
-            gncDistribListSetPercentageLabelSettlement, gncDistribListGetPercentageLabelSettlement);
+            gncDistribListSetPercentageLabelSettlement,
+                gncDistribListGetPercentageLabelSettlement);
         test_int_fcn (book, "Handle Percentage Total",
             gncDistribListSetPercentageTotal, gncDistribListGetPercentageTotal);
         test_string_fcn (book, "Handle Share Label Settlement",
-            gncDistribListSetSharesLabelSettlement, gncDistribListGetSharesLabelSettlement);
+            gncDistribListSetSharesLabelSettlement,
+                gncDistribListGetSharesLabelSettlement);
         test_int_fcn (book, "Handle Shares Total",
             gncDistribListSetSharesTotal, gncDistribListGetSharesTotal);
-
     }
 
     // Test name and length of lists
@@ -229,7 +252,7 @@ test_int_fcn (
     int (*get)(const GncDistributionList *))
 {
     GncDistributionList *distriblist = gncDistribListCreate (book);
-    int num = 42;
+    int num = 2;
 
     do_test (!gncDistribListIsDirty (distriblist), "test if start dirty");
     gncDistribListBeginEdit (distriblist);
