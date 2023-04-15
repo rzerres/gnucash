@@ -395,11 +395,11 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     const gchar* url = (const gchar*)pData;
     auto msg = "[GncDbiSqlConnection::unlock_database()] There was no lock entry in the Lock table";
     auto log_domain = nullptr;
-    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
-                                                 G_LOG_FLAG_FATAL);
+    auto loglevel = static_cast<GLogLevelFlags> (
+        G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
     TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
-    fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                                                 (GLogFunc)test_checked_handler);
+    fixture->hdlrs = test_log_set_fatal_handler (
+        fixture->hdlrs, check, (GLogFunc)test_checked_handler);
     if (fixture->filename)
         url = fixture->filename;
 
@@ -426,8 +426,9 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     g_assert (session_3 != NULL);
     g_assert_cmpint (qof_session_get_error (session_3), == , ERR_BACKEND_NO_ERR);
     // Compare with the original data
-    compare_books (qof_session_get_book (session_2),
-                   qof_session_get_book (session_3));
+    compare_books (
+        qof_session_get_book (session_2),
+        qof_session_get_book (session_3));
     /* fixture->session belongs to the fixture and teardown() will clean it up */
     qof_session_end (session_2);
     qof_session_destroy (session_2);
@@ -588,8 +589,8 @@ test_dbi_business_store_and_reload (Fixture* fixture, gconstpointer pData)
 
     auto msg = "[GncDbiSqlConnection::unlock_database()] There was no lock entry in the Lock table";
     auto log_domain = nullptr;
-    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
-                                                 G_LOG_FLAG_FATAL);
+    auto loglevel = static_cast<GLogLevelFlags> (
+        G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
     TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
     if (fixture->filename)
         url = fixture->filename;
