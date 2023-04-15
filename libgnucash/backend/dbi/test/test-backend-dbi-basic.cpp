@@ -44,6 +44,7 @@
 #include "Split.h"
 #include "gnc-commodity.h"
 #include "gncAddress.h"
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
 #include "gncInvoice.h"
     /* For version_control */
@@ -172,6 +173,7 @@ setup_business (Fixture* fixture, gconstpointer pData)
     gnc_commodity_table* table;
     gnc_commodity* currency;
     GncAddress* addr;
+    GncCoOwner* coowner;
     GncCustomer* cust;
     GncEmployee* emp;
     GncTaxTable* tt;
@@ -209,6 +211,23 @@ setup_business (Fixture* fixture, gconstpointer pData)
     gncTaxTableEntrySetType (tte, GNC_AMT_TYPE_PERCENT);
     gncTaxTableEntrySetAmount (tte, gnc_numeric_zero ());
     gncTaxTableAddEntry (tt, tte);
+
+    coowner = gncCoOwnerCreate (book);
+    gncCoOwnerSetID (coowner, "0001");
+    gncCoOwnerSetCurrency (coowner, currency);
+    addr = gncAddressCreate (book, QOF_INSTANCE (coowner));
+    gncAddressSetName (addr, "theAddress");
+    gncAddressSetAddr1 (addr, "Address line #1");
+    gncAddressSetAddr2 (addr, "Address line #2");
+    gncAddressSetAddr3 (addr, "Address line #3");
+    gncAddressSetAddr4 (addr, "Address line #4");
+    gncAddressSetPhone (addr, "(123) 555-1212");
+    gncAddressSetPhone (addr, "(123) 555-2121");
+    gncAddressSetEmail (addr, "coowner@mycoowneromer.com");
+    gncCoOwnerSetAptShare (coowner, gnc_numeric_create (15200, 100));
+    gncCoOwnerSetNotes (coowner, "Here are some coowner notes");
+    gncCoOwnerSetPropertyUnit (coowner, "Property Unit 0001");
+    gncCoOwnerSetUsername (coowner, "MyCoOwner");
 
     cust = gncCustomerCreate (book);
     gncCustomerSetID (cust, "0001");
@@ -676,6 +695,6 @@ test_suite_gnc_backend_dbi (void)
         }
     }
 
-    GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime", 
+    GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime",
         test_adjust_sql_options_string );
 }
