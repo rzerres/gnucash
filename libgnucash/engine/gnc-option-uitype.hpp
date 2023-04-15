@@ -60,6 +60,7 @@ enum class GncOptionUIType : unsigned int
     RADIOBUTTON,
     DATE_FORMAT,
     OWNER,
+    COOWNER,
     CUSTOMER,
     VENDOR,
     EMPLOYEE,
