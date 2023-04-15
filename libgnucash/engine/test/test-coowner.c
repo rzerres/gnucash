@@ -77,6 +77,7 @@ test_coowner (void)
         GncGUID guid;
 
         test_string_fcn (book, "Id", gncCoOwnerSetID, gncCoOwnerGetID);
+        test_string_fcn (book, "Language", gncCoOwnerSetLanguage, gncCoOwnerGetLanguage);
         test_string_fcn (book, "Name", gncCoOwnerSetName, gncCoOwnerGetName);
         test_string_fcn (book, "Notes", gncCoOwnerSetNotes, gncCoOwnerGetNotes);
 
@@ -109,6 +110,7 @@ test_coowner (void)
         g_list_free (list);
     }
     {
+        /*  Match random string after committing */
         const char *str = get_random_string();
         const char *res;
 
@@ -117,8 +119,23 @@ test_coowner (void)
         gncCoOwnerSetName (coowner, str);
         gncCoOwnerCommitEdit(coowner);
         res = qof_object_printable (GNC_ID_COOWNER, coowner);
-        do_test (res != NULL, "Printable NULL?");
-        do_test (g_strcmp0 (str, res) == 0, "Printable equals");
+        do_test (res != NULL, "Printable NULL");
+        do_test (g_strcmp0 (str, res) == 0, "Printable match string");
+    }
+    {
+        /* Compare explicit Apartment Unit string  */
+        char str[20] = "Apartment Unit-Name";
+        const char *CoOwnerAptUnit = str;
+        const char *res;
+
+        res = NULL;
+        gncCoOwnerBeginEdit (coowner);
+        gncCoOwnerSetName (coowner, CoOwnerAptUnit);
+        gncCoOwnerCommitEdit (coowner);
+
+        res = qof_object_printable (GNC_ID_COOWNER, coowner);
+        do_test (res != NULL, "Test String non NULL");
+        do_test (g_strcmp0 (CoOwnerAptUnit, res) == 0, "AptUnit match string");
     }
 
     /* TODO */
@@ -150,7 +167,7 @@ test_string_fcn (QofBook *book, const char *message,
     /* CoOwner record should be dirty */
     do_test (gncCoOwnerIsDirty (coowner), "test dirty later");
     gncCoOwnerCommitEdit (coowner);
-    /* CoOwner record should be not dirty */
+    /* CoOwner record shouldn't be dirty */
     /* Skip, because will always fail without a backend.
      * It's not possible to load a backend in the engine code
      * without having circular dependencies.
@@ -225,6 +242,8 @@ main (int argc, char **argv)
     do_test (gncJobRegister (),  "Cannot register GncJob");
     do_test (gncCoOwnerRegister(), "Cannot register GncCoOwner");
 #endif
+    /* Print out successfull tests */
+    /* set_success_print(TRUE); */
     test_coowner();
     print_test_results();
     qof_close ();
