@@ -119,7 +119,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
             return NULL;
         *isnew = TRUE;
     }
-    
+
     /* Now have a new account. Update the cell with the name as created. */
     account_name = gnc_get_account_name_for_register (account);
     if (g_strcmp0(account_name, gnc_basic_cell_get_value(bcell)))
@@ -286,10 +286,10 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
     /* Orders and Invoices are "invoices" for lookups */
     switch (type)
     {
-    case GNCENTRY_ORDER_ENTRY:
-    case GNCENTRY_ORDER_VIEWER:
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_ORDER_VIEWER:
         ledger->is_cust_doc = TRUE;
         ledger->is_credit_note = FALSE;
         break;
@@ -297,10 +297,14 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
     case GNCENTRY_BILL_VIEWER:
     case GNCENTRY_EXPVOUCHER_ENTRY:
     case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_SETTLEMENT_ENTRY:
+    case GNCENTRY_SETTLEMENT_VIEWER:
     case GNCENTRY_NUM_REGISTER_TYPES:
         ledger->is_cust_doc = FALSE;
         ledger->is_credit_note = FALSE;
         break;
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
         ledger->is_cust_doc = TRUE;
@@ -314,10 +318,10 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
         ledger->is_credit_note = TRUE;
         break;
     default:
-	PWARN ("Bad GncEntryLedgerType");
-	g_free (ledger);
-	return NULL;
-	break;
+        PWARN ("Bad GncEntryLedgerType");
+        g_free (ledger);
+        return NULL;
+        break;
     }
 
     ledger->blank_entry_guid = *guid_null();
@@ -457,20 +461,24 @@ static void create_invoice_query (GncEntryLedger *ledger)
     /* Term 2 */
     switch (ledger->type)
     {
-    case GNCENTRY_INVOICE_ENTRY:
-    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
         type = ENTRY_INVOICE;
         break;
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_BILL_VIEWER:
-    case GNCENTRY_EXPVOUCHER_ENTRY:
-    case GNCENTRY_EXPVOUCHER_VIEWER:
-    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
-    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
     case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
     case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_SETTLEMENT_ENTRY:
+    case GNCENTRY_SETTLEMENT_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
         type = ENTRY_BILL;
         break;
     default:
@@ -611,31 +619,35 @@ void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly)
     {
         switch (ledger->type)
         {
-        case GNCENTRY_ORDER_ENTRY:
-            ledger->type = GNCENTRY_ORDER_VIEWER;
-            break;
-        case GNCENTRY_INVOICE_ENTRY:
-            ledger->type = GNCENTRY_INVOICE_VIEWER;
-            create_invoice_query (ledger);
-            break;
         case GNCENTRY_BILL_ENTRY:
             ledger->type = GNCENTRY_BILL_VIEWER;
             create_invoice_query (ledger);
             break;
-        case GNCENTRY_EXPVOUCHER_ENTRY:
-            ledger->type = GNCENTRY_EXPVOUCHER_VIEWER;
+        case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+            ledger->type = GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER;
             create_invoice_query (ledger);
             break;
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
             ledger->type = GNCENTRY_CUST_CREDIT_NOTE_VIEWER;
             create_invoice_query (ledger);
             break;
-        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
-            ledger->type = GNCENTRY_VEND_CREDIT_NOTE_VIEWER;
-            create_invoice_query (ledger);
-            break;
         case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
             ledger->type = GNCENTRY_EMPL_CREDIT_NOTE_VIEWER;
+            create_invoice_query (ledger);
+            break;
+        case GNCENTRY_EXPVOUCHER_ENTRY:
+            ledger->type = GNCENTRY_EXPVOUCHER_VIEWER;
+            create_invoice_query (ledger);
+            break;
+        case GNCENTRY_INVOICE_ENTRY:
+            ledger->type = GNCENTRY_INVOICE_VIEWER;
+            create_invoice_query (ledger);
+            break;
+        case GNCENTRY_ORDER_ENTRY:
+            ledger->type = GNCENTRY_ORDER_VIEWER;
+            break;
+        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+            ledger->type = GNCENTRY_VEND_CREDIT_NOTE_VIEWER;
             create_invoice_query (ledger);
             break;
         default:
@@ -646,31 +658,35 @@ void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly)
     {
         switch (ledger->type)
         {
-        case GNCENTRY_ORDER_VIEWER:
-            ledger->type = GNCENTRY_ORDER_ENTRY;
-            break;
-        case GNCENTRY_INVOICE_VIEWER:
-            ledger->type = GNCENTRY_INVOICE_ENTRY;
-            create_invoice_query (ledger);
-            break;
         case GNCENTRY_BILL_VIEWER:
             ledger->type = GNCENTRY_BILL_ENTRY;
             create_invoice_query (ledger);
             break;
-        case GNCENTRY_EXPVOUCHER_VIEWER:
-            ledger->type = GNCENTRY_EXPVOUCHER_ENTRY;
+        case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
+            ledger->type = GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY;
             create_invoice_query (ledger);
             break;
         case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
             ledger->type = GNCENTRY_CUST_CREDIT_NOTE_ENTRY;
             create_invoice_query (ledger);
             break;
-        case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
-            ledger->type = GNCENTRY_VEND_CREDIT_NOTE_ENTRY;
-            create_invoice_query (ledger);
-            break;
         case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
             ledger->type = GNCENTRY_EMPL_CREDIT_NOTE_ENTRY;
+            create_invoice_query (ledger);
+            break;
+        case GNCENTRY_INVOICE_VIEWER:
+            ledger->type = GNCENTRY_INVOICE_ENTRY;
+            create_invoice_query (ledger);
+            break;
+        case GNCENTRY_EXPVOUCHER_VIEWER:
+            ledger->type = GNCENTRY_EXPVOUCHER_ENTRY;
+            create_invoice_query (ledger);
+            break;
+        case GNCENTRY_ORDER_VIEWER:
+            ledger->type = GNCENTRY_ORDER_ENTRY;
+            break;
+        case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
+            ledger->type = GNCENTRY_VEND_CREDIT_NOTE_ENTRY;
             create_invoice_query (ledger);
             break;
         default:
@@ -729,7 +745,9 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
         ledger->type == GNCENTRY_EXPVOUCHER_ENTRY ||
         ledger->type == GNCENTRY_EXPVOUCHER_VIEWER ||
         ledger->type == GNCENTRY_EMPL_CREDIT_NOTE_ENTRY ||
-        ledger->type == GNCENTRY_EMPL_CREDIT_NOTE_VIEWER)
+        ledger->type == GNCENTRY_EMPL_CREDIT_NOTE_VIEWER ||
+        ledger->type == GNCENTRY_SETTLEMENT_ENTRY ||
+        ledger->type == GNCENTRY_SETTLEMENT_VIEWER)
     {
         g_assert (gnc_numeric_zero_p (discount));
         disc_type = GNC_AMT_TYPE_VALUE;
