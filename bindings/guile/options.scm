@@ -1,15 +1,15 @@
 ;; Scheme code for supporting options
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -110,15 +110,15 @@
 ;; copies the values of all options from src which exist in dest to
 ;; there.
 (define-public (gnc:options-copy-values src-options dest-options)
-  (if 
+  (if
    dest-options
-   (gnc:options-for-each 
-    (lambda (src-option) 
+   (gnc:options-for-each
+    (lambda (src-option)
       (let ((dest-option (gnc-lookup-option (gnc:optiondb dest-options)
                                             (gnc:option-section src-option)
                                             (gnc:option-name src-option))))
         (if dest-option
-            (GncOption-set-value dest-option 
+            (GncOption-set-value dest-option
                                  (GncOption-get-value src-option)))))
     src-options)))
 
@@ -214,7 +214,7 @@
 (define-public (gnc:make-pixmap-option section name key docstring default)
   (issue-deprecation-warning "gnc:make-pixmap-option is deprecated. Make and register the option in one command with gnc-register-pixmap-option.")
   (gnc-make-string-option section name key docstring default (GncOptionUIType-PIXMAP)))
-;; gnc:make-account-list-option's getter and validator parameters are functions. 
+;; gnc:make-account-list-option's getter and validator parameters are functions.
 (define-public (gnc:make-account-list-option section name key docstring default validator multi)
   (issue-deprecation-warning "gnc:make-account-list-option is deprecated. Make and register the option in one command with gnc-register-account-list-option.")
   (gnc-make-account-list-option section name key docstring (default)))
@@ -283,18 +283,20 @@
 (define-public (gnc:make-owner-option section name key docstring getter validator owner-type)
   (issue-deprecation-warning "gnc:make-owner-option is deprecated. Make and register the option in one command with gnc-register-owner-option.")
   (let* ((ui-type (cond
+                  ((eqv? owner-type GNC-OWNER-COOWNER) (GncOptionUIType-COOWNER))
                   ((eqv? owner-type GNC-OWNER-CUSTOMER) (GncOptionUIType-CUSTOMER))
-                  ((eqv? owner-type GNC-OWNER-VENDOR) (GncOptionUIType-VENDOR))
                   ((eqv? owner-type GNC-OWNER-EMPLOYEE) (GncOptionUIType-EMPLOYEE))
                   ((eqv? owner-type GNC-OWNER-JOB) (GncOptionUIType-JOB))
+                  ((eqv? owner-type GNC-OWNER-VENDOR) (GncOptionUIType-VENDOR))
                   (else (GncOptionUIType-INTERNAL))))
 
          (guid (gncOwnerReturnGUID (getter)))
          (book (gnc-get-current-book))
          (defval (cond
+                  ((eqv? owner-type GNC-OWNER-COOWNER) (gncCoOwnerLookupFlip guid book))
                   ((eqv? owner-type GNC-OWNER-CUSTOMER) (gncCustomerLookupFlip guid book))
-                  ((eqv? owner-type GNC-OWNER-VENDOR) (gncVendorLookupFlip guid book))
                   ((eqv? owner-type GNC-OWNER-EMPLOYEE) (gncEmployeeLookupFlip guid book))
+                  ((eqv? owner-type GNC-OWNER-VENDOR) (gncVendorLookupFlip guid book))
                   ((eqv? owner-type GNC-OWNER-JOB) (gncJobLookupFlip guid book)))))
 
     (gnc-make-gncowner-option section name key docstring defval ui-type)))
@@ -349,7 +351,7 @@
 
 ;; Scheme code for supporting options for the business modules
 ;;
-;; Created by:	Derek Atkins <derek@ihtfp.com>
+;; Created by:  Derek Atkins <derek@ihtfp.com>
 ;;
 
 ;; Internally, values are always a guid. Externally, both guids and
