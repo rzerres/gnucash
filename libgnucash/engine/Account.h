@@ -105,71 +105,73 @@ typedef enum
     ACCT_TYPE_NONE = -1,/**< Not a type */
 
     ACCT_TYPE_BANK = 0,    /**< The bank account type denotes a savings
-			 *   or checking account held at a bank.
-			 *   Often interest bearing. */
+                         *   or checking account held at a bank.
+                         *   Often interest bearing. */
     ACCT_TYPE_CASH = 1,    /**< The cash account type is used to denote a
-			 *   shoe-box or pillowcase stuffed with *
-			 *   cash. */
+                         *   shoe-box or pillowcase stuffed with *
+                         *   cash. */
     ACCT_TYPE_CREDIT = 3,    /**< The Credit card account is used to denote
-			 *   credit (e.g. amex) and debit (e.g. visa,
-			 *   mastercard) card accounts */
+                         *   credit (e.g. amex) and debit (e.g. visa,
+                         *   mastercard) card accounts */
     ACCT_TYPE_ASSET = 2,    /**< asset (and liability) accounts indicate
-			 *   generic, generalized accounts that are
-			 *   none of the above. */
+                         *   generic, generalized accounts that are
+                         *   none of the above. */
     ACCT_TYPE_LIABILITY = 4,/**< liability (and asset) accounts indicate
-			   *   generic, generalized accounts that are
-			   *   none of the above. */
+                           *   generic, generalized accounts that are
+                           *   none of the above. */
     ACCT_TYPE_STOCK = 5,    /**< Stock accounts will typically be shown in
-			 *   registers which show three columns:
-			 *   price, number of shares, and value. */
+                         *   registers which show three columns:
+                         *   price, number of shares, and value. */
     ACCT_TYPE_MUTUAL = 6,    /**< Mutual Fund accounts will typically be
-			 *   shown in registers which show three
-			 *   columns: price, number of shares, and
-			 *   value. */
+                         *   shown in registers which show three
+                         *   columns: price, number of shares, and
+                         *   value. */
     ACCT_TYPE_CURRENCY = 7,/**< The currency account type indicates that
-			  *   the account is a currency trading
-			  *   account.  In many ways, a currency
-			  *   trading account is like a stock *
-			  *   trading account. It is shown in the
-			  *   register with three columns: price,
-			  *   number of shares, and value. Note:
-			  *   Since version 1.7.0, this account is *
-			  *   no longer needed to exchange currencies
-			  *   between accounts, so this type is
-			  *   DEPRECATED. */
+                          *   the account is a currency trading
+                          *   account.  In many ways, a currency
+                          *   trading account is like a stock *
+                          *   trading account. It is shown in the
+                          *   register with three columns: price,
+                          *   number of shares, and value. Note:
+                          *   Since version 1.7.0, this account is *
+                          *   no longer needed to exchange currencies
+                          *   between accounts, so this type is
+                          *   DEPRECATED. */
     ACCT_TYPE_INCOME = 8,    /**< Income accounts are used to denote
-			 *   income */
+                         *   income */
 
-    ACCT_TYPE_EXPENSE = 9,/**< Expense accounts are used to denote
-			 *   expenses. */
+    ACCT_TYPE_EXPENSE = 9, /**< Expense accounts are used to denote
+                            *   expenses. */
 
-    ACCT_TYPE_EQUITY = 10,/**< Equity account is used to balance the
-			 *   balance sheet. */
+    ACCT_TYPE_EQUITY = 10, /**< Equity account is used to balance the
+                            *   balance sheet. */
 
-    ACCT_TYPE_RECEIVABLE = 11,/**< A/R account type */
+    ACCT_TYPE_RECEIVABLE = 11, /**< A/R account type */
 
-    ACCT_TYPE_PAYABLE = 12,  /**< A/P account type */
+    ACCT_TYPE_PAYABLE = 12, /**< A/P account type */
 
     ACCT_TYPE_ROOT = 13, /**< The hidden root account of an account tree. */
 
     ACCT_TYPE_TRADING = 14, /**< Account used to record multiple commodity transactions.
-                           *   This is not the same as ACCT_TYPE_CURRENCY above.
-                           *   Multiple commodity transactions have splits in these
-                           *   accounts to make the transaction balance in each
-                           *   commodity as well as in total value.  */
+                             *   This is not the same as ACCT_TYPE_CURRENCY above.
+                             *   Multiple commodity transactions have splits in these
+                             *   accounts to make the transaction balance in each
+                             *   commodity as well as in total value.  */
 
-    NUM_ACCOUNT_TYPES = 15,  /**< stop here; the following types
-			    * just aren't ready for prime time */
+    ACCT_TYPE_APPORTIONABLE = 15, /**< Apportionable Expenses/Incomes */
+    ACCT_TYPE_NONAPPORTIONABLE = 16, /**< Non apportionable Expenses/Incomes */
+    NUM_ACCOUNT_TYPES = 17,  /**< stop here; the following types
+                              * just aren't ready for prime time */
 
     /* bank account types */
-    ACCT_TYPE_CHECKING = 15, /**< bank account type -- don't use this
-			    *   for now, see NUM_ACCOUNT_TYPES  */
-    ACCT_TYPE_SAVINGS = 16, /**< bank account type -- don't use this for
-			   *   now, see NUM_ACCOUNT_TYPES  */
-    ACCT_TYPE_MONEYMRKT = 17, /**< bank account type -- don't use this
-			     *   for now, see NUM_ACCOUNT_TYPES  */
-    ACCT_TYPE_CREDITLINE = 18, /**< line of credit -- don't use this for
-			      *   now, see NUM_ACCOUNT_TYPES  */
+    ACCT_TYPE_CHECKING = 17, /**< bank account type -- don't use this
+                              *   for now, see NUM_ACCOUNT_TYPES  */
+    ACCT_TYPE_SAVINGS = 18, /**< bank account type -- don't use this for
+                             *   now, see NUM_ACCOUNT_TYPES  */
+    ACCT_TYPE_MONEYMRKT = 19, /**< bank account type -- don't use this
+                               *   for now, see NUM_ACCOUNT_TYPES  */
+    ACCT_TYPE_CREDITLINE = 20, /**< line of credit -- don't use this for
+                                *   now, see NUM_ACCOUNT_TYPES  */
     ACCT_TYPE_LAST
 #ifdef __cplusplus
 };
@@ -1681,33 +1683,33 @@ typedef enum
     /** @name Account parameter names
      @{
     */
-#define ACCOUNT_KVP		"kvp"
-#define ACCOUNT_NAME_		"name"
-#define ACCOUNT_CODE_		"code"
-#define ACCOUNT_DESCRIPTION_	"desc"
-#define ACCOUNT_COLOR_		"color"
-#define ACCOUNT_FILTER_		"filter"
-#define ACCOUNT_SORT_ORDER_	"sort-order"
+#define ACCOUNT_KVP             "kvp"
+#define ACCOUNT_NAME_           "name"
+#define ACCOUNT_CODE_           "code"
+#define ACCOUNT_DESCRIPTION_    "desc"
+#define ACCOUNT_COLOR_          "color"
+#define ACCOUNT_FILTER_         "filter"
+#define ACCOUNT_SORT_ORDER_     "sort-order"
 #define ACCOUNT_SORT_REVERSED_ "sort-reversed"
-#define ACCOUNT_NOTES_		"notes"
-#define ACCOUNT_BALANCE_	"balance"
-#define ACCOUNT_NOCLOSING_	"noclosing"
+#define ACCOUNT_NOTES_          "notes"
+#define ACCOUNT_BALANCE_        "balance"
+#define ACCOUNT_NOCLOSING_      "noclosing"
 #define ACCOUNT_OPENING_BALANCE_ "opening-balance"
-#define ACCOUNT_CLEARED_	"cleared"
-#define ACCOUNT_RECONCILED_	"reconciled"
-#define ACCOUNT_PRESENT_	"present"
+#define ACCOUNT_CLEARED_        "cleared"
+#define ACCOUNT_RECONCILED_     "reconciled"
+#define ACCOUNT_PRESENT_        "present"
 #define ACCOUNT_FUTURE_MINIMUM_ "future-minimum"
-#define ACCOUNT_TAX_RELATED	"tax-related-p"
-#define ACCOUNT_TYPE_		"account-type"
-#define ACCOUNT_SCU		"smallest-commodity-unit"
-#define ACCOUNT_NSCU		"non-standard-scu"
-#define ACCOUNT_PARENT		"parent-account"
+#define ACCOUNT_TAX_RELATED     "tax-related-p"
+#define ACCOUNT_TYPE_           "account-type"
+#define ACCOUNT_SCU             "smallest-commodity-unit"
+#define ACCOUNT_NSCU            "non-standard-scu"
+#define ACCOUNT_PARENT          "parent-account"
 
     /** @} */
 
     /** This is the type-override when you want to match all accounts.  Used
      * in the gnome-search parameter list.  Be careful when you use this. */
-#define ACCOUNT_MATCH_ALL_TYPE	"account-match-all"
+#define ACCOUNT_MATCH_ALL_TYPE  "account-match-all"
 
 #ifdef __cplusplus
     } /* extern "C" */
