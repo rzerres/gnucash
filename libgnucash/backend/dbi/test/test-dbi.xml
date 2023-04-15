@@ -23,6 +23,8 @@
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
      xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:distriblist="http://www.gnucash.org/XML/distriblist"
+     xmlns:dl-shares="http://www.gnucash.org/XML/dl-shares"
      xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
      xmlns:tte="http://www.gnucash.org/XML/tte"
      xmlns:order="http://www.gnucash.org/XML/order"
@@ -44,6 +46,7 @@
     </slot:value>
   </slot>
 </book:slots>
+
 <gnc:count-data cd:type="commodity">1</gnc:count-data>
 <gnc:count-data cd:type="account">12</gnc:count-data>
 <gnc:count-data cd:type="transaction">5</gnc:count-data>
