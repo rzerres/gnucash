@@ -37,7 +37,7 @@
 /* For cleaning up the database */
 #include <dbi/dbi.h>
 #include <gnc-uri-utils.h>
-    /* For setup_business */
+/* For setup_business */
 #include "Account.h"
 #include <TransLog.h>
 #include "Transaction.h"
@@ -173,6 +173,8 @@ setup_business (Fixture* fixture, gconstpointer pData)
     gnc_commodity_table* table;
     gnc_commodity* currency;
     GncAddress* addr;
+    GncAddress* shipaddr;
+    GncAddress* tenantaddr;
     GncCoOwner* coowner;
     GncCustomer* cust;
     GncEmployee* emp;
@@ -222,12 +224,34 @@ setup_business (Fixture* fixture, gconstpointer pData)
     gncAddressSetAddr3 (addr, "Address line #3");
     gncAddressSetAddr4 (addr, "Address line #4");
     gncAddressSetPhone (addr, "(123) 555-1212");
-    gncAddressSetPhone (addr, "(123) 555-2121");
+    gncAddressSetMobile (addr, "(987) 555-2121");
+    gncAddressSetFax (addr, "(123) 555-1213");
     gncAddressSetEmail (addr, "coowner@mycoowner.com");
     gncCoOwnerSetAptShare (coowner, gnc_numeric_create (15200, 100));
     gncCoOwnerSetAptUnit (coowner, "Apartment Unit 0001");
     gncCoOwnerSetNotes (coowner, "Here are some coowner notes");
-    gncCoOwnerSetTenant (coowner, "MyTenant");
+    gncCoOwnerSetTenantID (coowner, "000001");
+    gncCoOwnerSetTenantName (coowner, "Tenant 1");
+    tenantaddr = gncAddressCreate (book, QOF_INSTANCE (coowner));
+    gncAddressSetName (tenantaddr, "Tenant Name");
+    gncAddressSetAddr1 (tenantaddr, "Tenent Address line #1");
+    gncAddressSetAddr2 (tenantaddr, "Tenent Address line #2");
+    gncAddressSetAddr3 (tenantaddr, "Tenent Address line #3");
+    gncAddressSetAddr4 (tenantaddr, "Tenent Address line #4");
+    gncAddressSetPhone (tenantaddr, "(123) 666-1212");
+    gncAddressSetMobile (tenantaddr, "(987) 666-2121");
+    gncAddressSetFax (tenantaddr, "(123) 666-121");
+    gncAddressSetEmail (tenantaddr, "tenent@mycoowner.com");
+    shipaddr = gncAddressCreate (book, QOF_INSTANCE (coowner));
+    gncAddressSetName (shipaddr, "Shipment Assignee");
+    gncAddressSetAddr1 (shipaddr, "Ship Address line #1");
+    gncAddressSetAddr2 (shipaddr, "Ship Address line #2");
+    gncAddressSetAddr3 (shipaddr, "Ship Address line #3");
+    gncAddressSetAddr4 (shipaddr, "Ship Address line #4");
+    gncAddressSetPhone (shipaddr, "(123) 777-1212");
+    gncAddressSetMobile (shipaddr, "(987) 777-2121");
+    gncAddressSetFax (shipaddr, "(123) 777-121");
+    gncAddressSetEmail (shipaddr, "shipowner@mycoowner.com");
 
     cust = gncCustomerCreate (book);
     gncCustomerSetID (cust, "0001");
