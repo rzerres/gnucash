@@ -77,7 +77,7 @@ const gchar* coowner_version_string = "2.0.0";
 #define coowner_taxtable_string "coowner:taxtable"
 #define coowner_taxtableoverride_string "coowner:use-tt"
 #define coowner_terms_string "coowner:terms"
-#define coowner_username_string "coowner:username"
+#define coowner_tenant_string "coowner:tenant"
 
 static xmlNodePtr
 coowner_dom_tree_create (GncCoOwner* coowner)
@@ -148,8 +148,8 @@ coowner_dom_tree_create (GncCoOwner* coowner)
         xmlAddChild (ret, guid_to_dom_tree (coowner_terms_string,
             qof_instance_get_guid (QOF_INSTANCE (term))));
 
-    xmlAddChild (ret, text_to_dom_tree (coowner_username_string,
-        gncCoOwnerGetUsername (coowner)));
+    xmlAddChild (ret, text_to_dom_tree (coowner_tenant_string,
+        gncCoOwnerGetTenant (coowner)));
 
     return ret;
 }
