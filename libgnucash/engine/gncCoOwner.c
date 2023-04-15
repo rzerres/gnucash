@@ -38,7 +38,6 @@
 #include "gncInvoice.h"
 #include "gncBusiness.h"
 
-#include "gncBusiness.h"
 #include "gncCoOwner.h"
 #include "gncCoOwnerP.h"
 #include "gncJobP.h"
@@ -92,7 +91,6 @@ struct _gncCoOwnerClass
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_COOWNER
-
 
 /* ============================================================== */
 /* misc inline funcs */
@@ -1488,7 +1486,7 @@ coowner_handle_qof_events (QofInstance *entity, QofEventId event_type,
             /* Pre-payment lots */
             end_owner = gncOwnerGetEndOwner (&lot_owner);
 
-if (gncOwnerGetType (end_owner) == GNC_OWNER_COOWNER)
+        if (gncOwnerGetType (end_owner) == GNC_OWNER_COOWNER)
         {
             /* Clear the cached balance */
             GncCoOwner* coowner = gncOwnerGetCoOwner (end_owner);
