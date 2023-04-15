@@ -2,8 +2,14 @@
 <!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
+  <object class="GtkAdjustment" id="adjust_percentage_total">
+    <property name="upper">100</property>
+    <property name="step-increment">10</property>
+    <property name="page-increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjust_shares_total">
     <property name="upper">1000</property>
+    <property name="value">1000</property>
     <property name="step-increment">100</property>
     <property name="page-increment">10</property>
   </object>
@@ -852,7 +858,10 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Co-Owners</col>
+        <col id="0" translatable="yes">Co-Owner 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Co-Owner 2</col>
       </row>
     </data>
   </object>
@@ -913,7 +922,7 @@
                             <property name="name">distriblists_treeview_description</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="model">distriblists_liststore_coowner</property>
+                            <property name="model">liststore_coowner</property>
                             <property name="headers-visible">False</property>
                             <property name="search-column">0</property>
                             <child internal-child="selection">
@@ -1120,6 +1129,7 @@
             </child>
             <child>
               <object class="GtkButton" id="edit_distribution_list_button_ok">
+                <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
@@ -1128,9 +1138,6 @@
                 <property name="tooltip-markup">Commit this Billing Term</property>
                 <property name="tooltip-text" translatable="yes">Commit this Billing Term</property>
                 <property name="use-underline">True</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1231,7 +1238,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="model">distriblists_liststore_coowner</property>
+                <property name="model">liststore_type</property>
                 <signal name="changed" handler="distriblists_type_changed_cb" swapped="no"/>
                 <child>
                   <object class="GtkCellRendererText" id="edit_distriblists_cellrenderertext"/>
@@ -1413,7 +1420,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="model">distriblists_liststore_coowner</property>
+                <property name="model">liststore_type</property>
                 <signal name="changed" handler="distriblists_type_changed_cb" swapped="no"/>
                 <child>
                   <object class="GtkCellRendererText" id="new_distriblists_cellrenderertext_list"/>
