@@ -27,6 +27,7 @@
 
 #include "gncOwner.h"
 #include "gncBillTerm.h"
+#include "gncDistributionList.h"
 #include "gncTaxTable.h"
 #include "gncInvoice.h"
 
@@ -72,11 +73,15 @@ char *gnc_get_default_invoice_print_report (void);
  */
 GtkWidget * gnc_default_invoice_report_combo (const char* guid_scm_function);
 
-GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
-                                     QofBook *book, GncOwner *owner);
+GtkWidget *gnc_owner_select_create (
+    GtkWidget *label,
+    GtkWidget *hbox,
+    QofBook *book,
+    GncOwner *owner);
 
-GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
-                                   QofBook *book, GncOwner *owner);
+GtkWidget *gnc_owner_edit_create (
+    GtkWidget *label, GtkWidget *hbox,
+    QofBook *book, GncOwner *owner);
 
 void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner);
 void gnc_owner_set_owner (GtkWidget *widget, const GncOwner *owner);
@@ -85,23 +90,28 @@ void gnc_owner_set_owner (GtkWidget *widget, const GncOwner *owner);
 /* An invoice select widget..
  * the owner, invoice, and label parameters are optional
  */
-GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
-                                       const GncOwner *owner,
-                                       GncInvoice *invoice,
-                                       GtkWidget *label);
+GtkWidget *gnc_invoice_select_create (
+    GtkWidget *hbox,
+    QofBook *book,
+    const GncOwner *owner,
+    GncInvoice *invoice,
+    GtkWidget *label);
 
-GncInvoice * gnc_invoice_get_invoice (GtkWidget *widget);
+GncInvoice *gnc_invoice_get_invoice (GtkWidget *widget);
 void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice);
 void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner);
 
 /* Fill in a combo box with the appropriate list of accounts
  * Returns the default selected account */
-Account * gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
-        GList *acct_types,
-        GList *acct_commodities);
+Account
+*gnc_account_select_combo_fill (
+    GtkWidget *combo,
+    QofBook *book,
+    GList *acct_types,
+    GList *acct_commodities);
 
 /* Returns the currently selected account in the combo box*/
-Account * gnc_account_select_combo_get_active (GtkWidget *combo);
+Account *gnc_account_select_combo_get_active (GtkWidget *combo);
 
 /* Create a combo box of available billing terms based on
  * the combo box If none_ok is true, then add "none" as a
@@ -114,13 +124,27 @@ Account * gnc_account_select_combo_get_active (GtkWidget *combo);
  * This can be used for example in a callback function that triggers
  * on the combo box' "changed" signal"
  */
-void gnc_billterms_combo (GtkComboBox *cbox, QofBook *book,
-                          gboolean none_ok, GncBillTerm *initial_choice);
+void gnc_billterms_combo (
+    GtkComboBox *cbox,
+    QofBook *book,
+    gboolean none_ok,
+    GncBillTerm *initial_choice);
+
+/* Same thing except for the distribution list */
+void
+gnc_distriblist_combo (
+    GtkComboBox *cbox,
+    QofBook *book,
+    gboolean none_ok,
+    GncDistributionList *initial_choice);
 
 /* Same thing except for the tax tables */
 void
-gnc_taxtables_combo (GtkComboBox *cbox, QofBook *book,
-                     gboolean none_ok, GncTaxTable *initial_choice);
+gnc_taxtables_combo (
+    GtkComboBox *cbox,
+    QofBook *book,
+    gboolean none_ok,
+    GncTaxTable *initial_choice);
 
 /* Build an option menu for choosing a GncTaxIncluded */
 void gnc_taxincluded_combo (GtkComboBox *cbox, GncTaxIncluded initial_choice);
