@@ -9,6 +9,7 @@ set (backend_xml_utils_noinst_HEADERS
   gnc-bill-term-xml-v2.h
   gnc-coowner-xml-v2.h
   gnc-customer-xml-v2.h
+  gnc-distriblist-xml-v2.h
   gnc-employee-xml-v2.h
   gnc-entry-xml-v2.h
   gnc-invoice-xml-v2.h
@@ -42,6 +43,7 @@ set (backend_xml_utils_SOURCES
   gnc-commodity-xml-v2.cpp
   gnc-coowner-xml-v2.cpp
   gnc-customer-xml-v2.cpp
+  gnc-distriblist-xml-v2.cpp
   gnc-employee-xml-v2.cpp
   gnc-entry-xml-v2.cpp
   gnc-freqspec-xml-v2.cpp
