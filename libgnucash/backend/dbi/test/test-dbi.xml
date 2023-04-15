@@ -18,6 +18,7 @@
      xmlns:job="http://www.gnucash.org/XML/job"
      xmlns:invoice="http://www.gnucash.org/XML/invoice"
      xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:coowner="http://www.gnucash.org/XML/coowner"
      xmlns:cust="http://www.gnucash.org/XML/cust"
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
