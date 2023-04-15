@@ -26,6 +26,7 @@
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
 #include "gncVendorP.h"
@@ -61,17 +62,20 @@ gnc_owner_to_dom_tree (const char* tag, const GncOwner* owner)
 
     switch (gncOwnerGetType (owner))
     {
+    case GNC_OWNER_COOWNER:
+        type_str = GNC_ID_CUSTOMER;
+        break;
     case GNC_OWNER_CUSTOMER:
         type_str = GNC_ID_CUSTOMER;
+        break;
+    case GNC_OWNER_EMPLOYEE:
+        type_str = GNC_ID_EMPLOYEE;
         break;
     case GNC_OWNER_JOB:
         type_str = GNC_ID_JOB;
         break;
     case GNC_OWNER_VENDOR:
         type_str = GNC_ID_VENDOR;
-        break;
-    case GNC_OWNER_EMPLOYEE:
-        type_str = GNC_ID_EMPLOYEE;
         break;
     default:
         PWARN ("Invalid owner type: %d", gncOwnerGetType (owner));
@@ -100,17 +104,20 @@ static gboolean
 owner_type_handler (xmlNodePtr node, gpointer owner_pdata)
 {
     struct owner_pdata* pdata = static_cast<decltype (pdata)> (owner_pdata);
+
     GncOwner* owner = pdata->owner;
     auto init_owner_type = [](GncOwner* owner, const char* txt)
     {
-        if (!g_strcmp0 (txt, GNC_ID_CUSTOMER))
-            gncOwnerInitCustomer (owner, NULL);
-        else if (!g_strcmp0 (txt, GNC_ID_JOB))
-            gncOwnerInitJob (owner, NULL);
-        else if (!g_strcmp0 (txt, GNC_ID_VENDOR))
-            gncOwnerInitVendor (owner, NULL);
-        else if (!g_strcmp0 (txt, GNC_ID_EMPLOYEE))
-            gncOwnerInitEmployee (owner, NULL);
+      if (!g_strcmp0 (txt, GNC_ID_COOWNER))
+        gncOwnerInitCoOwner (owner, NULL);
+      else if (!g_strcmp0 (txt, GNC_ID_CUSTOMER))
+        gncOwnerInitCustomer (owner, NULL);
+      else if (!g_strcmp0 (txt, GNC_ID_EMPLOYEE))
+        gncOwnerInitEmployee (owner, NULL);
+      else if (!g_strcmp0 (txt, GNC_ID_JOB))
+        gncOwnerInitJob (owner, NULL);
+      else if (!g_strcmp0 (txt, GNC_ID_VENDOR))
+        gncOwnerInitVendor (owner, NULL);
     };
     return apply_xmlnode_text (init_owner_type, owner, node);
 }
@@ -125,6 +132,17 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
 
     switch (gncOwnerGetType (pdata->owner))
     {
+    case GNC_OWNER_COOWNER:
+    {
+        GncCoOwner* coowner = gncCoOwnerLookup (pdata->book, guid);
+        if (!coowner)
+        {
+            coowner = gncCoOwnerCreate (pdata->book);
+            gncCoOwnerSetGUID (coowner, guid);
+        }
+        gncOwnerInitCoOwner (pdata->owner, coowner);
+        break;
+    }
     case GNC_OWNER_CUSTOMER:
     {
         GncCustomer* cust = gncCustomerLookup (pdata->book, &*guid);
@@ -134,6 +152,17 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
             gncCustomerSetGUID (cust, &*guid);
         }
         gncOwnerInitCustomer (pdata->owner, cust);
+        break;
+    }
+    case GNC_OWNER_EMPLOYEE:
+    {
+        GncEmployee* employee = gncEmployeeLookup (pdata->book, guid);
+        if (!employee)
+        {
+            employee = gncEmployeeCreate (pdata->book);
+            gncEmployeeSetGUID (employee, guid);
+        }
+        gncOwnerInitEmployee (pdata->owner, employee);
         break;
     }
     case GNC_OWNER_JOB:
