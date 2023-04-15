@@ -27,6 +27,7 @@ set (gtkbuilder_SOURCES
         dialog-custom-report.glade
         dialog-customer-import-gui.glade
         dialog-date-close.glade
+        dialog-distriblists.glade
         dialog-employee.glade
         dialog-file-access.glade
         dialog-fincalc.glade
