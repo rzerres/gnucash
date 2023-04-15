@@ -20,6 +20,7 @@
      xmlns:billterm="http://www.gnucash.org/XML/billterm"
      xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
      xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:coowner="http://www.gnucash.org/XML/coowner"
      xmlns:cust="http://www.gnucash.org/XML/cust"
      xmlns:employee="http://www.gnucash.org/XML/employee"
      xmlns:entry="http://www.gnucash.org/XML/entry"
