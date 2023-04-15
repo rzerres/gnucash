@@ -147,41 +147,45 @@ enum
 
 /* This map contains a set of strings representing the different column types. */
 static const std::map<GNCAccountType, const char*> gnc_acct_debit_strs = {
-    { ACCT_TYPE_NONE,       N_("Funds In") },
-    { ACCT_TYPE_BANK,       N_("Deposit") },
-    { ACCT_TYPE_CASH,       N_("Receive") },
-    { ACCT_TYPE_CREDIT,     N_("Payment") },
-    { ACCT_TYPE_ASSET,      N_("Increase") },
-    { ACCT_TYPE_LIABILITY,  N_("Decrease") },
-    { ACCT_TYPE_STOCK,      N_("Buy") },
-    { ACCT_TYPE_MUTUAL,     N_("Buy") },
-    { ACCT_TYPE_CURRENCY,   N_("Buy") },
-    { ACCT_TYPE_INCOME,     N_("Charge") },
-    { ACCT_TYPE_EXPENSE,    N_("Expense") },
-    { ACCT_TYPE_PAYABLE,    N_("Payment") },
-    { ACCT_TYPE_RECEIVABLE, N_("Invoice") },
-    { ACCT_TYPE_TRADING,    N_("Decrease") },
-    { ACCT_TYPE_EQUITY,     N_("Decrease") },
+    { ACCT_TYPE_NONE,               N_("Funds In") },
+    { ACCT_TYPE_BANK,               N_("Deposit") },
+    { ACCT_TYPE_CASH,               N_("Receive") },
+    { ACCT_TYPE_CREDIT,             N_("Payment") },
+    { ACCT_TYPE_ASSET,              N_("Increase") },
+    { ACCT_TYPE_LIABILITY,          N_("Decrease") },
+    { ACCT_TYPE_STOCK,              N_("Buy") },
+    { ACCT_TYPE_MUTUAL,             N_("Buy") },
+    { ACCT_TYPE_CURRENCY,           N_("Buy") },
+    { ACCT_TYPE_INCOME,             N_("Charge") },
+    { ACCT_TYPE_EXPENSE,            N_("Expense") },
+    { ACCT_TYPE_PAYABLE,            N_("Payment") },
+    { ACCT_TYPE_RECEIVABLE,         N_("Invoice") },
+    { ACCT_TYPE_TRADING,            N_("Decrease") },
+    { ACCT_TYPE_EQUITY,             N_("Decrease") },
+    { ACCT_TYPE_APPORTIONABLE,      N_("Apportionable") },
+    { ACCT_TYPE_NONAPPORTIONABLE,   N_("NonApportionable") },
 };
 static const char* dflt_acct_debit_str = N_("Debit");
 
 /* This map contains a set of strings representing the different column types. */
 static const std::map<GNCAccountType, const char*> gnc_acct_credit_strs = {
-    { ACCT_TYPE_NONE,       N_("Funds Out") },
-    { ACCT_TYPE_BANK,       N_("Withdrawal") },
-    { ACCT_TYPE_CASH,       N_("Spend") },
-    { ACCT_TYPE_CREDIT,     N_("Charge") },
-    { ACCT_TYPE_ASSET,      N_("Decrease") },
-    { ACCT_TYPE_LIABILITY,  N_("Increase") },
-    { ACCT_TYPE_STOCK,      N_("Sell") },
-    { ACCT_TYPE_MUTUAL,     N_("Sell") },
-    { ACCT_TYPE_CURRENCY,   N_("Sell") },
-    { ACCT_TYPE_INCOME,     N_("Income") },
-    { ACCT_TYPE_EXPENSE,    N_("Rebate") },
-    { ACCT_TYPE_PAYABLE,    N_("Bill") },
-    { ACCT_TYPE_RECEIVABLE, N_("Payment") },
-    { ACCT_TYPE_TRADING,    N_("Increase") },
-    { ACCT_TYPE_EQUITY,     N_("Increase") },
+    { ACCT_TYPE_NONE,               N_("Funds Out") },
+    { ACCT_TYPE_BANK,               N_("Withdrawal") },
+    { ACCT_TYPE_CASH,               N_("Spend") },
+    { ACCT_TYPE_CREDIT,             N_("Charge") },
+    { ACCT_TYPE_ASSET,              N_("Decrease") },
+    { ACCT_TYPE_LIABILITY,          N_("Increase") },
+    { ACCT_TYPE_STOCK,              N_("Sell") },
+    { ACCT_TYPE_MUTUAL,             N_("Sell") },
+    { ACCT_TYPE_CURRENCY,           N_("Sell") },
+    { ACCT_TYPE_INCOME,             N_("Income") },
+    { ACCT_TYPE_EXPENSE,            N_("Rebate") },
+    { ACCT_TYPE_PAYABLE,            N_("Bill") },
+    { ACCT_TYPE_RECEIVABLE,         N_("Payment") },
+    { ACCT_TYPE_TRADING,            N_("Increase") },
+    { ACCT_TYPE_EQUITY,             N_("Increase") },
+    { ACCT_TYPE_APPORTIONABLE,      N_("Apportionable") },
+    { ACCT_TYPE_NONAPPORTIONABLE,   N_("NonApportionable") },
 };
 static const char* dflt_acct_credit_str = N_("Credit");
 
@@ -4264,7 +4268,6 @@ xaccAccountTypeEnumAsString(GNCAccountType type)
 gboolean
 xaccAccountStringToType(const char* str, GNCAccountType *type)
 {
-
     GNC_RETURN_ON_MATCH(NONE);
     GNC_RETURN_ON_MATCH(BANK);
     GNC_RETURN_ON_MATCH(CASH);
@@ -4281,6 +4284,10 @@ xaccAccountStringToType(const char* str, GNCAccountType *type)
     GNC_RETURN_ON_MATCH(PAYABLE);
     GNC_RETURN_ON_MATCH(ROOT);
     GNC_RETURN_ON_MATCH(TRADING);
+    GNC_RETURN_ON_MATCH(APPORTIONABLE);
+    GNC_RETURN_ON_MATCH(NONAPPORTIONABLE);
+
+    // non production ready
     GNC_RETURN_ON_MATCH(CHECKING);
     GNC_RETURN_ON_MATCH(SAVINGS);
     GNC_RETURN_ON_MATCH(MONEYMRKT);
@@ -4325,7 +4332,9 @@ account_type_name[NUM_ACCOUNT_TYPES] =
     N_("A/Receivable"),
     N_("A/Payable"),
     N_("Root"),
-    N_("Trading")
+    N_("Trading"),
+    N_("Apportionable"),
+    N_("NonApportionable"),
     /*
       N_("Checking"),
       N_("Savings"),
