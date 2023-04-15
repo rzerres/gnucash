@@ -31,7 +31,24 @@
 #ifndef GNC_BILLTERM_H_
 #define GNC_BILLTERM_H_
 
+/** @struct GncBillTerm
+
+@param  QofInstance inst - The instance entity.
+@param  const char* name - Pointer to the name of the bill term.
+@param  const char* descrition - Pointer to the description for the bill term.
+@param  GncBillTermType type - The type of the bill term.
+@param  gint due_days - Due days.
+@param  gint disc_days - Discount days.
+@param  gnc_numeric discount - The Discount amount.
+@param  gint cutff - Days the cuttoff will take effect.
+*/
 typedef struct _gncBillTerm GncBillTerm;
+
+
+/** @struct GncBillTermClass
+
+@param  QofInstanceClass parent_class - The parent entity class.
+*/
 typedef struct _gncBillTermClass GncBillTermClass;
 
 #include "qof.h"
