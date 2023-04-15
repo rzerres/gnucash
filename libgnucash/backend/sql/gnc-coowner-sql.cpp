@@ -36,13 +36,15 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 
-#include "gnc-commodity.h"
+// #include "gnc-commodity.h"
 #include "gncBillTermP.h"
+#include "gncDistributionListP.h"
 #include "gncCoOwnerP.h"
 #include "gncTaxTableP.h"
 }
 
 #include "gnc-bill-term-sql.h"
+#include "gnc-distrib-list-sql.h"
 #include "gnc-commodity-sql.h"
 #include "gnc-coowner-sql.h"
 #include "gnc-slots-sql.h"
