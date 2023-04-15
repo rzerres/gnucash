@@ -96,11 +96,11 @@ gboolean gnc_coowner_billaddr4_key_press_cb(
     gpointer user_data );
 
 static GncCoOwner
-*gnc_coowner_lookup_data (CoOwnerWindow *ow);
+*ow_get_coowner (CoOwnerWindow *ow);
 void
 gnc_coowner_name_changed_cb (GtkWidget *widget, gpointer data);
 static void
-gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner);
+gnc_ui_to_coowner (CoOwnerWindow *ow, GncCoOwner *coowner);
 
 void gnc_coowner_shipaddr2_insert_cb(GtkEditable *editable,
     gchar *new_text, gint new_text_length,
@@ -296,6 +296,15 @@ struct _coowner_window
  * Functions
 \*************************************************/
 
+static GncCoOwner *
+ow_get_coowner (CoOwnerWindow *ow)
+{
+    if (!ow)
+        return NULL;
+
+    return gncCoOwnerLookup (ow->book, &ow->coowner_guid);
+}
+
 /* CoOwner callback functions */
 void
 gnc_coowner_apt_share_changed_cb (GtkWidget *widget, gpointer data)
@@ -448,7 +457,7 @@ void
 gnc_coowner_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
     CoOwnerWindow *ow = data;
-    GncCoOwner *coowner = gnc_coowner_lookup_data (ow);
+    GncCoOwner *coowner = ow_get_coowner (ow);
 
     gnc_suspend_gui_refresh ();
 
@@ -469,7 +478,7 @@ void
 gnc_coowner_window_help_cb (GtkWidget *widget, gpointer data)
 {
     CoOwnerWindow *ow = data;
-    gnc_gnome_help (GTK_WINDOW(ow->dialog), HF_HELP, HL_USAGE_COOWNER);
+    gnc_gnome_help (GTK_WINDOW(ow->dialog), DF_MANUAL, DL_USAGE_COOWNER);
 }
 
 void
@@ -602,14 +611,25 @@ gnc_coowner_window_ok_cb (GtkWidget *widget, gpointer data)
      */
     {
         /* Update coowner structure from GUI fields */
-        GncCoOwner *coowner = gnc_coowner_lookup_data (ow);
+        GncCoOwner *coowner = ow_get_coowner (ow);
 
         if (coowner)
         {
             /* Now save it off */
-            gnc_ui_coowner_save_data (ow, coowner);
+            gnc_ui_to_coowner (ow, coowner);
         }
 
+        ow->created_coowner = coowner;
+        ow->coowner_guid = *guid_null ();
+    }
+
+    /* Now save it off */
+    {
+        GncCoOwner *coowner = ow_get_coowner (ow);
+        if (coowner)
+        {
+            gnc_ui_to_coowner (ow, coowner);
+        }
         ow->created_coowner = coowner;
         ow->coowner_guid = *guid_null ();
     }
@@ -794,7 +814,6 @@ static CoOwnerWindow
     edit = gnc_account_sel_new();
     acct_types = g_list_prepend(NULL, (gpointer)ACCT_TYPE_CREDIT);
     gnc_account_sel_set_acct_filters (GNC_ACCOUNT_SEL(edit), acct_types, NULL);
-    gnc_account_sel_set_hexpand (GNC_ACCOUNT_SEL(edit), TRUE);
     g_list_free (acct_types);
 
     ow->ccard_acct_sel = edit;
@@ -1232,7 +1251,7 @@ gnc_coowner_window_refresh_handler (
 {
     CoOwnerWindow *ow = user_data;
     const EventInfo *info;
-    GncCoOwner *coowner = gnc_coowner_lookup_data (ow);
+    GncCoOwner *coowner = ow_get_coowner (ow);
 
     /* If there isn't a coowner behind us, close down */
     if (!coowner)
@@ -1279,7 +1298,7 @@ gnc_ui_coowner_new (GtkWindow *parent, QofBook *bookp)
 }
 
 static void
-gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner)
+gnc_ui_to_coowner (CoOwnerWindow *ow, GncCoOwner *coowner)
 {
     GtkTextBuffer* text_buffer;
     GtkTextIter start, end;
@@ -1462,15 +1481,6 @@ check_entry_nonempty (GtkWidget *entry,
         return TRUE;
     }
     return FALSE;
-}
-
-static GncCoOwner *
-gnc_coowner_lookup_data (CoOwnerWindow *ow)
-{
-    if (!ow)
-        return NULL;
-
-    return gncCoOwnerLookup (ow->book, &ow->coowner_guid);
 }
 
 GNCSearchWindow *
@@ -1663,7 +1673,7 @@ new_coowner_cb (GtkWindow *dialog, gpointer user_data)
     g_return_val_if_fail (user_data, NULL);
 
     ow = gnc_ui_coowner_new (dialog, sw->book);
-    return gnc_coowner_lookup_data (ow);
+    return ow_get_coowner (ow);
 }
 
 static void
