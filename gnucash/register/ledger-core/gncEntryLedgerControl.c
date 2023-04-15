@@ -95,20 +95,22 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
 
         switch (ledger->type)
         {
-        case GNCENTRY_ORDER_ENTRY:
-            gncOrderAddEntry (ledger->order, blank_entry);
-            break;
-        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_INVOICE_ENTRY:
             /* Anything entered on an invoice entry must be part of the invoice! */
             gncInvoiceAddEntry (ledger->invoice, blank_entry);
             break;
         case GNCENTRY_BILL_ENTRY:
-        case GNCENTRY_EXPVOUCHER_ENTRY:
-        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
         case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_EXPVOUCHER_ENTRY:
+        case GNCENTRY_SETTLEMENT_ENTRY:
+        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
             /* Anything entered on an invoice entry must be part of the invoice! */
             gncBillAddEntry (ledger->invoice, blank_entry);
+            break;
+        case GNCENTRY_ORDER_ENTRY:
+            gncOrderAddEntry (ledger->order, blank_entry);
             break;
         default:
             /* Nothing to do for viewers */
@@ -178,16 +180,18 @@ gnc_entry_ledger_verify_can_save (GncEntryLedger *ledger)
     {
         switch (ledger->type)
         {
-        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_INVOICE_ENTRY:
             if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_IACCT_CELL,
                     _("This account should usually be of type income.")))
                 return FALSE;
             break;
         case GNCENTRY_BILL_ENTRY:
-        case GNCENTRY_EXPVOUCHER_ENTRY:
-        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
         case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_EXPVOUCHER_ENTRY:
+        case GNCENTRY_SETTLEMENT_ENTRY:
+        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
             if (!gnc_entry_ledger_verify_acc_cell_ok (ledger, ENTRY_BACCT_CELL,
                     _("This account should usually be of type expense or asset.")))
                 return FALSE;
@@ -305,10 +309,12 @@ find_entry_in_book_by_desc(GncEntryLedger *reg, const char* desc)
 
     switch (reg->type)
     {
-    case GNCENTRY_INVOICE_ENTRY:
-    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
         use_invoice = TRUE;
         break;
     default:
@@ -426,11 +432,12 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
     /* Auto-completion is done only in an entry ledger */
     switch (ledger->type)
     {
-    case GNCENTRY_ORDER_ENTRY:
-    case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_BILL_ENTRY:
-    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_ORDER_ENTRY:
     case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
     case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
         break;
@@ -514,15 +521,17 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
     /* Auto-complete the account field */
     switch (ledger->type)
     {
-    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_INVOICE_ENTRY:
         cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_IACCT_CELL);
         account_name = gnc_get_account_name_for_register (gncEntryGetInvAccount(auto_entry));
         break;
-    case GNCENTRY_EXPVOUCHER_ENTRY:
     case GNCENTRY_BILL_ENTRY:
-    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
     case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_SETTLEMENT_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
         cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_BACCT_CELL);
         account_name = gnc_get_account_name_for_register (gncEntryGetBillAccount(auto_entry));
         break;
@@ -543,8 +552,9 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
         gboolean orig_is_cn;
         switch (ledger->type)
         {
-        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_INVOICE_ENTRY:
             orig_is_cn = gncInvoiceGetIsCreditNote (gncEntryGetInvoice (auto_entry));
             break;
         default:
@@ -560,8 +570,9 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
         gnc_numeric price;
         switch (ledger->type)
         {
-        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_INVOICE_ENTRY:
             price = gncEntryGetInvPrice (auto_entry);
             break;
         default:
@@ -582,8 +593,9 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
         GncTaxTable *taxtable = NULL;
         switch (ledger->type)
         {
-        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_INVOICE_ENTRY:
             taxable = gncEntryGetInvTaxable (auto_entry);
             taxincluded = gncEntryGetInvTaxIncluded (auto_entry);
             taxtable = gncEntryGetInvTaxTable (auto_entry);
@@ -600,9 +612,10 @@ gnc_entry_ledger_auto_completion (GncEntryLedger *ledger,
 
         switch (ledger->type)
         {
-        case GNCENTRY_INVOICE_ENTRY:
-        case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
         case GNCENTRY_BILL_ENTRY:
+        case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_INVOICE_ENTRY:
         case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
             /* Taxable? cell */
             cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_TAXABLE_CELL);
@@ -679,20 +692,24 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 
         switch (ledger->type)
         {
-        case GNCENTRY_INVOICE_ENTRY:
-        case GNCENTRY_INVOICE_VIEWER:
+        case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
         case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_INVOICE_VIEWER:
             cell_name = ENTRY_IACCT_CELL;
             break;
         case GNCENTRY_BILL_ENTRY:
         case GNCENTRY_BILL_VIEWER:
-        case GNCENTRY_EXPVOUCHER_ENTRY:
-        case GNCENTRY_EXPVOUCHER_VIEWER:
-        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
-        case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
         case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
         case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+        case GNCENTRY_EXPVOUCHER_ENTRY:
+        case GNCENTRY_EXPVOUCHER_VIEWER:
+        case GNCENTRY_SETTLEMENT_ENTRY:
+        case GNCENTRY_SETTLEMENT_VIEWER:
+        case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
             cell_name = ENTRY_BACCT_CELL;
             break;
         default:
@@ -880,8 +897,9 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 
         switch (ledger->type)
         {
-        case GNCENTRY_INVOICE_ENTRY:
+        case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
         case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
+        case GNCENTRY_INVOICE_ENTRY:
             if (gncEntryGetOrder (entry) != NULL)
             {
                 dialog = gtk_message_dialog_new(GTK_WINDOW(ledger->parent),
@@ -1018,6 +1036,7 @@ gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
         gboolean dontask = FALSE;
 
         if (ledger->type ==  GNCENTRY_INVOICE_ENTRY ||
+                ledger->type ==  GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY ||
                 ledger->type ==  GNCENTRY_CUST_CREDIT_NOTE_ENTRY)
         {
             gboolean inv_value;

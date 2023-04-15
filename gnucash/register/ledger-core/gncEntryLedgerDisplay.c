@@ -34,7 +34,7 @@
 #include "gncEntryLedger.h"
 #include "gncEntryLedgerP.h"
 
-#define ENTRYLEDGER_CLASS	"entry-ledger-class"
+#define ENTRYLEDGER_CLASS       "entry-ledger-class"
 
 /* Return the list of entries (NOTE: Should use a query here!) */
 static GList *
@@ -64,7 +64,8 @@ gnc_entry_ledger_refresh_internal (GncEntryLedger *ledger, GList *entries)
     if ((ledger->type == GNCENTRY_ORDER_VIEWER ||
             ledger->type == GNCENTRY_INVOICE_VIEWER ||
             ledger->type == GNCENTRY_BILL_VIEWER ||
-            ledger->type == GNCENTRY_EXPVOUCHER_VIEWER) && !entries)
+            ledger->type == GNCENTRY_EXPVOUCHER_VIEWER ||
+            ledger->type == GNCENTRY_SETTLEMENT_VIEWER) && !entries)
         return;
 
     ledger->loading = TRUE;
@@ -111,16 +112,17 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
                                         gncOwnerGetGUID
                                         (gncInvoiceGetOwner (ledger->invoice)),
                                         QOF_EVENT_MODIFY);
-    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_BILL_VIEWER:
-    case GNCENTRY_EXPVOUCHER_ENTRY:
-    case GNCENTRY_EXPVOUCHER_VIEWER:
-    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
-    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
     case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
     case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
+    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
         type = GNC_INVOICE_MODULE_NAME;
         break;
 

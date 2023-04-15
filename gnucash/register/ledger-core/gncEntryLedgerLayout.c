@@ -84,7 +84,7 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
         {
             ENTRY_DESC_CELL, QUICKFILL_CELL_TYPE_NAME,
             C_("sample for 'Description'", "Description of an Entry"), CELL_ALIGN_LEFT,
-	    TRUE, FALSE
+            TRUE, FALSE
         },
         {
             /* Translators: Enter the longest 'Action' entry */
@@ -175,12 +175,14 @@ static void gnc_entry_ledger_layout_add_cursors (GncEntryLedger *ledger,
 
     switch (ledger->type)
     {
-    case GNCENTRY_ORDER_ENTRY:
-    case GNCENTRY_ORDER_VIEWER:
-    case GNCENTRY_INVOICE_ENTRY:
-    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_INVOICE_ENTRY:
+    case GNCENTRY_INVOICE_VIEWER:
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_ORDER_VIEWER:
         num_cols = 15;
         break;
     case GNCENTRY_BILL_ENTRY:
@@ -193,6 +195,8 @@ static void gnc_entry_ledger_layout_add_cursors (GncEntryLedger *ledger,
     case GNCENTRY_EXPVOUCHER_VIEWER:
     case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
     case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_SETTLEMENT_ENTRY:
+    case GNCENTRY_SETTLEMENT_VIEWER:
         num_cols = 10;
         break;
     default:
@@ -215,12 +219,12 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
 
     switch (ledger->type)
     {
-    case GNCENTRY_ORDER_ENTRY:
-    case GNCENTRY_ORDER_VIEWER:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_ENTRY:
+    case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_INVOICE_VIEWER:
-    case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
-    case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_ORDER_ENTRY:
+    case GNCENTRY_ORDER_VIEWER:
 
         curs = gnc_table_layout_get_cursor (layout, "cursor");
         gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 0);
@@ -266,6 +270,8 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
     case GNCENTRY_EXPVOUCHER_VIEWER:
     case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
     case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+    case GNCENTRY_SETTLEMENT_ENTRY:
+    case GNCENTRY_SETTLEMENT_VIEWER:
 
         curs = gnc_table_layout_get_cursor (layout, "cursor");
         gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 0);
