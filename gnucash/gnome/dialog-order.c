@@ -80,31 +80,31 @@ struct _order_select_window
 
 struct _order_window
 {
-    GtkWidget *	dialog;
+    GtkWidget * dialog;
 
-    GtkWidget *	id_entry;
-    GtkWidget *	ref_entry;
-    GtkWidget *	notes_text;
-    GtkWidget *	opened_date;
-    GtkWidget *	closed_date;
-    GtkWidget *	active_check;
+    GtkWidget * id_entry;
+    GtkWidget * ref_entry;
+    GtkWidget * notes_text;
+    GtkWidget * opened_date;
+    GtkWidget * closed_date;
+    GtkWidget * active_check;
 
     GtkWidget * cd_label;
     GtkWidget * close_order_button;
 
-    GtkWidget *	owner_box;
-    GtkWidget *	owner_label;
-    GtkWidget *	owner_choice;
+    GtkWidget * owner_box;
+    GtkWidget * owner_label;
+    GtkWidget * owner_choice;
 
-    GnucashRegister *	reg;
-    GncEntryLedger *	ledger;
+    GnucashRegister *   reg;
+    GncEntryLedger *    ledger;
 
-    OrderDialogType	dialog_type;
-    GncGUID		order_guid;
-    gint		component_id;
-    QofBook *	book;
-    GncOrder *	created_order;
-    GncOwner	owner;
+    OrderDialogType     dialog_type;
+    GncGUID             order_guid;
+    gint                component_id;
+    QofBook *   book;
+    GncOrder *  created_order;
+    GncOwner    owner;
 
 };
 
@@ -784,6 +784,7 @@ gnc_ui_order_new (GtkWindow *parent, GncOwner *ownerp, QofBook *bookp)
     {
         switch (gncOwnerGetType (ownerp))
         {
+        case GNC_OWNER_COOWNER:
         case GNC_OWNER_CUSTOMER:
         case GNC_OWNER_VENDOR:
         case GNC_OWNER_JOB:
