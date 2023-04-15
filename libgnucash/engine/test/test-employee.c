@@ -30,6 +30,7 @@
 #include <qofinstance-p.h>
 
 #include "gncEmployeeP.h"
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
 #include "gncInvoiceP.h"
@@ -240,6 +241,7 @@ main (int argc, char **argv)
     qof_init();
     do_test (gncInvoiceRegister(), "Cannot register GncInvoice");
     do_test (gncJobRegister (),  "Cannot register GncJob");
+    do_test (gncCoOwnerRegister(), "Cannot register GncCoOwner");
     do_test (gncCustomerRegister(), "Cannot register GncCustomer");
     do_test (gncEmployeeRegister(), "Cannot register GncEmployee");
     test_employee();
