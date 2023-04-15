@@ -71,16 +71,16 @@ typedef struct _distribution_list_owners
     GtkWidget *label_description;
     GtkWidget *label_owners;
     GtkWidget *label_typename;
-    GtkWidget *owners_typename;
+    GtkWidget *entry_typename;
 
     // TODO
     GtkWidget *acct_tree;
 
     // Distriblist "owners" entities
     gboolean owner_new;
-    GncOwner *owner;
+    //GncOwner *owner;
     GList *owners_list;
-    const char *owner_typename;
+    const char *typename;
     GncDistributionListType type;
 
 } DistributionListOwners;
@@ -102,7 +102,7 @@ typedef struct _distribution_list_notebook
     GtkWidget *label_settlement_percentage;
     GtkWidget *label_settlement_shares;
     GtkWidget *label_shares_total;
-    GtkWidget *owners;
+    //GtkWidget *owners;
     GtkWidget *owners_typename;
     GtkWidget *view_percentage_owner;
     GtkWidget *percentage_owner_typename;
@@ -112,6 +112,8 @@ typedef struct _distribution_list_notebook
     GtkWidget *shares_owner_typename;
     GtkWidget *shares_total;
 
+    // Disriblist "notebook" entities
+    DistributionListOwners owners;
     GncDistributionListType type;
 } DistributionListNotebook;
 
@@ -201,9 +203,7 @@ static void owners_init (
     DistributionListOwners *owners,
     gboolean read_only,
     gpointer user_data);
-static void owners_maybe_set_type (
-    DistributionListOwners *owners,
-    GncOwnerType owner_type);
+static void owners_maybe_set_type (DistributionListOwners *owners);
 static void owners_remove (
     DistributionListOwners *owners);
 static GtkWidget *read_widget (GtkBuilder *builder, char *name, gboolean read_only);
@@ -331,15 +331,15 @@ distriblists_list_refresh (
 
     /* gtk_entry_set_text ( */
     /*     GTK_ENTRY (notebook->percentage_owner_typename), */
-    /*     notebook->owners_typename); */
+    /*     owners->typename); */
 
     /* gtk_entry_set_text ( */
     /*     GTK_ENTRY (notebook->shares_owner_typename), */
-    /*     notebook->owners_typename); */
+    /*     owners->typename); */
 
     /* gtk_entry_set_int ( */
     /*     GTK_ENTRY (notebook->owner_type), */
-    /*     notebook->owner_type); */
+    /*     owners->owner_type); */
 }
 
 static void
@@ -499,27 +499,29 @@ distriblist_to_ui (
     /* gncOwnerTypeToQofIdType(owners->owner->type); */
     /* gncDistribListSetOwner (distriblist, owners->owner); */
 
-    // Set the owner type
-    owners->owner = gncDistribListGetOwner (distriblist);
-    g_warning ("[distriblist_to_ui] Got owner type: '%s'\n",
-               gncOwnerTypeToQofIdType(gncOwnerGetType (owners->owner)));
+    // Set the owner
+    /* owners->owner = gncDistribListGetOwner (distriblist); */
+
+    // Set the owner typename (e.g GNC_OWNER_COOWNER -> N_"Co-Owner")
+    /* owners->owner_typename = gncOwnerGetTypeString( */
+    /*      gncDistribListGetOwner (distriblist)); */
+
+    /* g_warning ("[distriblist_to_ui] Got owner type: '%s' -> typename: '%s'\n", */
+    /*            gncOwnerTypeToQofIdType(gncOwnerGetType (owners->owner)), */
+    /*            gncOwnerGetTypeString(gncDistribListGetOwner (distriblist))); */
 
     /* notebook->owner->type = GNC_OWNER_COOWNER; */
     /* g_warning ("[distriblist_to_ui] Hardcode owner type: '%s'\n", */
     /*            gncOwnerTypeToQofIdType(notebook->owner->type)); */
 
-    // Set the owner typename (e.g GNC_OWNER_COOWNER -> N_"Co-Owner")
-    owners->owner_typename = gncOwnerGetTypeString(
-         gncDistribListGetOwner (distriblist));
-    g_warning ("[distriblist_to_ui] Got owner typename: '%s'\n", owners->owner_typename);
-
+    // Set the owner typename
     gtk_entry_set_text (
         GTK_ENTRY (notebook->percentage_owner_typename),
-        owners->owner_typename);
+        owners->typename);
 
     gtk_entry_set_text (
         GTK_ENTRY (notebook->shares_owner_typename),
-        owners->owner_typename);
+        owners->typename);
 
     // Distribution list type
     notebook->type = gncDistribListGetType (distriblist);
@@ -787,7 +789,8 @@ static GncDistributionList
         // Set reasonable defaults (GNC_OWNER_NONE | GNC_OWNER_COOWNER)
         g_warning ("[new_dialog] assign type defaults\n");
         new_distriblist->notebook.type = GNC_DISTRIBLIST_TYPE_SHARES;
-        new_distriblist->owners.owner->type = GNC_OWNER_NONE;
+        /* new_distriblist->owners.owner->type = GNC_OWNER_NONE; */
+        new_distriblist->owners.typename = GNC_OWNER_NONE;
     }
 
     // Initialize the notebook widgets (read_write)
@@ -804,8 +807,8 @@ static GncDistributionList
     else
     {
         // Set reasonable defaults
-        new_distriblist->owners.type = GNC_DISTRIBLIST_TYPE_SHARES;
-        new_distriblist->owners.owner->type = GNC_OWNER_COOWNER;
+        new_distriblist->notebook.type = GNC_DISTRIBLIST_TYPE_SHARES;
+        new_distriblist->owners.typename = N_("Co-Owner");
     }
 
     // Attach the notebook (expanded and filled, no padding)
@@ -1258,13 +1261,13 @@ owners_init (
     /*            ); */
 
     // (Note: assigned owners must have same type: e.g Co-Owner)
-    /* owners->owner_typename = gncOwnerTypeGetTypeString( */
+    /* owners->typename = gncOwnerTypeGetTypeString( */
     /*      owners->owner->type); */
-    /* g_warning ("[owners_init] owners_typename done\n"); */
+    /* g_warning ("[owners_init] typename done\n"); */
 
-    /* owners->owner_typename = gncOwnerGetTypeString( */
+    /* owners->typename = gncOwnerGetTypeString( */
     /*      gncDistribListGetOwner (distriblist)); */
-    /* owners->owners_typename = GTK_WIDGET( */
+    /* owners->typename = GTK_WIDGET( */
     /*     gtk_builder_get_object (builder, "owners_combobox_typename")); */
 
     // Load the view of assigned owners
@@ -1314,16 +1317,17 @@ owners_init (
 }
 
 static void
-owners_maybe_set_type (
-    DistributionListOwners *owners,
-    GncOwnerType owner_type)
+owners_maybe_set_type (DistributionListOwners *owners)
+    //GncOwnerType owner_type)
 {
+    g_warning ("[owners_maybe_set_type] not implmentet yet.\n");
+
     // See if anything to do?
-    if (owner_type == owners->owner->type)
-        return;
+    /* if (ownes->typename == owners->typename) */
+    /*     return; */
 
     /* Let's refresh */
-    owners->owner->type = owner_type;
+    //owners->typename = owner_typename;
     //owners_show (owners);
 }
 
@@ -1465,26 +1469,35 @@ ui_to_distriblist (NewDistributionList *new_distriblist)
             notebook->percentage_total,
             distriblist,
             gncDistribListSetPercentageTotal);
-       // FIXME: set a default owner-type (e.g: GNC_OWNER_NONE, GNC_OWNER_COOWNER)
-       PWARN ("Write owner ('%i') -> '%s'\n",
-              owners->owner->type,
-              gncOwnerTypeToQofIdType(owners->owner->type));
-        gncDistribListSetOwner (
+        // FIXME: set a default owner-type (e.g: GNC_OWNER_NONE, GNC_OWNER_COOWNER)
+        PWARN ("Write owner typename: '%s'\n", owners->typename);
+        gncDistribListSetOwnerTypeName (
             distriblist,
-            owners->owner);
+            owners->typename);
+
+        /* PWARN ("Write owner: '%s' -> '%s'\n", */
+        /*       owners->owner->type, */
+        /*       gncOwnerTypeToQofIdType(owners->owner->type)); */
+        /* gncDistribListSetOwner ( */
+        /*     distriblist, */
+        /*     owners->owner); */
         break;
     case GNC_DISTRIBLIST_TYPE_SHARES:
+        gncDistribListSetSharesLabelSettlement (
+            distriblist, gtk_editable_get_chars (
+                GTK_EDITABLE (notebook->entry_settlement_shares), 0, -1));
         set_int (
             notebook->shares_total,
             distriblist,
             gncDistribListSetSharesTotal);
-       // FIXME: set a default owner-type (e.g: GNC_OWNER_NONE, GNC_OWNER_COOWNER)
-        PWARN ("Write owner ('%i') -> '%s'\n",
-               owners->owner->type,
-               gncOwnerTypeToQofIdType(owners->owner->type));
-        gncDistribListSetOwner (
-            distriblist,
-            owners->owner);
+        // FIXME: set a default owner-type (e.g: GNC_OWNER_NONE, GNC_OWNER_COOWNER)
+        PWARN ("Write owner typename: '%s'\n", owners->typename);
+        /* PWARN ("Write owner ('%i') -> '%s'\n", */
+        /*        owners->owner->type, */
+        /*        gncOwnerTypeToQofIdType(owners->owner->type)); */
+        /* gncDistribListSetOwner ( */
+        /*     distriblist, */
+        /*     owners->owner); */
         break;
     }
 
@@ -1514,7 +1527,7 @@ verify_distriblist_ok (
         {
             // Translators: This is the label that should be presented in settlements.
             gtk_entry_set_text(GTK_ENTRY(notebook->entry_settlement_percentage),  _("Percentage"));
-            gnc_error_dialog (GTK_WINDOW(new_distriblist->dialog), "%s", msg_label);
+            gnc_warning_dialog (GTK_WINDOW(new_distriblist->dialog), "%s", msg_label);
         }
 
         // Set the "percentage_total" value
@@ -1536,7 +1549,7 @@ verify_distriblist_ok (
         {
             // Translators: This is the label that should be presented in settlements.
             gtk_entry_set_text(GTK_ENTRY(notebook->entry_settlement_shares),  _("Shares"));
-            gnc_error_dialog (GTK_WINDOW(new_distriblist->dialog), "%s", msg_label);
+            gnc_warning_dialog (GTK_WINDOW(new_distriblist->dialog), "%s", msg_label);
         }
 
         // Set the "shares_total" value
@@ -1970,5 +1983,6 @@ owners_type_changed_cb (
     gint value;
 
     value = gtk_combo_box_get_active (combobox);
-    owners_maybe_set_type (owners, value + 1);
+    owners_maybe_set_type (owners);
+    /* owners_maybe_set_type (owners, value + 1); */
 }
