@@ -716,7 +716,7 @@ gboolean gncCustomerIsDirty (GncCustomer *cust)
             gncAddressIsDirty (cust->shipaddr));
 }
 
-/* Other functions */
+/* Helper functions */
 
 int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b)
 {
@@ -881,7 +881,6 @@ cust_handle_qof_events (QofInstance *entity, QofEventId event_type,
 /* Package-Private functions */
 static const char * _gncCustomerPrintable (gpointer item)
 {
-//  GncCustomer *c = item;
     if (!item) return "failed";
     return gncCustomerGetName((GncCustomer*)item);
 }
