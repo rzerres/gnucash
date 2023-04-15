@@ -20,6 +20,7 @@ set(GNUCASH_CORE_C_INCLUDES
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-commodity.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-lot.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-numeric.h
+    ${CMAKE_SOURCE_DIR}/libgnucash/engine/gncCoOwner.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/gncCustomer.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/gncEmployee.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/gncVendor.h
