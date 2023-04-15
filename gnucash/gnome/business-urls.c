@@ -142,15 +142,16 @@ invoiceCB (const char *location, const char *label,
 
 static gboolean
 jobCB (const char *location, const char *label,
-       gboolean new_window, GNCURLResult * result)
+       gboolean new_window, GNCURLResult *result)
 {
     QofInstance *entity;
+    GncOwner owner;
     GncJob *job;
 
     /* href="...:job=<guid>" */
     HANDLE_TYPE ("job=", GNC_ID_JOB);
     job = (GncJob *) entity;
-    gnc_ui_job_edit (result->parent, job);
+    gnc_ui_job_edit (result->parent, &owner, job);
 
     return TRUE;
 }
