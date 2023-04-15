@@ -27,6 +27,7 @@
 #include <SX-book.h>
 #include <Recurrence.h>
 #include <gncBillTerm.h>
+#include <gncDistributionList.h>
 #include <gncTaxTable.h>
 #include <gncInvoice.h>
 #include <gnc-pricedb.h>
@@ -54,6 +55,7 @@
 
 #include "gnc-bill-term-sql.h"
 #include "gnc-customer-sql.h"
+#include "gnc-distrib-list-sql.h"
 #include "gnc-employee-sql.h"
 #include "gnc-entry-sql.h"
 #include "gnc-invoice-sql.h"
@@ -224,7 +226,7 @@ static const StrVec fixed_load_order
 
 /* Order in which business objects need to be loaded */
 static const StrVec business_fixed_load_order =
-{ GNC_ID_BILLTERM, GNC_ID_TAXTABLE, GNC_ID_INVOICE };
+{ GNC_ID_BILLTERM, GNC_ID_DISTRIBLIST, GNC_ID_TAXTABLE, GNC_ID_INVOICE };
 
 void
 GncSqlBackend::ObjectBackendRegistry::load_remaining(GncSqlBackend* sql_be)
@@ -1001,6 +1003,7 @@ GncSqlBackend::ObjectBackendRegistry::ObjectBackendRegistry()
     register_backend(std::make_shared<GncSqlSchedXactionBackend>());
     register_backend(std::make_shared<GncSqlLotsBackend>());
     register_backend(std::make_shared<GncSqlBillTermBackend>());
+    register_backend(std::make_shared<GncSqlDistribListBackend>());
     register_backend(std::make_shared<GncSqlCustomerBackend>());
     register_backend(std::make_shared<GncSqlEmployeeBackend>());
     register_backend(std::make_shared<GncSqlEntryBackend>());
