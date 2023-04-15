@@ -43,6 +43,9 @@ namespace owner = "http://www.gnucash.org/XML/owner"
 namespace billterm = "http://www.gnucash.org/XML/billterm"
 namespace bt-days = "http://www.gnucash.org/XML/bt-days"
 namespace bt-prox = "http://www.gnucash.org/XML/bt-prox"
+namespace distrblist = "http://www.gnucash.org/XML/distrblist"
+namespace dl-percentage = "http://www.gnucash.org/XML/dl-percentage"
+namespace dl-shares = "http://www.gnucash.org/XML/dl-shares"
 namespace coowner = "http://www.gnucash.org/XML/coowner"
 namespace cust = "http://www.gnucash.org/XML/cust"
 namespace employee = "http://www.gnucash.org/XML/employee"
@@ -96,6 +99,7 @@ Book = element gnc:book {
 # plugins (those with a get_count slot)
 
   element gnc:count-data { attribute cd:type { "gnc:GncBillTerm" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncDistribList" }, xsd:int }?,
   element gnc:count-data { attribute cd:type { "gnc:GncCoOwner" }, xsd:int }?,
   element gnc:count-data { attribute cd:type { "gnc:GncCustomer" }, xsd:int }?,
   element gnc:count-data { attribute cd:type { "gnc:GncEmployee" }, xsd:int }?,
@@ -117,6 +121,7 @@ Book = element gnc:book {
 # plugins (those with a write slot)
 
   BillTerm*,
+  DistribList*,
   CoOwner*,
   Customer*,
   Employee*,
@@ -396,6 +401,29 @@ BillTerm = element gnc:GncBillTerm {
       element bt-prox:disc-day { xsd:int }?,
       element bt-prox:discount { GncNumeric }?,
       element bt-prox:cutoff-day { xsd:int }?
+    }
+  )
+}
+
+# from in src/backend/xml/gnc-distriblist-xml-v2.c
+
+DistribList = element gnc:GncDistribList {
+  attribute version { "2.0.0" },
+  element distriblist:guid { attribute type { "guid" }, GUID }?,
+  element distriblist:name { text },
+  element distriblist:description { text },
+  element distriblist:refcount { xsd:int },
+  element distriblist:invisible { xsd:boolean { pattern = "[01]" } },
+  element distriblist:slots { KvpSlot+ }?,
+  element distriblist:child { attribute type { "guid" }, GUID }?,
+  element distriblist:parent { attribute type { "guid" }, GUID }?,
+  ( element distriblist:percentage {
+      element dl-percentage:label_settlement { text }?,
+      element bt-percentage:percentage_total { xsd:int }?,
+    }
+  | element distriblist:shares {
+      element dl-shares:label_settlement { text }?,
+      element bt-shares:percentage_total { xsd:int }?,
     }
   )
 }
