@@ -108,7 +108,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
         account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_CREDIT);
         account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_ASSET);
         account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_LIABILITY);
-        if ( ledger->is_cust_doc )
+        if (ledger->is_coowner_doc || ledger->is_cust_doc)
             account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_INCOME);
         else
             account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_EXPENSE);
@@ -169,7 +169,7 @@ GncTaxTable * gnc_entry_ledger_get_taxtable (GncEntryLedger *ledger,
 
     /* If it has not changed, pull in the table from the entry */
     entry = gnc_entry_ledger_get_current_entry (ledger);
-    if (ledger->is_cust_doc)
+    if (ledger->is_coowner_doc || ledger->is_cust_doc )
         return gncEntryGetInvTaxTable (entry);
     else
         return gncEntryGetBillTaxTable (entry);
@@ -290,6 +290,7 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
     case GNCENTRY_INVOICE_VIEWER:
     case GNCENTRY_ORDER_ENTRY:
     case GNCENTRY_ORDER_VIEWER:
+        ledger->is_coowner_doc = TRUE;
         ledger->is_cust_doc = TRUE;
         ledger->is_credit_note = FALSE;
         break;
@@ -300,6 +301,7 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
     case GNCENTRY_SETTLEMENT_ENTRY:
     case GNCENTRY_SETTLEMENT_VIEWER:
     case GNCENTRY_NUM_REGISTER_TYPES:
+        ledger->is_coowner_doc = FALSE;
         ledger->is_cust_doc = FALSE;
         ledger->is_credit_note = FALSE;
         break;
@@ -307,6 +309,7 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
     case GNCENTRY_COOWNER_CREDIT_NOTE_VIEWER:
     case GNCENTRY_CUST_CREDIT_NOTE_ENTRY:
     case GNCENTRY_CUST_CREDIT_NOTE_VIEWER:
+        ledger->is_coowner_doc = TRUE;
         ledger->is_cust_doc = TRUE;
         ledger->is_credit_note = TRUE;
         break;
@@ -314,6 +317,7 @@ GncEntryLedger * gnc_entry_ledger_new (QofBook *book, GncEntryLedgerType type)
     case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
     case GNCENTRY_EMPL_CREDIT_NOTE_ENTRY:
     case GNCENTRY_EMPL_CREDIT_NOTE_VIEWER:
+        ledger->is_coowner_doc = FALSE;
         ledger->is_cust_doc = FALSE;
         ledger->is_credit_note = TRUE;
         break;
