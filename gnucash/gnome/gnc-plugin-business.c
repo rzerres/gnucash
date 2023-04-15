@@ -32,6 +32,7 @@
 
 #include "dialog-doclink.h"
 #include "dialog-billterms.h"
+        /* depreciated: use coowner/customer functions */
 #include "dialog-doclink.h"
 #include "dialog-coowner.h"
 #include "dialog-customer.h"
