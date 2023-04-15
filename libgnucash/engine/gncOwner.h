@@ -77,6 +77,9 @@ QofIdTypeConst qofOwnerGetType(const GncOwner *owner);
 /** return the type for the owner as an untranslated string. */
 const char * gncOwnerGetTypeString (const GncOwner *owner);
 
+/** return the type for the owner as an untranslated string. */
+const char * gncOwnerTypeGetTypeString (GncOwnerType owner);
+
 /** return the owner itself as an entity. */
 QofInstance* qofOwnerGetOwner (const GncOwner *owner);
 
@@ -88,8 +91,8 @@ void qofOwnerSetEntity (GncOwner *owner, QofInstance *ent);
  *  objects even though an owner is not really a true object. */
 gboolean GNC_IS_OWNER (QofInstance *ent);
 
-/** Returns the QofIdType of the given GncOwnerType, or NULL if no
- * suitable one exists. */
+/** return the QofIdType constant of the given GncOwnerTyp
+ * e.g GNC_ID_CUSTOMER. NULL if no suitable type exists. */
 QofIdTypeConst gncOwnerTypeToQofIdType(GncOwnerType t);
 
 gboolean
@@ -102,7 +105,7 @@ gncOwnerRegister(void);
 /** \struct GncOwner */
 struct _gncOwner
 {
-    GncOwnerType     type;      /**< from enum: Co-Owner, Customer, Employee, Job, None, Vendor or Undefined. */
+    GncOwnerType     type;      /**< from enum: GNC_OWNER_[COOWNER|Customer|Employee|Job|None|Vendor|Undefined] */
     union
     {
         gpointer       undefined;
@@ -151,7 +154,8 @@ GncJob * gncOwnerGetJob (const GncOwner *owner);
  * to the vendor object. Otherwise returns NULL. */
 GncVendor * gncOwnerGetVendor (const GncOwner *owner);
 
-/** Returns the GncOwnerType of this owner. (Not to be confused with qofOwnerGetType().) */
+/** Returns the GncOwnerType of this owner (e.g GNC_OWNER_VENDOR).
+  * (Not to be confused with qofOwnerGetType().) */
 GncOwnerType gncOwnerGetType (const GncOwner *owner);
 
 /** If the given owner is of type GNC_OWNER_UNDEFINED, returns the undefined

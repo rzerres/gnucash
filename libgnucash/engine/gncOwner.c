@@ -252,6 +252,30 @@ const char * gncOwnerGetTypeString (const GncOwner *owner)
     }
 }
 
+const char * gncOwnerTypeGetTypeString (GncOwnerType type)
+{
+  switch (type)
+    {
+    case GNC_OWNER_NONE:
+        return N_("None");
+    case GNC_OWNER_UNDEFINED:
+        return N_("Undefined");
+    case GNC_OWNER_COOWNER:
+        return N_("Co-Owner");
+    case GNC_OWNER_CUSTOMER:
+        return N_("Customer");
+    case GNC_OWNER_EMPLOYEE:
+        return N_("Employee");
+    case GNC_OWNER_JOB:
+        return N_("Job");
+    case GNC_OWNER_VENDOR:
+        return N_("Vendor");
+    default:
+        PWARN ("Unknown owner type");
+        return NULL;
+    }
+}
+
 QofIdTypeConst
 qofOwnerGetType(const GncOwner *owner)
 {
