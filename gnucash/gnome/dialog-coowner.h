@@ -1,5 +1,5 @@
 /*
- * dialog-coowner.h -- Dialog(s) for Employee search and entry
+ * dialog-coowner.h -- Dialog(s) for Co-Owner search and entry
  * Copyright (C) 2022 Ralf Zerres
  * Author: Ralf Zerres <ralf.zerres@mail.de>
  *
