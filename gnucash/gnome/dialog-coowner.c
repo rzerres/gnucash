@@ -67,6 +67,11 @@
  * (assume C11 semantics, where order matters)
 \*************************************************/
 
+void
+gnc_coowner_apt_share_changed_cb (GtkWidget *widget, gpointer data);
+void
+gnc_coowner_ccard_acct_toggled_cb (GtkToggleButton *button, gpointer data);
+
 void gnc_coowner_billaddr2_insert_cb(
     GtkEditable *editable,
     gchar *new_text, gint new_text_length,
@@ -90,32 +95,12 @@ gboolean gnc_coowner_billaddr4_key_press_cb(
     GtkEntry *entry, GdkEventKey *event,
     gpointer user_data );
 
-void
-gnc_coowner_apt_share_changed_cb (GtkWidget *widget, gpointer data);
-void
-gnc_coowner_ccard_acct_toggled_cb (GtkToggleButton *button, gpointer data);
 static GncCoOwner
 *gnc_coowner_lookup_data (CoOwnerWindow *ow);
 void
 gnc_coowner_name_changed_cb (GtkWidget *widget, gpointer data);
 static void
 gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner);
-void
-gnc_coowner_terms_changed_cb (GtkWidget *widget, gpointer data);
-void
-gnc_coowner_taxincluded_changed_cb (GtkWidget *widget, gpointer data);
-void
-gnc_coowner_taxtable_changed_cb (GtkWidget *widget, gpointer data);
-void
-gnc_coowner_taxtable_check_cb (GtkToggleButton *togglebutton,
-    gpointer user_data);
-
-gboolean gnc_coowner_shipaddr2_key_press_cb( GtkEntry *entry,
-    GdkEventKey *event, gpointer user_data );
-gboolean gnc_coowner_shipaddr3_key_press_cb( GtkEntry *entry,
-    GdkEventKey *event, gpointer user_data );
-gboolean gnc_coowner_shipaddr4_key_press_cb( GtkEntry *entry,
-    GdkEventKey *event, gpointer user_data );
 
 void gnc_coowner_shipaddr2_insert_cb(GtkEditable *editable,
     gchar *new_text, gint new_text_length,
@@ -126,6 +111,44 @@ void gnc_coowner_shipaddr3_insert_cb(GtkEditable *editable,
 void gnc_coowner_shipaddr4_insert_cb(GtkEditable *editable,
     gchar *new_text, gint new_text_length,
     gint *position, gpointer user_data);
+
+gboolean gnc_coowner_shipaddr2_key_press_cb( GtkEntry *entry,
+    GdkEventKey *event, gpointer user_data );
+gboolean gnc_coowner_shipaddr3_key_press_cb( GtkEntry *entry,
+    GdkEventKey *event, gpointer user_data );
+gboolean gnc_coowner_shipaddr4_key_press_cb( GtkEntry *entry,
+    GdkEventKey *event, gpointer user_data );
+
+void
+gnc_coowner_taxincluded_changed_cb (GtkWidget *widget, gpointer data);
+void
+gnc_coowner_taxtable_changed_cb (GtkWidget *widget, gpointer data);
+void
+gnc_coowner_taxtable_check_cb (GtkToggleButton *togglebutton,
+    gpointer user_data);
+
+void
+gnc_coowner_tenant_name_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_coowner_tenantaddr2_insert_cb(GtkEditable *editable,
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data);
+void gnc_coowner_tenantaddr3_insert_cb(GtkEditable *editable,
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data);
+void gnc_coowner_tenantaddr4_insert_cb(GtkEditable *editable,
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data);
+
+gboolean gnc_coowner_tenantaddr2_key_press_cb( GtkEntry *entry,
+    GdkEventKey *event, gpointer user_data );
+gboolean gnc_coowner_tenantaddr3_key_press_cb( GtkEntry *entry,
+    GdkEventKey *event, gpointer user_data );
+gboolean gnc_coowner_tenantaddr4_key_press_cb( GtkEntry *entry,
+    GdkEventKey *event, gpointer user_data );
+
+void
+gnc_coowner_terms_changed_cb (GtkWidget *widget, gpointer data);
+
 
 void
 gnc_coowner_window_cancel_cb (GtkWidget *widget, gpointer data);
@@ -187,15 +210,21 @@ struct _coowner_window
     GtkWidget *dialog;
 
     GtkWidget *coowner_checkbutton_active;
+    GtkWidget *coowner_checkbutton_tenant_active;
 
-    GtkWidget *coowner_entry_billname;
-    GtkWidget *coowner_entry_billaddr1;
-    GtkWidget *coowner_entry_billaddr2;
-    GtkWidget *coowner_entry_billaddr3;
-    GtkWidget *coowner_entry_billaddr4;
-    GtkWidget *coowner_entry_billphone;
-    GtkWidget *coowner_entry_billfax;
-    GtkWidget *coowner_entry_billemail;
+    GtkWidget *coowner_entry_coowner_addrname;
+    GtkWidget *coowner_entry_coowner_addr1;
+    GtkWidget *coowner_entry_coowner_addr2;
+    GtkWidget *coowner_entry_coowner_addr3;
+    GtkWidget *coowner_entry_coowner_addr4;
+    GtkWidget *coowner_entry_coowner_mobile;
+    GtkWidget *coowner_entry_coowner_phone;
+    GtkWidget *coowner_entry_coowner_fax;
+    GtkWidget *coowner_entry_coowner_email;
+
+    GtkWidget *coowner_entry_coowner_id;
+    GtkWidget *coowner_entry_coowner_name;
+    GtkWidget *coowner_entry_coowner_text;
 
     GtkWidget *coowner_entry_apt_share;
     GtkWidget *coowner_entry_apt_unit;
@@ -207,23 +236,32 @@ struct _coowner_window
     GtkWidget *coowner_entry_distribution_key;
     GtkWidget *coowner_entry_language;
 
-    GtkWidget *coowner_entry_coowner_id;
-    GtkWidget *coowner_entry_coowner_name;
+    GtkWidget *coowner_entry_ship_addrname;
+    GtkWidget *coowner_entry_ship_addr1;
+    GtkWidget *coowner_entry_ship_addr2;
+    GtkWidget *coowner_entry_ship_addr3;
+    GtkWidget *coowner_entry_ship_addr4;
+    GtkWidget *coowner_entry_ship_mobile;
+    GtkWidget *coowner_entry_ship_phone;
+    GtkWidget *coowner_entry_ship_fax;
+    GtkWidget *coowner_entry_ship_email;
 
-    GtkWidget *coowner_entry_shipname;
-    GtkWidget *coowner_entry_shipaddr1;
-    GtkWidget *coowner_entry_shipaddr2;
-    GtkWidget *coowner_entry_shipaddr3;
-    GtkWidget *coowner_entry_shipaddr4;
-    GtkWidget *coowner_entry_shipphone;
-    GtkWidget *coowner_entry_shipfax;
-    GtkWidget *coowner_entry_shipemail;
-
-    GtkWidget *coowner_entry_tenant;
-    GtkWidget *coowner_entry_text;
+    GtkWidget *coowner_entry_tenant_id;
+    GtkWidget *coowner_entry_tenant_name;
+    GtkWidget *coowner_entry_tenant_addrname;
+    GtkWidget *coowner_entry_tenant_addr1;
+    GtkWidget *coowner_entry_tenant_addr2;
+    GtkWidget *coowner_entry_tenant_addr3;
+    GtkWidget *coowner_entry_tenant_addr4;
+    GtkWidget *coowner_entry_tenant_phone;
+    GtkWidget *coowner_entry_tenant_mobile;
+    GtkWidget *coowner_entry_tenant_fax;
+    GtkWidget *coowner_entry_tenant_email;
+    GtkWidget *coowner_entry_tenant_language;
+    GtkWidget *coowner_entry_tenant_text;
 
     //GncLanguage *languages;
-    GncBillTerm *terms;
+    GncBillTerm *coowner_terms;
     GtkWidget *coowner_combobox_terms;
     GncTaxIncluded taxincluded;
     GtkWidget *coowner_combobox_taxincluded;
@@ -234,16 +272,20 @@ struct _coowner_window
     CoOwnerDialogType dialog_type;
     GncGUID coowner_guid;
     gint component_id;
+    gint tenant_id;
     QofBook *book;
     GncCoOwner *created_coowner;
 
     /* stored data for the description quickfill selection function */
-    QuickFill *billaddr2_quickfill;
-    QuickFill *billaddr3_quickfill;
-    QuickFill *billaddr4_quickfill;
-    QuickFill *shipaddr2_quickfill;
-    QuickFill *shipaddr3_quickfill;
-    QuickFill *shipaddr4_quickfill;
+    QuickFill *coowner_addr2_quickfill;
+    QuickFill *coowner_addr3_quickfill;
+    QuickFill *coowner_addr4_quickfill;
+    QuickFill *ship_addr2_quickfill;
+    QuickFill *ship_addr3_quickfill;
+    QuickFill *ship_addr4_quickfill;
+    QuickFill *tenant_addr2_quickfill;
+    QuickFill *tenant_addr3_quickfill;
+    QuickFill *tenant_addr4_quickfill;
     gint addrX_start_selection;
     gint addrX_end_selection;
     guint addrX_selection_source_id;
@@ -317,18 +359,6 @@ gnc_coowner_name_changed_cb (GtkWidget *widget, gpointer data)
 }
 
 void
-gnc_coowner_terms_changed_cb (GtkWidget *widget, gpointer data)
-{
-    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
-    CoOwnerWindow *ow = data;
-
-    if (!ow) return;
-    if (!cbox) return;
-
-    ow->terms = gnc_simple_combo_get_value (cbox);
-}
-
-void
 gnc_coowner_taxincluded_changed_cb (GtkWidget *widget, gpointer data)
 {
     GtkComboBox *cbox = GTK_COMBO_BOX (widget);
@@ -362,6 +392,40 @@ gnc_coowner_taxtable_check_cb (GtkToggleButton *togglebutton,
         gtk_widget_set_sensitive (ow->coowner_combobox_taxtable, TRUE);
     else
         gtk_widget_set_sensitive (ow->coowner_combobox_taxtable, FALSE);
+}
+
+void
+gnc_coowner_tenant_name_changed_cb (GtkWidget *widget, gpointer data)
+{
+    CoOwnerWindow *ow = data;
+    char *fullname;
+    const char *id;
+    const char *name;
+
+    if (!ow)
+        return;
+
+    name = gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_name));
+    if (!name || *name == '\0')
+        name = _("<No tenant name>");
+
+    id = gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_tenant_id));
+
+    fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
+
+    g_free (fullname);
+}
+
+void
+gnc_coowner_terms_changed_cb (GtkWidget *widget, gpointer data)
+{
+    GtkComboBox *cbox = GTK_COMBO_BOX (widget);
+    CoOwnerWindow *ow = data;
+
+    if (!ow) return;
+    if (!cbox) return;
+
+    ow->coowner_terms = gnc_simple_combo_get_value (cbox);
 }
 
 static void
@@ -431,7 +495,7 @@ gnc_coowner_window_ok_cb (GtkWidget *widget, gpointer data)
         g_free(string);
     }
 
-    /* Check for valid coowner name */
+    /* Check for valid coowner id */
     if (check_entry_nonempty (
          ow->coowner_entry_coowner_name,
          _("The Co-Owner name field cannot be left blank, please "
@@ -440,7 +504,7 @@ gnc_coowner_window_ok_cb (GtkWidget *widget, gpointer data)
 
     /* Check for valid coowner address name */
     if (check_entry_nonempty (
-        ow->coowner_entry_billname,
+        ow->coowner_entry_coowner_addrname,
         _("The Co-Owner name field inside the address section "
           "cannot be left blank, please "
           "enter a coowner's name associated as contact for the apartment.")))
@@ -500,6 +564,40 @@ gnc_coowner_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /*
+     * Tenant Frame
+     */
+
+    /* Set the tenant id
+     * tenant name was specified, but no tenant id has been chosen
+     */
+    /* if ((g_strcmp0 (gtk_entry_get_text */
+    /*                 (GTK_ENTRY (ow->coowner_entry_tenant_id)), "") == 0) */
+    /*   && (g_strcmp0 (gtk_entry_get_text */
+    /*                  (GTK_ENTRY (ow->coowner_entry_tenant_name)), "") > 0)) */
+    /* { */
+    /*     // well, the tenant isn't worth its own counter or module name */
+    /*     // therefore we preset the active coowner_id */
+    /*     gtk_entry_set_text ( */
+    /*         GTK_ENTRY (ow->coowner_entry_tenant_id), */
+    /*         gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_id))); */
+    /* } */
+
+    /* /\* tenant name optional optional *\/ */
+    /* if (check_entry_nonempty ( */
+    /*      ow->coowner_entry_tenant_name, */
+    /*      _("The Tenant name field cannot be left blank, please " */
+    /*        "enter a tenant name associated to the property."))) */
+    /*     return; */
+
+    /* /\* tenant address name is optional *\/ */
+    /* if (check_entry_nonempty ( */
+    /*     ow->coowner_entry_tenant_name, */
+    /*     _("The tenant name field inside the address section " */
+    /*       "cannot be left blank, please " */
+    /*       "enter a tenant name associated as contact for the apartment."))) */
+    /*     return; */
+
+    /*
      * UI actions done -> save data structure persitant via backend
      */
     {
@@ -545,8 +643,8 @@ static CoOwnerWindow
         GncGUID coowner_guid;
 
         coowner_guid = *gncCoOwnerGetGUID (coowner);
-        ow = gnc_find_first_gui_component (DIALOG_EDIT_COOWNER_CM_CLASS,
-                                           find_handler, &coowner_guid);
+        ow = gnc_find_first_gui_component (
+            DIALOG_EDIT_COOWNER_CM_CLASS, find_handler, &coowner_guid);
         if (ow)
         {
             gtk_window_set_transient_for (GTK_WINDOW(ow->dialog), parent);
@@ -573,7 +671,8 @@ static CoOwnerWindow
 
     builder = gtk_builder_new();
     // TODO: create language dialog
-    //gnc_builder_add_from_file (builder, "dialog-coowner.glade", "coowner_liststore_languages");
+    //gnc_builder_add_from_file (builder, "dialog-coowner.glade",
+    //    "coowner_liststore_languages");
     gnc_builder_add_from_file (builder, "dialog-coowner.glade",
         "coowner_liststore_taxincluded");
     gnc_builder_add_from_file (builder, "dialog-coowner.glade",
@@ -597,7 +696,7 @@ static CoOwnerWindow
      * Co-Owner Frame
      */
 
-    /* Get coowner identifieers (id, name) */
+    /* Get coowner identifiers (id, name) */
     ow->coowner_entry_coowner_id = GTK_WIDGET(gtk_builder_get_object (
       builder,
       "coowner_entry_coowner_id"));
@@ -611,30 +710,33 @@ static CoOwnerWindow
         "coowner_checkbutton_active"));
 
     /* Address fields */
-    ow->coowner_entry_billname = GTK_WIDGET(gtk_builder_get_object (
+    ow->coowner_entry_coowner_addrname = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_billname"));
-    ow->coowner_entry_billaddr1 = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_coowner_addrname"));
+    ow->coowner_entry_coowner_addr1 = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_billaddr1"));
-    ow->coowner_entry_billaddr2 = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_coowner_addr1"));
+    ow->coowner_entry_coowner_addr2 = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_billaddr2"));
-    ow->coowner_entry_billaddr3 = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_coowner_addr2"));
+    ow->coowner_entry_coowner_addr3 = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_billaddr3"));
-    ow->coowner_entry_billaddr4 = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_coowner_addr3"));
+    ow->coowner_entry_coowner_addr4 = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_billaddr4"));
-    ow->coowner_entry_billphone = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_coowner_addr4"));
+    ow->coowner_entry_coowner_mobile = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_billphone"));
-    ow->coowner_entry_billfax = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_coowner_mobile"));
+    ow->coowner_entry_coowner_phone = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_billfax"));
-    ow->coowner_entry_billemail = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_coowner_phone"));
+    ow->coowner_entry_coowner_fax = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_billemail"));
+        "coowner_entry_coowner_fax"));
+    ow->coowner_entry_coowner_email = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_coowner_email"));
 
     /* Apartment share: Percentage value */
     edit = gnc_amount_edit_new();
@@ -665,14 +767,9 @@ static CoOwnerWindow
         "coowner_entry_language"));
 
     /* Notes */
-    ow->coowner_entry_text = GTK_WIDGET (gtk_builder_get_object (
+    ow->coowner_entry_coowner_text = GTK_WIDGET (gtk_builder_get_object (
         builder,
-        "coowner_entry_text"));
-
-    /* Tenant: */
-    ow->coowner_entry_tenant = GTK_WIDGET(gtk_builder_get_object (
-        builder,
-        "coowner_entry_tenant"));
+        "coowner_entry_coowner_text"));
 
     /*
      * Billing Frame
@@ -740,34 +837,88 @@ static CoOwnerWindow
         gtk_builder_get_object (builder, "coowner_combobox_terms"));
 
     /*
+     * Tenant Frame
+     */
+
+    /* Get tenant identifiers (id, name) */
+    ow->coowner_entry_tenant_id = GTK_WIDGET(gtk_builder_get_object (
+      builder,
+      "coowner_entry_tenant_id"));
+    ow->coowner_entry_tenant_name= GTK_WIDGET(gtk_builder_get_object (
+      builder,
+      "coowner_entry_tenant_name"));
+
+    /* Activate/Deactivate the coowner entity */
+    ow->coowner_checkbutton_tenant_active = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_checkbutton_tenant_active"));
+
+    /* Address fields */
+    ow->coowner_entry_tenant_addrname = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_addrname"));
+    ow->coowner_entry_tenant_addr1 = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_addr1"));
+    ow->coowner_entry_tenant_addr2 = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_addr2"));
+    ow->coowner_entry_tenant_addr3 = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_addr3"));
+    ow->coowner_entry_tenant_addr4 = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_addr4"));
+    ow->coowner_entry_tenant_mobile = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_mobile"));
+    ow->coowner_entry_tenant_phone = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_phone"));
+    ow->coowner_entry_tenant_fax = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_fax"));
+    ow->coowner_entry_tenant_email = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_email"));
+
+    /* Notes */
+    ow->coowner_entry_tenant_text = GTK_WIDGET (gtk_builder_get_object (
+        builder,
+        "coowner_entry_tenant_text"));
+
+    /*
      * Shipping Frame
      */
 
     /* Shiping fields */
-    ow->coowner_entry_shipname = GTK_WIDGET(gtk_builder_get_object (
+    ow->coowner_entry_ship_addrname = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_shipname"));
-    ow->coowner_entry_shipaddr1 = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_ship_addrname"));
+    ow->coowner_entry_ship_addr1 = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_shipaddr1"));
-    ow->coowner_entry_shipaddr2 = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_ship_addr1"));
+    ow->coowner_entry_ship_addr2 = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_shipaddr2"));
-    ow->coowner_entry_shipaddr3 = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_ship_addr2"));
+    ow->coowner_entry_ship_addr3 = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_shipaddr3"));
-    ow->coowner_entry_shipaddr4 = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_ship_addr3"));
+    ow->coowner_entry_ship_addr4 = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_shipaddr4"));
-    ow->coowner_entry_shipphone = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_ship_addr4"));
+    ow->coowner_entry_ship_mobile = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_shipphone"));
-    ow->coowner_entry_shipfax = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_ship_mobile"));
+    ow->coowner_entry_ship_phone = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_shipfax"));
-    ow->coowner_entry_shipemail = GTK_WIDGET(gtk_builder_get_object (
+        "coowner_entry_ship_phone"));
+    ow->coowner_entry_ship_fax = GTK_WIDGET(gtk_builder_get_object (
         builder,
-        "coowner_entry_shipemail"));
+        "coowner_entry_ship_fax"));
+    ow->coowner_entry_ship_email = GTK_WIDGET(gtk_builder_get_object (
+        builder,
+        "coowner_entry_ship_email"));
 
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
@@ -778,39 +929,52 @@ static CoOwnerWindow
     if (coowner != NULL)
     {
         GtkTextBuffer *text_buffer;
-        GncAddress *billaddr, *shipaddr;
+        GncAddress *coowner_addr;
+        GncAddress *ship_addr;
+        GncAddress *tenant_addr;
         const char *string;
 
         ow->dialog_type = EDIT_COOWNER;
         ow->coowner_guid = *gncCoOwnerGetGUID (coowner);
 
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_id),
-            gncCoOwnerGetID (coowner));
+        /*
+         * Co-Owner Frame
+         */
 
         /* Active check toggle button */
         gtk_toggle_button_set_active (
             GTK_TOGGLE_BUTTON (ow->coowner_checkbutton_active),
             gncCoOwnerGetActive (coowner));
 
-        /* Setup Address */
-        billaddr = gncCoOwnerGetAddr (coowner);
+        /* Co-owner ID */
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_id),
+            gncCoOwnerGetID (coowner));
 
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_billname),
-            gncAddressGetName (billaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_billaddr1),
-            gncAddressGetAddr1 (billaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_billaddr2),
-            gncAddressGetAddr2 (billaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_billaddr3),
-            gncAddressGetAddr3 (billaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_billaddr4),
-            gncAddressGetAddr4 (billaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_billphone),
-            gncAddressGetPhone (billaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_billfax),
-            gncAddressGetFax (billaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_billemail),
-            gncAddressGetEmail (billaddr));
+        /* Co-owner name */
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_name),
+            gncCoOwnerGetName (coowner));
+
+        /* Assign Address */
+        coowner_addr = gncCoOwnerGetAddr (coowner);
+
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_addrname),
+            gncAddressGetName (coowner_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_addr1),
+            gncAddressGetAddr1 (coowner_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_addr2),
+            gncAddressGetAddr2 (coowner_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_addr3),
+            gncAddressGetAddr3 (coowner_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_addr4),
+            gncAddressGetAddr4 (coowner_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_mobile),
+            gncAddressGetMobile (coowner_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_phone),
+            gncAddressGetPhone (coowner_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_fax),
+            gncAddressGetFax (coowner_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_email),
+            gncAddressGetEmail (coowner_addr));
 
         /* Distribution Key */
         gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_distribution_key),
@@ -821,51 +985,91 @@ static CoOwnerWindow
         gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_language),
             gncCoOwnerGetLanguage (coowner));
 
-        /* Assign coowner name values */
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_coowner_name),
-            gncCoOwnerGetName (coowner));
-
         /* Notes */
         string = gncCoOwnerGetNotes (coowner);
         text_buffer = gtk_text_view_get_buffer
-            (GTK_TEXT_VIEW(ow->coowner_entry_text));
+            (GTK_TEXT_VIEW(ow->coowner_entry_coowner_text));
         gtk_text_buffer_set_text (text_buffer, string, -1);
 
-        /* Tenant */
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant),
-            gncCoOwnerGetTenant (coowner));
+        /*
+         * Billing Frame
+         */
 
         /* Set toggle buttons */
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON
             (ow->coowner_button_taxtable),
             gncCoOwnerGetTaxTableOverride (coowner));
 
-        ow->terms = gncCoOwnerGetTerms (coowner);
+        ow->coowner_terms = gncCoOwnerGetTerms (coowner);
+
+        /*
+         * Tenant Frame
+         */
+        /* Tenant active state */
+        gtk_toggle_button_set_active (
+            GTK_TOGGLE_BUTTON (ow->coowner_checkbutton_tenant_active),
+            gncCoOwnerGetActive (coowner));
+
+        /* Tenant ID */
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_id),
+            gncCoOwnerGetTenantID (coowner));
+
+        /* Tenant name */
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_name),
+            gncCoOwnerGetTenantName (coowner));
+
+        /* Tenant address fields */
+        tenant_addr = gncCoOwnerGetTenantAddr (coowner);
+
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_addrname),
+            gncAddressGetName (tenant_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_addr1),
+            gncAddressGetAddr1 (tenant_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_addr2),
+            gncAddressGetAddr2 (tenant_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_addr3),
+            gncAddressGetAddr3 (tenant_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_addr4),
+            gncAddressGetAddr4 (tenant_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_phone),
+            gncAddressGetMobile (tenant_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_mobile),
+            gncAddressGetPhone (tenant_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_fax),
+            gncAddressGetFax (tenant_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_tenant_email),
+            gncAddressGetEmail (tenant_addr));
+
+        /* Set tenant notes */
+        string = gncCoOwnerGetTenantNotes (coowner);
+        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_tenant_text));
+        gtk_text_buffer_set_text (text_buffer, string, -1);
+
+        /*
+         * Shipping Frame
+         */
 
         /* Setup Shiping Address */
-        shipaddr = gncCoOwnerGetShipAddr (coowner);
+        ship_addr = gncCoOwnerGetShipAddr (coowner);
 
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_shipname),
-            gncAddressGetName (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_shipaddr1),
-            gncAddressGetAddr1 (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_shipaddr2),
-            gncAddressGetAddr2 (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_shipaddr3),
-            gncAddressGetAddr3 (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_shipaddr4),
-            gncAddressGetAddr4 (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_shipphone),
-            gncAddressGetPhone (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_shipfax),
-            gncAddressGetFax (shipaddr));
-        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_shipemail),
-            gncAddressGetEmail (shipaddr));
-
-        /* Set notes */
-        string = gncCoOwnerGetNotes (coowner);
-        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_text));
-        gtk_text_buffer_set_text (text_buffer, string, -1);
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_ship_addrname),
+            gncAddressGetName (ship_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_ship_addr1),
+            gncAddressGetAddr1 (ship_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_ship_addr2),
+            gncAddressGetAddr2 (ship_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_ship_addr3),
+            gncAddressGetAddr3 (ship_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_ship_addr4),
+            gncAddressGetAddr4 (ship_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_ship_phone),
+            gncAddressGetPhone (ship_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_ship_mobile),
+            gncAddressGetMobile (ship_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_ship_fax),
+            gncAddressGetFax (ship_addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_ship_email),
+            gncAddressGetEmail (ship_addr));
 
         /* Registrer the handler */
         ow->component_id =
@@ -895,7 +1099,7 @@ static CoOwnerWindow
         //ow->languages = NULL;
 
         /* TODO: assign global-default terms */
-        ow->terms = NULL;
+        ow->coowner_terms = NULL;
     }
 
     /*
@@ -903,12 +1107,17 @@ static CoOwnerWindow
      * either passed in or newly created
      */
 
+    /* Set the coowner Id */
+    gnc_gui_component_watch_entity_type (ow->component_id,
+        GNC_COOWNER_MODULE_NAME,
+        QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+
     /* Set the coowner name value */
     gtk_entry_set_text (
          GTK_ENTRY (ow->coowner_entry_coowner_name),
          gncCoOwnerGetName (coowner));
 
-    /* Active check toggle button */
+    /* Set coowner active state */
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (ow->coowner_checkbutton_active),
         gncCoOwnerGetActive (coowner));
@@ -917,10 +1126,6 @@ static CoOwnerWindow
     gnc_amount_edit_set_amount (
          GNC_AMOUNT_EDIT (ow->coowner_entry_apt_share),
          gncCoOwnerGetAptShare (coowner));
-
-    gnc_gui_component_watch_entity_type (ow->component_id,
-        GNC_COOWNER_MODULE_NAME,
-        QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     /* Set the apartment unit value */
     gtk_entry_set_text
@@ -946,7 +1151,7 @@ static CoOwnerWindow
 
     /* Set billing terms */
     gnc_billterms_combo (GTK_COMBO_BOX(ow->coowner_combobox_terms),
-        bookp, TRUE, ow->terms);
+        bookp, TRUE, ow->coowner_terms);
 
     /* Setup tax related entities */
     ow->taxincluded = gncCoOwnerGetTaxIncluded (coowner);
@@ -958,20 +1163,51 @@ static CoOwnerWindow
     gnc_taxtables_combo (GTK_COMBO_BOX(ow->coowner_combobox_taxtable),
         bookp, TRUE, ow->coowner_entry_taxtable);
 
+    /* Set tenant active state */
+    gtk_toggle_button_set_active (
+        GTK_TOGGLE_BUTTON (ow->coowner_checkbutton_tenant_active),
+        gncCoOwnerGetActive (coowner));
+
+    /* Set tenant Id */
+    gtk_entry_set_text (
+         GTK_ENTRY (ow->coowner_entry_tenant_id),
+         gncCoOwnerGetTenantID (coowner));
+
+    /* Set the tenant name value */
+    gtk_entry_set_text (
+         GTK_ENTRY (ow->coowner_entry_tenant_name),
+         gncCoOwnerGetTenantName (coowner));
+
     /* Set up the addr line quickfill */
-    ow->billaddr2_quickfill = gnc_get_shared_address_addr2_quickfill(ow->book,
+    ow->coowner_addr2_quickfill = gnc_get_shared_address_addr2_quickfill(ow->book,
         ADDR_QUICKFILL);
-    ow->billaddr3_quickfill = gnc_get_shared_address_addr3_quickfill(ow->book,
+    ow->coowner_addr3_quickfill = gnc_get_shared_address_addr3_quickfill(ow->book,
         ADDR_QUICKFILL);
-    ow->billaddr4_quickfill = gnc_get_shared_address_addr4_quickfill(ow->book,
+    ow->coowner_addr4_quickfill = gnc_get_shared_address_addr4_quickfill(ow->book,
+        ADDR_QUICKFILL);
+
+    /* Set up the tenant_addr line quickfill */
+    ow->tenant_addr2_quickfill = gnc_get_shared_address_addr2_quickfill(ow->book,
+        ADDR_QUICKFILL);
+    ow->tenant_addr3_quickfill = gnc_get_shared_address_addr3_quickfill(ow->book,
+        ADDR_QUICKFILL);
+    ow->tenant_addr4_quickfill = gnc_get_shared_address_addr4_quickfill(ow->book,
+        ADDR_QUICKFILL);
+
+    /* Set up the tenant_addr line quickfill */
+    ow->tenant_addr2_quickfill = gnc_get_shared_address_addr2_quickfill(ow->book,
+        ADDR_QUICKFILL);
+    ow->tenant_addr3_quickfill = gnc_get_shared_address_addr3_quickfill(ow->book,
+        ADDR_QUICKFILL);
+    ow->tenant_addr4_quickfill = gnc_get_shared_address_addr4_quickfill(ow->book,
         ADDR_QUICKFILL);
 
     /* Set up the shipaddr line quickfill */
-    ow->shipaddr2_quickfill = gnc_get_shared_address_addr2_quickfill(ow->book,
+    ow->ship_addr2_quickfill = gnc_get_shared_address_addr2_quickfill(ow->book,
         ADDR_QUICKFILL);
-    ow->shipaddr3_quickfill = gnc_get_shared_address_addr3_quickfill(ow->book,
+    ow->ship_addr3_quickfill = gnc_get_shared_address_addr3_quickfill(ow->book,
         ADDR_QUICKFILL);
-    ow->shipaddr4_quickfill = gnc_get_shared_address_addr4_quickfill(ow->book,
+    ow->ship_addr4_quickfill = gnc_get_shared_address_addr4_quickfill(ow->book,
         ADDR_QUICKFILL);
 
     /* Set Discount amounts */
@@ -981,11 +1217,6 @@ static CoOwnerWindow
     /* Set Discount amounts */
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (ow->coowner_entry_credit),
         gncCoOwnerGetCredit (coowner));
-
-    /* Set Co-Owner Id */
-    gnc_gui_component_watch_entity_type (ow->component_id,
-        GNC_COOWNER_MODULE_NAME,
-        QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     /* Handle the coowner widget */
     gtk_widget_show_all (ow->dialog);
@@ -1053,7 +1284,9 @@ gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner)
     GtkTextBuffer* text_buffer;
     GtkTextIter start, end;
     gchar *text;
-    GncAddress *billaddr, *shipaddr;
+    GncAddress *coowner_addr;
+    GncAddress *ship_addr;
+    GncAddress *tenant_addr;
 
     /* lock gui changes */
     gnc_suspend_gui_refresh ();
@@ -1062,6 +1295,10 @@ gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner)
 
     if (ow->dialog_type == NEW_COOWNER)
         qof_event_gen(QOF_INSTANCE(coowner), QOF_EVENT_ADD, NULL);
+
+    /*
+     * Co-Owner Frame attributes
+     */
 
     /* Set coowner active/inactive */
     gncCoOwnerSetActive (coowner, gtk_toggle_button_get_active
@@ -1076,23 +1313,52 @@ gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner)
         (GTK_EDITABLE (ow->coowner_entry_apt_unit), 0, -1));
 
     /* Fill in the address values */
-    billaddr = gncCoOwnerGetAddr (coowner);
-    gncAddressSetName (billaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_billname), 0, -1));
-    gncAddressSetAddr1 (billaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_billaddr1), 0, -1));
-    gncAddressSetAddr2 (billaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_billaddr2), 0, -1));
-    gncAddressSetAddr3 (billaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_billaddr3), 0, -1));
-    gncAddressSetAddr4 (billaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_billaddr4), 0, -1));
-    gncAddressSetPhone (billaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_billphone), 0, -1));
-    gncAddressSetFax (billaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_billfax), 0, -1));
-    gncAddressSetEmail (billaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_billemail), 0, -1));
+    coowner_addr = gncCoOwnerGetAddr (coowner);
+    gncAddressSetName (coowner_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_addrname), 0, -1));
+    gncAddressSetAddr1 (coowner_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_addr1), 0, -1));
+    gncAddressSetAddr2 (coowner_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_addr2), 0, -1));
+    gncAddressSetAddr3 (coowner_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_addr3), 0, -1));
+    gncAddressSetAddr4 (coowner_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_addr4), 0, -1));
+    gncAddressSetMobile (coowner_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_mobile), 0, -1));
+    gncAddressSetPhone (coowner_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_phone), 0, -1));
+    gncAddressSetFax (coowner_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_fax), 0, -1));
+    gncAddressSetEmail (coowner_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_email), 0, -1));
+
+    /* Fill in the distribution key */
+    // FIXME: switch to distriblist reference once its finished
+    gncCoOwnerSetDistributionKey (coowner, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_distribution_key), 0, -1));
+
+    /* Fill in the coowner identification key */
+    gncCoOwnerSetID (coowner, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_id), 0, -1));
+
+    /* Fill in the coowner identification name */
+    gncCoOwnerSetName (coowner, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_coowner_name), 0, -1));
+
+    /* Fill in the language */
+    gncCoOwnerSetLanguage (coowner, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_language), 0, -1));
+
+    /* Fill in extra coowner notes */
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_coowner_text));
+    gtk_text_buffer_get_bounds (text_buffer, &start, &end);
+    text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
+    gncCoOwnerSetNotes (coowner, text);
+
+    /*
+     * Billing Frame attributes
+     */
 
     /* Fill in the Credit-Card Account */
     gncCoOwnerSetCCard (coowner, (gtk_toggle_button_get_active
@@ -1111,49 +1377,8 @@ gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner)
     gncCoOwnerSetDiscount (coowner, gnc_amount_edit_get_amount
         (GNC_AMOUNT_EDIT (ow->coowner_entry_discount)));
 
-    /* Fill in the distribution key */
-    gncCoOwnerSetDistributionKey (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_distribution_key), 0, -1));
-
-    /* Fill in the coowner identification key */
-    gncCoOwnerSetID (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_id), 0, -1));
-
-    /* Fill in the coowner identification name */
-    gncCoOwnerSetName (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_coowner_name), 0, -1));
-
-    /* Fill in the language */
-    gncCoOwnerSetLanguage (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_language), 0, -1));
-
-    /* Fill in extra notes */
-    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_text));
-    gtk_text_buffer_get_bounds (text_buffer, &start, &end);
-    text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
-    gncCoOwnerSetNotes (coowner, text);
-
-    /* Fill in the shipping address */
-    shipaddr = gncCoOwnerGetShipAddr (coowner);
-    gncAddressSetName (shipaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_shipname), 0, -1));
-    gncAddressSetAddr1 (shipaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_shipaddr1), 0, -1));
-    gncAddressSetAddr2 (shipaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_shipaddr2), 0, -1));
-    gncAddressSetAddr3 (shipaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_shipaddr3), 0, -1));
-    gncAddressSetAddr4 (shipaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_shipaddr4), 0, -1));
-    gncAddressSetPhone (shipaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_shipphone), 0, -1));
-    gncAddressSetFax (shipaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_shipfax), 0, -1));
-    gncAddressSetEmail (shipaddr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_shipemail), 0, -1));
-
-    /* Parse and set the terms */
-    gncCoOwnerSetTerms (coowner, ow->terms);
+    /* Parse and set the coowner terms */
+    gncCoOwnerSetTerms (coowner, ow->coowner_terms);
 
     /* Parse and set the tax units */
     gncCoOwnerSetTaxIncluded (coowner, ow->taxincluded);
@@ -1162,15 +1387,79 @@ gnc_ui_coowner_save_data (CoOwnerWindow *ow, GncCoOwner *coowner)
            GTK_TOGGLE_BUTTON (ow->coowner_button_taxtable)));
     gncCoOwnerSetTaxTable (coowner, ow->coowner_entry_taxtable);
 
-    /* Fill in the tenant key */
-    gncCoOwnerSetTenant (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant), 0, -1));
+    /*
+     * Tenant Frame attributes
+     */
 
-    /* Parse and set the tenant */
-    gncCoOwnerSetTenant (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->coowner_entry_tenant), 0, -1));
+    /* Set tenant active/inactive */
+    gncCoOwnerSetTenantActive (coowner, gtk_toggle_button_get_active
+        (GTK_TOGGLE_BUTTON (ow->coowner_checkbutton_tenant_active)));
 
-    /* persistently save the data-structure */
+    /* Fill in the tenant identification key */
+    gncCoOwnerSetTenantID (coowner, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_id), 0, -1));
+
+    /* Fill in the tenant name */
+    gncCoOwnerSetTenantName (coowner, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_name), 0, -1));
+
+    /* Fill in the tenant address */
+    tenant_addr = gncCoOwnerGetTenantAddr (coowner);
+    gncAddressSetName (tenant_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_addrname), 0, -1));
+    gncAddressSetAddr1 (tenant_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_addr1), 0, -1));
+    gncAddressSetAddr2 (tenant_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_addr2), 0, -1));
+    gncAddressSetAddr3 (tenant_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_addr3), 0, -1));
+    gncAddressSetAddr4 (tenant_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_addr4), 0, -1));
+    gncAddressSetMobile (tenant_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_mobile), 0, -1));
+    gncAddressSetPhone (tenant_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_phone), 0, -1));
+    gncAddressSetFax (tenant_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_fax), 0, -1));
+    gncAddressSetEmail (tenant_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_tenant_email), 0, -1));
+
+    /* Fill in tenant extra notes */
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_tenant_text));
+    gtk_text_buffer_get_bounds (text_buffer, &start, &end);
+    text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
+    gncCoOwnerSetTenantNotes (coowner, text);
+
+    /*
+     * Shipping Frame attributes
+     */
+
+    /* Fill in the shipping address */
+    ship_addr = gncCoOwnerGetShipAddr (coowner);
+    gncAddressSetName (ship_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_ship_addrname), 0, -1));
+    gncAddressSetAddr1 (ship_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_ship_addr1), 0, -1));
+    gncAddressSetAddr2 (ship_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_ship_addr2), 0, -1));
+    gncAddressSetAddr3 (ship_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_ship_addr3), 0, -1));
+    gncAddressSetAddr4 (ship_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_ship_addr4), 0, -1));
+    gncAddressSetPhone (ship_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_ship_phone), 0, -1));
+    gncAddressSetMobile (ship_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_ship_mobile), 0, -1));
+    gncAddressSetFax (ship_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_ship_fax), 0, -1));
+    gncAddressSetEmail (ship_addr, gtk_editable_get_chars
+        (GTK_EDITABLE (ow->coowner_entry_ship_email), 0, -1));
+
+    /*
+     * Save to persistent store
+     */
+
+    /* commit the data-structure */
     gncCoOwnerCommitEdit (coowner);
 
     /* unlock gui changes */
@@ -1256,11 +1545,14 @@ gnc_coowner_search (GtkWindow *parent, GncCoOwner *start, QofBook *book)
             ADDRESS_NAME, NULL);
         params = gnc_search_param_prepend (
             params, _("Shipping Contact"), NULL,
-            type, COOWNER_SHIPADDR,
+            type, COOWNER_SHIP_ADDRESS,
             ADDRESS_NAME, NULL);
         params = gnc_search_param_prepend (
+            params, _("Tenant ID"), NULL,
+            type, COOWNER_TENANT_ID, NULL);
+        params = gnc_search_param_prepend (
             params, _("Tenant Name"), NULL,
-            type, COOWNER_TENANT, NULL);
+            type, COOWNER_TENANT_NAME, NULL);
     }
 
     /* Build the column list in reverse order */
@@ -1269,11 +1561,15 @@ gnc_coowner_search (GtkWindow *parent, GncCoOwner *start, QofBook *book)
         columns = gnc_search_param_prepend (
             columns, _("Tenant Name"), NULL,
             type,
-            COOWNER_TENANT, NULL);
-        params = gnc_search_param_prepend (
+            COOWNER_TENANT_NAME, NULL);
+        columns = gnc_search_param_prepend (
+            columns, _("Tenant ID"), NULL,
+            type,
+            COOWNER_TENANT_ID, NULL);
+        columns = gnc_search_param_prepend (
             columns, _("Shipping Contact"),
             NULL, type,
-            COOWNER_SHIPADDR, ADDRESS_NAME,
+            COOWNER_SHIP_ADDRESS, ADDRESS_NAME,
             NULL);
         columns = gnc_search_param_prepend (
             columns, _("Settlement Contact"),
@@ -1467,7 +1763,7 @@ idle_select_region_billaddr2(gpointer user_data)
     CoOwnerWindow *wdata = user_data;
     g_return_val_if_fail(user_data, FALSE);
 
-    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_billaddr2),
+    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_coowner_addr2),
                                wdata->addrX_start_selection,
                                wdata->addrX_end_selection);
 
@@ -1481,7 +1777,7 @@ idle_select_region_billaddr3(gpointer user_data)
     CoOwnerWindow *wdata = user_data;
     g_return_val_if_fail(user_data, FALSE);
 
-    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_billaddr3),
+    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_coowner_addr3),
                                wdata->addrX_start_selection,
                                wdata->addrX_end_selection);
 
@@ -1495,7 +1791,7 @@ idle_select_region_billaddr4(gpointer user_data)
     CoOwnerWindow *wdata = user_data;
     g_return_val_if_fail(user_data, FALSE);
 
-    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_billaddr4),
+    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_coowner_addr4),
                                wdata->addrX_start_selection,
                                wdata->addrX_end_selection);
     wdata->addrX_selection_source_id = 0;
@@ -1508,7 +1804,7 @@ idle_select_region_shipaddr2(gpointer user_data)
     CoOwnerWindow *wdata = user_data;
     g_return_val_if_fail(user_data, FALSE);
 
-    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_shipaddr2),
+    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_ship_addr2),
                                wdata->addrX_start_selection,
                                wdata->addrX_end_selection);
 
@@ -1522,7 +1818,7 @@ idle_select_region_shipaddr3(gpointer user_data)
     CoOwnerWindow *wdata = user_data;
     g_return_val_if_fail(user_data, FALSE);
 
-    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_shipaddr3),
+    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_ship_addr3),
                                wdata->addrX_start_selection,
                                wdata->addrX_end_selection);
 
@@ -1536,7 +1832,49 @@ idle_select_region_shipaddr4(gpointer user_data)
     CoOwnerWindow *wdata = user_data;
     g_return_val_if_fail(user_data, FALSE);
 
-    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_shipaddr4),
+    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_ship_addr4),
+                               wdata->addrX_start_selection,
+                               wdata->addrX_end_selection);
+
+    wdata->addrX_selection_source_id = 0;
+    return FALSE;
+}
+
+static gboolean
+idle_select_region_tenantaddr2(gpointer user_data)
+{
+    CoOwnerWindow *wdata = user_data;
+    g_return_val_if_fail(user_data, FALSE);
+
+    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_tenant_addr2),
+                               wdata->addrX_start_selection,
+                               wdata->addrX_end_selection);
+
+    wdata->addrX_selection_source_id = 0;
+    return FALSE;
+}
+
+static gboolean
+idle_select_region_tenantaddr3(gpointer user_data)
+{
+    CoOwnerWindow *wdata = user_data;
+    g_return_val_if_fail(user_data, FALSE);
+
+    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_tenant_addr3),
+                               wdata->addrX_start_selection,
+                               wdata->addrX_end_selection);
+
+    wdata->addrX_selection_source_id = 0;
+    return FALSE;
+}
+
+static gboolean
+idle_select_region_tenantaddr4(gpointer user_data)
+{
+    CoOwnerWindow *wdata = user_data;
+    g_return_val_if_fail(user_data, FALSE);
+
+    gtk_editable_select_region(GTK_EDITABLE(wdata->coowner_entry_tenant_addr4),
                                wdata->addrX_start_selection,
                                wdata->addrX_end_selection);
 
@@ -1637,7 +1975,7 @@ gnc_coowner_billaddr2_insert_cb(
     /* The handling common to all address lines is done in this other
      * function. */
     r = gnc_coowner_addr_common_insert_cb(editable, new_text, new_text_length,
-        position, user_data, wdata->billaddr2_quickfill);
+        position, user_data, wdata->coowner_addr2_quickfill);
 
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
@@ -1661,7 +1999,7 @@ gnc_coowner_billaddr3_insert_cb(
     /* The handling common to all address lines is done in this other
      * function. */
     r = gnc_coowner_addr_common_insert_cb(editable, new_text, new_text_length,
-            position, user_data, wdata->billaddr3_quickfill);
+            position, user_data, wdata->coowner_addr3_quickfill);
 
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
@@ -1683,7 +2021,7 @@ gnc_coowner_billaddr4_insert_cb(
     /* The handling common to all address lines is done in this other
      * function. */
     r = gnc_coowner_addr_common_insert_cb(editable, new_text, new_text_length,
-            position, user_data, wdata->billaddr4_quickfill);
+            position, user_data, wdata->coowner_addr4_quickfill);
 
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
@@ -1732,7 +2070,7 @@ gnc_coowner_billaddr2_key_press_cb(
 {
     CoOwnerWindow *wdata = user_data;
     return gnc_coowner_common_key_press_cb(entry, event, user_data,
-         wdata->coowner_entry_billaddr2);
+         wdata->coowner_entry_coowner_addr2);
 }
 
 gboolean
@@ -1742,7 +2080,7 @@ gnc_coowner_billaddr3_key_press_cb( GtkEntry *entry,
 {
     CoOwnerWindow *wdata = user_data;
     return gnc_coowner_common_key_press_cb(entry, event, user_data,
-        wdata->coowner_entry_billaddr3);
+        wdata->coowner_entry_coowner_addr3);
 }
 
 gboolean
@@ -1753,7 +2091,7 @@ gnc_coowner_billaddr4_key_press_cb(
 {
     CoOwnerWindow *wdata = user_data;
     return gnc_coowner_common_key_press_cb(entry, event, user_data,
-        wdata->coowner_entry_billaddr4);
+        wdata->coowner_entry_coowner_addr4);
 }
 
 void
@@ -1768,7 +2106,7 @@ gnc_coowner_shipaddr2_insert_cb(
     /* The handling common to all address lines is done in this other
      * function. */
     r = gnc_coowner_addr_common_insert_cb(editable, new_text, new_text_length,
-            position, user_data, wdata->shipaddr2_quickfill);
+            position, user_data, wdata->ship_addr2_quickfill);
 
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
@@ -1791,7 +2129,7 @@ gnc_coowner_shipaddr3_insert_cb(
     /* The handling common to all address lines is done in this other
      * function. */
     r = gnc_coowner_addr_common_insert_cb(editable, new_text, new_text_length,
-            position, user_data, wdata->shipaddr3_quickfill);
+            position, user_data, wdata->ship_addr3_quickfill);
 
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
@@ -1814,13 +2152,82 @@ gnc_coowner_shipaddr4_insert_cb(
     /* The handling common to all address lines is done in this other
      * function. */
     r = gnc_coowner_addr_common_insert_cb(editable, new_text, new_text_length,
-            position, user_data, wdata->shipaddr4_quickfill);
+            position, user_data, wdata->ship_addr4_quickfill);
 
     /* Did we insert something? Then set up the correct idle handler */
     if (r)
     {
         wdata->addrX_selection_source_id = g_idle_add(
             idle_select_region_shipaddr4,
+            user_data);
+    }
+}
+
+void
+gnc_coowner_tenantaddr2_insert_cb(
+    GtkEditable *editable,
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data)
+{
+    CoOwnerWindow *wdata = user_data;
+    gboolean r;
+
+    /* The handling common to all address lines is done in this other
+     * function. */
+    r = gnc_coowner_addr_common_insert_cb(editable, new_text, new_text_length,
+            position, user_data, wdata->tenant_addr2_quickfill);
+
+    /* Did we insert something? Then set up the correct idle handler */
+    if (r)
+    {
+        wdata->addrX_selection_source_id = g_idle_add(
+            idle_select_region_tenantaddr2,
+            user_data);
+    }
+}
+
+void
+gnc_coowner_tenantaddr3_insert_cb(
+    GtkEditable *editable,
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data)
+{
+    CoOwnerWindow *wdata = user_data;
+    gboolean r;
+
+    /* The handling common to all address lines is done in this other
+     * function. */
+    r = gnc_coowner_addr_common_insert_cb(editable, new_text, new_text_length,
+            position, user_data, wdata->tenant_addr3_quickfill);
+
+    /* Did we insert something? Then set up the correct idle handler */
+    if (r)
+    {
+        wdata->addrX_selection_source_id = g_idle_add(
+            idle_select_region_tenantaddr3,
+            user_data);
+    }
+}
+
+void
+gnc_coowner_tenantaddr4_insert_cb(
+    GtkEditable *editable,
+    gchar *new_text, gint new_text_length,
+    gint *position, gpointer user_data)
+{
+    CoOwnerWindow *wdata = user_data;
+    gboolean r;
+
+    /* The handling common to all address lines is done in this other
+     * function. */
+    r = gnc_coowner_addr_common_insert_cb(editable, new_text, new_text_length,
+            position, user_data, wdata->tenant_addr4_quickfill);
+
+    /* Did we insert something? Then set up the correct idle handler */
+    if (r)
+    {
+        wdata->addrX_selection_source_id = g_idle_add(
+            idle_select_region_tenantaddr4,
             user_data);
     }
 }
@@ -1833,7 +2240,7 @@ gnc_coowner_shipaddr2_key_press_cb(
 {
     CoOwnerWindow *wdata = user_data;
     return gnc_coowner_common_key_press_cb(entry, event, user_data,
-         wdata->coowner_entry_shipaddr2);
+         wdata->coowner_entry_ship_addr2);
 }
 
 gboolean
@@ -1844,7 +2251,7 @@ gnc_coowner_shipaddr3_key_press_cb(
 {
     CoOwnerWindow *wdata = user_data;
     return gnc_coowner_common_key_press_cb(entry, event, user_data,
-        wdata->coowner_entry_shipaddr3);
+        wdata->coowner_entry_ship_addr3);
 }
 
 gboolean
@@ -1855,5 +2262,38 @@ gnc_coowner_shipaddr4_key_press_cb(
 {
     CoOwnerWindow *wdata = user_data;
     return gnc_coowner_common_key_press_cb(entry, event, user_data,
-        wdata->coowner_entry_shipaddr4);
+        wdata->coowner_entry_ship_addr4);
+}
+
+gboolean
+gnc_coowner_tenantaddr2_key_press_cb(
+    GtkEntry *entry,
+    GdkEventKey *event,
+    gpointer user_data )
+{
+    CoOwnerWindow *wdata = user_data;
+    return gnc_coowner_common_key_press_cb(entry, event, user_data,
+         wdata->coowner_entry_tenant_addr2);
+}
+
+gboolean
+gnc_coowner_tenantaddr3_key_press_cb(
+    GtkEntry *entry,
+    GdkEventKey *event,
+    gpointer user_data )
+{
+    CoOwnerWindow *wdata = user_data;
+    return gnc_coowner_common_key_press_cb(entry, event, user_data,
+        wdata->coowner_entry_tenant_addr3);
+}
+
+gboolean
+gnc_coowner_tenantaddr4_key_press_cb(
+    GtkEntry *entry,
+    GdkEventKey *event,
+    gpointer user_data )
+{
+    CoOwnerWindow *wdata = user_data;
+    return gnc_coowner_common_key_press_cb(entry, event, user_data,
+        wdata->coowner_entry_tenant_addr4);
 }
