@@ -88,14 +88,16 @@ test_distriblist (void)
         do_test (gncDistribListGetBook (distriblist) == book, "Get book");
 
         gncDistribListBeginEdit (distriblist);
+        success ("Edit - distriblist");
         gncDistribListDestroy (distriblist);
-        success ("create/destroy");
+        success ("Destroy - distriblist ");
     }
 
     // Test set and get functions
     {
         GncGUID guid;
-        GncDistributionListType type = GNC_DISTRIBLIST_TYPE_SHARES;
+        GncDistributionListType type_shares = GNC_DISTRIBLIST_TYPE_SHARES;
+        GncDistributionListType type_percentage = GNC_DISTRIBLIST_TYPE_PERCENTAGE;
         /* GncOwner *owner_1 = NULL; */
         /* GncOwner *owner_2 = gncOwnerNew(); */
         const char *owner_typename = "Co-Owner";
@@ -105,15 +107,19 @@ test_distriblist (void)
         count++;
         gncDistribListSetGUID (distriblist, &guid);
         do_test (guid_equal (
-            &guid, gncDistribListGetGUID (distriblist)), "Compare guid");
+            &guid, gncDistribListGetGUID (distriblist)), "Compare guid - distriblist");
 
-        gncDistribListSetType (distriblist, type);
-        do_test (gncDistribListGetType (distriblist) == type, "Get type");
+        gncDistribListSetType (distriblist, type_shares);
+        do_test (gncDistribListGetType (distriblist) == type_shares, "Get type -  shares");
+        printf ("Testvalue  distriblist->type: '%s'\n", gncDistribListGetType (distriblist));
+        gncDistribListSetType (distriblist, type_percentage);
+        printf ("Testvalue  distriblist->type: '%s'\n", gncDistribListGetType (distriblist));
+        do_test (gncDistribListGetType (distriblist) == type_percentage, "Get type - percentage");
 
         gncDistribListSetOwnerTypeName (distriblist, owner_typename);
-        do_test (gncDistribListGetOwnerTypeName (distriblist) == owner_typename, "Get owner typename");
+        do_test (gncDistribListGetOwnerTypeName (distriblist) == owner_typename, "Get owner typename - distriblist");
 
-        // Test with explicit owner_type
+        // Test setting an explicit owner_type
         /* do_test (g_strcmp0 (gncOwnerGetTypeString ( */
         /*              gncDistribListGetOwner (distriblist)), */
         /*              owner_typename) */
