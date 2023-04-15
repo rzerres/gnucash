@@ -394,6 +394,13 @@ distriblist_to_ui (
 {
     gtk_entry_set_text (
         GTK_ENTRY(desc), gncDistribListGetDescription (distriblist));
+
+// FIXME
+    // Label Settlement
+    /* gtk_entry_set_text ( */
+    /*    GTK_ENTRY(entry_settlement), gncDistribListGetLabelSettlement (distriblist)); */
+
+    // Distribution list type
     notebook->type = gncDistribListGetType (distriblist);
 
     switch (notebook->type)
