@@ -31,6 +31,8 @@
 #include <string.h>
 #include <qofinstance-p.h>
 
+#include "gnc-commodity.h"
+
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
 #include "gncInvoice.h"
@@ -871,12 +873,6 @@ GncBillTerm *gncCoOwnerGetTerms (const GncCoOwner *coowner)
     return coowner->coowner_terms;
 }
 
-/* GncTaxIncluded gncCoOwnerGetTaxIncluded (const GncCoOwner *coowner) */
-/* { */
-/*     if (!coowner) return GNC_TAXINCLUDED_USEGLOBAL; */
-/*     return coowner->tax_included; */
-/* } */
-
 gboolean gncCoOwnerGetTenantActive (const GncCoOwner *coowner)
 {
     if (!coowner) return FALSE;
@@ -1321,21 +1317,27 @@ gboolean gncCoOwnerEqual(const GncCoOwner* a, const GncCoOwner* b)
         return FALSE;
     }
 
-    if (!gncAddressEqual(a->addr, b->addr))
-    {
-        PWARN("Addresses differ");
-        return FALSE;
-    }
-
     if (!xaccAccountEqual(a->ccard_acc, b->ccard_acc, TRUE))
     {
         PWARN("Accounts differ");
         return FALSE;
     }
 
+    if (!gncAddressEqual(a->addr, b->addr))
+    {
+        PWARN("Addresses differ");
+        return FALSE;
+    }
+
     if (!gnc_numeric_equal(a->apt_share, b->apt_share))
     {
         PWARN("Apartment shares differ");
+        return FALSE;
+    }
+
+    if (g_strcmp0(a->apt_unit, b->apt_unit) != 0)
+    {
+        PWARN("Apartment units differ: %s vs %s", a->apt_unit, b->apt_unit);
         return FALSE;
     }
 
@@ -1378,12 +1380,6 @@ gboolean gncCoOwnerEqual(const GncCoOwner* a, const GncCoOwner* b)
     if (g_strcmp0(a->notes, b->notes) != 0)
     {
         PWARN("Notes differ: %s vs %s", a->notes, b->notes);
-        return FALSE;
-    }
-
-    if (g_strcmp0(a->apt_unit, b->apt_unit) != 0)
-    {
-        PWARN("Apartment units differ: %s vs %s", a->apt_unit, b->apt_unit);
         return FALSE;
     }
 
@@ -1550,11 +1546,13 @@ gboolean gncCoOwnerRegister (void)
             (QofSetterFunc)gncCoOwnerSetActive
         },
         {
-            COOWNER_ACL, QOF_TYPE_STRING, (QofAccessFunc)gncCoOwnerGetAcl,
+            COOWNER_ACL, QOF_TYPE_STRING,
+            (QofAccessFunc)gncCoOwnerGetAcl,
             (QofSetterFunc)gncCoOwnerSetAcl
         },
         {
-            COOWNER_ADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCoOwnerGetAddr,
+            COOWNER_ADDR, GNC_ID_ADDRESS,
+            (QofAccessFunc)gncCoOwnerGetAddr,
             (QofSetterFunc)qofCoOwnerSetAddr
         },
         {
@@ -1572,7 +1570,8 @@ gboolean gncCoOwnerRegister (void)
             (QofAccessFunc)qof_instance_get_book, NULL
         },
         {
-            COOWNER_CC, GNC_ID_ACCOUNT, (QofAccessFunc)gncCoOwnerGetCCard,
+            COOWNER_CC, GNC_ID_ACCOUNT,
+            (QofAccessFunc)gncCoOwnerGetCCard,
             (QofSetterFunc)gncCoOwnerSetCCard },
         {
             COOWNER_CREDIT, QOF_TYPE_NUMERIC,
@@ -1604,11 +1603,13 @@ gboolean gncCoOwnerRegister (void)
             (QofSetterFunc)gncCoOwnerSetLanguage
         },
         {
-            COOWNER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCoOwnerGetName,
+            COOWNER_NAME, QOF_TYPE_STRING,
+            (QofAccessFunc)gncCoOwnerGetName,
             (QofSetterFunc)gncCoOwnerSetName
         },
         {
-            COOWNER_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncCoOwnerGetNotes,
+            COOWNER_NOTES, QOF_TYPE_STRING,
+            (QofAccessFunc)gncCoOwnerGetNotes,
             (QofSetterFunc)gncCoOwnerSetNotes
         },
         {
@@ -1616,13 +1617,6 @@ gboolean gncCoOwnerRegister (void)
             (QofAccessFunc)gncCoOwnerGetShipAddr,
             (QofSetterFunc)qofCoOwnerSetShipAddr
         },
-        /*
-         * {
-         *     COOWNER_TAX_INCLUDED, QOF_TYPE_STRING,
-         *     (QofAccessFunc)qofCoOwnerGetTaxIncluded,
-         *     (QofSetterFunc)gncCoOwnerSetTaxIncluded
-         * },
-         */
         {
             COOWNER_TAXTABLE_OVERRIDE, QOF_TYPE_BOOLEAN,
             (QofAccessFunc)gncCoOwnerGetTaxTableOverride,
