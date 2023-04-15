@@ -399,6 +399,10 @@ void gnc_entry_ledger_load (GncEntryLedger* ledger, GList* entry_list)
                 /* Determine the TaxIncluded and Discount values */
                 switch (gncOwnerGetType (owner))
                 {
+                case GNC_OWNER_COOWNER:
+                    taxincluded_p = gncCoOwnerGetTaxIncluded (owner->owner.coowner);
+                    discount = gncCoOwnerGetDiscount (owner->owner.coowner);
+                    break;
                 case GNC_OWNER_CUSTOMER:
                     taxincluded_p = gncCustomerGetTaxIncluded (owner->owner.customer);
                     discount = gncCustomerGetDiscount (owner->owner.customer);
