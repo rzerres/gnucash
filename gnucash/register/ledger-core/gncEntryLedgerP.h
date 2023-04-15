@@ -56,7 +56,8 @@ struct GncEntryLedger_s
 
     GncEntryLedgerType type;
 
-    gboolean   is_cust_doc;      /** is this document customer or vendor related ? */
+    gboolean   is_coowner_doc;   /** is this document coowner related ? */
+    gboolean   is_cust_doc;      /** is this document customer related ? */
     gboolean   is_credit_note;   /** is this an invoice (or a bill)? */
 
     const gchar * prefs_group;
