@@ -42,7 +42,9 @@
                     <property name="can-focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">Shares _total</property>
+                    <property name="use-underline">True</property>
                     <property name="justify">right</property>
+                    <property name="mnemonic-widget">shares:shares_total</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -70,8 +72,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Settlement label</property>
+                    <property name="label" translatable="yes">Settlement _label</property>
+                    <property name="use-underline">True</property>
                     <property name="justify">right</property>
+                    <property name="mnemonic-widget">distriblists_notebook_entry_settlement_shares</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -122,67 +126,110 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="distriblists_notebook_grid_shares_owner">
+              <!-- n-columns=2 n-rows=3 -->
+              <object class="GtkGrid" id="distriblists_notebook_grid_shares_owners">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">6</property>
-                <property name="column-homogeneous">True</property>
                 <child>
-                  <object class="GtkBox" id="distriblists_notebook_vbox_shares_owners">
+                  <object class="GtkLabel" id="distriblists_notebook_label_shares_owner_type">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="border-width">2</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">3</property>
-                    <child>
-                      <object class="GtkLabel" id="distriblists_notebook_label_shares_owner_assigned">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Owners assigned</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow" id="distriblists_notebook_scrolled_window_shares">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="distriblists_notebook_treeview_shares_owner">
-                            <property name="name">distriblists_treeview_description</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="headers-visible">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection"/>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Owner Type</property>
+                    <property name="justify">right</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="distriblists_notebook_label_shares_owner_assigned">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Owners assigned&lt;/b&gt;</property>
+                    <property name="use-markup">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
-                    <property name="width">2</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="distriblists_notebook_scrolled_window_shares">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="GtkTreeView" id="distriblists_notebook_treeview_shares_owners">
+                        <property name="name">distriblists_treeview_description</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="headers-visible">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="distriblists_notebook_label_shares_owners">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Owners</property>
+                    <property name="justify">right</property>
+                    <property name="track-visited-links">False</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="distriblists_notebook_hbox_owner_type">
+                    <property name="name">distriblists_notebook_hbox_shares_owner_typename</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkLabel" id="distriblists_notebook_shares_owner_typename">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="margin-top">3</property>
+                        <property name="margin-bottom">3</property>
+                        <property name="label">(Owner Typename)</property>
+                        <property name="justify">center</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="frame"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -227,8 +274,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Settlement label</property>
+                    <property name="label" translatable="yes">Settlement _label</property>
+                    <property name="use-underline">True</property>
                     <property name="justify">right</property>
+                    <property name="mnemonic-widget">distriblists_notebook_entry_settlement_percentage</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -254,8 +303,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Total %</property>
+                    <property name="label" translatable="yes">_Total %</property>
+                    <property name="use-underline">True</property>
                     <property name="justify">right</property>
+                    <property name="mnemonic-widget">percentage:percentage_total</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -294,67 +345,112 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="distriblists_notebook_grid_percentage_owner">
+              <!-- n-columns=2 n-rows=3 -->
+              <object class="GtkGrid" id="distriblists_notebook_grid_percentage_owners">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="row-spacing">1</property>
+                <property name="row-spacing">6</property>
                 <property name="column-spacing">6</property>
-                <property name="column-homogeneous">True</property>
                 <child>
-                  <object class="GtkBox" id="distriblists_notebook_vbox_percentage_owners">
+                  <object class="GtkLabel" id="distriblists_notebook_label_percentage_owners_assigned">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="border-width">2</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">3</property>
-                    <child>
-                      <object class="GtkLabel" id="distriblists_notebook_label_percentage_owner_assigned">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Owners assigned</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow" id="distriblists_notebook_scrolled_window_percentage">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="distriblists_notebook_treeview_percentage_coowner">
-                            <property name="name">distriblists_treeview_description</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="headers-visible">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection"/>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Owners assigned&lt;/b&gt;</property>
+                    <property name="use-markup">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
-                    <property name="width">2</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="distriblists_notebook_label_percentage_owner_type">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Owner type</property>
+                    <property name="justify">right</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="distriblists_notebook_scrolled_window_percentage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="distriblists_notebook_treeview_percentage_owners">
+                        <property name="name">distriblists_treeview_description</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="headers-visible">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="distriblists_notebook_label_percentage_owners">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="valign">baseline</property>
+                    <property name="label" translatable="yes">Owners</property>
+                    <property name="justify">right</property>
+                    <property name="track-visited-links">False</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="distriblists_notebook_hbox_percentage_owner_type">
+                    <property name="name">distriblists_notebook_hbox_typename</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkLabel" id="distriblists_notebook_percentage_owner_typename">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">6</property>
+                        <property name="margin-end">6</property>
+                        <property name="margin-top">3</property>
+                        <property name="margin-bottom">3</property>
+                        <property name="label">(Owner Typename)</property>
+                        <property name="justify">center</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="frame"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -367,199 +463,6 @@
           <packing>
             <property name="position">1</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-  </object>
-  <object class="GtkWindow" id="distriblists_owner_window">
-    <property name="can-focus">False</property>
-    <property name="border-width">6</property>
-    <property name="title" translatable="yes">Notebook Distribution-Lists</property>
-    <child>
-      <object class="GtkNotebook" id="distriblists_owner">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="show-tabs">False</property>
-        <property name="show-border">False</property>
-        <child>
-          <object class="GtkBox" id="distriblists_owner_vbox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
-            <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="distriblists_owner_grid">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="row-spacing">3</property>
-                <property name="column-spacing">6</property>
-                <child>
-                  <object class="GtkBox" id="distriblists_owner_vbox_coowners">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="border-width">2</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">3</property>
-                    <child>
-                      <object class="GtkLabel" id="distriblists_owner_label_coowner_assigned">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Owners assigned</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow" id="distriblists_owner_scrolled_window_lists">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTreeView" id="distriblists_owner_treeview_owners">
-                            <property name="name">distriblists_treeview_description</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="headers-visible">False</property>
-                            <property name="search-column">0</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection"/>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButtonBox" id="distriblists_ owner_buttonbox_actions_lists">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="spacing">6</property>
-                        <property name="layout-style">spread</property>
-                        <child>
-                          <object class="GtkButton" id="distriblists_owner_button_owner_assign">
-                            <property name="label" translatable="yes">_Assign</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes">Assign a Co-Owner to the list</property>
-                            <property name="use-underline">True</property>
-                            <signal name="clicked" handler="distriblists_owner_assign_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="distriblists_owner_button_owner_remove">
-                            <property name="label" translatable="yes">_Remove</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes">Remove a Co-Owner from the list</property>
-                            <property name="use-underline">True</property>
-                            <signal name="clicked" handler="distriblists_owner_remove_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="distriblists_owner_button_owner_edit">
-                            <property name="label" translatable="yes">_Edit</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="tooltip-text" translatable="yes">Remove a Co-Owner from the list</property>
-                            <property name="use-underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="distriblists_owner_button_cancel">
-                            <property name="label" translatable="yes">_Cancel</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="can-default">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="has-tooltip">True</property>
-                            <property name="tooltip-markup">Cancel your changes</property>
-                            <property name="tooltip-text" translatable="yes">Cancel your changes</property>
-                            <property name="use-underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="distriblists_owner_button_ok">
-                            <property name="label" translatable="yes">_OK</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="can-default">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="has-tooltip">True</property>
-                            <property name="tooltip-markup">Commit this Billing Term</property>
-                            <property name="tooltip-text" translatable="yes">Commit this Billing Term</property>
-                            <property name="use-underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">4</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <placeholder/>
@@ -681,7 +584,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSeparator" id="distribution_list_vseparator">
+              <object class="GtkSeparator" id="distribution_list_separator">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
@@ -763,6 +666,7 @@
                             <property name="editable">False</property>
                             <property name="invisible-char">●</property>
                             <property name="activates-default">True</property>
+                            <property name="width-chars">50</property>
                             <property name="primary-icon-activatable">False</property>
                             <property name="secondary-icon-activatable">False</property>
                           </object>
@@ -969,7 +873,7 @@
                 <property name="receives-default">True</property>
                 <property name="tooltip-text" translatable="yes">Edit owner entities assigned to this list</property>
                 <property name="use-underline">True</property>
-                <signal name="clicked" handler="distriblists_owner_edit_cb" swapped="no"/>
+                <signal name="clicked" handler="owners_edit_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1030,6 +934,7 @@
                 <property name="hexpand">True</property>
                 <property name="invisible-char">●</property>
                 <property name="activates-default">True</property>
+                <property name="width-chars">50</property>
                 <property name="primary-icon-activatable">False</property>
                 <property name="secondary-icon-activatable">False</property>
               </object>
@@ -1159,7 +1064,7 @@
                 <property name="receives-default">True</property>
                 <property name="tooltip-text" translatable="yes">Edit owner entities assigned to this list</property>
                 <property name="use-underline">True</property>
-                <signal name="clicked" handler="distriblists_owner_edit_cb" swapped="no"/>
+                <signal name="clicked" handler="owners_edit_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1368,13 +1273,13 @@
     <property name="modal">True</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
-      <object class="GtkBox">
+      <object class="GtkBox" id="owner_select_vbox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">8</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox">
+          <object class="GtkButtonBox" id="owner_select_buttonbox_actions">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
@@ -1403,7 +1308,7 @@
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
                 <property name="receives-default">True</property>
-                <property name="tooltip-text" translatable="yes">Create this new distribution list</property>
+                <property name="tooltip-text" translatable="yes">Assignes the selected Owner</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -1432,7 +1337,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">&lt;b&gt;Owners assigned&lt;/b&gt;</property>
+                <property name="margin-bottom">6</property>
+                <property name="label" translatable="yes">&lt;b&gt;Owner assignment&lt;/b&gt;</property>
                 <property name="use-markup">True</property>
               </object>
               <packing>
@@ -1484,5 +1390,232 @@
       <action-widget response="-6">owner_select_button_cancel</action-widget>
       <action-widget response="-5">owner_select_button_ok</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkDialog" id="owners_dialog">
+    <property name="can-focus">False</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="owners_vbox">
+        <property name="can-focus">False</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="owners_buttonbox_actions_lists">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="owners_button_cancel">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="has-tooltip">True</property>
+                <property name="tooltip-markup">Cancel your changes</property>
+                <property name="tooltip-text" translatable="yes">Cancel your changes</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="owners_button_edit">
+                <property name="label" translatable="yes">_Edit</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Edit the attributes of the given Owner </property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="owners_edit_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="owners_buttons_remove">
+                <property name="label" translatable="yes">_Remove</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Remove an Owner from the list</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="owners_remove_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="owners_button_assign">
+                <property name="label" translatable="yes">_Assign</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Assign an Owner to the list</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="owners_assign_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="owners_button_ok">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Commit the assigned owners</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="owners_label_description">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin-bottom">6</property>
+            <property name="label" translatable="yes">&lt;b&gt;Assigned owners&lt;/b&gt;</property>
+            <property name="use-markup">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <!-- n-columns=2 n-rows=2 -->
+          <object class="GtkGrid" id="owners_grid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="row-spacing">3</property>
+            <property name="column-spacing">6</property>
+            <child>
+              <object class="GtkComboBox" id="owners_combobox_type">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <signal name="changed" handler="owners_type_changed_cb" swapped="no"/>
+                <child>
+                  <object class="GtkCellRendererText" id="owners_cellrenderertext_list"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="owners_scrolled_window_lists">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="owners_treeview_owners">
+                    <property name="name">distriblists_treeview_description</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="headers-visible">False</property>
+                    <property name="search-column">0</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="owners_label_owner_typename">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes">_Owner type</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="owners_label_owners">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes">Owners</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-5">owners_button_ok</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkListStore" id="ownerstore_type">
+    <columns>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Co-Owner</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Employee</col>
+      </row>
+    </data>
   </object>
 </interface>
