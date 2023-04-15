@@ -2,16 +2,16 @@
 ;; report-impl.scm : structures/utilities for representing reports
 ;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -62,6 +62,7 @@
 (export gnc:menuname-experimental)
 (export gnc:menuname-income-expense)
 (export gnc:menuname-multicolumn)
+(export gnc:menuname-property-management)
 (export gnc:menuname-reports)
 (export gnc:menuname-taxes)
 (export gnc:optname-invoice-number)
@@ -150,22 +151,23 @@
 (define *gnc:_report-templates_* (make-hash-table 23))
 
 ;; Define those strings here to make changes easier and avoid typos.
-(define gnc:menuname-reports "Reports/StandardReports")
+(define gnc:pagename-accounts (N_ "Accounts"))
+(define gnc:menuname-business-reports (N_ "_Business"))
+(define gnc:menuname-custom (N_ "_Custom"))
 (define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
-(define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-budget (N_ "B_udget"))
-(define gnc:menuname-taxes (N_ "_Taxes"))
+(define gnc:pagename-display (N_ "Display"))
 (define gnc:menuname-example (N_ "E_xamples"))
 (define gnc:menuname-experimental (N_ "_Experimental"))
-(define gnc:menuname-multicolumn (N_ "_Multicolumn"))
-(define gnc:menuname-custom (N_ "_Custom"))
 (define gnc:pagename-general (N_ "General"))
-(define gnc:pagename-accounts (N_ "Accounts"))
-(define gnc:pagename-display (N_ "Display"))
+(define gnc:menuname-income-expense (N_ "_Income & Expense"))
+(define gnc:menuname-multicolumn (N_ "_Multicolumn"))
+(define gnc:menuname-property-management (N_ "Property management"))
+(define gnc:menuname-reports "Reports/StandardReports")
+(define gnc:menuname-taxes (N_ "_Taxes"))
+(define gnc:optname-invoice-number (N_ "Invoice Number"))
 (define gnc:optname-reportname (N_ "Report name"))
 (define gnc:optname-stylesheet (N_ "Stylesheet"))
-(define gnc:menuname-business-reports (N_ "_Business"))
-(define gnc:optname-invoice-number (N_ "Invoice Number"))
 
 ;; A <report-template> represents one of the available report types.
 (define-record-type <report-template>
