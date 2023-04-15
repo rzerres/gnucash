@@ -61,7 +61,7 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define MAX_ID_LEN 2048
 #define MAX_LANGUAGE_LEN 2048
 #define MAX_NAME_LEN 2048
-#define MAX_USERNAME_LEN 2048
+#define MAX_TENANT_LEN 2048
 
 #define TABLE_NAME "coowner"
 #define TABLE_VERSION 2
@@ -84,18 +84,25 @@ static EntryVec col_table
         "language", MAX_LANGUAGE_LEN, COL_NNUL, "language"),
     gnc_sql_make_table_entry<CT_STRING>("id", MAX_ID_LEN, COL_NNUL, "id"),
     gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
+    gnc_sql_make_table_entry<CT_STRING>("notes", MAX_NAME_LEN, COL_NNUL,
+                                        "notes"),
+    gnc_sql_make_table_entry<CT_ADDRESS>("ship_addr", 0, 0, "ship_addr"),
     gnc_sql_make_table_entry<CT_BOOLEAN>(
         "tax_override", 0, COL_NNUL, COOWNER_TAXTABLE_OVERRIDE, true),
-    gnc_sql_make_table_entry<CT_STRING>(
-        "username", MAX_USERNAME_LEN, COL_NNUL, "username"),
     gnc_sql_make_table_entry<CT_INT>(
-         "tax_included", 0, 0,
-         (QofAccessFunc)gncCoOwnerGetTaxIncluded,
-         (QofSetterFunc)gncCoOwnerSetTaxIncluded),
+        "tax_included", 0, 0,
+        (QofAccessFunc)gncCoOwnerGetTaxIncluded,
+        (QofSetterFunc)gncCoOwnerSetTaxIncluded),
     gnc_sql_make_table_entry<CT_TAXTABLEREF>(
-          "taxtable", 0, 0,
-          (QofAccessFunc)gncCoOwnerGetTaxTable,
-          (QofSetterFunc)gncCoOwnerSetTaxTable),
+        "taxtable", 0, 0,
+        (QofAccessFunc)gncCoOwnerGetTaxTable,
+        (QofSetterFunc)gncCoOwnerSetTaxTable),
+    gnc_sql_make_table_entry<CT_BOOLEAN>(
+        "tenant_active", 0, COL_NNUL, "tenant_active"),
+    gnc_sql_make_table_entry<CT_ADDRESS>(
+        "tenant_addr", 0, 0, "tenant_addr"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "tenant", MAX_TENANT_LEN, COL_NNUL, "tenant"),
 });
 
 GncSqlCoOwnerBackend::GncSqlCoOwnerBackend() :
