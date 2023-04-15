@@ -32,6 +32,7 @@ The UI is designed to group suitable informations in frames.
 -# General coOwner information
    -# Identification
    -# Billing Address information
+   -# Phone/Mobile/Fax info
    -# Notes
  -# Billing Information
    -# Currency
@@ -39,9 +40,14 @@ The UI is designed to group suitable informations in frames.
    -# Credit
    -# Discount
    -# Tax handling
+-# Tenant Information
+   -# Differing address for Tenant communication
+   -# Phone/Mobile/Fax info
+   -# Email Url
+   -# Notes
 -# Shipping Information
    -# Differing address for CoOwner communication
-   -# Phone/Fax info
+   -# Phone/Mobile/Fax info
    -# Email Url
 
     @{ */
@@ -70,6 +76,7 @@ typedef struct _coowner_select_window CoOwnerSelectWindow;
 @param  GtkWidget* second line in the billing address.
 @param  GtkWidget* third line in the billing address.
 @param  GtkWidget* forth line in the billing address.
+@param  GtkWidget* mobile number in the billing address.
 @param  GtkWidget* phone number in the billing address.
 @param  GtkWidget* fax number in the billing address.
 @param  GtkWidget* email url in the billing address.
@@ -93,6 +100,7 @@ typedef struct _coowner_select_window CoOwnerSelectWindow;
 @param  GtkWidget* third line in the shipping address.
 @param  GtkWidget* forth line in the shipping address.
 @param  GtkWidget* phone number in the shipping address.
+@param  GtkWidget* mobile number in the shipping address.
 @param  GtkWidget* fax number in the shipping address.
 @param  GtkWidget* email url in the shipping address.
 
