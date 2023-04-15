@@ -22,9 +22,16 @@
 /** @addtogroup Business
     @{ */
 /** @addtogroup CoOwner
+Implements CoOwner objects.
+
+You may create new entities, or edit exiting ones.
+Deletion isn't allowed, as soon as transactions are assined to a
+given entity (e.g. invoices, settlements, credit notes or jobs ).
+
+
     @{ */
 /** @file gncCoOwner.h
-    @brief CoOwner Interface
+    @brief Core CoOwner Object
     @author Copyright (C) 2022 Ralf Zerres <ralf.zerres@mail.de>
 */
 
@@ -33,38 +40,39 @@
 
 /** @struct GncCoOwner
 
-Generic params:\n
+Generic params (identical to all business objects, e.g. Customers, Employees, Vendors):
 
 @param  QofInstance inst;
-@param  char * id;
+@param  char* id;
 
 @param  gboolean active;
-@param  GncAddress *addr;
+@param  GncAddress* addr;
 @param  gnc_numeric balance;
-@param  Account *ccard_acc;
-@param  gnc_numeric credit;
+@param  Account* ccard_acc;
 @param  gnc_commodity *currency;
-@param  gnc_numeric discount;
-@param  GList *jobs;
-@param  char *language;
-@param  char *notes;
-@param  char *name;
-@param  GncBillTerm *terms;
-@param  GncTaxTable *taxtable;
+@param  GList* jobs;
+@param  char* language;
+@param  char* notes;
+@param  char* name;
+@param  GncBillTerm* terms;
+@param  GncTaxTable* taxtable;
 @param  gboolean taxtable_override;
 @param  GncTaxIncluded tax_included;
 
-CoOwner specific:\n
+CoOwner specific params:
+
 @param  gnc_numeric apt_share;
-@param  char *distibution_key;
-@param  char *property_unit;
-@param  GncAddress *shipaddr;
-@param  char *tenant;
+@param  gnc_numeric apt_unit;
+@param  gnc_numeric credit;
+@param  gnc_numeric discount;
+@param  char* distibution_key;
+@param  char* property_unit;
+@param  GncAddress* shipaddr;
+@param  char* tenant;
 */
 
 typedef struct _gncCoOwner GncCoOwner;
 typedef struct _gncCoOwnerClass GncCoOwnerClass;
-
 
 #include "gncAddress.h"
 #include "gncBillTerm.h"
@@ -95,7 +103,6 @@ void gncCoOwnerDestroy (GncCoOwner *coowner);
 
 /** @name Get Functions
  @{ */
-
 QofBook * gncCoOwnerGetBook (GncCoOwner *coowner);
 const char * gncCoOwnerGetID (const GncCoOwner *coowner);
 const char * gncCoOwnerGetAcl (const GncCoOwner *coowner);
@@ -122,12 +129,12 @@ const char * gncCoOwnerGetTenant (const GncCoOwner *coowner);
 
 /** @name Set Functions
  @{ */
-
 void gncCoOwnerSetID (GncCoOwner *coowner, const char *id);
 void gncCoOwnerSetAcl (GncCoOwner *coowner, const char *acl);
 void gncCoOwnerSetActive (GncCoOwner *coowner, gboolean active);
 void qofCoOwnerSetAddr (GncCoOwner *coowner, QofInstance *addr_ent);
 void gncCoOwnerSetAptShare (GncCoOwner *coowner, gnc_numeric apt_share);
+void gncCoOwnerSetAptUnit (GncCoOwner *coowner, const char *apt_unit);
 void gncCoOwnerSetCCard (GncCoOwner *coowner, Account* ccard_acc);
 void gncCoOwnerSetCredit (GncCoOwner *coowner, gnc_numeric credit);
 void gncCoOwnerSetCurrency (GncCoOwner *coowner, gnc_commodity * currency);
@@ -136,7 +143,7 @@ void gncCoOwnerSetDistributionKey (GncCoOwner *coowner, const char *distribution
 void gncCoOwnerSetLanguage (GncCoOwner *coowner, const char *language);
 void gncCoOwnerSetName (GncCoOwner *coowner, const char *name);
 void gncCoOwnerSetNotes (GncCoOwner *coowner, const char *notes);
-void gncCoOwnerSetPropertyUnit (GncCoOwner *coowner, const char *property_unit);
+void qofCoOwnerSetShipAddr (GncCoOwner *coowner, QofInstance *shipaddr_ent);
 void gncCoOwnerSetTerms (GncCoOwner *coowner, GncBillTerm *terms);
 void gncCoOwnerSetTaxIncluded (GncCoOwner *coowner, GncTaxIncluded tax_included);
 void gncCoOwnerSetTaxTableOverride (GncCoOwner *coowner, gboolean override);
@@ -147,32 +154,7 @@ void gncCoOwnerAddJob (GncCoOwner *coowner, GncJob *job);
 void gncCoOwnerBeginEdit (GncCoOwner *coowner);
 void gncCoOwnerCommitEdit (GncCoOwner *coowner);
 void gncCoOwnerRemoveJob (GncCoOwner *coowner, GncJob *job);
-
 //** @} */
-
-/** @name Get Functions
- @{ */
-
-QofBook * gncCoOwnerGetBook (GncCoOwner *coowner);
-const char * gncCoOwnerGetID (const GncCoOwner *coowner);
-const char * gncCoOwnerGetAcl (const GncCoOwner *coowner);
-gboolean gncCoOwnerGetActive (const GncCoOwner *coowner);
-GncAddress * gncCoOwnerGetAddr (const GncCoOwner *coowner);
-gnc_numeric gncCoOwnerGetAptShare (const GncCoOwner *coowner);
-Account * gncCoOwnerGetCCard (const GncCoOwner *coowner);
-gnc_numeric gncCoOwnerGetCredit (const GncCoOwner *coowner);
-gnc_commodity * gncCoOwnerGetCurrency (const GncCoOwner *coowner);
-gnc_numeric gncCoOwnerGetDiscount (const GncCoOwner *coowner);
-const char * gncCoOwnerGetDistributionKey (const GncCoOwner *coowner);
-const char * gncCoOwnerGetLanguage (const GncCoOwner *coowner);
-const char * gncCoOwnerGetName (const GncCoOwner *coowner);
-const char * gncCoOwnerGetNotes (const GncCoOwner *coowner);
-const char * gncCoOwnerGetPropertyUnit (const GncCoOwner *coowner);
-GncTaxIncluded gncCoOwnerGetTaxIncluded (const GncCoOwner *coowner);
-GncBillTerm * gncCoOwnerGetTerms (const GncCoOwner *coowner);
-gboolean gncCoOwnerGetTaxTableOverride (const GncCoOwner *coowner);
-GncTaxTable* gncCoOwnerGetTaxTable (const GncCoOwner *coowner);
-const char * gncCoOwnerGetUsername (const GncCoOwner *coowner);
 
 /** Return values:
  *   <0   => a is less then b
@@ -197,6 +179,7 @@ static inline GncCoOwner * gncCoOwnerLookup (const QofBook *book, const GncGUID 
 #define COOWNER_ACTIVE            "is_active"
 #define COOWNER_ADDR              "addr"
 #define COOWNER_APT_SHARE         "apt_share"
+#define COOWNER_APT_UNIT          "apt_unit"
 #define COOWNER_CC                "credit_card_account"
 #define COOWNER_CREDIT            "credit"
 #define COOWNER_DISCOUNT          "discount"
@@ -204,7 +187,7 @@ static inline GncCoOwner * gncCoOwnerLookup (const QofBook *book, const GncGUID 
 #define COOWNER_LANGUAGE          "native language"
 #define COOWNER_NAME              "name"
 #define COOWNER_NOTES             "notes"
-#define COOWNER_PROPERTY_UNIT     "property_unit"
+#define COOWNER_SHIPADDR          "shipaddr"
 #define COOWNER_TERMS             "terms"
 #define COOWNER_TAX_INCLUDED      "tax included"
 #define COOWNER_TAXTABLE_OVERRIDE "tax table override"
