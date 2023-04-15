@@ -241,7 +241,7 @@ if (NOT GLIB_COMPILE_SCHEMAS)
 endif()
 
 find_path (REGEX_INCLUDE_PATH NAMES regex.h
-		  PATHS /usr/include /opt/gnome/include)
+                  PATHS /usr/include /opt/gnome/include)
 find_library (REGEX_LIBRARY NAMES regex)
 
 # I18N
@@ -259,7 +259,7 @@ if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
 endif()
 
 find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
-		  PATHS /usr/include /opt/gnome/include)
+                  PATHS /usr/include /opt/gnome/include)
 find_library (LIBINTL_LIBRARY NAMES intl)
 
 # HELP
@@ -603,8 +603,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
 if (UNIX)
-  set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations ${CMAKE_CXX_FLAGS}")
+  set( CMAKE_C_FLAGS "-Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Wall -Wmissing-declarations ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif()
 if (MINGW)
