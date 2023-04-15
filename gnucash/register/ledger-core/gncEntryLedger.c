@@ -646,6 +646,10 @@ void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly)
         case GNCENTRY_ORDER_ENTRY:
             ledger->type = GNCENTRY_ORDER_VIEWER;
             break;
+        case GNCENTRY_SETTLEMENT_ENTRY:
+            ledger->type = GNCENTRY_ORDER_VIEWER;
+            create_invoice_query (ledger);
+            break;
         case GNCENTRY_VEND_CREDIT_NOTE_ENTRY:
             ledger->type = GNCENTRY_VEND_CREDIT_NOTE_VIEWER;
             create_invoice_query (ledger);
@@ -684,6 +688,10 @@ void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly)
             break;
         case GNCENTRY_ORDER_VIEWER:
             ledger->type = GNCENTRY_ORDER_ENTRY;
+            break;
+        case GNCENTRY_SETTLEMENT_VIEWER:
+            ledger->type = GNCENTRY_SETTLEMENT_ENTRY;
+            create_invoice_query (ledger);
             break;
         case GNCENTRY_VEND_CREDIT_NOTE_VIEWER:
             ledger->type = GNCENTRY_VEND_CREDIT_NOTE_ENTRY;
