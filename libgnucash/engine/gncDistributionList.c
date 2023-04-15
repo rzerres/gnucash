@@ -45,6 +45,7 @@ struct _gncDistributionList
     gint percentage_total;
     const char *shares_label_settlement;
     gint shares_total;
+    //GList *owner_tree;
 
     // Internal management fields
     // See src/doc/business.txt for an explanation of the following
@@ -79,8 +80,35 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 AS_STRING_DEC(GncDistributionListType, ENUM_DISTRIBLISTS_TYPE)
 FROM_STRING_DEC(GncDistributionListType, ENUM_DISTRIBLISTS_TYPE)
 
-/* ============================================================== */
-/* Misc inline utilities */
+/***********************************************************\
+ * Declaration: Private function prototypes
+ * We assume C11 semantics, where the definitions must
+ * preceed its usage. Once declared, the function ordering
+ * is independend from its actual function call.
+\***********************************************************/
+
+static void gncDistribListFree (GncDistributionList *distriblist);
+
+static void gnc_distriblist_dispose(GObject *distriblist_parent);
+static void gnc_distriblist_finalize(GObject* distriblist_parent);
+static void gnc_distriblist_get_property (
+    GObject *object,
+    guint prop_id,
+    GValue *value,
+    GParamSpec *pspec);
+static void gnc_distriblist_set_property (
+    GObject *object,
+    guint prop_id,
+    const GValue *value,
+    GParamSpec *pspec);
+static GList*
+impl_get_typed_referring_object_list(const QofInstance* inst, const QofInstance* ref);
+
+/*************************************************\
+ * Private Functions
+\*************************************************/
+
+// Misc inline utilities */
 
 static inline void
 mark_distriblist (GncDistributionList *distriblist)
@@ -165,9 +193,76 @@ enum
 G_DEFINE_TYPE(GncDistributionList, gnc_distriblist, QOF_TYPE_INSTANCE);
 
 static void
-gnc_distriblist_init(
+distriblist_free (QofInstance *inst)
+{
+    GncDistributionList *distriblist = (GncDistributionList *) inst;
+    gncDistribListFree(distriblist);
+}
+
+/* Create/Destroy Functions */
+static void
+gncDistribListFree (
     GncDistributionList *distriblist)
 {
+    GncDistributionList *child;
+    GList *list;
+
+    if (!distriblist) return;
+
+    qof_event_gen (&distriblist->inst,  QOF_EVENT_DESTROY, NULL);
+    CACHE_REMOVE (distriblist->name);
+    CACHE_REMOVE (distriblist->description);
+    CACHE_REMOVE (distriblist->percentage_label_settlement);
+    CACHE_REMOVE (distriblist->shares_label_settlement);
+    remObj (distriblist);
+
+    if (!qof_instance_get_destroying(distriblist))
+        PERR("free a distribution list without do_free set!");
+
+    /* disconnect from parent */
+    if (distriblist->parent)
+        gncDistribListRemoveChild(distriblist->parent, distriblist);
+
+    /* disconnect from the children */
+    for (list = distriblist->children; list; list = list->next)
+    {
+        child = list->data;
+        gncDistribListSetParent(child, NULL);
+    }
+    g_list_free(distriblist->children);
+
+    /* qof_instance_release(&distriblist->inst); */
+    g_object_unref (distriblist);
+}
+
+static void
+gnc_distriblist_class_init (GncDistributionListClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    QofInstanceClass* qof_class = QOF_INSTANCE_CLASS(klass);
+
+    gobject_class->dispose = gnc_distriblist_dispose;
+    gobject_class->finalize = gnc_distriblist_finalize;
+    gobject_class->set_property = gnc_distriblist_set_property;
+    gobject_class->get_property = gnc_distriblist_get_property;
+
+    qof_class->get_display_name = NULL;
+    qof_class->refers_to_object = NULL;
+    qof_class->get_typed_referring_object_list = impl_get_typed_referring_object_list;
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_NAME,
+     g_param_spec_string (
+         "name",
+         "DistributionList Name",
+         "The distribution list name is an arbitrary string "
+         "assigned by the user. It is intended to "
+         "be short string (10 to 30 character) "
+         "that is displayed by the GUI identified with the "
+         "distriblist mnemonic.",
+         NULL,
+         G_PARAM_READWRITE));
 }
 
 static void
@@ -205,6 +300,12 @@ gnc_distriblist_get_property (
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
     }
+}
+
+static void
+gnc_distriblist_init(
+    GncDistributionList *distriblist)
+{
 }
 
 static void
@@ -250,203 +351,31 @@ impl_get_typed_referring_object_list(const QofInstance* inst, const QofInstance*
     return NULL;
 }
 
-static void
-gnc_distriblist_class_init (GncDistributionListClass *klass)
-{
-    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    QofInstanceClass* qof_class = QOF_INSTANCE_CLASS(klass);
-
-    gobject_class->dispose = gnc_distriblist_dispose;
-    gobject_class->finalize = gnc_distriblist_finalize;
-    gobject_class->set_property = gnc_distriblist_set_property;
-    gobject_class->get_property = gnc_distriblist_get_property;
-
-    qof_class->get_display_name = NULL;
-    qof_class->refers_to_object = NULL;
-    qof_class->get_typed_referring_object_list = impl_get_typed_referring_object_list;
-
-    g_object_class_install_property
-    (gobject_class,
-     PROP_NAME,
-     g_param_spec_string (
-         "name",
-         "DistributionList Name",
-         "The distribution list name is an arbitrary string "
-         "assigned by the user. It is intended to "
-         "be short string (10 to 30 character) "
-         "that is displayed by the GUI identified with the "
-         "distriblist mnemonic.",
-         NULL,
-         G_PARAM_READWRITE));
-}
-
-/* Create/Destroy Functions */
-GncDistributionList
-*gncDistribListCreate (QofBook *book)
-{
-    GncDistributionList *distriblist;
-    if (!book) return NULL;
-
-    distriblist = g_object_new (GNC_TYPE_DISTRIBLIST, NULL);
-    qof_instance_init_data(&distriblist->inst, _GNC_MOD_NAME, book);
-    distriblist->name = CACHE_INSERT ("");
-    distriblist->description = CACHE_INSERT ("");
-    distriblist->type = GNC_DISTRIBLIST_TYPE_SHARES;
-    distriblist->percentage_label_settlement = CACHE_INSERT ("");
-    distriblist->percentage_total = 0;
-    distriblist->shares_label_settlement = CACHE_INSERT ("");
-    distriblist->shares_total = 0;
-
-    addObj (distriblist);
-    qof_event_gen (&distriblist->inst,  QOF_EVENT_CREATE, NULL);
-    return distriblist;
-}
-
-void gncDistribListDestroy (GncDistributionList *distriblist)
-{
-    gchar guidstr[GUID_ENCODING_LENGTH+1];
-    if (!distriblist) return;
-    guid_to_string_buff(qof_instance_get_guid(&distriblist->inst),guidstr);
-    DEBUG("destroying  distriblist %s (%p)", guidstr, distriblist);
-    qof_instance_set_destroying(distriblist, TRUE);
-    qof_instance_set_dirty (&distriblist->inst);
-    gncDistribListCommitEdit (distriblist);
-}
-
-static void
-gncDistribListFree (
-    GncDistributionList *distriblist)
-{
-    GncDistributionList *child;
-    GList *list;
-
-    if (!distriblist) return;
-
-    qof_event_gen (&distriblist->inst,  QOF_EVENT_DESTROY, NULL);
-    CACHE_REMOVE (distriblist->name);
-    CACHE_REMOVE (distriblist->description);
-    CACHE_REMOVE (distriblist->percentage_label_settlement);
-    CACHE_REMOVE (distriblist->shares_label_settlement);
-    remObj (distriblist);
-
-    if (!qof_instance_get_destroying(distriblist))
-        PERR("free a distribution list without do_free set!");
-
-    /* disconnect from parent */
-    if (distriblist->parent)
-        gncDistribListRemoveChild(distriblist->parent, distriblist);
-
-    /* disconnect from the children */
-    for (list = distriblist->children; list; list = list->next)
-    {
-        child = list->data;
-        gncDistribListSetParent(child, NULL);
-    }
-    g_list_free(distriblist->children);
-
-    /* qof_instance_release(&distriblist->inst); */
-    g_object_unref (distriblist);
-}
 
 /* ============================================================== */
-/* Set Functions */
-
 void
-gncDistribListSetName (GncDistributionList *distriblist, const char *name)
-{
-    if (!distriblist || !name) return;
-    SET_STR (distriblist, distriblist->name, name);
-    mark_distriblist (distriblist);
-    maybe_resort_list (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void
-gncDistribListSetDescription (
-    GncDistributionList *distriblist,
-    const char *description)
-{
-    if (!distriblist || !description) return;
-    SET_STR (distriblist, distriblist->description, description);
-    mark_distriblist (distriblist);
-    maybe_resort_list (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void
-gncDistribListSetType (
-    GncDistributionList *distriblist,
-    GncDistributionListType type)
+gncDistribListMakeInvisible (GncDistributionList *distriblist)
 {
     if (!distriblist) return;
-    if (distriblist->type == type) return;
     gncDistribListBeginEdit (distriblist);
-    distriblist->type = type;
+    distriblist->invisible = TRUE;
+    remObj (distriblist);
+    mark_distriblist (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
+gncDistribListSetChild (GncDistributionList *distriblist, GncDistributionList *child)
+{
+    if (!distriblist) return;
+    gncDistribListBeginEdit (distriblist);
+    distriblist->child = child;
     mark_distriblist (distriblist);
     gncDistribListCommitEdit (distriblist);
 }
 
 /** \brief Convert distribution list types from text. */
 FROM_STRING_FUNC(GncDistributionListType, ENUM_DISTRIBLIST_TYPE)
-
-static
-void qofDistributionListSetType (
-    GncDistributionList *distriblist,
-    const char *type_label)
-{
-    GncDistributionListType type;
-
-    type = GncDistributionListTypefromString(type_label);
-    gncDistribListSetType(distriblist, type);
-}
-
-void
-gncDistribListSetPercentageLabelSettlement (
-    GncDistributionList *distriblist,
-    const char *percentage_label_settlement)
-{
-    if (!distriblist) return;
-    SET_STR (distriblist, distriblist->percentage_label_settlement, percentage_label_settlement);
-    mark_distriblist (distriblist);
-    maybe_resort_list (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void gncDistribListSetPercentageTotal (
-    GncDistributionList *distriblist,
-    gint percentage_total)
-{
-    if (!distriblist) return;
-    if (distriblist->percentage_total == percentage_total) return;
-    gncDistribListBeginEdit (distriblist);
-    distriblist->percentage_total = percentage_total;
-    mark_distriblist (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void
-gncDistribListSetSharesLabelSettlement (
-    GncDistributionList *distriblist,
-    const char *shares_label_settlement)
-{
-    if (!distriblist) return;
-    SET_STR (distriblist, distriblist->shares_label_settlement, shares_label_settlement);
-    mark_distriblist (distriblist);
-    maybe_resort_list (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void gncDistribListSetSharesTotal (
-    GncDistributionList *distriblist,
-    gint shares_total)
-{
-    if (!distriblist) return;
-    if (distriblist->shares_total == shares_total) return;
-    gncDistribListBeginEdit (distriblist);
-    distriblist->shares_total = shares_total;
-    mark_distriblist (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
 
 // TODO: Is the parent/child relationship a double-linked list?
 //       Do we still need an explicite set-parent/set-child method?
@@ -473,39 +402,6 @@ gncDistribListSetParent (
 }
 
 void
-gncDistribListSetChild (GncDistributionList *distriblist, GncDistributionList *child)
-{
-    if (!distriblist) return;
-    gncDistribListBeginEdit (distriblist);
-    distriblist->child = child;
-    mark_distriblist (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void
-gncDistribListIncRef (GncDistributionList *distriblist)
-{
-    if (!distriblist) return;
-    if (distriblist->parent || distriblist->invisible) return;        /* children dont need refcounts */
-    gncDistribListBeginEdit (distriblist);
-    distriblist->refcount++;
-    mark_distriblist (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void
-gncDistribListDecRef (GncDistributionList *distriblist)
-{
-    if (!distriblist) return;
-    if (distriblist->parent || distriblist->invisible) return;        /* children dont need refcounts */
-    g_return_if_fail (distriblist->refcount >= 1);
-    gncDistribListBeginEdit (distriblist);
-    distriblist->refcount--;
-    mark_distriblist (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void
 gncDistribListSetRefcount (GncDistributionList *distriblist, gint64 refcount)
 {
     if (!distriblist) return;
@@ -513,29 +409,6 @@ gncDistribListSetRefcount (GncDistributionList *distriblist, gint64 refcount)
     distriblist->refcount = refcount;
     mark_distriblist (distriblist);
     gncDistribListCommitEdit (distriblist);
-}
-
-void
-gncDistribListMakeInvisible (GncDistributionList *distriblist)
-{
-    if (!distriblist) return;
-    gncDistribListBeginEdit (distriblist);
-    distriblist->invisible = TRUE;
-    remObj (distriblist);
-    mark_distriblist (distriblist);
-    gncDistribListCommitEdit (distriblist);
-}
-
-void
-gncDistribListChanged (GncDistributionList *distriblist)
-{
-    if (!distriblist) return;
-    distriblist->child = NULL;
-}
-
-void gncDistribListBeginEdit (GncDistributionList *distriblist)
-{
-    qof_begin_edit(&distriblist->inst);
 }
 
 static void
@@ -546,22 +419,17 @@ gncDistribListOnError (QofInstance *inst, QofBackendError errcode)
 }
 
 static void
-distriblist_free (QofInstance *inst)
-{
-    GncDistributionList *distriblist = (GncDistributionList *) inst;
-    gncDistribListFree(distriblist);
-}
-
-static void
 on_done (QofInstance *inst) {}
 
-void
-gncDistribListCommitEdit (
-    GncDistributionList *distriblist)
+static
+void qofDistributionListSetType (
+    GncDistributionList *distriblist,
+    const char *type_label)
 {
-    if (!qof_commit_edit (QOF_INSTANCE(distriblist))) return;
-    qof_commit_edit_part2 (&distriblist->inst, gncDistribListOnError,
-                           on_done, distriblist_free);
+    GncDistributionListType type;
+
+    type = GncDistributionListTypefromString(type_label);
+    gncDistribListSetType(distriblist, type);
 }
 
 /* Get Functions */
@@ -592,40 +460,6 @@ static GncDistributionList
     return new_distriblist;
 }
 
-GList
-*gncDistribListGetLists (
-    QofBook *book)
-{
-    struct _book_info *book_info;
-    if (!book) return NULL;
-
-    book_info = qof_book_get_data (book, _GNC_MOD_NAME);
-    return book_info->lists;
-}
-
-const char
-*gncDistribListGetName (
-    const GncDistributionList *distriblist)
-{
-    if (!distriblist) return NULL;
-    return distriblist->name;
-}
-
-const char
-*gncDistribListGetDescription (
-    const GncDistributionList *distriblist)
-{
-    if (!distriblist) return NULL;
-    return distriblist->description;
-}
-
-GncDistributionListType
-gncDistribListGetType (
-    const GncDistributionList *distriblist)
-{
-    if (!distriblist) return 0;
-    return distriblist->type;
-}
 
 /** \brief Convert distribution list types to text. */
 AS_STRING_FUNC(GncDistributionListType, ENUM_DISTRIBLIST_TYPE)
@@ -641,89 +475,6 @@ static const char
     return GncDistributionListTypeasString(distriblist->type);
 }
 
-const char
-*gncDistribListGetPercentageLabelSettlement (
-    const GncDistributionList *distriblist)
-{
-    if (!distriblist) return 0;
-    return distriblist->percentage_label_settlement;
-}
-
-gint
-gncDistribListGetPercentageTotal (
-    const GncDistributionList *distriblist)
-{
-    if (!distriblist) return 0;
-    return distriblist->percentage_total;
-}
-
-const char
-*gncDistribListGetSharesLabelSettlement (
-    const GncDistributionList *distriblist)
-{
-    if (!distriblist) return 0;
-    return distriblist->shares_label_settlement;
-}
-
-gint
-gncDistribListGetSharesTotal (
-    const GncDistributionList *distriblist)
-{
-    if (!distriblist) return 0;
-    return distriblist->shares_total;
-}
-
-GncDistributionList
-*gncDistribListLookupByName (
-    QofBook *book,
-    const char *name)
-{
-    GList *list = gncDistribListGetLists (book);
-
-    for ( ; list; list = list->next)
-    {
-        GncDistributionList *distriblist = list->data;
-        if (!g_strcmp0 (distriblist->name, name))
-            return list->data;
-    }
-    return NULL;
-}
-
-GncDistributionList
-*gncDistribListReturnChild (
-    GncDistributionList *distriblist,
-    gboolean make_new)
-{
-    GncDistributionList *child = NULL;
-
-    if (!distriblist) return NULL;
-    if (distriblist->child) return distriblist->child;
-    if (distriblist->parent || distriblist->invisible) return distriblist;
-    if (make_new)
-    {
-        child = gncDistribListCopy (distriblist);
-        gncDistribListSetChild (distriblist, child);
-        gncDistribListSetParent (child, distriblist);
-    }
-    return child;
-}
-
-GncDistributionList
-*gncDistribListGetParent (
-    const GncDistributionList *distriblist)
-{
-    if (!distriblist) return NULL;
-    return distriblist->parent;
-}
-
-gint64
-gncDistribListGetRefcount (
-    const GncDistributionList *distriblist)
-{
-    if (!distriblist) return 0;
-    return distriblist->refcount;
-}
-
 gboolean
 gncDistribListGetInvisible (
     const GncDistributionList *distriblist)
@@ -732,105 +483,8 @@ gncDistribListGetInvisible (
     return distriblist->invisible;
 }
 
-int
-gncDistribListCompare (
-    const GncDistributionList *a,
-    const GncDistributionList *b)
-{
-    int ret;
-
-    if (!a && !b) return 0;
-    if (!a) return -1;
-    if (!b) return 1;
-
-    ret = g_strcmp0 (a->name, b->name);
-    if (ret) return ret;
-
-    return g_strcmp0 (a->description, b->description);
-}
-
-gboolean
-gncDistribListEqual(
-    const GncDistributionList *a,
-    const GncDistributionList *b)
-{
-    if (a == NULL && b == NULL) return TRUE;
-    if (a == NULL || b == NULL) return FALSE;
-
-    g_return_val_if_fail(GNC_IS_DISTRIBLIST(a), FALSE);
-    g_return_val_if_fail(GNC_IS_DISTRIBLIST(b), FALSE);
-
-    if (g_strcmp0(a->name, b->name) != 0)
-    {
-        PWARN("Names differ: %s vs %s", a->name, b->name);
-        return FALSE;
-    }
-
-    if (g_strcmp0(a->description, b->description) != 0)
-    {
-        PWARN("Descriptions differ: %s vs %s", a->description, b->description);
-        return FALSE;
-    }
-
-    if (a->invisible != b->invisible)
-    {
-        PWARN("Invisible flags differ");
-        return FALSE;
-    }
-
-    if (a->percentage_label_settlement != b->percentage_label_settlement)
-    {
-        PWARN("Percentage label settlement differ: %s vs %s", a->percentage_label_settlement, b->percentage_label_settlement);
-        return FALSE;
-    }
-
-    if (a->percentage_total != b->percentage_total)
-    {
-        PWARN("Percentage total differ: %d vs %d", a->percentage_total, b->percentage_total);
-        return FALSE;
-    }
-
-    if (a->shares_label_settlement != b->shares_label_settlement)
-    {
-        PWARN("Shares label settlement differ: %s vs %s", a->shares_label_settlement, b->shares_label_settlement);
-        return FALSE;
-    }
-
-    if (a->shares_total != b->shares_total)
-    {
-        PWARN("Shares total differ: %d vs %d", a->shares_total, b->shares_total);
-        return FALSE;
-    }
-
-    if (a->type != b->type)
-    {
-        PWARN("Types differ");
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
-gboolean
-gncDistribListIsFamily (
-    const GncDistributionList *a,
-    const GncDistributionList *b)
-{
-    if (!gncDistribListCompare (a, b))
-        return TRUE;
-    else
-        return FALSE;
-}
-
-gboolean
-gncDistribListIsDirty (const GncDistributionList *distriblist)
-{
-    if (!distriblist) return FALSE;
-    return qof_instance_get_dirty_flag(distriblist);
-}
-
-
 // Private functions
+
 static void
 _gncDistribListCreate (QofBook *book)
 {
@@ -945,3 +599,408 @@ gncDistribListRegister (void)
 
     return qof_object_register (&gncDistribListDescription);
 }
+
+
+/***********************************************************\
+ * Public functions
+\***********************************************************/
+
+// Create/Destroy Functions
+
+void
+gncDistribListBeginEdit (GncDistributionList *distriblist)
+{
+    qof_begin_edit(&distriblist->inst);
+}
+
+void
+gncDistribListChanged (GncDistributionList *distriblist)
+{
+    if (!distriblist) return;
+    distriblist->child = NULL;
+}
+
+void
+gncDistribListCommitEdit (
+    GncDistributionList *distriblist)
+{
+    if (!qof_commit_edit (QOF_INSTANCE(distriblist))) return;
+    qof_commit_edit_part2 (&distriblist->inst, gncDistribListOnError,
+                           on_done, distriblist_free);
+}
+
+GncDistributionList
+*gncDistribListCreate (QofBook *book)
+{
+    GncDistributionList *distriblist;
+    if (!book) return NULL;
+
+    distriblist = g_object_new (GNC_TYPE_DISTRIBLIST, NULL);
+    qof_instance_init_data(&distriblist->inst, _GNC_MOD_NAME, book);
+    distriblist->name = CACHE_INSERT ("");
+    distriblist->description = CACHE_INSERT ("");
+    distriblist->type = GNC_DISTRIBLIST_TYPE_SHARES;
+    distriblist->percentage_label_settlement = CACHE_INSERT ("");
+    distriblist->percentage_total = 0;
+    distriblist->shares_label_settlement = CACHE_INSERT ("");
+    distriblist->shares_total = 0;
+
+    addObj (distriblist);
+    qof_event_gen (&distriblist->inst,  QOF_EVENT_CREATE, NULL);
+    return distriblist;
+}
+
+void
+gncDistribListDecRef (GncDistributionList *distriblist)
+{
+    if (!distriblist) return;
+    if (distriblist->parent || distriblist->invisible) return;        /* children dont need refcounts */
+    g_return_if_fail (distriblist->refcount >= 1);
+    gncDistribListBeginEdit (distriblist);
+    distriblist->refcount--;
+    mark_distriblist (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
+gncDistribListDestroy (GncDistributionList *distriblist)
+{
+    gchar guidstr[GUID_ENCODING_LENGTH+1];
+    if (!distriblist) return;
+    guid_to_string_buff(qof_instance_get_guid(&distriblist->inst),guidstr);
+    DEBUG("destroying  distriblist %s (%p)", guidstr, distriblist);
+    qof_instance_set_destroying(distriblist, TRUE);
+    qof_instance_set_dirty (&distriblist->inst);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
+gncDistribListIncRef (GncDistributionList *distriblist)
+{
+    if (!distriblist) return;
+    if (distriblist->parent || distriblist->invisible) return;        /* children dont need refcounts */
+    gncDistribListBeginEdit (distriblist);
+    distriblist->refcount++;
+    mark_distriblist (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+// Set Functions
+
+void
+gncDistribListSetDescription (
+    GncDistributionList *distriblist,
+    const char *description)
+{
+    if (!distriblist || !description) return;
+    SET_STR (distriblist, distriblist->description, description);
+    mark_distriblist (distriblist);
+    maybe_resort_list (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
+gncDistribListSetName (GncDistributionList *distriblist, const char *name)
+{
+    if (!distriblist || !name) return;
+    SET_STR (distriblist, distriblist->name, name);
+    mark_distriblist (distriblist);
+    maybe_resort_list (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
+gncDistribListSetPercentageLabelSettlement (
+    GncDistributionList *distriblist,
+    const char *percentage_label_settlement)
+{
+    if (!distriblist) return;
+    SET_STR (distriblist, distriblist->percentage_label_settlement, percentage_label_settlement);
+    mark_distriblist (distriblist);
+    maybe_resort_list (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void gncDistribListSetPercentageTotal (
+    GncDistributionList *distriblist,
+    gint percentage_total)
+{
+    if (!distriblist) return;
+    if (distriblist->percentage_total == percentage_total) return;
+    gncDistribListBeginEdit (distriblist);
+    distriblist->percentage_total = percentage_total;
+    mark_distriblist (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
+gncDistribListSetSharesLabelSettlement (
+    GncDistributionList *distriblist,
+    const char *shares_label_settlement)
+{
+    if (!distriblist) return;
+    SET_STR (distriblist, distriblist->shares_label_settlement, shares_label_settlement);
+    mark_distriblist (distriblist);
+    maybe_resort_list (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
+gncDistribListSetSharesTotal (
+    GncDistributionList *distriblist,
+    gint shares_total)
+{
+    if (!distriblist) return;
+    if (distriblist->shares_total == shares_total) return;
+    gncDistribListBeginEdit (distriblist);
+    distriblist->shares_total = shares_total;
+    mark_distriblist (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
+gncDistribListSetType (
+    GncDistributionList *distriblist,
+    GncDistributionListType type)
+{
+    if (!distriblist) return;
+    if (distriblist->type == type) return;
+    gncDistribListBeginEdit (distriblist);
+    distriblist->type = type;
+    mark_distriblist (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+// Get Functions
+
+const char
+*gncDistribListGetDescription (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return NULL;
+    return distriblist->description;
+}
+
+GList
+*gncDistribListGetLists (
+    QofBook *book)
+{
+    struct _book_info *book_info;
+    if (!book) return NULL;
+
+    book_info = qof_book_get_data (book, _GNC_MOD_NAME);
+    return book_info->lists;
+}
+
+const char
+*gncDistribListGetName (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return NULL;
+    return distriblist->name;
+}
+
+/* GList */
+/* *gncDistribListGetOwners ( */
+/*     GncOwner *owner) */
+/* { */
+/*     struct _owner_info *owner_info; */
+/*     if (!owner) return NULL; */
+
+/*     owner_info = qof_owner_get_data (owner, _GNC_MOD_NAME); */
+/*     return owner_info->lists; */
+/* } */
+
+GncDistributionList
+*gncDistribListGetParent (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return NULL;
+    return distriblist->parent;
+}
+
+const char
+*gncDistribListGetPercentageLabelSettlement (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return 0;
+    return distriblist->percentage_label_settlement;
+}
+
+gint
+gncDistribListGetPercentageTotal (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return 0;
+    return distriblist->percentage_total;
+}
+
+gint64
+gncDistribListGetRefcount (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return 0;
+    return distriblist->refcount;
+}
+
+const char
+*gncDistribListGetSharesLabelSettlement (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return 0;
+    return distriblist->shares_label_settlement;
+}
+
+gint
+gncDistribListGetSharesTotal (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return 0;
+    return distriblist->shares_total;
+}
+
+GncDistributionListType
+gncDistribListGetType (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return 0;
+    return distriblist->type;
+}
+
+GncDistributionList
+*gncDistribListReturnChild (
+    GncDistributionList *distriblist,
+    gboolean make_new)
+{
+    GncDistributionList *child = NULL;
+
+    if (!distriblist) return NULL;
+    if (distriblist->child) return distriblist->child;
+    if (distriblist->parent || distriblist->invisible) return distriblist;
+    if (make_new)
+    {
+        child = gncDistribListCopy (distriblist);
+        gncDistribListSetChild (distriblist, child);
+        gncDistribListSetParent (child, distriblist);
+    }
+    return child;
+}
+
+//Helper Functions
+
+GncDistributionList
+*gncDistribListLookupByName (
+    QofBook *book,
+    const char *name)
+{
+    GList *list = gncDistribListGetLists (book);
+
+    for ( ; list; list = list->next)
+    {
+        GncDistributionList *distriblist = list->data;
+        if (!g_strcmp0 (distriblist->name, name))
+            return list->data;
+    }
+    return NULL;
+}
+
+// Comparison Functions
+
+int
+gncDistribListCompare (
+    const GncDistributionList *a,
+    const GncDistributionList *b)
+{
+    int ret;
+
+    if (!a && !b) return 0;
+    if (!a) return -1;
+    if (!b) return 1;
+
+    ret = g_strcmp0 (a->name, b->name);
+    if (ret) return ret;
+
+    return g_strcmp0 (a->description, b->description);
+}
+
+gboolean
+gncDistribListIsDirty (const GncDistributionList *distriblist)
+{
+    if (!distriblist) return FALSE;
+    return qof_instance_get_dirty_flag(distriblist);
+}
+
+gboolean
+gncDistribListEqual(
+    const GncDistributionList *a,
+    const GncDistributionList *b)
+{
+    if (a == NULL && b == NULL) return TRUE;
+    if (a == NULL || b == NULL) return FALSE;
+
+    g_return_val_if_fail(GNC_IS_DISTRIBLIST(a), FALSE);
+    g_return_val_if_fail(GNC_IS_DISTRIBLIST(b), FALSE);
+
+    if (g_strcmp0(a->name, b->name) != 0)
+    {
+        PWARN("Names differ: %s vs %s", a->name, b->name);
+        return FALSE;
+    }
+
+    if (g_strcmp0(a->description, b->description) != 0)
+    {
+        PWARN("Descriptions differ: %s vs %s", a->description, b->description);
+        return FALSE;
+    }
+
+    if (a->invisible != b->invisible)
+    {
+        PWARN("Invisible flags differ");
+        return FALSE;
+    }
+
+    if (a->percentage_label_settlement != b->percentage_label_settlement)
+    {
+        PWARN("Percentage label settlement differ: %s vs %s", a->percentage_label_settlement, b->percentage_label_settlement);
+        return FALSE;
+    }
+
+    if (a->percentage_total != b->percentage_total)
+    {
+        PWARN("Percentage total differ: %d vs %d", a->percentage_total, b->percentage_total);
+        return FALSE;
+    }
+
+    if (a->shares_label_settlement != b->shares_label_settlement)
+    {
+        PWARN("Shares label settlement differ: %s vs %s", a->shares_label_settlement, b->shares_label_settlement);
+        return FALSE;
+    }
+
+    if (a->shares_total != b->shares_total)
+    {
+        PWARN("Shares total differ: %d vs %d", a->shares_total, b->shares_total);
+        return FALSE;
+    }
+
+    if (a->type != b->type)
+    {
+        PWARN("Types differ");
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+gboolean
+gncDistribListIsFamily (
+    const GncDistributionList *a,
+    const GncDistributionList *b)
+{
+    if (!gncDistribListCompare (a, b))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+// deprecated
