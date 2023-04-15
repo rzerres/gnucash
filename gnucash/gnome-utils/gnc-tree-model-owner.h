@@ -1,6 +1,6 @@
 /*
  * gnc-tree-model-owner.h -- GtkTreeModel implementation to
- *	display owners in a GtkTreeView.
+ *      display owners in a GtkTreeView.
  *
  * Copyright (C) 2011 Geert Janssens <geert@kobaltwit.be>
  *
@@ -62,6 +62,7 @@ typedef enum
     GNC_TREE_MODEL_OWNER_COL_ADDRESS_2,
     GNC_TREE_MODEL_OWNER_COL_ADDRESS_3,
     GNC_TREE_MODEL_OWNER_COL_ADDRESS_4,
+    GNC_TREE_MODEL_OWNER_COL_MOBILE,
     GNC_TREE_MODEL_OWNER_COL_PHONE,
     GNC_TREE_MODEL_OWNER_COL_FAX,
     GNC_TREE_MODEL_OWNER_COL_EMAIL,

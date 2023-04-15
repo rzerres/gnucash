@@ -1,6 +1,6 @@
 /*
  * gnc-tree-model-owner.c -- GtkTreeModel implementation to
- *	display owners in a GtkTreeView.
+ *      display owners in a GtkTreeView.
  *
  * Copyright (C) 2011 Geert Janssens <geert@kobaltwit.be>
  *
@@ -65,20 +65,20 @@ static void gnc_tree_model_owner_get_value (GtkTreeModel *tree_model,
         GtkTreeIter *iter,
         int column,
         GValue *value);
-static gboolean	gnc_tree_model_owner_iter_next (GtkTreeModel *tree_model,
+static gboolean gnc_tree_model_owner_iter_next (GtkTreeModel *tree_model,
         GtkTreeIter *iter);
-static gboolean	gnc_tree_model_owner_iter_children (GtkTreeModel *tree_model,
+static gboolean gnc_tree_model_owner_iter_children (GtkTreeModel *tree_model,
         GtkTreeIter *iter,
         GtkTreeIter *parent);
-static gboolean	gnc_tree_model_owner_iter_has_child (GtkTreeModel *tree_model,
+static gboolean gnc_tree_model_owner_iter_has_child (GtkTreeModel *tree_model,
         GtkTreeIter *iter);
 static int gnc_tree_model_owner_iter_n_children (GtkTreeModel *tree_model,
         GtkTreeIter *iter);
-static gboolean	gnc_tree_model_owner_iter_nth_child (GtkTreeModel *tree_model,
+static gboolean gnc_tree_model_owner_iter_nth_child (GtkTreeModel *tree_model,
         GtkTreeIter *iter,
         GtkTreeIter *parent,
         int n);
-static gboolean	gnc_tree_model_owner_iter_parent (GtkTreeModel *tree_model,
+static gboolean gnc_tree_model_owner_iter_parent (GtkTreeModel *tree_model,
         GtkTreeIter *iter,
         GtkTreeIter *child);
 
@@ -363,6 +363,7 @@ gnc_tree_model_owner_get_column_type (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_OWNER_COL_ADDRESS_2:
     case GNC_TREE_MODEL_OWNER_COL_ADDRESS_3:
     case GNC_TREE_MODEL_OWNER_COL_ADDRESS_4:
+    case GNC_TREE_MODEL_OWNER_COL_MOBILE:
     case GNC_TREE_MODEL_OWNER_COL_PHONE:
     case GNC_TREE_MODEL_OWNER_COL_FAX:
     case GNC_TREE_MODEL_OWNER_COL_EMAIL:
@@ -563,6 +564,14 @@ gnc_tree_model_owner_get_value (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_OWNER_COL_ADDRESS_4:
         g_value_init (value, G_TYPE_STRING);
         string = g_strdup (gncAddressGetAddr4 (gncOwnerGetAddr (owner)));
+        if (string)
+            g_value_take_string (value, string);
+        else
+            g_value_set_static_string (value, "");
+        break;
+    case GNC_TREE_MODEL_OWNER_COL_MOBILE:
+        g_value_init (value, G_TYPE_STRING);
+        string = g_strdup (gncAddressGetMobile (gncOwnerGetAddr (owner)));
         if (string)
             g_value_take_string (value, string);
         else
