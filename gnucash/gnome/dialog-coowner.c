@@ -117,11 +117,11 @@ struct _coowner_window
 {
     GtkWidget *dialog;
 
-    GtkWidget *id_entry;
+    GtkWidget *coowner_entry_id;
 
-    GtkWidget *active_check;
+    GtkWidget *coowner_checkbutton_active;
 
-    GtkWidget *addr1_entry;
+    GtkWidget *coowner_entry_addr1;
     GtkWidget *addr2_entry;
     GtkWidget *addr3_entry;
     GtkWidget *addr4_entry;
@@ -137,7 +137,7 @@ struct _coowner_window
     GtkWidget *discount_amount;
     GtkWidget *distribution_key;
     GtkWidget *language_entry;
-    GtkWidget *notes_text;
+    GtkWidget *coowner_entry_text;
     GtkWidget *property_unit;
 
     GncBillTerm *terms;
@@ -148,7 +148,7 @@ struct _coowner_window
     GtkWidget *taxtable_check;
     GtkWidget *taxtable_menu;
 
-    GtkWidget *name_entry;
+    GtkWidget *coowner_entry_name;
     GtkWidget *username_entry;
 
 
@@ -208,16 +208,16 @@ static void gnc_ui_to_coowner (CoOwnerWindow *ow, GncCoOwner *coowner)
         qof_event_gen(QOF_INSTANCE(coowner), QOF_EVENT_ADD, NULL);
 
     gncCoOwnerSetID (coowner, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->id_entry), 0, -1));
+        (GTK_EDITABLE (ow->coowner_entry_id), 0, -1));
     gncCoOwnerSetActive (coowner, gtk_toggle_button_get_active
-        (GTK_TOGGLE_BUTTON (ow->active_check)));
+        (GTK_TOGGLE_BUTTON (ow->coowner_checkbutton_active)));
 
 
     gncAddressSetName (addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->name_entry), 0, -1));
+        (GTK_EDITABLE (ow->coowner_entry_name), 0, -1));
 
     gncAddressSetAddr1 (addr, gtk_editable_get_chars
-        (GTK_EDITABLE (ow->addr1_entry), 0, -1));
+        (GTK_EDITABLE (ow->coowner_entry_addr1), 0, -1));
     gncAddressSetAddr2 (addr, gtk_editable_get_chars
         (GTK_EDITABLE (ow->addr2_entry), 0, -1));
     gncAddressSetAddr3 (addr, gtk_editable_get_chars
@@ -256,7 +256,7 @@ static void gnc_ui_to_coowner (CoOwnerWindow *ow, GncCoOwner *coowner)
         (GTK_EDITABLE (ow->username_entry), 0, -1));
 
     /* Fill in extra notes */
-    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_text));
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
     gncCoOwnerSetNotes (coowner, text);
@@ -318,7 +318,7 @@ gnc_coowner_window_ok_cb (GtkWidget *widget, gpointer data)
     GNCPrintAmountInfo print_info;
 
     /* Check for valid coowner name */
-    if (check_entry_nonempty (ow->name_entry,
+    if (check_entry_nonempty (ow->coowner_entry_name,
                               _("The Co-Owner Name filed cannot be left blank, please"
                                 "enter a coowner's name/person's name.")))
         return;
@@ -333,10 +333,10 @@ gnc_coowner_window_ok_cb (GtkWidget *widget, gpointer data)
       return;
 
     /* Set the coowner id if one has not been chosen */
-    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (ow->id_entry)), "") == 0)
+    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_id)), "") == 0)
     {
         string = gncCoOwnerNextID (ow->book);
-        gtk_entry_set_text (GTK_ENTRY (ow->id_entry), string);
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_id), string);
         g_free(string);
     }
 
@@ -431,11 +431,11 @@ gnc_coowner_name_changed_cb (GtkWidget *widget, gpointer data)
     if (!ow)
         return;
 
-    name = gtk_entry_get_text (GTK_ENTRY (ow->name_entry));
+    name = gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_name));
     if (!name || *name == '\0')
         name = _("<No name>");
 
-    id = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
+    id = gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_id));
 
     fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
 
@@ -598,6 +598,7 @@ gnc_coowner_new_window (GtkWindow *parent,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-coowner.glade", "taxincluded_store");
     gnc_builder_add_from_file (builder, "dialog-coowner.glade", "taxtable_store");
+    gnc_builder_add_from_file (builder, "dialog-coowner.glade", "terms_store");
     gnc_builder_add_from_file (builder, "dialog-coowner.glade", "coowner_dialog");
     ow->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "coowner_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(ow->dialog), parent);
@@ -609,13 +610,13 @@ gnc_coowner_new_window (GtkWindow *parent,
     g_object_set_data (G_OBJECT (ow->dialog), "dialog_info", ow);
 
     /* Get entry points */
-    ow->id_entry = GTK_WIDGET(gtk_builder_get_object (builder, "id_entry"));
+    ow->coowner_entry_id = GTK_WIDGET(gtk_builder_get_object (builder, "coowner_entry_id"));
 
-    ow->active_check = GTK_WIDGET(gtk_builder_get_object (builder, "active_check"));
+    ow->coowner_checkbutton_active = GTK_WIDGET(gtk_builder_get_object (builder, "coowner_checkbutton_active"));
 
     /* Address fields */
-    ow->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
-    ow->addr1_entry = GTK_WIDGET(gtk_builder_get_object (builder, "addr1_entry"));
+    ow->coowner_entry_name = GTK_WIDGET(gtk_builder_get_object (builder, "coowner_entry_name"));
+    ow->coowner_entry_addr1 = GTK_WIDGET(gtk_builder_get_object (builder, "coowner_entry_addr1"));
     ow->addr2_entry = GTK_WIDGET(gtk_builder_get_object (builder, "addr2_entry"));
     ow->addr3_entry = GTK_WIDGET(gtk_builder_get_object (builder, "addr3_entry"));
     ow->addr4_entry = GTK_WIDGET(gtk_builder_get_object (builder, "addr4_entry"));
@@ -633,17 +634,19 @@ gnc_coowner_new_window (GtkWindow *parent,
     ow->apt_share = edit;
     gtk_widget_show (edit);
 
-    hbox = GTK_WIDGET(gtk_builder_get_object (builder, "apt_share_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    // TODO: glade field apt_share_box
+    // hbox = GTK_WIDGET(gtk_builder_get_object (builder, "apt_share_box"));
+    // gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
     /* Property unit value */
-    ow->property_unit = GTK_WIDGET(gtk_builder_get_object (builder, "property_unit"));
+    // ow->property_unit = GTK_WIDGET(gtk_builder_get_object (builder, "property_unit"));
 
-    ow->distribution_key = GTK_WIDGET(gtk_builder_get_object (builder, "distribution_key"));
+    /* Distribution key value */
+    //ow->distribution_key = GTK_WIDGET(gtk_builder_get_object (builder, "distribution_key"));
 
 
     /* Language */
-    ow->language_entry = GTK_WIDGET(gtk_builder_get_object (builder, "language_entry"));
+    //ow->language_entry = GTK_WIDGET(gtk_builder_get_object (builder, "language_entry"));
 
     /* Credit: Monetary Value */
     edit = gnc_amount_edit_new();
@@ -655,8 +658,9 @@ gnc_coowner_new_window (GtkWindow *parent,
     ow->credit_amount = edit;
     gtk_widget_show (edit);
 
-    hbox = GTK_WIDGET (gtk_builder_get_object (builder, "credit_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    // TODO: glade field credit_box
+    // hbox = GTK_WIDGET (gtk_builder_get_object (builder, "credit_box"));
+    // gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
     /* CCard Account Selection */
     ow->ccard_acct_check = GTK_WIDGET(gtk_builder_get_object (builder, "ccard_check"));
@@ -695,7 +699,9 @@ gnc_coowner_new_window (GtkWindow *parent,
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
 
     /* Notes */
-    ow->notes_text = GTK_WIDGET (gtk_builder_get_object (builder, "notes_text"));
+    ow->coowner_entry_text = GTK_WIDGET (gtk_builder_get_object (builder, "coowner_entry_text"));
+
+    // TODO: glade field shipping address
 
     /* Tax table */
     ow->taxincluded_menu = GTK_WIDGET (gtk_builder_get_object (builder, "taxincluded_menu"));
@@ -723,15 +729,15 @@ gnc_coowner_new_window (GtkWindow *parent,
 
         addr = gncCoOwnerGetAddr (coowner);
 
-        gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncCoOwnerGetID (coowner));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_id), gncCoOwnerGetID (coowner));
 
         /* Active check toggle button */
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ow->active_check),
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ow->coowner_checkbutton_active),
                                       gncCoOwnerGetActive (coowner));
 
         /* Setup Address */
-        gtk_entry_set_text (GTK_ENTRY (ow->name_entry), gncAddressGetName (addr));
-        gtk_entry_set_text (GTK_ENTRY (ow->addr1_entry), gncAddressGetAddr1 (addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_name), gncAddressGetName (addr));
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_addr1), gncAddressGetAddr1 (addr));
         gtk_entry_set_text (GTK_ENTRY (ow->addr2_entry), gncAddressGetAddr2 (addr));
         gtk_entry_set_text (GTK_ENTRY (ow->addr3_entry), gncAddressGetAddr3 (addr));
         gtk_entry_set_text (GTK_ENTRY (ow->addr4_entry), gncAddressGetAddr4 (addr));
@@ -749,11 +755,11 @@ gnc_coowner_new_window (GtkWindow *parent,
 
         /* Notes */
         string = gncCoOwnerGetNotes (coowner);
-        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
+        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_text));
         gtk_text_buffer_set_text (text_buffer, string, -1);
 
         /* Assigne name values */
-        gtk_entry_set_text (GTK_ENTRY (ow->name_entry),
+        gtk_entry_set_text (GTK_ENTRY (ow->coowner_entry_name),
                             gncCoOwnerGetName (coowner));
         gtk_entry_set_text (GTK_ENTRY (ow->username_entry),
                             gncCoOwnerGetUsername (coowner));
@@ -771,7 +777,7 @@ gnc_coowner_new_window (GtkWindow *parent,
                                       gncCoOwnerGetTaxTableOverride (coowner));
 
         string = gncCoOwnerGetNotes (coowner);
-        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
+        text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->coowner_entry_text));
         gtk_text_buffer_set_text (text_buffer, string, -1);
 
         ow->component_id =
