@@ -271,6 +271,7 @@ gnucash/gtkbuilder/dialog-find-account.glade
 gnucash/gtkbuilder/dialog-imap-editor.glade
 gnucash/gtkbuilder/dialog-import.glade
 gnucash/gtkbuilder/dialog-invoice.glade
+gnucash/gtkbuilder/dialog-invoice_stable.glade
 gnucash/gtkbuilder/dialog-job.glade
 gnucash/gtkbuilder/dialog-lot-viewer.glade
 gnucash/gtkbuilder/dialog-new-user.glade
