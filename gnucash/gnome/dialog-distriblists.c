@@ -97,19 +97,21 @@ typedef struct _distribution_list_notebook
     GtkWidget *buttonbox_shares;
     GtkWidget *entry_settlement_percentage;
     GtkWidget *entry_settlement_shares;
-    GtkWidget *label_owner;
-    GtkWidget *label_percentage_total;
-    GtkWidget *label_settlement_percentage;
-    GtkWidget *label_settlement_shares;
-    GtkWidget *label_shares_total;
+    GtkLabel *label_owner;
+    GtkLabel *label_percentage_owner_typename;
+    GtkLabel *label_percentage_total;
+    GtkLabel *label_settlement_percentage;
+    GtkLabel *label_settlement_shares;
+    GtkLabel *label_shares_owner_typename;
+    GtkLabel *label_shares_total;
     //GtkWidget *owners;
-    GtkWidget *owners_typename;
+    GtkLabel *owners_typename;
     GtkWidget *view_percentage_owner;
-    GtkWidget *percentage_owner_typename;
+    GtkLabel *percentage_owner_typename;
     GtkWidget *percentage_total;
     GtkWidget *view_shares_owner;
-    GtkWidget *shares_owner_type;
-    GtkWidget *shares_owner_typename;
+    //GtkWidget *shares_owner_type;
+    GtkLabel *shares_owner_typename;
     GtkWidget *shares_total;
 
     // Disriblist "notebook" entities
@@ -288,12 +290,14 @@ distriblists_list_refresh (
     DistributionListsWindow *distriblists_window)
 {
     DistributionListNotebook *notebook;
+    DistributionListOwners *owners;
     char *label_type = _("Label type");
     char *entry_type;
 
     g_return_if_fail (distriblists_window);
 
     notebook = &distriblists_window->notebook;
+    owners = &distriblists_window->owners;
 
     if (!distriblists_window->current_list)
     {
@@ -324,14 +328,15 @@ distriblists_list_refresh (
         break;
     }
 
-    // show the notebook widgets (active page)
-    notebook_show (&distriblists_window->notebook);
     gtk_label_set_text (
         GTK_LABEL(distriblists_window->entry_type), entry_type);
 
-    /* gtk_entry_set_text ( */
-    /*     GTK_ENTRY (notebook->percentage_owner_typename), */
-    /*     owners->typename); */
+    gtk_entry_set_text (
+        GTK_ENTRY (notebook->percentage_owner_typename),
+        owners->typename);
+
+    // show the notebook widgets (active page)
+    notebook_show (&distriblists_window->notebook);
 
     /* gtk_entry_set_text ( */
     /*     GTK_ENTRY (notebook->shares_owner_typename), */
@@ -389,13 +394,14 @@ distriblists_window_refresh (
     GtkTreeSelection *selection;
     GtkTreeRowReference *reference = NULL;
 
+    PWARN ("Refresh the window list\n");
     g_return_if_fail (distriblists_window);
     view = GTK_TREE_VIEW(distriblists_window->view_lists);
     store = GTK_LIST_STORE(gtk_tree_view_get_model (view));
     selection = gtk_tree_view_get_selection (view);
 
     // Clear the list
-    gtk_list_store_clear (store);
+    g_return_if_fail (distriblists_window);    gtk_list_store_clear (store);
     gnc_gui_component_clear_watches (distriblists_window->component_id);
 
     // Add the items to the list
@@ -466,6 +472,7 @@ distriblists_window_refresh (
         if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL(store), &iter))
             gtk_tree_selection_select_iter (selection, &iter);
     }
+    PWARN ("Refresh the window list done\n");
 }
 
 static void
@@ -493,7 +500,59 @@ distriblist_to_ui (
     gtk_entry_set_text (
         GTK_ENTRY(description), gncDistribListGetDescription (distriblist));
 
-    // FIXME: hardcoded for now
+    // Get notbook attributes
+    notebook->type = gncDistribListGetType (distriblist);
+
+    // Get owners attributes
+    owners->typename = gncDistribListGetOwnerTypeName (distriblist);
+
+    // Set widgets
+    switch (notebook->type)
+    {
+    case GNC_DISTRIBLIST_TYPE_PERCENTAGE:
+    {
+        // Set the settlement label
+        gtk_entry_set_text (
+            GTK_ENTRY (notebook->entry_settlement_percentage),
+            gncDistribListGetPercentageLabelSettlement (distriblist));
+        PWARN("Label Settlement percentage: '%s'\n", gncDistribListGetPercentageLabelSettlement (distriblist));
+
+        // Set the total percentage value representing available shares
+        get_int (
+            notebook->percentage_total,
+            distriblist,
+            gncDistribListGetPercentageTotal);
+
+        // Set the owner typename
+        gtk_label_set_label (
+            GTK_LABEL (notebook->percentage_owner_typename),
+            owners->typename);
+        PWARN("Label Owner typename percentage: '%s'\n", gncDistribListGetOwnerTypeName (distriblist));
+        break;
+    }
+    case GNC_DISTRIBLIST_TYPE_SHARES:
+    {
+        // Set the settlement label
+        gtk_entry_set_text (
+            GTK_ENTRY (notebook->entry_settlement_shares),
+            gncDistribListGetSharesLabelSettlement (distriblist));
+        PWARN("Label Settlement shares: '%s'\n", gncDistribListGetSharesLabelSettlement (distriblist));
+
+        // Set the amount of total shares
+        get_int (
+            notebook->shares_total,
+            distriblist,
+            gncDistribListGetSharesTotal);
+
+        // Set the owner typename
+        gtk_label_set_label (
+            GTK_LABEL (notebook->shares_owner_typename),
+            owners->typename);
+        PWARN("Label Owner typename shares: '%s'\n", gncDistribListGetOwnerTypeName (distriblist));
+        break;
+    }
+    }
+
     /* owners->owner = gncOwnerNew(); */
     /* owners->owner->type = GNC_OWNER_COOWNER; */
     /* gncOwnerTypeToQofIdType(owners->owner->type); */
@@ -514,49 +573,21 @@ distriblist_to_ui (
     /* g_warning ("[distriblist_to_ui] Hardcode owner type: '%s'\n", */
     /*            gncOwnerTypeToQofIdType(notebook->owner->type)); */
 
-    // Set the owner typename
-    gtk_entry_set_text (
-        GTK_ENTRY (notebook->percentage_owner_typename),
-        owners->typename);
+    // Set the owner typename (e.g GNC_OWNER_COOWNER -> N_"Co-Owner")
+    /* gtk_entry_set_text ( GTK_ENTRY ( */
 
-    gtk_entry_set_text (
-        GTK_ENTRY (notebook->shares_owner_typename),
-        owners->typename);
+    /*     owners->entry_typename), */
+    /*     gncDistribListGetOwnerTypeName (distriblist)); */
+    //PWARN ("Set owner typename: '%s'\n", owners->typename);
 
-    // Distribution list type
-    notebook->type = gncDistribListGetType (distriblist);
+    /* gtk_entry_set_text ( GTK_ENTRY ( */
+    /*     notebook->shares_owner_typename), */
+    /*     gncDistribListGetOwnerTypeName (distriblist)); */
 
-    switch (notebook->type)
-    {
-    case GNC_DISTRIBLIST_TYPE_PERCENTAGE:
-    {
-        // Set the settlement label
-        gtk_entry_set_text (
-            GTK_ENTRY (notebook->entry_settlement_percentage),
-            gncDistribListGetPercentageLabelSettlement (distriblist));
+    /* gtk_entry_set_text ( GTK_ENTRY ( */
+    /*     notebook->percentage_owner_typename), */
+    /*     gncDistribListGetOwnerTypeName (distriblist)); */
 
-        // Set the total percentage value representing available shares
-        get_int (
-            notebook->percentage_total,
-            distriblist,
-            gncDistribListGetPercentageTotal);
-        break;
-    }
-    case GNC_DISTRIBLIST_TYPE_SHARES:
-    {
-        // Set the settlement label
-        gtk_entry_set_text ( GTK_ENTRY (
-            notebook->entry_settlement_shares),
-            gncDistribListGetSharesLabelSettlement (distriblist));
-
-        // Set the amount of total shares
-        get_int (
-            notebook->shares_total,
-            distriblist,
-            gncDistribListGetSharesTotal);
-        break;
-    }
-    }
 
 //FIXME: assign list of saved owners
 //FIXME: assign correct owner_type
@@ -642,8 +673,6 @@ distriblist_to_ui (
 
     /* gnc_tree_view_owner_set_filter ( */
     /*     GNC_TREE_VIEW_OWNER(tree_view), */
-    /*     gnc_plugin_page_owner_tree_filter_owners, &priv->fd, NULL); */
-
 }
 
 static gboolean
@@ -970,6 +999,8 @@ notebook_init (
     gchar* label = "";
     GncOwner *owner;
     const gchar *style_label = NULL;
+    PangoAttrList *pango_attributes_list;
+    gchar *entry_attributes = "";
 
     // Load the notebook from Glade file
     g_warning ("[notebook_init] read in distriblists_notebook glade definitions\n");
@@ -1003,43 +1034,46 @@ notebook_init (
         notebook->notebook), "gnc-class-distribution-lists");
 
     // Load the "percentage" widgets
-    notebook->label_settlement_percentage = GTK_WIDGET(gtk_builder_get_object (
-        builder, "distriblists_notebook_label_settlement_percentage"));
-    notebook->entry_settlement_percentage = GTK_WIDGET(gtk_builder_get_object (
-        builder, "distriblists_notebook_entry_settlement_percentage"));
-    notebook->label_percentage_total = GTK_WIDGET(gtk_builder_get_object (
-        builder, "distriblists_notebook_label_percentage_total"));
-    notebook->percentage_total = read_widget (builder,
-        "percentage:percentage_total", read_only);
-    notebook->percentage_total = GTK_WIDGET(gtk_builder_get_object (
-        builder, "percentage:percentage_total"));
-    notebook->percentage_owner_typename = GTK_WIDGET(gtk_builder_get_object (
-        builder, "distriblists_notebook_percentage_owner_typename"));
     box = GTK_WIDGET (gtk_builder_get_object (
         builder,
         "distriblists_notebook_scrolled_window_percentage"));
 
-    // FIXME:  owner struct is only initialized !after! distriblist_to_ui
-    /* notebook->view_percentage_owner = GTK_WIDGET ( */
-    /*     gnc_tree_view_owner_new (notebook->owner->type)); */
-    /* gtk_container_add (GTK_CONTAINER(box), notebook->view_percentage_owner); */
-    /* gtk_tree_view_set_headers_visible ( */
-    /*     GTK_TREE_VIEW(notebook->view_percentage_owner), FALSE); */
+    /* notebook->label_settlement_percentage = GTK_LABEL (gtk_builder_get_object ( */
+    /*     builder, "distriblists_notebook_label_settlement_percentage")); */
+    notebook->entry_settlement_percentage = GTK_WIDGET (gtk_builder_get_object (
+        builder, "distriblists_notebook_entry_settlement_percentage"));
+    /* notebook->label_percentage_total = GTK_WIDGET (gtk_builder_get_object ( */
+    /*     builder, "distriblists_notebook_label_percentage_total")); */
+    /* notebook->percentage_total = read_widget (builder, */
+    /*     "percentage:percentage_total", read_only); */
+    notebook->percentage_total = GTK_WIDGET (gtk_builder_get_object (
+        builder, "percentage:percentage_total"));
+    /* notebook->label_percentage_owner_typename = GTK_WIDGET (gtk_builder_get_object ( */
+    /*      builder, "distriblists_notebook_label_percentage_owner_typename")); */
+    notebook->percentage_owner_typename = GTK_LABEL (gtk_builder_get_object (
+        builder, "distriblists_notebook_percentage_owner_typename"));
 
     // Load the "shares" widgets
-    notebook->label_settlement_shares = GTK_WIDGET(gtk_builder_get_object (
-        builder, "distriblists_notebook_label_settlement_shares"));
-    notebook->entry_settlement_shares = GTK_WIDGET(gtk_builder_get_object (
-        builder, "distriblists_notebook_entry_settlement_shares"));
-    notebook->label_shares_total = GTK_WIDGET(gtk_builder_get_object (
-        builder, "distriblists_notebook_label_shares_total"));
-    notebook->shares_total = GTK_WIDGET(gtk_builder_get_object (
-        builder, "shares:shares_total"));
-    notebook->shares_owner_typename = GTK_WIDGET(gtk_builder_get_object (
-        builder, "distriblists_notebook_shares_owner_typename"));
     box = GTK_WIDGET (gtk_builder_get_object (
         builder,
         "distriblists_notebook_scrolled_window_shares"));
+
+    /* notebook->label_shares_total = GTK_LABEL (gtk_builder_get_object ( */
+    /*     builder, "distriblists_notebook_label_shares_total")); */
+    notebook->label_settlement_shares = GTK_LABEL (gtk_builder_get_object (
+        builder, "distriblists_notebook_label_settlement_shares"));
+    /* notebook->shares_total = read_widget (builder, */
+    /*     "shares:shares_total", read_only); */
+    notebook->shares_total = GTK_WIDGET (gtk_builder_get_object (
+        builder, "shares:shares_total"));
+    notebook->entry_settlement_shares = GTK_WIDGET (gtk_builder_get_object (
+        builder, "distriblists_notebook_entry_settlement_shares"));
+    /* notebook->shares_owner_typename = GTK_WIDGET (gtk_builder_get_object ( */
+    /*     builder, "distriblists_notebook_shares_owner_typename")); */
+    /* notebook->label_shares_owner_typename = GTK_WIDGET (gtk_builder_get_object ( */
+    /*     builder, "distriblists_notebook_label_shares_owner_typename")); */
+    notebook->shares_owner_typename = GTK_LABEL (gtk_builder_get_object (
+        builder, "distriblists_notebook_shares_owner_typename"));
 
     /* notebook->view_percentage_owner = GTK_WIDGET ( */
     /*     gnc_tree_view_owner_new (notebook->owner->type)); */
@@ -1458,7 +1492,7 @@ ui_to_distriblist (NewDistributionList *new_distriblist)
         new_distriblist->this_distriblist,
         new_distriblist->notebook.type);
 
-    // Set the attributes
+    // Set the notebook attributes
     switch (new_distriblist->notebook.type)
     {
     case GNC_DISTRIBLIST_TYPE_PERCENTAGE:
@@ -1470,7 +1504,10 @@ ui_to_distriblist (NewDistributionList *new_distriblist)
             distriblist,
             gncDistribListSetPercentageTotal);
         // FIXME: set a default owner-type (e.g: GNC_OWNER_NONE, GNC_OWNER_COOWNER)
-        PWARN ("Write owner typename: '%s'\n", owners->typename);
+        PWARN ("Set owner typename: '%s'\n", owners->typename);
+        gtk_label_set_label(
+            GTK_LABEL (notebook->percentage_owner_typename),
+            owners->typename);
         gncDistribListSetOwnerTypeName (
             distriblist,
             owners->typename);
@@ -1490,16 +1527,16 @@ ui_to_distriblist (NewDistributionList *new_distriblist)
             notebook->shares_total,
             distriblist,
             gncDistribListSetSharesTotal);
-        // FIXME: set a default owner-type (e.g: GNC_OWNER_NONE, GNC_OWNER_COOWNER)
-        PWARN ("Write owner typename: '%s'\n", owners->typename);
-        /* PWARN ("Write owner ('%i') -> '%s'\n", */
-        /*        owners->owner->type, */
-        /*        gncOwnerTypeToQofIdType(owners->owner->type)); */
-        /* gncDistribListSetOwner ( */
-        /*     distriblist, */
-        /*     owners->owner); */
+        gtk_label_set_label(
+            GTK_LABEL (notebook->shares_owner_typename),
+            owners->typename);
         break;
     }
+
+    // Set the owner attributes
+    gncDistribListSetOwnerTypeName (
+        distriblist, gtk_editable_get_chars (
+            GTK_EDITABLE (owners->entry_typename), 0, -1));
 
     return gncDistribListIsDirty (distriblist);
 }
@@ -1589,9 +1626,8 @@ gnc_ui_distriblists_window_new (
     GtkWindow *parent,
     QofBook *book)
 {
-    GtkWidget *widget;
-
     GtkBuilder *builder;
+    GtkWidget *notebook_vbox;
     GtkTreeViewColumn *column;
     DistributionListsWindow *distriblists_window;
     GtkCellRenderer *renderer;
@@ -1630,27 +1666,27 @@ gnc_ui_distriblists_window_new (
     distriblists_window->window = GTK_WIDGET(
         gtk_builder_get_object (builder, "distriblists_window"));
 
-    // Assign the gtk box (the primary dialog)
-    distriblists_window->vbox = GTK_WIDGET(
-        gtk_builder_get_object (builder, "distriblists_vbox"));
+    /* // Assign the gtk primary dialog (as vbox) */
+    /* distriblists_window->vbox = GTK_WIDGET( */
+    /*     gtk_builder_get_object (builder, "distriblists_vbox")); */
 
-    // Assign distribution lists frame
+    // Assign distribution lists tree frame
     distriblists_window->view_lists = GTK_WIDGET(
         gtk_builder_get_object (builder, "distriblists_treeview_lists"));
 
-    // Assign distribution list definition frame
+    /* // Assign distribution list definition frame */
     distriblists_window->vbox_definition = GTK_WIDGET(
         gtk_builder_get_object (builder, "distriblists_vbox_definition"));
 
-    // Assign distribution list attributes
-    distriblists_window->label_definition = GTK_WIDGET(
-        gtk_builder_get_object (builder, "distriblists_label_definition_distribution_list"));
-    distriblists_window->label_description = GTK_WIDGET(
-        gtk_builder_get_object (builder, "distriblists_label_description"));
+    /* // Assign distribution list attributes */
+    /* distriblists_window->label_definition = GTK_WIDGET( */
+    /*     gtk_builder_get_object (builder, "distriblists_label_definition_distribution_list")); */
+    /* distriblists_window->label_description = GTK_WIDGET( */
+    /*     gtk_builder_get_object (builder, "distriblists_label_description")); */
     distriblists_window->entry_description = GTK_WIDGET(
         gtk_builder_get_object (builder, "distriblists_entry_description"));
-    distriblists_window->label_type = GTK_WIDGET(
-        gtk_builder_get_object (builder, "distriblists_label_type"));
+    /* distriblists_window->label_type = GTK_WIDGET( */
+    /*     gtk_builder_get_object (builder, "distriblists_label_type")); */
     distriblists_window->entry_type = GTK_WIDGET(
         gtk_builder_get_object (builder, "distriblists_entry_type"));
 
@@ -1667,7 +1703,7 @@ gnc_ui_distriblists_window_new (
         G_CALLBACK (
             distriblists_window_key_press_cb), distriblists_window);
 
-    // Initialize the view
+    // Initialize the list view
     view = GTK_TREE_VIEW(distriblists_window->view_lists);
     store = gtk_list_store_new (
         NUM_DISTRIBUTION_LIST_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
@@ -1703,11 +1739,19 @@ gnc_ui_distriblists_window_new (
     // Initialize the notebook widgets (read_only)
     notebook_init (&distriblists_window->notebook, TRUE, distriblists_window);
 
-    // Attach the notebook (list attributes)
-    widget = GTK_WIDGET(
+    // Attach the notebook inside the distributionlist vbox
+    notebook_vbox = GTK_WIDGET(
         gtk_builder_get_object (builder, "distriblists_vbox_notebook"));
+    /* gtk_entry_set_attributes ( */
+    /*     GTK_ENTRY (notebook->entry_settlement_shares), */
+    /*     writable [no]); */
+    /* g_warning ("[gnc_ui_distriblists_window_new] " */
+    /*            "entry attributes: '%s'\n", */
+    /*            gtk_entry_get_attributes ( */
+    /*                GTK_ENTRY (distriblists_window->notebook.notebook->entry_settlement_shares))); */
+
     gtk_box_pack_start (
-        GTK_BOX(widget),
+        GTK_BOX(notebook_vbox),
         distriblists_window->notebook.notebook,
         TRUE,
         TRUE,
@@ -1735,8 +1779,6 @@ gnc_ui_distriblists_window_new (
     gtk_widget_show_all (distriblists_window->window);
 
     // Refresh the UI widgets with updated entities
-    g_warning ("[gnc_ui_distriblists_window_new] "
-               "refresh the UI\n");
     distriblists_window_refresh (distriblists_window);
 
     // Decrement the reference counter
