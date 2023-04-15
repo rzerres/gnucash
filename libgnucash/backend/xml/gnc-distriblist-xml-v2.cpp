@@ -30,7 +30,7 @@ extern "C"
 
 #include "gncDistributionListP.h"
 #include "gncDistributionListP.h"
-#include "gncOwner.h"
+// #include "gncOwner.h"
 #include "qof.h"
 }
 
@@ -46,7 +46,7 @@ extern "C"
 #include "gnc-xml.h"
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
-#include "gnc-owner-xml-v2.h"
+// #include "gnc-owner-xml-v2.h"
 #include "gnc-distriblist-xml-v2.h"
 
 #include "xml-helpers.h"
@@ -68,7 +68,8 @@ const gchar* distriblist_version_string = "2.0.0";
 #define distriblist_parent_string "distriblist:parent"
 #define distriblist_child_string "distriblist:child"
 #define distriblist_slots_string "distriblist:slots"
-#define distriblist_owner_string "distriblist:owner"
+// #define distriblist_owner_string "distriblist:owner"
+#define distriblist_owner_typename_string "distriblist:owner_typename"
 
 #define percentage_labelsettlement_string "dl-percentage:label_settlement"
 #define percentage_owner_string "distriblist:owner"
@@ -128,8 +129,10 @@ static gboolean
 distriblist_slots_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static sixtp* distriblist_sixtp_parser_create (void);
 static gboolean distriblist_write (FILE *out, QofBook *book);
+// static gboolean
+// owner_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static gboolean
-owner_handler (xmlNodePtr node, gpointer distriblist_pdata);
+distriblist_owner_typename_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static gboolean
 percentage_labelsettlement_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static gboolean
@@ -227,7 +230,7 @@ distriblist_dom_tree_create (GncDistributionList* distriblist)
 {
     xmlNodePtr ret;
     xmlNodePtr data;
-    GncOwner *owner;
+    // GncOwner *owner;
 
     ret = xmlNewNode (NULL, BAD_CAST gnc_distriblist_string);
     xmlSetProp (ret, BAD_CAST "version", BAD_CAST distriblist_version_string);
@@ -247,6 +250,21 @@ distriblist_dom_tree_create (GncDistributionList* distriblist)
         distriblist_invisible_string,
         gncDistribListGetInvisible (distriblist)));
 
+    // write back the string value of the assigned owner type
+    // (GNC_ID_[OWNER] -> e.g "gncCoOwner")
+    // Hint: we do not reference to an owner guid , so id is empty
+    xmlAddChild ( ret, text_to_dom_tree (
+        distriblist_owner_typename_string,
+        gncDistribListGetOwnerTypeName (distriblist)));
+
+    // owner = gncDistribListGetOwner (distriblist);
+    // DEBUG ("Write string value of owner '%s' ('%i')\n",
+    //        gncOwnerTypeToQofIdType(owner->type),
+    //        owner->type);
+    // //if (owner && owner->owner.undefined != NULL)
+    // if (owner)
+    //     xmlAddChild (ret, gnc_owner_to_dom_tree (percentage_owner_string, owner));
+
     // xmlAddChild won't do anything with a NULL, so tests are superfluous.
     // xmlAddChild (ret, qof_instance_slots_to_dom_tree (
     //    distriblist_slots_string,
@@ -264,17 +282,6 @@ distriblist_dom_tree_create (GncDistributionList* distriblist)
             distriblist_parent_string,
             QOF_INSTANCE (gncDistribListGetParent (distriblist)));
     }
-
-    // write back the string value of the assigned owner type
-    // (GNC_ID_[OWNER] -> e.g "gncCoOwner")
-    // Hint: we do not reference to an owner guid , so id is empty
-    owner = gncDistribListGetOwner (distriblist);
-    DEBUG ("Write string value of owner '%s' ('%i')\n",
-           gncOwnerTypeToQofIdType(owner->type),
-           owner->type);
-    //if (owner && owner->owner.undefined != NULL)
-    if (owner)
-        xmlAddChild (ret, gnc_owner_to_dom_tree (percentage_owner_string, owner));
 
     switch (gncDistribListGetType (distriblist))
     {
@@ -388,9 +395,15 @@ dom_tree_handler distriblist_handlers_v2[] =
         1,
         0
     },
+    // {
+    //     distriblist_owner_string,
+    //     owner_handler,
+    //     0,
+    //     0
+    // },
     {
-        distriblist_owner_string,
-        owner_handler,
+        distriblist_owner_typename_string,
+        distriblist_owner_typename_handler,
         0,
         0
     },
@@ -787,8 +800,10 @@ distriblist_scrub_cb (QofInstance* distriblist_p, gpointer list_p)
                 distriblist, gncDistribListGetSharesLabelSettlement (t));
             gncDistribListSetSharesTotal (
                 distriblist, gncDistribListGetSharesTotal (t));
-            gncDistribListSetOwner (
-                distriblist, gncDistribListGetOwner (t));
+            // gncDistribListSetOwner (
+            //     distriblist, gncDistribListGetOwner (t));
+            gncDistribListSetOwnerTypeName (
+                distriblist, gncDistribListGetOwnerTypeName (t));
             gncDistribListCommitEdit (distriblist);
         }
         else
@@ -888,23 +903,32 @@ distriblist_write (FILE *out, QofBook* book)
     return ferror (out) == 0;
 }
 
+// static gboolean
+// owner_handler (xmlNodePtr node, gpointer distriblist_pdata)
+// {
+//     struct distriblist_pdata* pdata =
+//         static_cast<decltype (pdata)> (distriblist_pdata);
+//     GncOwner owner;
+//     gboolean ret;
+
+//     ret = gnc_dom_tree_to_owner (node, &owner, pdata->book);
+//     if (ret)
+//       gncDistribListSetOwner ( pdata->distriblist, &owner);
+
+//     return ret;
+
+//     // // Get the string representation of the owner type
+//     // QofIdTypeConst ownertype_name = gncOwnerGetTypeString (
+//     //     gncDistribListGetOwner (pdata->distriblist));
+// }
+
 static gboolean
-owner_handler (xmlNodePtr node, gpointer distriblist_pdata)
+distriblist_owner_typename_handler (xmlNodePtr node, gpointer distriblist_pdata)
 {
-    struct distriblist_pdata* pdata =
+    struct distriblist_pdata *pdata =
         static_cast<decltype (pdata)> (distriblist_pdata);
-    GncOwner owner;
-    gboolean ret;
-
-    ret = gnc_dom_tree_to_owner (node, &owner, pdata->book);
-    if (ret)
-      gncDistribListSetOwner ( pdata->distriblist, &owner);
-
-    return ret;
-
-    // // Get the string representation of the owner type
-    // QofIdTypeConst ownertype_name = gncOwnerGetTypeString (
-    //     gncDistribListGetOwner (pdata->distriblist));
+    return set_string (
+        node, pdata->distriblist, gncDistribListSetOwnerTypeName);
 }
 
 static gboolean
