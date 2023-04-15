@@ -59,7 +59,7 @@ extern "C" {
 typedef enum
 {
     GNC_INVOICE_UNDEFINED ,
-    GNC_INVOICE_COOWNER_INVOICE ,     /* Settlement */
+    GNC_INVOICE_COOWNER_SETTLEMENT ,  /* Settlement */
     GNC_INVOICE_CUST_INVOICE ,        /* Invoice */
     GNC_INVOICE_EMPL_INVOICE ,        /* Voucher */
     GNC_INVOICE_VEND_INVOICE ,        /* Bill */

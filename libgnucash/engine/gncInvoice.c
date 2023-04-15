@@ -1123,7 +1123,7 @@ GList
     {
     case GNC_OWNER_COOWNER:
         type_list = g_list_append (
-            type_list, GINT_TO_POINTER(GNC_INVOICE_COOWNER_INVOICE));
+            type_list, GINT_TO_POINTER(GNC_INVOICE_COOWNER_SETTLEMENT));
         type_list = g_list_append (
             type_list, GINT_TO_POINTER(GNC_INVOICE_COOWNER_CREDIT_NOTE));
         return type_list;
@@ -1161,7 +1161,7 @@ gncInvoiceGetType (const GncInvoice *invoice)
     case GNC_OWNER_COOWNER:
         return (gncInvoiceGetIsCreditNote (invoice) ?
                 GNC_INVOICE_COOWNER_CREDIT_NOTE :
-                GNC_INVOICE_COOWNER_INVOICE);
+                GNC_INVOICE_COOWNER_SETTLEMENT);
     case GNC_OWNER_CUSTOMER:
         return (gncInvoiceGetIsCreditNote (invoice) ?
                 GNC_INVOICE_CUST_CREDIT_NOTE :
@@ -1187,16 +1187,18 @@ const char
     GncInvoiceType type = gncInvoiceGetType (invoice);
     switch (type)
     {
-    case GNC_INVOICE_COOWNER_INVOICE:
+    case GNC_INVOICE_COOWNER_SETTLEMENT:
+        return _("Settlement");
     case GNC_INVOICE_CUST_INVOICE:
         return _("Invoice");
     case GNC_INVOICE_VEND_INVOICE:
         return _("Bill");
     case GNC_INVOICE_EMPL_INVOICE:
         return _("Expense");
+    case GNC_INVOICE_COOWNER_CREDIT_NOTE:
     case GNC_INVOICE_CUST_CREDIT_NOTE:
-    case GNC_INVOICE_VEND_CREDIT_NOTE:
     case GNC_INVOICE_EMPL_CREDIT_NOTE:
+    case GNC_INVOICE_VEND_CREDIT_NOTE:
         return _("Credit Note");
     default:
         PWARN("Unknown invoice type");
@@ -1451,7 +1453,7 @@ gncInvoiceAmountPositive (const GncInvoice *invoice)
 {
     switch (gncInvoiceGetType (invoice))
     {
-    case GNC_INVOICE_COOWNER_INVOICE:
+    case GNC_INVOICE_COOWNER_SETTLEMENT:
     case GNC_INVOICE_CUST_INVOICE:
     case GNC_INVOICE_VEND_CREDIT_NOTE:
     case GNC_INVOICE_EMPL_CREDIT_NOTE:
