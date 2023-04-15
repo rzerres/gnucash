@@ -48,12 +48,14 @@
 static inline GncOwnerType
 ui_type_to_owner_type(GncOptionUIType ui_type)
 {
+    if (ui_type == GncOptionUIType::COOWNER)
+        return GNC_OWNER_CUSTOMER;
     if (ui_type == GncOptionUIType::CUSTOMER)
         return GNC_OWNER_CUSTOMER;
-    if (ui_type == GncOptionUIType::VENDOR)
-        return GNC_OWNER_VENDOR;
     if (ui_type == GncOptionUIType::EMPLOYEE)
         return GNC_OWNER_EMPLOYEE;
+    if (ui_type == GncOptionUIType::VENDOR)
+        return GNC_OWNER_VENDOR;
 
     std::ostringstream oss;
     oss << "UI type " << static_cast<unsigned int>(ui_type) << " could not be converted to owner type\n";
@@ -233,11 +235,13 @@ gnc_business_options_gnome_initialize(void)
 {
     GncOptionUIFactory::set_func(GncOptionUIType::OWNER,
                                  create_option_widget<GncOptionUIType::OWNER>);
+    GncOptionUIFactory::set_func(GncOptionUIType::COOWNER,
+                                 create_option_widget<GncOptionUIType::OWNER>);
     GncOptionUIFactory::set_func(GncOptionUIType::CUSTOMER,
                                  create_option_widget<GncOptionUIType::OWNER>);
-    GncOptionUIFactory::set_func(GncOptionUIType::VENDOR,
-                                 create_option_widget<GncOptionUIType::OWNER>);
     GncOptionUIFactory::set_func(GncOptionUIType::EMPLOYEE,
+                                 create_option_widget<GncOptionUIType::OWNER>);
+    GncOptionUIFactory::set_func(GncOptionUIType::VENDOR,
                                  create_option_widget<GncOptionUIType::OWNER>);
     GncOptionUIFactory::set_func(GncOptionUIType::INVOICE,
                                  create_option_widget<GncOptionUIType::INVOICE>);
