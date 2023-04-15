@@ -148,6 +148,29 @@ test_job (void)
     {
         GList *list;
         GncOwner owner;
+        GncCoOwner *coowner = gncCoOwnerCreate (book);
+
+        gncOwnerInitCoOwner (&owner, coowner);
+
+        do_test (gncCoOwnerGetJoblist (coowner, TRUE) == NULL, "empty list at start");
+        gncJobSetOwner (job, &owner);
+        list = gncCoOwnerGetJoblist (coowner, FALSE);
+        do_test (list != NULL, "added to coowner");
+        do_test (g_list_length (list) == 1, "correct joblist length");
+        do_test (list->data == job, "verify job in list");
+        gncJobSetActive (job, FALSE);
+        list = gncCoOwnerGetJoblist (coowner, FALSE);
+        do_test (list == NULL, "no active jobs");
+        list = gncCoOwnerGetJoblist (coowner, TRUE);
+        do_test (list != NULL, "all jobs");
+        gncJobBeginEdit (job);
+        gncJobDestroy (job);
+        list = gncCoOwnerGetJoblist (coowner, TRUE);
+        do_test (list == NULL, "no more jobs");
+    }
+    {
+        GList *list;
+        GncOwner owner;
         GncCustomer *cust = gncCustomerCreate (book);
 
         gncOwnerInitCustomer (&owner, cust);
