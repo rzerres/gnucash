@@ -3250,7 +3250,10 @@ static InvoiceWindow
 
     // Default glade labels are for invoices, change them to comply
     // with active owner type.
-    g_warning ("[gnc_invoice_window_new_invoice] adapt owner type specific labels\n");
+    g_warning ("[gnc_invoice_window_new_invoice] adapt labels for given owner type: %d -> %s\n",
+               gncOwnerGetType(&iw->owner),
+               gncOwnerGetTypeString(&iw->owner)
+               );
     switch (gncOwnerGetType(&iw->owner))
     {
         case GNC_OWNER_COOWNER:
