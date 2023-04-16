@@ -112,6 +112,7 @@ GLIST_HELPER_INOUT(OwnerList, SWIGTYPE_p__gncOwner);
 %include <gncAddress.h>
 %include <gncBillTerm.h>
 %include <gncBusiness.h>
+%include <gncDistributionList.h>
 %include <gncCoOwner.h>
 %include <gncCustomer.h>
 %include <gncEmployee.h>
