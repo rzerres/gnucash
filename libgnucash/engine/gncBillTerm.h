@@ -116,11 +116,11 @@ void gncBillTermDecRef (GncBillTerm *term);
 void gncBillTermChanged (GncBillTerm *term);
 void gncBillTermBeginEdit (GncBillTerm *term);
 void gncBillTermCommitEdit (GncBillTerm *term);
+
 /** @} */
 
 /** @name Set Functions
-@{
-*/
+ @{ */
 void gncBillTermSetName (GncBillTerm *term, const char *name);
 void gncBillTermSetDescription (GncBillTerm *term, const char *name);
 void gncBillTermSetType (GncBillTerm *term, GncBillTermType type);
