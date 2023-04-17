@@ -39,6 +39,7 @@ struct _gncDistributionList
     QofInstance inst;
 
     // 'visible' data fields directly manipulated by user
+    gboolean active;
     const char *name;
     const char *description;
     GncDistributionListType type;
@@ -190,11 +191,19 @@ gncDistribListRemoveChild (
 enum
 {
     PROP_0,
-    PROP_NAME
+    PROP_ACTIVE,                             /* Table */
+    PROP_DESCRIPTION,                        /* Table */
+    PROP_NAME,                               /* Table */
+    PROP_OWNER_TYPENAME,                     /* Table */
+    PROP_PERCENTAGE_LABEL_SETTLEMENT,        /* Table */
+    PROP_PERCENTAGE_TOTAL,                   /* Table (numeric) */
+    PROP_SHARES_LABEL_SETTLEMENT,            /* Table */
+    PROP_SHARES_TOTAL,                       /* Table (numeric) */
 };
 
+
 /* GObject Initialization */
-G_DEFINE_TYPE(GncDistributionList, gnc_distriblist, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE(GncDistributionList, gnc_distriblist, QOF_TYPE_INSTANCE)
 
 static void
 distriblist_free (QofInstance *inst)
@@ -258,6 +267,29 @@ gnc_distriblist_class_init (GncDistributionListClass *klass)
     (gobject_class,
      PROP_NAME,
      g_param_spec_string (
+         "active",
+         "Active",
+         "TRUE if the distribution list is active. FALSE if inactive.",
+         FALSE,
+         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_DESCRIPTION,
+     g_param_spec_string (
+         "description",
+         "DistributionList Description",
+         "The distribution list description is an arbitrary string "
+         "assigned by the user. It is intended to "
+         "be a short text that uniqueliy identifies the "
+         "distriblist.",
+         NULL,
+         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_NAME,
+     g_param_spec_string (
          "name",
          "DistributionList Name",
          "The distribution list name is an arbitrary string "
@@ -266,6 +298,57 @@ gnc_distriblist_class_init (GncDistributionListClass *klass)
          "that is displayed by the GUI identified with the "
          "distriblist mnemonic.",
          NULL,
+         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_OWNER_TYPENAME,
+     g_param_spec_string (
+         "owner_typename",
+         "DistributionList owner type name",
+         "The distribution list will be assigned to books "
+         "that meet the given owner type.",
+         NULL,
+         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_PERCENTAGE_LABEL_SETTLEMENT,
+     g_param_spec_string (
+         "percentage_label_settlement",
+         "DistributionList label assigned to settlements ",
+         "calculated by a percentage value.",
+         NULL,
+         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_PERCENTAGE_TOTAL,
+     g_param_spec_int (
+         "percentage_total",
+         "DistributionList max percentage value.",
+         "Given as integer",
+         0, G_MAXINT16, 0,
+         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_SHARES_LABEL_SETTLEMENT,
+     g_param_spec_string (
+         "shares_label_settlement",
+         "DistributionList label assigned to settlements ",
+         "calculated by a value given as a shares number.",
+         NULL,
+         G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
+     PROP_SHARES_TOTAL,
+     g_param_spec_int (
+         "shares_total",
+         "DistributionList max shares value.",
+         "Given as integer",
+         0, G_MAXINT16, 0,
          G_PARAM_READWRITE));
 }
 
@@ -328,9 +411,36 @@ gnc_distriblist_set_property (
 
     switch (prop_id)
     {
+    case PROP_ACTIVE:
+        gncDistribListSetActive(distriblist, g_value_get_boolean(value));
+        break;
+    case PROP_DESCRIPTION:
+        gncDistribListSetDescription(
+            distriblist, g_value_get_string(value));
+        break;
     case PROP_NAME:
         gncDistribListSetName(
             distriblist, g_value_get_string(value));
+        break;
+    case PROP_OWNER_TYPENAME:
+        gncDistribListSetOwnerTypeName(
+            distriblist, g_value_get_string(value));
+        break;
+    case PROP_PERCENTAGE_LABEL_SETTLEMENT:
+        gncDistribListSetPercentageLabelSettlement(
+            distriblist, g_value_get_string(value));
+        break;
+    case PROP_PERCENTAGE_TOTAL:
+        gncDistribListSetPercentageTotal(
+            distriblist, g_value_get_int(value));
+        break;
+    case PROP_SHARES_LABEL_SETTLEMENT:
+        gncDistribListSetPercentageLabelSettlement(
+            distriblist, g_value_get_string(value));
+        break;
+    case PROP_SHARES_TOTAL:
+        gncDistribListSetSharesTotal(
+            distriblist, g_value_get_int(value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -504,13 +614,26 @@ _gncDistribListCreate (QofBook *book)
 }
 
 static void
+destroy_distriblist_on_book_close (QofInstance *ent, gpointer data)
+{
+    GncDistributionList *distriblist = GNC_DISTRIBLIST(ent);
+
+    gncDistribListBeginEdit (distriblist);
+    gncDistribListDestroy (distriblist);
+}
+
+static void
 _gncDistribListDestroy (QofBook *book)
 {
     struct _book_info *book_info;
+    QofCollection *col;
 
     if (!book) return;
 
     book_info = qof_book_get_data (book, _GNC_MOD_NAME);
+
+    col = qof_book_get_collection (book, GNC_ID_DISTRIBLIST);
+    qof_collection_foreach (col, destroy_distriblist_on_book_close, NULL);
 
     g_list_free (book_info->lists);
     g_free (book_info);
@@ -537,6 +660,12 @@ gncDistribListRegister (void)
 {
     static QofParam params[] =
     {
+        {
+            QOF_PARAM_ACTIVE,
+            QOF_TYPE_BOOLEAN,
+            (QofAccessFunc)gncDistribListGetActive,
+            (QofSetterFunc)gncDistribListSetActive,
+        },
         {
             QOF_PARAM_BOOK,
             QOF_ID_BOOK,
@@ -711,6 +840,19 @@ gncDistribListIncRef (GncDistributionList *distriblist)
 // Set Functions
 
 void
+gncDistribListSetActive (
+    GncDistributionList *distriblist,
+    gboolean active)
+{
+    if (!distriblist) return;
+    if (active == distriblist->active) return;
+    gncDistribListBeginEdit (distriblist);
+    distriblist->active = active;
+    mark_distriblist (distriblist);
+    gncDistribListCommitEdit (distriblist);
+}
+
+void
 gncDistribListSetDescription (
     GncDistributionList *distriblist,
     const char *description)
@@ -825,6 +967,14 @@ gncDistribListSetType (
 }
 
 // Get Functions
+
+gboolean
+gncDistribListGetActive (
+    const GncDistributionList *distriblist)
+{
+    if (!distriblist) return FALSE;
+    return distriblist->active;
+}
 
 const char
 *gncDistribListGetDescription (
