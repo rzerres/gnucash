@@ -115,6 +115,8 @@ static void gnc_plugin_business_cmd_assign_payment (GSimpleAction *simple, GVari
 static void gnc_plugin_business_cmd_billing_terms (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void gnc_plugin_business_cmd_bills_due_reminder (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
+static void gnc_plugin_business_cmd_distribution_lists (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+
 static void gnc_plugin_business_cmd_doclink (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 static void gnc_plugin_business_cmd_invoices_due_reminder (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -182,6 +184,7 @@ static GActionEntry gnc_plugin_actions [] =
     { "BusinessLinkedDocsAction", gnc_plugin_business_cmd_doclink, NULL, NULL, NULL },
     { "TaxTablesOpenAction", gnc_plugin_business_cmd_tax_tables, NULL, NULL, NULL },
     { "BillingTermsOpenAction", gnc_plugin_business_cmd_billing_terms, NULL, NULL, NULL },
+    { "DistributionListsOpenAction", gnc_plugin_business_cmd_distribution_lists, NULL, NULL, NULL },
     { "BillsDueReminderOpenAction", gnc_plugin_business_cmd_bills_due_reminder, NULL, NULL, NULL },
     { "InvoicesDueReminderOpenAction", gnc_plugin_business_cmd_invoices_due_reminder, NULL, NULL, NULL },
 
@@ -896,18 +899,17 @@ gnc_plugin_business_cmd_bills_due_reminder (GSimpleAction *simple,
     gnc_invoice_remind_bills_due (GTK_WINDOW (mw->window));
 }
 
-// TODO: consume distribution_lists
-/* static void */
-/* gnc_plugin_business_cmd_distribution_lists (GSimpleAction *simple, */
-/*                                             GVariant      *parameter, */
-/*                                             gpointer       user_data) */
-/* { */
-/*     GncMainWindowActionData *mw = user_data; */
-/*     g_return_if_fail (mw != NULL); */
-/*     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data)); */
+static void
+gnc_plugin_business_cmd_distribution_lists (GSimpleAction *simple,
+                                            GVariant      *parameter,
+                                            gpointer       user_data)
+{
+    GncMainWindowActionData *mw = user_data;
+    g_return_if_fail (mw != NULL);
+    g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-/*     gnc_ui_distriblists_window_new (GTK_WINDOW (mw->window), gnc_get_current_book()); */
-/* } */
+    gnc_ui_distriblists_window_new (GTK_WINDOW (mw->window), gnc_get_current_book());
+}
 
 static void
 gnc_plugin_business_cmd_invoices_due_reminder (GSimpleAction *simple,
