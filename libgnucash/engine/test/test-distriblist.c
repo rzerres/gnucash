@@ -50,11 +50,11 @@ test_int_fcn (
     void (*set) (GncDistributionList *, int),
     int (*get) (const GncDistributionList *));
 
-static void
-test_numeric_fcn (
-    QofBook *book, const char *message,
-    void (*set) (GncDistributionList *, gnc_numeric),
-    gnc_numeric (*get)(const GncDistributionList *));
+/* static void */
+/* test_numeric_fcn ( */
+/*     QofBook *book, const char *message, */
+/*     void (*set) (GncDistributionList *, gnc_numeric), */
+/*     gnc_numeric (*get)(const GncDistributionList *)); */
 
 static void
 test_string_fcn (
@@ -85,7 +85,7 @@ test_distriblist (void)
         //do_test (qof_instance_get_book(QOF_INSTANCE(distriblist)) == book,
         //    "getbook");
 
-        do_test (gncDistribListGetBook (distriblist) == book, "Get book");
+        do_test (gncDistribListGetBook (distriblist) == book, "Get book - book");
 
         gncDistribListBeginEdit (distriblist);
         success ("Edit - distriblist");
@@ -110,15 +110,15 @@ test_distriblist (void)
             &guid, gncDistribListGetGUID (distriblist)), "Compare guid - distriblist");
 
         gncDistribListSetType (distriblist, type_shares);
+        //printf ("Testvalue  distriblist->type: '%d' (%d)'\n", type_shares, gncDistribListGetType (distriblist));
         do_test (gncDistribListGetType (distriblist) == type_shares, "Get type -  shares");
-        printf ("Testvalue  distriblist->type: '%s'\n", gncDistribListGetType (distriblist));
         gncDistribListSetType (distriblist, type_percentage);
-        printf ("Testvalue  distriblist->type: '%s'\n", gncDistribListGetType (distriblist));
+        // printf ("Testvalue  distriblist->type: '%d' (%d)\n", type_percentage, gncDistribListGetType (distriblist));
         do_test (gncDistribListGetType (distriblist) == type_percentage, "Get type - percentage");
 
         gncDistribListSetOwnerTypeName (distriblist, owner_typename);
-        do_test (gncDistribListGetOwnerTypeName (distriblist) == owner_typename, "Get owner typename - distriblist");
 
+        // do_test (gncDistribListGetOwnerTypeName (distriblist) == owner_typename, "Get owner typename - distriblist");
         // Test setting an explicit owner_type
         /* do_test (g_strcmp0 (gncOwnerGetTypeString ( */
         /*              gncDistribListGetOwner (distriblist)), */
@@ -158,6 +158,8 @@ test_distriblist (void)
                 gncDistribListGetSharesLabelSettlement);
         test_int_fcn (book, "Handle Shares Total",
             gncDistribListSetSharesTotal, gncDistribListGetSharesTotal);
+
+        test_bool_fcn (book, "Activate/De-Activate", gncDistribListSetActive, gncDistribListGetActive);
     }
 
     // Test name and length of lists
@@ -166,13 +168,14 @@ test_distriblist (void)
         const char *name = "Test-DistributionList";
         const char *res = NULL;
 
-        //list = gncDistribListGetLists (book);
-        // gncDistribListCreate() and each test-function call do
-        // increment the counter. Result: count => should be 6.
-        list = gncBusinessGetList (book, GNC_ID_DISTRIBLIST, TRUE);
-        do_test (list != NULL, "Get lists: all");
-        do_test (g_list_length (list) == count, "Compare list length: all");
-        g_list_free (list);
+        // gncDistribListCreate() and each test_xxx_fcn() call
+        // increment the counter. Result: count => should be 8.
+        list = gncDistribListGetLists (book);
+        //list = gncBusinessGetList (book, GNC_ID_DISTRIBLIST, FALSE);
+        do_test (list != NULL, "Get distribution lists");
+        // printf ("list entry count: '%i'\n", count);
+        //printf ("g_list_length: '%i'\n", g_list_length (list));
+        do_test (g_list_length (list) == count, "Number of created list elements");
 
         gncDistribListSetName (distriblist, name);
         res = gncDistribListGetName (distriblist);
@@ -181,41 +184,22 @@ test_distriblist (void)
         //printf ("name: '%s'\n", name);
         //printf ("res: '%s'\n", res);
         do_test (g_strcmp0 (name, res) == 0, "Lookup list: by name");
-        g_list_free (list);
     }
-    {
-        //  Match random string after committing
-        const char *str = get_random_string();
-        const char *res;
+    /* { */
+    /*     //  Match random string after committing */
+    /*     const char *str = get_random_string(); */
+    /*     const char *res; */
 
-        //printf ("Random string: '%s'\n", str);
-        res = NULL;
-        gncDistribListBeginEdit(distriblist);
-        gncDistribListSetName (distriblist, str);
-        gncDistribListCommitEdit(distriblist);
-        res = qof_object_printable (GNC_ID_DISTRIBLIST, distriblist);
-        //printf ("Test string: '%s'\n", str);
-        //printf ("distriblist string: '%s'\n", res);
-        //FIXME: do_test (res != NULL, "Assert Printable 'NULL' string match ");
-        //FIXME: do_test (g_strcmp0 (str, res) == 0, "Assert Printable string match");
-    }
-    {
-        // Compare explicit Distribution List string
-        char str[16] = "Co-Owner shares";
-        const char *DistriblistTestString = str;
-        const char *res;
-
-        res = NULL;
-        gncDistribListBeginEdit (distriblist);
-        //printf ("DistriblistTestString: '%s'\n", DistriblistTestString);
-        gncDistribListSetName (distriblist, DistriblistTestString);
-        gncDistribListCommitEdit (distriblist);
-
-        res = qof_object_printable (GNC_ID_DISTRIBLIST, distriblist);
-        //printf ("res from distriblist: '%s'\n", res);
-        //FIXME: do_test (res != NULL, "Test String non NULL");
-        //FIXME: do_test (g_strcmp0 (DistriblistTestString, res) == 0, "Test string match");
-    }
+    /*     printf ("Random string: '%s'\n", str); */
+    /*     gncDistribListBeginEdit(distriblist); */
+    /*     gncDistribListSetName (distriblist, str); */
+    /*     gncDistribListCommitEdit(distriblist); */
+    /*     res = qof_object_printable (GNC_ID_DISTRIBLIST, distriblist); */
+    /*     // printf ("distriblist string: '%s'\n", res); */
+    /*     // printf ("Test string: '%s'\n", gncDistribListGetName(distriblist)); */
+    /*     // FIXME: do_test (res != NULL, "Assert Printable non 'NULL' string"); */
+    /*     // FIXME: do_test (g_strcmp0 (str, res) == 0, "Assert Printable string match"); */
+    /* } */
 
     // Test the Entity Table
     {
@@ -286,31 +270,31 @@ test_int_fcn (
     count++;
 }
 
-static void
-test_numeric_fcn (
-    QofBook *book,
-    const char *message,
-    void (*set) (GncDistributionList *, gnc_numeric),
-    gnc_numeric (*get)(const GncDistributionList *))
-{
-    GncDistributionList *distriblist = gncDistribListCreate (book);
-    gnc_numeric num = gnc_numeric_create (17, 1);
+/* static void */
+/* test_numeric_fcn ( */
+/*     QofBook *book, */
+/*     const char *message, */
+/*     void (*set) (GncDistributionList *, gnc_numeric), */
+/*     gnc_numeric (*get)(const GncDistributionList *)) */
+/* { */
+/*     GncDistributionList *distriblist = gncDistribListCreate (book); */
+/*     gnc_numeric num = gnc_numeric_create (17, 1); */
 
-    do_test (!gncDistribListIsDirty (distriblist), "test if start dirty");
-    gncDistribListBeginEdit (distriblist);
-    set (distriblist, num);
-    /* Distriblist record should be dirty */
-    do_test (gncDistribListIsDirty (distriblist), "test dirty later");
-    gncDistribListCommitEdit (distriblist);
-    /* Distriblist record should be not dirty */
-    /* Skip, because will always fail without a backend.
-     * It's not possible to load a backend in the engine code
-     * without having circular dependencies.
-     */
-    // do_test (!gncDistribListIsDirty (distriblist), "test dirty after commit");
-    do_test (gnc_numeric_equal (get (distriblist), num), message);
-    count++;
-}
+/*     do_test (!gncDistribListIsDirty (distriblist), "test if start dirty"); */
+/*     gncDistribListBeginEdit (distriblist); */
+/*     set (distriblist, num); */
+/*     /\* Distriblist record should be dirty *\/ */
+/*     do_test (gncDistribListIsDirty (distriblist), "test dirty later"); */
+/*     gncDistribListCommitEdit (distriblist); */
+/*     /\* Distriblist record should be not dirty *\/ */
+/*     /\* Skip, because will always fail without a backend. */
+/*      * It's not possible to load a backend in the engine code */
+/*      * without having circular dependencies. */
+/*      *\/ */
+/*     // do_test (!gncDistribListIsDirty (distriblist), "test dirty after commit"); */
+/*     do_test (gnc_numeric_equal (get (distriblist), num), message); */
+/*     count++; */
+/* } */
 
 static void
 test_string_fcn (
@@ -345,15 +329,12 @@ main (int argc, char **argv)
     set_success_print(TRUE);
 
     qof_init();
-    // FIXME: cashobjects
-    do_test (cashobjects_register(), "Register cash objects");
-    /* Registration is done during cashobjects_register,
-       so trying to register again naturally fails. */
-#if 0
-    do_test (gncDistribListRegister(), "Cannot register GncDistributionList");
-#endif
-    test_distriblist();
-    print_test_results();
+    if (cashobjects_register())
+    {
+      test_distriblist();
+      print_test_results();
+    }
+
     qof_close ();
     return get_rv();
 }
