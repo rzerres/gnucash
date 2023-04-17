@@ -44,6 +44,8 @@ costs to be settled to this apartment unit (the devisor).
 #ifndef GNC_DISTRIBLIST_H_
 #define GNC_DISTRIBLIST_H_
 
+#include <glib.h>
+
 /** @struct GncDistributionList
 
 Generic params (identical to all business objects, e.g. Customers, Employees, Vendors):
@@ -143,6 +145,7 @@ void gncDistribListCommitEdit (GncDistributionList *distriblist);
 
 /** @name Set Functions
  @{ */
+void gncDistribListSetActive (GncDistributionList *distriblist, gboolean active);
 void gncDistribListSetDescription (GncDistributionList *distriblist, const char *name);
 void gncDistribListSetName (GncDistributionList *distriblist, const char *name);
 // void gncDistribListSetOwner (GncDistributionList *distriblist, GncOwner *owner);
@@ -159,6 +162,7 @@ void gncDistribListSetType (GncDistributionList *distriblist, GncDistributionLis
 /** @name Get Functions
  @{ */
 #define gncDistribListGetChild(t) gncDistribListReturnChild((t),FALSE)
+gboolean gncDistribListGetActive (const GncDistributionList *distriblist);
 const char *gncDistribListGetDescription (const GncDistributionList *distriblist);
 GList * gncDistribListGetLists (QofBook *book);
 const char *gncDistribListGetName (const GncDistributionList *distriblist);
