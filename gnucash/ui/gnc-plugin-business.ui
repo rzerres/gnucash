@@ -152,6 +152,11 @@
       <attribute name="action">gnc-plugin-business-actions.BillingTermsOpenAction</attribute>
       <attribute name="tooltip" translatable="yes">View and edit the list of Billing Terms</attribute>
     </item>
+    <item>
+      <attribute name="label" translatable="yes">_Distribution List Editor</attribute>
+      <attribute name="action">gnc-plugin-business-actions.DistributionListsOpenAction</attribute>
+      <attribute name="tooltip" translatable="yes">View and edit the list of Distribution Lists</attribute>
+    </item>
   </menu>
 
   <menu id="ExtensionsPlaceholder0">
