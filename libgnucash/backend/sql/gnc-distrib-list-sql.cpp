@@ -71,6 +71,7 @@ static void distriblist_set_parent_guid (gpointer data, gpointer value);
 static EntryVec col_table
 {
     gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_BOOLEAN>("active", 0, COL_NNUL, "active"),
     gnc_sql_make_table_entry<CT_STRING>("name", MAX_NAME_LEN, COL_NNUL, "name"),
     gnc_sql_make_table_entry<CT_STRING>(
         "description",
