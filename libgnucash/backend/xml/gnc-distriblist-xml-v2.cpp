@@ -60,6 +60,7 @@ const gchar* distriblist_version_string = "2.0.0";
 /*************************************************\
  * constants
 \*************************************************/
+#define distriblist_active_string "distriblist:active"
 #define distriblist_guid_string "distriblist:guid"
 #define distriblist_name_string "distriblist:name"
 #define distriblist_desc_string "distriblist:description"
@@ -86,6 +87,8 @@ const gchar* distriblist_version_string = "2.0.0";
  * Function prototypes declaration
  * (assume C11 semantics, where order matters)
 \*************************************************/
+static gboolean
+distriblist_active_handler (xmlNodePtr node, gpointer distriblist_pdata);
 static void
 distriblist_add_xml (QofInstance* distriblist_p, gpointer out_p);
 static gboolean
@@ -235,6 +238,10 @@ distriblist_dom_tree_create (GncDistributionList* distriblist)
     ret = xmlNewNode (NULL, BAD_CAST gnc_distriblist_string);
     xmlSetProp (ret, BAD_CAST "version", BAD_CAST distriblist_version_string);
 
+    xmlAddChild (ret, int_to_dom_tree (
+        distriblist_active_string,
+        gncDistribListGetActive (distriblist)));
+
     maybe_add_guid (ret, distriblist_guid_string, QOF_INSTANCE (distriblist));
     xmlAddChild (ret, text_to_dom_tree (
         distriblist_name_string,
@@ -365,6 +372,12 @@ dom_tree_handler shares_data_handlers_v2[] =
 static struct
 dom_tree_handler distriblist_handlers_v2[] =
 {
+    {
+        distriblist_active_string,
+        distriblist_active_handler,
+        1,
+        0
+    },
     {
         distriblist_child_string,
         distriblist_child_handler,
@@ -508,6 +521,20 @@ dom_tree_to_shares_data (xmlNodePtr node, struct distriblist_pdata *pdata)
  * @param distriblist_p - pointer to the distribution list struct.
  * @param out_p - pointer to the filename that is used to store the data.
  */
+static gboolean
+distriblist_active_handler (xmlNodePtr node, gpointer distriblist_pdata)
+{
+    struct distriblist_pdata* pdata = static_cast<decltype (pdata)> (distriblist_pdata);
+    gint64 val;
+    gboolean ret;
+
+    ret = dom_tree_to_integer (node, &val);
+    if (ret)
+        gncDistribListSetActive (pdata->distriblist, (gboolean)val);
+
+    return ret;
+}
+
 static void
 distriblist_add_xml (QofInstance *distriblist_p, gpointer out_p)
 {
