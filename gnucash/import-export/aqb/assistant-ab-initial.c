@@ -232,7 +232,7 @@ aai_page_prepare (GtkAssistant *assistant, gpointer user_data)
 
     g_return_if_fail(info->api);
 
-    /* Enable the Assistant Buttons if we accounts */
+    /* Enable the Assistant Buttons if we have valid accounts */
     if (banking_has_accounts(info->api))
         gtk_assistant_set_page_complete (assistant, page, TRUE);
     else
@@ -275,7 +275,7 @@ aai_button_clicked_cb(GtkButton *button, gpointer user_data)
         }
     }
 
-    /* Enable the Assistant Buttons if we accounts */
+    /* Enable the Assistant Buttons if we have accounts */
     if (banking_has_accounts(info->api))
         gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, TRUE);
     else
@@ -346,25 +346,25 @@ aai_match_delete_button_clicked_cb(GtkButton *button, gpointer user_data)
 static guint
 aai_ab_account_hash (gconstpointer v)
 {
-	if (v == NULL)
-		return 0;
-	else
-		/* Use the account unique id as hash value */
-		return AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v);
+        if (v == NULL)
+                return 0;
+        else
+                /* Use the account unique id as hash value */
+                return AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v);
 }
 
 static gboolean
 aai_ab_account_equal (gconstpointer v1, gconstpointer v2)
 {
-	if (v1 == NULL || v2 == NULL)
-		return v1 == v2;
-	else
-	{
-		/* Use the account unique id to check for equality */
-		uint32_t uid1 = AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v1);
-		uint32_t uid2 = AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v2);
-		return uid1 == uid2;
-	}
+        if (v1 == NULL || v2 == NULL)
+                return v1 == v2;
+        else
+        {
+                /* Use the account unique id to check for equality */
+                uint32_t uid1 = AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v1);
+                uint32_t uid2 = AB_AccountSpec_GetUniqueId((const GNC_AB_ACCOUNT_SPEC *) v2);
+                return uid1 == uid2;
+        }
 }
 
 static void
@@ -728,11 +728,11 @@ void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
     switch (gtk_assistant_get_current_page(assistant))
     {
     case 1:
-        /* Current page is wizard button page */
+        /* Current page is "aqbanking_page" -> wizard button page */
         aai_page_prepare (assistant , user_data );
         break;
     case 2:
-        /* Current page is match page */
+        /* Current page is "account_match_page" -> select accounts */
         aai_match_page_prepare (assistant , user_data );
         break;
     }
@@ -813,4 +813,3 @@ gnc_ab_initial_assistant(void)
         single_info = gnc_ab_initial_assistant_new();
     gtk_widget_show(single_info->window);
 }
-
