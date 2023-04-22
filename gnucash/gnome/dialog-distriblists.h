@@ -44,9 +44,11 @@ Within a list you define a list type. Each list type will hold the
 100% share value (the numerator). The numerator is an absolute or
 a percentage value.
 
-Assigned owner objects will offer their appropriate unit share value
-as an object attribute. To calculate the settlement costs, the share
-value is referenced as the devisor.
+Within each distribution list you may assigne a list of associated
+owner objects. Each owner object itself will hold attributes, to store
+the appropriate unit share value. If you trigger a settlement report,
+the given share value is referenced as the devisor when calculationg
+the proportionate costs.
 
 Co-Owner example:
 Calculation base with 100% = 1000 units (numerator)

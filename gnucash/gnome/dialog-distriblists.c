@@ -49,6 +49,9 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define DIALOG_DISTRIBLISTS_CM_CLASS "distribution-lists-dialog"
 
+typedef struct _distribution_list_owners DistributionListOwners;
+typedef struct _distribution_list_revlookup_data DistributionListRevlookupData;
+
 
 /*************************************************\
  * enumerations and type definitions
@@ -73,12 +76,15 @@ typedef struct _distribution_list_owners
     GtkWidget *label_typename;
     GtkWidget *entry_typename;
 
-    // TODO
+    // Distriblist assigned "owners" accounts
     GtkWidget *acct_tree;
+    GtkTreeView *account_view;
+    GtkListStore *account_store;
 
-    // Distriblist "owners" entities
+    // Distriblist "owners"
     gboolean owner_new;
     //GncOwner *owner;
+    GList *owners_account_types;
     GList *owners_list;
     const char *typename;
     GncDistributionListType type;
@@ -118,6 +124,11 @@ typedef struct _distribution_list_notebook
     DistributionListOwners owners;
     GncDistributionListType type;
 } DistributionListNotebook;
+
+struct _distribution_list_revlookup_data
+{
+    Account *gnc_accounts;
+};
 
 struct _distribution_lists_window
 {
@@ -1196,7 +1207,6 @@ owners_edit (
     g_warning ("[owners_edit] assign owners ui widgets\n");
     owners->dialog = GTK_WIDGET(
         gtk_builder_get_object (builder, "owners_dialog"));
-    g_warning ("[owners_edit] owners dialog done\n");
 
     // Show dialog and set focus
     // gtk_widget_show (owners->dialog);
@@ -1211,8 +1221,20 @@ owners_edit (
         response = gtk_dialog_run (GTK_DIALOG(owners->dialog));
         switch (response)
         {
+        case GTK_RESPONSE_APPLY:
+            g_warning ("[owners_edit] apply owner assignement dialog.\n");
+            done = TRUE;
+            break;
+        case GTK_RESPONSE_CLOSE:
+            g_warning ("[owners_edit] close selected owner from owners list.\n");
+            done = TRUE;
+            break;
         case GTK_RESPONSE_OK:
             g_warning ("[owners_edit] ended with reponse ok.\n");
+            done = TRUE;
+            break;
+        case GTK_RESPONSE_CANCEL:
+            g_warning ("[owners_edit] ended with reponse cancel.\n");
             done = TRUE;
             break;
         default:
@@ -1227,6 +1249,7 @@ owners_edit (
     g_free (owners);
 
     // *owners_list and *owner needs to be saved via ui_to_distriblist
+    g_warning ("[owners_edit] owners dialog done\n");
 }
 
 static void
@@ -1938,6 +1961,7 @@ owners_assign_cb (
         return;
 
     // Assign new owner to the list
+    g_warning ("[owners_assign_cb] assign new owners to distribution list\n");
     owners_assign (&distriblists_window->owners);
 }
 
@@ -1948,6 +1972,8 @@ owners_edit_cb (
 {
     DistributionListNotebook *notebook;
     NewDistributionList *new_distriblist = NULL;
+
+    g_warning ("[owners_edit_cb] edit owners attributes in given distribution list\n");
 
     g_return_if_fail (distriblists_window);
     if (!distriblists_window->current_list)
