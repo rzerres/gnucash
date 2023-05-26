@@ -29,7 +29,6 @@ set (reports_standard_SCHEME
     standard/cash-flow.scm
     standard/cashflow-barchart.scm
     standard/category-barchart.scm
-    standard/coowner-settlement.scm
     standard/dashboard.scm
     standard/equity-statement.scm
     standard/general-journal.scm
@@ -52,6 +51,7 @@ set (reports_standard_SCHEME
     standard/invoice.scm
     standard/balsheet-eg.scm
 )
+    #standard/coowner-settlement.scm
 
 # Reports depending on one of the generator functions from
 # scm-reports-standard-with-exposed-generator:
