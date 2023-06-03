@@ -1355,7 +1355,18 @@
                 <property name="vexpand">True</property>
                 <property name="hscrollbar-policy">never</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkTreeView" id="owner_treeview_owners">
+                    <property name="name">distriblists_treeview_description</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="headers-visible">False</property>
+                    <property name="search-column">0</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -1390,6 +1401,20 @@
       <action-widget response="-6">owner_select_button_cancel</action-widget>
       <action-widget response="-5">owner_select_button_ok</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkListStore" id="ownerstore_type">
+    <columns>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Co-Owner</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Employee</col>
+      </row>
+    </data>
   </object>
   <object class="GtkDialog" id="owners_dialog">
     <property name="can-focus">False</property>
@@ -1504,24 +1529,6 @@
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
-              <object class="GtkComboBox" id="owners_combobox_type">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <signal name="changed" handler="owners_type_changed_cb" swapped="no"/>
-                <child>
-                  <object class="GtkCellRendererText" id="owners_cellrenderertext_list"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkScrolledWindow" id="owners_scrolled_window_lists">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -1575,6 +1582,26 @@
                 <property name="top-attach">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkComboBox" id="owners_combobox_type">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="model">ownerstore_type</property>
+                <property name="has-frame">False</property>
+                <signal name="changed" handler="owners_type_changed_cb" swapped="no"/>
+                <child>
+                  <object class="GtkCellRendererText" id="owners_cellrenderertext_list"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -1585,21 +1612,8 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="-6">owners_button_cancel</action-widget>
       <action-widget response="-5">owners_button_ok</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkListStore" id="ownerstore_type">
-    <columns>
-      <!-- column-name type -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Co-Owner</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Employee</col>
-      </row>
-    </data>
   </object>
 </interface>
