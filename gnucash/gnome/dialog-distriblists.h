@@ -168,7 +168,7 @@ distriblists_window_key_press_cb (
 void
 owners_assign_cb (
     GtkButton *button,
-    DistributionListsWindow *distriblists_window);
+    DistributionListOwners *owners);
 void
 owners_edit_cb (
     GtkButton *button,
@@ -180,7 +180,7 @@ void owners_ok_cb (
 void
 owners_remove_cb (
     GtkButton *button,
-    DistributionListsWindow *distriblists_window);
+    DistributionListOwners *owners);
 /** @} */
 
 #endif /* _DIALOG_DISTRIBUTION_LISTS_H */
