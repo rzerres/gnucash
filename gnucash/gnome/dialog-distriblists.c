@@ -537,7 +537,7 @@ distriblist_to_ui (
             notebook->percentage_total,
             distriblist,
             gncDistribListGetPercentageTotal);
-        PWARN("Percentage total: '%s'\n", gtk_spin_button_get_value(notebook->percentage_total));
+        PWARN("Percentage total: '%d'\n", gtk_spin_button_get_value(notebook->percentage_total));
 
         // Set the owner typename
         gtk_label_set_label (
@@ -559,7 +559,7 @@ distriblist_to_ui (
             notebook->shares_total,
             distriblist,
             gncDistribListGetSharesTotal);
-        PWARN("Settlement total: '%i'\n", gtk_spin_button_get_value(notebook->shares_total));
+        PWARN("Settlement total: '%d'\n", gtk_spin_button_get_value(notebook->shares_total));
 
         // Set the owner typename
         gtk_label_set_label (
@@ -891,6 +891,12 @@ static GncDistributionList
     if (name)
         gtk_entry_set_text (GTK_ENTRY(new_distriblist->entry_name), name);
 
+    // Initialize the notebook widgets (read_write)
+    notebook_init (&new_distriblist->notebook, TRUE, new_distriblist);
+
+    // Initialize the owners widgets (read_write)
+    //owners_init (&new_distriblist->owners, TRUE, new_distriblist);
+
     // Fill in the widgets appropriately
     if (distriblist)
     {
@@ -909,12 +915,6 @@ static GncDistributionList
         /* new_distriblist->owners.owner->type = GNC_OWNER_NONE; */
         new_distriblist->owners.typename = GNC_OWNER_NONE;
     }
-
-    // Initialize the notebook widgets (read_write)
-    notebook_init (&new_distriblist->notebook, TRUE, new_distriblist);
-
-    // Initialize the owners widgets (read_write)
-    //owners_init (&new_distriblist->owners, TRUE, new_distriblist);
 
     // Attach the notebook (expanded and filled, no padding)
     box = GTK_WIDGET(gtk_builder_get_object (builder, dialog_notebook));
@@ -998,61 +998,21 @@ static DistributionListOwners
     g_warning ("[new_owners_dialog] handle assignement and removal of owners.\n");
 
     // Initialize the owners widgets (read_write)
-    owners_init (owners, TRUE, owners);
-
-    // Load the owners from Glade file
-    /* g_warning ("[owners_init] read in distriblists owner glade definitions\n"); */
-    /* builder = gtk_builder_new (); */
-    /* gnc_builder_add_from_file ( */
-    /*     builder, "dialog-distriblists.glade", "owners_dialog"); */
-    /* gnc_builder_add_from_file ( */
-    /*     builder, "dialog-distriblists.glade", "ownerstore_type"); */
-
-    /* // Assign the parent widgets */
-    /* g_warning ("[owners_init] assign distriblists owners parent\n"); */
-    /* parent = GTK_WIDGET ( */
-    /*     gtk_builder_get_object (builder, "owners_dialog")); */
-
-    /* // Assign the owners widgets */
-    /* g_warning ("[owners_init] assign owners ui widgets\n"); */
-    /* owners->dialog = GTK_WIDGET ( */
-    /*     gtk_builder_get_object (builder, "owners_dialog")); */
-
-    /* // Create the owner type list (menu as combobox) */
-    /* list_type = GTK_WIDGET ( */
-    /*     gtk_builder_get_object (builder, "owners_combobox_type")); */
-    /* g_warning ("[owners_init] combobox_type done\n"); */
-
-    /*  // Load the view of assigned owners */
-    /* owners_treeview = GTK_WIDGET ( */
-    /*     gtk_builder_get_object (builder, "owners_treeview_owners")); */
-    /* g_warning ("[owners_init] owners_treeview done\n"); */
+    owners_init (owners, TRUE, distriblists_window);
 
     // Show dialog and set focus
     gtk_widget_show_all (owners->dialog);
 
-    // Decrease the reference pointer to the owner list object
-    //g_object_unref (owners->dialog);
-
-// FIXME: this works!
-    /* create a new dialog */
-    /* GtkWidget *button_text_dialog; */
-    /* button_text_dialog = gtk_dialog_new_with_buttons("Edit owners dialog", */
-    /*     owners->dialog, GTK_DIALOG_DESTROY_WITH_PARENT, "OK", */
-    /*     GTK_RESPONSE_OK, NULL); */
-    /* gtk_widget_show_all(button_text_dialog); */
-
     // owners_combobox_type vs list_typename
-    //gtk_widget_grab_focus (owners->entry_typename);
+    gtk_widget_grab_focus (owners->entry_typename);
 
     // Setup signals
-    /* gtk_builder_connect_signals_full ( */
-    /*     //builder, gnc_builder_connect_full_func, new_distriblist); */
-    /* 	builder, gnc_builder_connect_full_func, owners); */
+    gtk_builder_connect_signals_full (
+    builder, gnc_builder_connect_full_func, owners);
 
-    /* gtk_window_set_transient_for ( */
-    /*     GTK_WINDOW(owners->dialog), */
-    /*     GTK_WINDOW(distriblists_window->notebook.notebook)); */
+    gtk_window_set_transient_for (
+        GTK_WINDOW(owners->dialog),
+        GTK_WINDOW(distriblists_window->notebook.notebook));
 
     done = FALSE;
     while (!done)
@@ -1082,10 +1042,12 @@ static DistributionListOwners
         }
     }
 
-    //gtk_widget_destroy (owners->dialog);
+    g_object_unref (G_OBJECT(builder));
+
+    gtk_widget_destroy (owners->dialog);
     //g_free (owners);
 
-    // *owners_list and *owner needs to be saved via ui_to_distriblist
+    // persitent storage of the owners struct will be handled in parent nootbook dialog
     g_warning ("[new_owners_dialog] owners dialog done\n");
 
     return owners;
@@ -1154,14 +1116,14 @@ notebook_init (
     /* 	TRUE, */
     /* 	0); */
 
-    /* notebook->label_settlement_percentage = GTK_LABEL (gtk_builder_get_object ( */
-    /*      builder, "distriblists_notebook_label_settlement_percentage")); */
+    notebook->label_settlement_percentage = GTK_LABEL (gtk_builder_get_object (
+         builder, "distriblists_notebook_label_settlement_percentage"));
     notebook->entry_settlement_percentage = GTK_WIDGET (gtk_builder_get_object (
         builder, "distriblists_notebook_entry_settlement_percentage"));
-    notebook->label_percentage_total = GTK_LABEL (gtk_builder_get_object (
-        builder, "distriblists_notebook_label_percentage_total"));
-    notebook->percentage_total = GTK_WIDGET (gtk_builder_get_object (
-        builder, "percentage:percentage_total"));
+    /* notebook->label_percentage_total = GTK_LABEL (gtk_builder_get_object ( */
+    /*     builder, "distriblists_notebook_label_percentage_total")); */
+    /* notebook->percentage_total = GTK_WIDGET (gtk_builder_get_object ( */
+    /*     builder, "percentage:percentage_total")); */
 
     notebook->percentage_owner_typename = GTK_LABEL (gtk_builder_get_object (
         builder, "distriblists_notebook_percentage_owner_typename"));
@@ -1183,14 +1145,14 @@ notebook_init (
     /* 	TRUE, */
     /* 	0); */
 
-    /* notebook->label_settlement_shares = GTK_LABEL (gtk_builder_get_object ( */
-    /*     builder, "distriblists_notebook_label_settlement_shares")); */
+    notebook->label_settlement_shares = GTK_LABEL (gtk_builder_get_object (
+        builder, "distriblists_notebook_label_settlement_shares"));
     notebook->entry_settlement_shares = GTK_WIDGET (gtk_builder_get_object (
         builder, "distriblists_notebook_entry_settlement_shares"));
-    notebook->label_shares_total = GTK_LABEL (gtk_builder_get_object (
-        builder, "distriblists_notebook_label_shares_total"));
-    notebook->shares_total = GTK_WIDGET (gtk_builder_get_object (
-        builder, "shares:shares_total"));
+    /* notebook->label_shares_total = GTK_LABEL (gtk_builder_get_object ( */
+    /*     builder, "distriblists_notebook_label_shares_total")); */
+    /* notebook->shares_total = GTK_WIDGET (gtk_builder_get_object ( */
+    /*     builder, "shares:shares_total")); */
 
     notebook->shares_owner_typename = GTK_LABEL (gtk_builder_get_object (
         builder, "distriblists_notebook_shares_owner_typename"));
@@ -1228,7 +1190,7 @@ notebook_init (
     // Disconnect the notebook from the window
     g_object_ref (notebook->notebook);
     gtk_container_remove (GTK_CONTAINER(parent), notebook->notebook);
-    //g_object_unref (G_OBJECT(builder));
+    g_object_unref (G_OBJECT(builder));
     gtk_widget_destroy (parent);
 
     // NOTE: The caller needs to handle unref once they attach a notebook
@@ -1270,7 +1232,7 @@ owners_init (
     GtkBuilder *builder;
     GtkWidget *list_type;
     GtkWidget *owners_treeview;
-    GtkWidget *parent;
+    //GtkWidget *parent;
     //GtkTreeSelection *selection;
 
     // Load the owners from Glade file
@@ -1283,8 +1245,8 @@ owners_init (
 
     // Assign the parent widgets
     g_warning ("[owners_init] assign distriblists owners parent\n");
-    parent = GTK_WIDGET(
-        gtk_builder_get_object (builder, "owners_dialog"));
+    /* parent = GTK_WIDGET( */
+    /*     gtk_builder_get_object (builder, "owners_dialog")); */
 
     // Assign the owners widgets
     g_warning ("[owners_init] assign owners ui widgets\n");
@@ -1359,11 +1321,11 @@ owners_init (
     // Set widgets inactive
     //gtk_widget_set_sensitive (owners_dialog, TRUE);
 
-    // Disconnect the owner from the window
+    // Disconnect the owner dialog from the parent window
     g_object_ref (owners->dialog);
-    gtk_container_remove (GTK_CONTAINER(parent), owners->dialog);
+    //gtk_container_remove (GTK_CONTAINER(parent), owners->dialog);
     g_object_unref (G_OBJECT(builder));
-    gtk_widget_destroy (parent);
+    //gtk_widget_destroy (parent);
 
     // NOTE: The caller needs to handle unref once they attach a owner dialog
 }
