@@ -230,13 +230,8 @@ static gboolean
 coowner_apt_share_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
-    gnc_numeric *val;
 
-    val = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (val, FALSE);
-
-    gncCoOwnerSetAptShare (pdata->coowner, *val);
-    g_free (val);
+    gncCoOwnerSetAptShare (pdata->coowner, dom_tree_to_gnc_numeric (node));
 
     return TRUE;
 }
@@ -253,13 +248,8 @@ static gboolean
 coowner_credit_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
-    gnc_numeric *val;
 
-    val = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (val, FALSE);
-
-    gncCoOwnerSetCredit (pdata->coowner, *val);
-    g_free (val);
+    gncCoOwnerSetCredit (pdata->coowner, dom_tree_to_gnc_numeric (node));
 
     return TRUE;
 }
@@ -282,13 +272,8 @@ static gboolean
 coowner_discount_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
-    gnc_numeric *val;
 
-    val = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (val, FALSE);
-
-    gncCoOwnerSetDiscount (pdata->coowner, *val);
-    g_free (val);
+    gncCoOwnerSetDiscount (pdata->coowner, dom_tree_to_gnc_numeric (node));
 
     return TRUE;
 }
