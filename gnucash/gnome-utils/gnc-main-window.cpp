@@ -2757,7 +2757,6 @@ gnc_main_window_init (GncMainWindow *window)
                            window);
 
     gnc_main_window_setup_window (window);
-    gnc_gobject_tracking_remember(G_OBJECT(window),
 }
 
 /** The object has been fully constructed.
