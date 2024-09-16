@@ -1658,20 +1658,9 @@ gboolean gncCoOwnerRegister (void)
         { NULL },
     };
 
-    if (!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_COOWNER, INVOICE_OWNER))
-    {
-        return FALSE;
-    }
-    if (!qof_choice_add_class(GNC_ID_JOB, GNC_ID_COOWNER, JOB_OWNER))
-    {
-        return FALSE;
-    }
-
     qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncCoOwnerCompare, params);
-    if (!qof_choice_create(GNC_ID_COOWNER))
-    {
-        return FALSE;
-    }
+
+
     /* temp */
     _gncCoOwnerPrintable(NULL);
     return qof_object_register (&gncCoOwnerDesc);
