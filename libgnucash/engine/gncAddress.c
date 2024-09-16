@@ -740,11 +740,5 @@ gboolean gncAddressRegister (void)
 
     qof_class_register (GNC_ID_ADDRESS, (QofSortFunc)gncAddressCompare, params);
 
-    /* Co-Owner or Customer assingned */
-      if (!qof_choice_add_class (GNC_ID_COOWNER, GNC_ID_CUSTOMER, GNC_ID_ADDRESS, ADDRESS_OWNER))
-    {
-        return FALSE;
-    }
-
     return qof_object_register(&GncAddressDesc);
 }
