@@ -31,6 +31,10 @@
 
 #include "gncDistributionList.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean gncDistribListRegister (void);
 
 #define gncDistribListSetGUID(D,G) qof_instance_set_guid(QOF_INSTANCE(D),(G))
@@ -41,5 +45,9 @@ void gncDistribListSetRefcount (GncDistributionList *distriblist, gint64 refcoun
 void gncDistribListMakeInvisible (GncDistributionList *distriblist);
 
 gboolean gncDistribListGetInvisible (const GncDistributionList *distriblist);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_DISTRIBUTIONLISTP_H_ */
