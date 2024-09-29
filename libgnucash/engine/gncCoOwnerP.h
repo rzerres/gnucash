@@ -30,11 +30,19 @@
 
 #include "gncCoOwner.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean gncCoOwnerRegister (void);
 gchar *gncCoOwnerNextID (QofBook *book);
 const gnc_numeric *gncCoOwnerGetCachedBalance (GncCoOwner *coowner);
 void gncCoOwnerSetCachedBalance (GncCoOwner *coowner, const gnc_numeric *new_bal);
 
 #define gncCoOwnerSetGUID(C,G) qof_instance_set_guid(QOF_INSTANCE(C),(G))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_COOWNERP_H_ */
