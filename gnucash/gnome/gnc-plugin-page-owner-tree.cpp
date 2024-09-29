@@ -96,8 +96,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageOwnerTree, gnc_plugin_page_owner_tree, G
         (GTypeInstance*)o, \
         GNC_TYPE_PLUGIN_PAGE_OWNER_TREE))
 
-static GObjectClass *parent_class = NULL;
-
 /************************************************************
  *                        Prototypes                        *
  ************************************************************/
