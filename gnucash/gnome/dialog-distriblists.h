@@ -63,6 +63,10 @@ Co-Owner settlement value = 1000/100 * account balance (owner object)
 #ifndef _DIALOG_DISTRIBUTION_LISTS_H
 #define _DIALOG_DISTRIBUTION_LISTS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @struct DistributionListsWindow
 
 @param  GtkWidget*  window - Pointer to the window.
@@ -182,6 +186,10 @@ owners_remove_cb (
     GtkButton *button,
     DistributionListOwners *owners);
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _DIALOG_DISTRIBUTION_LISTS_H */
 /** @} */
