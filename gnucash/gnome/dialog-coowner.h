@@ -59,6 +59,10 @@ The UI is designed to group suitable informations in frames.
 #ifndef GNC_DIALOG_COOWNER_H_
 #define GNC_DIALOG_COOWNER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** \struct CoOwnerSelectWindow
 
 @param  QofBook* Copy of the book pointer.
@@ -178,5 +182,9 @@ GNCSearchWindow * gnc_coowner_search_select (GtkWindow *parent, gpointer start, 
  *  @param book A pointer to the assigned book object.
  */
 GNCSearchWindow * gnc_coowner_search_edit (GtkWindow *parent, gpointer start, gpointer book);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_DIALOG_COOWNER_H_ */
