@@ -53,20 +53,27 @@ The UI is designed to group suitable informations in frames.
     @{ */
 /** @file dialog-coowner.h
     @brief handling CoOwner dialog objects
-    @author Copyright (C) 2022 Ralf Zerres <ralf.zerres@mail.de>
+    @author Copyright (C) 2022-2025 Ralf Zerres <ralf.zerres@mail.de>
 */
 
 #ifndef GNC_DIALOG_COOWNER_H_
 #define GNC_DIALOG_COOWNER_H_
 
-/** \struct CoOwnerSelectWindow
+#include "gncCoOwner.h"
+#include "dialog-search.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/** @struct CoOwnerSelectWindow
 
 @param  QofBook* Copy of the book pointer.
 @param  QofQuery* Copy of the query pointer.
 */
 typedef struct _coowner_select_window CoOwnerSelectWindow;
 
-/** \struct CoOwnerWindow
+/** @struct CoOwnerWindow
 
 @param  GtkWidget* The dialog entity.
 @param  GtkWidget* Checkbutton handling activation status of a CoOwner entity.
@@ -133,9 +140,6 @@ typedef struct _coowner_select_window CoOwnerSelectWindow;
 */
 typedef struct _coowner_window CoOwnerWindow;
 
-#include "gncCoOwner.h"
-#include "dialog-search.h"
-
 /* Functions to edit and create coowners */
 
 /** Edit and modify an exiting "CoOwner" object via the dialog page.
@@ -178,5 +182,9 @@ GNCSearchWindow * gnc_coowner_search_select (GtkWindow *parent, gpointer start, 
  *  @param book A pointer to the assigned book object.
  */
 GNCSearchWindow * gnc_coowner_search_edit (GtkWindow *parent, gpointer start, gpointer book);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_DIALOG_COOWNER_H_ */
