@@ -490,6 +490,7 @@ gnucash/report/reports/standard/ifrs-cost-basis.scm
 gnucash/report/reports/standard/income-gst-statement.scm
 gnucash/report/reports/standard/income-statement.scm
 gnucash/report/reports/standard/investment-lots.scm
+gnucash/report/reports/standard/invoice_aleternate_practitioner.scm
 gnucash/report/reports/standard/invoice.scm
 gnucash/report/reports/standard/lot-viewer.scm
 gnucash/report/reports/standard/net-charts.scm
@@ -505,6 +506,7 @@ gnucash/report/reports/standard/transaction.scm
 gnucash/report/reports/standard/trial-balance.scm
 gnucash/report/reports/standard/txn-columns.scm
 gnucash/report/reports/standard/view-column.scm
+gnucash/report/reports/support/alt_patitioner.eguile.scm
 gnucash/report/reports/support/balsheet-eg.eguile.scm
 gnucash/report/reports/support/coowner-billing.eguile.scm
 gnucash/report/reports/support/receipt.eguile.scm
@@ -650,7 +652,7 @@ libgnucash/engine/gncCoOwner.c
 libgnucash/engine/gncCustomer.c
 libgnucash/engine/gnc-date.cpp
 libgnucash/engine/gnc-datetime.cpp
-libgnucash/engine/gncDistributionList.c
+libgnucash/engine/gnc-distribution-list.c
 libgnucash/engine/gncEmployee.c
 libgnucash/engine/gnc-engine.cpp
 libgnucash/engine/gncEntry.c
