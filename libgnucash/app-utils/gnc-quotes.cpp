@@ -20,7 +20,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \ *******************************************************************/
 
-#include <boost/process/environment.hpp>
+#include <boost/process/v1/environment.hpp>
 #include <config.h>
 #include <qoflog.h>
 
