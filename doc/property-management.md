@@ -11,17 +11,17 @@ In Germany, a co-owner's association (WEG) is free to decide to
 self-manage their property in an owner administration. The law
 requires, that all property owners aggree to this decision by a 100%
 vote (Owner's resolution). Tasks of the [property managment][property_mgmt]
-can then be taken over by an owner of the WEG (§19 2.6.). Again this has to be
-defineds and in a written resolution of the owners' meeting.
+can then be taken over by an owner of the WEG. Again this has to be
+defined and in a written resolution of the owners' meeting.
 
-The rules may be adopted to the needs in other countries as well.
+The rules and tasks may be adopted in other countries as well.
 
 [property_mgmt]: https://www.gesetze-im-internet.de/woeigg/__19.html
 
 ## Implementation
 
-Following the management of customers and suppliers a new entity `Co-Owner`
-has been introduced. It offers to
+Following the management of customers and suppliers, this module has introduced 
+a new entity `Co-Owner`. It offers to
 
 * Create
 * Edit
@@ -30,15 +30,15 @@ has been introduced. It offers to
 
 the new entity type.
 
-Similar to customers, is enables the handling `Co-Owner` assigned
+Similar to customers, is enables the handling of `Co-Owner` assigned
 
 * Invoices
 * Orders
 * Payments
 * Settlements
 
-Within a Co-Owner object, you can define attributes that vary per
-housing unit. They are used while managing property managment tasks.
+Within a Co-Owner object, you can define attributes that probably will vary
+for each housing unit. They are used while managing property managment tasks.
 For example, the following object identifiers must be assigned to
 create correct settlements:
 
