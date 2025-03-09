@@ -1,27 +1,27 @@
-/*********************************************************************\
- * gncDistributionList.c -- the Gnucash Distirbuton List interface   *
- *                                                                   *
- * This program is free software; you can redistribute it and/or     *
- * modify it under the terms of the GNU General Public License as    *
- * published by the Free Software Foundation; either version 2 of    *
- * the License, or (at your option) any later version.               *
- *                                                                   *
- * This program is distributed in the hope that it will be useful,   *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of    *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     *
- * GNU General Public License for more details.                      *
- *                                                                   *
- * You should have received a copy of the GNU General Public License *
- * along with this program; if not, contact:                         *
- *                                                                   *
- * Free Software Foundation           Voice:  +1-617-542-5942        *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652        *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                    *
- *                                                                   *
-\*********************************************************************/
+/**********************************************************************\
+ * gnc-distribution-list.cpp -- the Gnucash Distributon List interface *
+ *                                                                     *
+ * This program is free software; you can redistribute it and/or       *
+ * modify it under the terms of the GNU General Public License as      *
+ * published by the Free Software Foundation; either version 2 of      *
+ * the License, or (at your option) any later version.                 *
+ *                                                                     *
+ * This program is distributed in the hope that it will be useful,     *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of      *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the       *
+ * GNU General Public License for more details.                        *
+ *                                                                     *
+ * You should have received a copy of the GNU General Public License   *
+ * along with this program; if not, contact:                           *
+ *                                                                     *
+ * Free Software Foundation           Voice:  +1-617-542-5942          *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652          *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                      *
+ *                                                                     *
+\**********************************************************************/
 
 /*
- * Copyright (C) 2022 Ralf Zerres
+ * Copyright (C) 2025 Ralf Zerres
  * Author: Ralf Zerres <ralf.zerres@mail.de>
  */
 
@@ -31,8 +31,8 @@
 #include <qofinstance-p.h>
 
 #include "gnc-engine.h"
+#include "gnc-distribution-list-p.h"
 #include "gncOwnerP.h"
-#include "gncDistributionListP.h"
 
 struct _gncDistributionList
 {
@@ -122,7 +122,8 @@ mark_distriblist (GncDistributionList *distriblist)
     qof_event_gen (&distriblist->inst, QOF_EVENT_MODIFY, NULL);
 }
 
-static inline void maybe_resort_list (GncDistributionList *distriblist)
+static inline void
+maybe_resort_list (GncDistributionList *distriblist)
 {
     struct _book_info *book_info;
 
