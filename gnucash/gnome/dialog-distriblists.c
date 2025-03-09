@@ -32,6 +32,7 @@
 //#include "search-owner.h"
 #include "search-param.h"
 #include "gnc-component-manager.h"
+#include "gnc-distribution-list.h"
 #include "gncOwner.h"
 #include "gnc-session.h"
 #include "gnc-tree-view-owner.h"
@@ -41,7 +42,6 @@
 #include "gnc-ui-util.h"
 #include "qof.h"
 
-#include "gncDistributionList.h"
 #include "dialog-distriblists.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */

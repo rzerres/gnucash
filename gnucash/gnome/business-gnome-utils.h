@@ -25,9 +25,9 @@
 #ifndef GNC_BUSINESS_GNOME_UTILS_H_
 #define GNC_BUSINESS_GNOME_UTILS_H_
 
+#include "gnc-distribution-list.h"
 #include "gncOwner.h"
 #include "gncBillTerm.h"
-#include "gncDistributionList.h"
 #include "gncTaxTable.h"
 #include "gncInvoice.h"
 
