@@ -45,6 +45,7 @@
 #include <gnc-plugin-bi-import.h>
 #include <gnc-plugin-csv-export.h>
 #include <gnc-plugin-csv-import.h>
+// #include <gnc-plugin-coowner-import.h>
 #include <gnc-plugin-customer-import.h>
 #include <gnc-plugin-file-history.h>
 #include <gnc-plugin-log-replay.h>
@@ -79,6 +80,7 @@ load_gnucash_plugins()
     gnc_plugin_bi_import_create_plugin ();
     gnc_plugin_csv_export_create_plugin ();
     gnc_plugin_csv_import_create_plugin();
+    //gnc_plugin_coowner_import_create_plugin ();
     gnc_plugin_customer_import_create_plugin ();
     gnc_plugin_qif_import_create_plugin ();
     gnc_plugin_log_replay_create_plugin ();
