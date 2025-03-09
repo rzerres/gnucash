@@ -64,6 +64,7 @@ set(gnucash_GRESOURCES
   ui/gnc-plugin-business.ui
   ui/gnc-plugin-csv-export.ui
   ui/gnc-plugin-csv-import.ui
+  #ui/gnc-plugin-coowner-import.ui
   ui/gnc-plugin-customer-import.ui
   ui/gnc-plugin-file-history.ui
   ui/gnc-plugin-log-replay.ui
