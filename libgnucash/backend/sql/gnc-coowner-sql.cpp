@@ -37,8 +37,8 @@ extern "C"
 #include <string.h>
 
 // #include "gnc-commodity.h"
+#include "gnc-distribution-list-p.h"
 #include "gncBillTermP.h"
-#include "gncDistributionListP.h"
 #include "gncCoOwnerP.h"
 #include "gncTaxTableP.h"
 }
