@@ -1,50 +1,61 @@
-/********************************************************************\
- * gncDistributionList.h -- the Gnucash distribution list interface *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
- *                                                                  *
-\********************************************************************/
+/*********************************************************************\
+ * gnc-distribution-list.h -- the Gnucash distribution list interface *
+ *                                                                    *
+ * This program is free software; you can redistribute it and/or      *
+ * modify it under the terms of the GNU General Public License as     *
+ * published by the Free Software Foundation; either version 2 of     *
+ * the License, or (at your option) any later version.                *
+ *                                                                    *
+ * This program is distributed in the hope that it will be useful,    *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of     *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      *
+ * GNU General Public License for more details.                       *
+ *                                                                    *
+ * You should have received a copy of the GNU General Public License  *
+ * along with this program; if not, contact:                          *
+ *                                                                    *
+ * Free Software Foundation           Voice:  +1-617-542-5942         *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652         *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                     *
+ *                                                                    *
+\*********************************************************************/
+
 /** @addtogroup Business
     @{ */
-/** @addtogroup DistributionList
+/** @addtogroup DistributionList Distribution List
+    This file implements the engine methods needed to manage
+    Distribution Lists objects.
 
-This file implements the engine methods needed to manage
-::Distribution Lists objects.
+    A distribution list is used to save attributes that are needed, when
+    account balances are to be split proportionally (e.g. into co-owner
+    settlements).
 
-A distributon list is used to save attributes that are needed, when
-account balances are to be split proportionally into co-owner
-settlements.
-
-Each list defines the 100% share value (the numerator) as the
-calculation base. You assign the appropriate unit share value inside
-the co-owners objects, which in term is referenced to calculate the
-costs to be settled to this apartment unit (the devisor).
+    Each list defines the 100% share value (the numerator) as the
+    calculation base. As an example, you assign the appropriate unit
+    share value inside the co-owners objects, which in term is
+    referenced to calculate the costs to be settled to this apartment
+    unit (the devisor).
 
     @{ */
-/** @file gncDistributionList.h
-    @brief Distribution list interface
-    @author Copyright (C) 2022 Ralf Zerres <ralf.zerres@mail.de>
-*/
+/** @file gnc-distribution-list.h
+ *  @author Copyright (C) 2025 Ralf Zerres <ralf.zerres@mail.de>
+ *  @brief Distribution list handling public routines
+ */
 
-#ifndef GNC_DISTRIBLIST_H_
-#define GNC_DISTRIBLIST_H_
+#ifndef GNC_DISTRIBLIST_H
+#define GNC_DISTRIBLIST_H
 
 #include <glib.h>
+
+#include "qof.h"
+#include "gnc-engine.h"
+#include "gnc-distribution-list.h"
+#include "gncBusiness.h"
+#include "gncOwner.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** @struct GncDistributionList
 
@@ -73,14 +84,6 @@ typedef struct _gncDistributionList GncDistributionList;
 */
 typedef struct _gncDistributionListClass GncDistributionListClass;
 
-#include "qof.h"
-#include "gncOwner.h"
-#include "gncBusiness.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define GNC_ID_DISTRIBLIST "gncDistribList"
 
 /* --- type macros --- */
@@ -98,7 +101,7 @@ extern "C" {
 GType gnc_distriblist_get_type(void);
 
 /** @name DistributonList parameter names
- @{ */
+    @{ */
 #define GNC_DISTRIBLIST_DESCRIPTION "description"
 #define GNC_DISTRIBLIST_NAME "name"
 //#define GNC_DISTRIBLIST_OWNER "owner"
@@ -131,7 +134,14 @@ typedef enum
 #endif
 
 /** @name Create/Destroy Functions
- @{ */
+    @{ */
+
+/**
+ * Destruct and release a Distribution List.
+ * @param distrib_list The Distribution List.
+ */
+//void gnc_distrib_list_destroy(gncDistribListDestroy (GncDistributionList* *distriblist);
+
 GncDistributionList *gncDistribListCreate (QofBook *book);
 void gncDistribListDecRef (GncDistributionList *distriblist);
 void gncDistribListDestroy (GncDistributionList *distriblist);
@@ -143,8 +153,9 @@ void gncDistribListCommitEdit (GncDistributionList *distriblist);
 
 /** @} */
 
-/** @name Set Functions
- @{ */
+
+/** @name Setters Functions
+    @{ */
 void gncDistribListSetActive (GncDistributionList *distriblist, gboolean active);
 void gncDistribListSetDescription (GncDistributionList *distriblist, const char *name);
 void gncDistribListSetName (GncDistributionList *distriblist, const char *name);
@@ -159,8 +170,8 @@ void gncDistribListSetType (GncDistributionList *distriblist, GncDistributionLis
 
 /** @} */
 
-/** @name Get Functions
- @{ */
+/** @name Getters Functions
+    @{ */
 #define gncDistribListGetChild(t) gncDistribListReturnChild((t),FALSE)
 gboolean gncDistribListGetActive (const GncDistributionList *distriblist);
 const char *gncDistribListGetDescription (const GncDistributionList *distriblist);
@@ -184,7 +195,7 @@ gint64 gncDistribListGetRefcount (const GncDistributionList *distriblist);
 /** @} */
 
 /** @name Helper Functions
- @{ */
+    @{ */
 /** Return a pointer to the instance `gncDistributionList` that is identified
  *  by the guid, and is residing in the book. Returns NULL if the
  *  instance can't be found.
@@ -201,7 +212,7 @@ GncDistributionList *gncDistribListLookupByName (QofBook *book, const char *name
 /** @} */
 
 /** @name Comparison Functions
- @{ */
+    @{ */
 /** Compare distributon lists on their name for sorting. */
 int gncDistribListCompare (const GncDistributionList *a, const GncDistributionList *b);
 
@@ -224,15 +235,11 @@ gboolean gncDistribListIsFamily (const GncDistributionList *a, const GncDistribu
 
 /* deprecated */
 #define gncDistribListGetGUID(x) qof_instance_get_guid (QOF_INSTANCE(x))
-/** @deprecated functions, should be removed */
-#define gncDistribListRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
-#define gncDistribListGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
-#define gncDistribListLookupDirect(g,b) gncCoOwnerLookup((b), &(g))
 
 #ifdef __cplusplus
-}
+} /* extern "C" */
 #endif
 
-#endif /* GNC_DISTRIBLIST_H_ */
+#endif /* GNC_DISTRIBLIST_H */
 /** @} */
 /** @} */
