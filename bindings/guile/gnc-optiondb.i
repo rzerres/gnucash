@@ -124,6 +124,8 @@ SCM scm_init_sw_gnc_optiondb_module(void);
             type = $descriptor(GncInvoice*);
         else if (GNC_IS_TAXTABLE($1))
             type = $descriptor(GncTaxTable*);
+        else if (GNC_IS_COOWNER($1))
+            type = $descriptor(_gncCoOwner*);
         else if (GNC_IS_CUSTOMER($1))
             type = $descriptor(_gncCustomer*);
         else if (GNC_IS_EMPLOYEE($1))
@@ -139,12 +141,13 @@ SCM scm_init_sw_gnc_optiondb_module(void);
 %typemap (in) QofInstance_s* {
     if (scm_is_true($input))
     {
-        static const std::array<swig_type_info*, 10> types {
+        static const std::array<swig_type_info*, 11> types {
             $descriptor(QofInstance_s*), $descriptor(gnc_commodity*),
                 $descriptor(GncBudget*), $descriptor(GncInvoice*),
                 $descriptor(GncTaxTable*), $descriptor(Account*),
-                $descriptor(_gncCustomer*), $descriptor(_gncEmployee*),
-                $descriptor(_gncJob*), $descriptor(_gncVendor*)
+                $descriptor(_gncCoOwner*), $descriptor(_gncCustomer*),
+	        $descriptor(_gncEmployee*), $descriptor(_gncJob*),
+	        $descriptor(_gncVendor*)
                 };
         void* ptr{};
         SCM instance{$input};
@@ -229,6 +232,8 @@ scm_from_value<const QofInstance*>(const QofInstance* value)
         type = SWIGTYPE_p__gncInvoice;
     else if (GNC_IS_TAXTABLE(value))
         type = SWIGTYPE_p__gncTaxTable;
+    else if (GNC_IS_COOWNER(value))
+        type = SWIGTYPE_p__gncCoOwner;
     else if (GNC_IS_CUSTOMER(value))
         type = SWIGTYPE_p__gncCustomer;
     else if (GNC_IS_EMPLOYEE(value))
@@ -393,12 +398,13 @@ scm_to_value<const QofInstance*>(SCM new_value)
     if (new_value == SCM_BOOL_F)
         return nullptr;
 
-    static const std::array<swig_type_info*, 10> types{
+    static const std::array<swig_type_info*, 11> types{
         SWIGTYPE_p_QofInstance_s, SWIGTYPE_p_gnc_commodity,
         SWIGTYPE_p_budget_s, SWIGTYPE_p__gncInvoice,
         SWIGTYPE_p__gncTaxTable, SWIGTYPE_p_Account,
-        SWIGTYPE_p__gncCustomer, SWIGTYPE_p__gncEmployee,
-        SWIGTYPE_p__gncJob, SWIGTYPE_p__gncVendor
+        SWIGTYPE_p__gncCoOwner, SWIGTYPE_p__gncCustomer,
+	SWIGTYPE_p__gncEmployee, SWIGTYPE_p__gncJob,
+	SWIGTYPE_p__gncVendor
             };
     void* ptr{};
     auto pos = std::find_if(types.begin(), types.end(),
