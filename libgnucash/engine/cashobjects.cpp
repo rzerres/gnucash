@@ -36,10 +36,10 @@
 #include "gnc-pricedb-p.h"
 #include "gnc-lot-p.h"
 #include "gnc-budget.h"
+#include "gnc-distribution-list-p.h"
 
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
-#include "gncDistributionListP.h"
 #include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"
