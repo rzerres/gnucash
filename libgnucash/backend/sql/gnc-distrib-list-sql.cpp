@@ -36,7 +36,7 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 
-#include "gncDistributionListP.h"
+#include "gnc-distribution-list-p.h"
 #include "qof.h"
 }
 

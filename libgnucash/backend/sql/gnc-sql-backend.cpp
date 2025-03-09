@@ -24,10 +24,10 @@
 #include <gnc-prefs.h>
 #include <gnc-engine.h>
 #include <gnc-commodity.h>
+#include "gnc-distribution-list.h"
 #include <SX-book.h>
 #include <Recurrence.h>
 #include <gncBillTerm.h>
-#include <gncDistributionList.h>
 #include <gncTaxTable.h>
 #include <gncInvoice.h>
 #include <gnc-pricedb.h>

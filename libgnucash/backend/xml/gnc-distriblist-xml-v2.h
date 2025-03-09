@@ -25,7 +25,7 @@
 #define GNC_DISTRIBLIST_XML_V2_H
 extern "C"
 {
-#include "gncDistributionList.h"
+#include "gnc-distribution-list-p.h"
 }
 
 void gnc_distriblist_xml_initialize (void);
