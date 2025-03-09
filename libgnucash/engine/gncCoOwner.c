@@ -168,77 +168,77 @@ gnc_coowner_get_property (
     switch (prop_id)
     {
     case PROP_ACTIVE:
-        g_value_set_boolean(value, coowner->active);
-        break;
+	g_value_set_boolean(value, coowner->active);
+	break;
     case PROP_ACL:
-        g_value_set_string(value, coowner->acl);
-        break;
+	g_value_set_string(value, coowner->acl);
+	break;
     case PROP_ADDRESS:
-        g_value_take_object(value, coowner->addr);
-        break;
+	g_value_take_object(value, coowner->addr);
+	break;
     case PROP_APT_SHARE:
-        g_value_set_boxed(value, &coowner->apt_share);
-        break;
+	g_value_set_boxed(value, &coowner->apt_share);
+	break;
     case PROP_APT_UNIT:
-        g_value_set_string(value, coowner->apt_unit);
-        break;
+	g_value_set_string(value, coowner->apt_unit);
+	break;
     case PROP_CCARD:
-        g_value_take_object(value, coowner->ccard_acc);
-        break;
+	g_value_take_object(value, coowner->ccard_acc);
+	break;
     case PROP_CURRENCY:
-        g_value_take_object(value, coowner->currency);
-        break;
+	g_value_take_object(value, coowner->currency);
+	break;
     case PROP_DISTRIBUTION_KEY:
-        g_value_set_string(value, coowner->distribution_key);
-        break;
+	g_value_set_string(value, coowner->distribution_key);
+	break;
     case PROP_LANGUAGE:
-        g_value_set_string(value, coowner->language);
-        break;
+	g_value_set_string(value, coowner->language);
+	break;
     case PROP_ID:
-        g_value_set_string(value, coowner->id);
-        break;
+	g_value_set_string(value, coowner->id);
+	break;
     case PROP_NAME:
-        g_value_set_string(value, coowner->name);
-        break;
+	g_value_set_string(value, coowner->name);
+	break;
     case PROP_NOTES:
-        g_value_set_string(value, coowner->notes);
-        break;
+	g_value_set_string(value, coowner->notes);
+	break;
     case PROP_LAST_POSTED:
-        qof_instance_get_kvp (QOF_INSTANCE (coowner), value, 1, LAST_POSTED_TO_ACCT);
-        break;
+	qof_instance_get_kvp (QOF_INSTANCE (coowner), value, 1, LAST_POSTED_TO_ACCT);
+	break;
     case PROP_PAYMENT_LAST_ACCT:
-        qof_instance_get_kvp (QOF_INSTANCE (coowner), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
-        break;
+	qof_instance_get_kvp (QOF_INSTANCE (coowner), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
+	break;
     case PROP_PDF_DIRNAME:
-        qof_instance_get_kvp (QOF_INSTANCE (coowner), value, 1, OWNER_EXPORT_PDF_DIRNAME);
-        break;
+	qof_instance_get_kvp (QOF_INSTANCE (coowner), value, 1, OWNER_EXPORT_PDF_DIRNAME);
+	break;
     case PROP_SHIP_ADDRESS:
-        g_value_take_object(value, coowner->ship_addr);
-        break;
+	g_value_take_object(value, coowner->ship_addr);
+	break;
     case PROP_TAXTABLE:
-        g_value_take_object(value, coowner->tax_table);
-        break;
+	g_value_take_object(value, coowner->tax_table);
+	break;
     case PROP_TAX_INCLUDED:
-        g_value_set_int(value, coowner->tax_included);
-        break;
+	g_value_set_int(value, coowner->tax_included);
+	break;
     case PROP_TENANT_ACTIVE:
-        g_value_set_boolean(value, coowner->tenant_active);
-        break;
+	g_value_set_boolean(value, coowner->tenant_active);
+	break;
     case PROP_TENANT_ADDRESS:
-        g_value_take_object(value, coowner->tenant_addr);
-        break;
+	g_value_take_object(value, coowner->tenant_addr);
+	break;
     case PROP_TENANT_ID:
-        g_value_set_string(value, coowner->tenant_id);
-        break;
+	g_value_set_string(value, coowner->tenant_id);
+	break;
     case PROP_TENANT_NAME:
-        g_value_set_string(value, coowner->tenant_name);
-        break;
+	g_value_set_string(value, coowner->tenant_name);
+	break;
     case PROP_TENANT_NOTES:
-        g_value_set_string(value, coowner->tenant_notes);
-        break;
+	g_value_set_string(value, coowner->tenant_notes);
+	break;
     default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-        break;
+	G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	break;
     }
 }
 
@@ -262,68 +262,68 @@ gnc_coowner_set_property (
     switch (prop_id)
     {
     case PROP_ACL:
-        gncCoOwnerSetAcl(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetAcl(coowner, g_value_get_string(value));
+	break;
     case PROP_ACTIVE:
-        gncCoOwnerSetActive(coowner, g_value_get_boolean(value));
-        break;
+	gncCoOwnerSetActive(coowner, g_value_get_boolean(value));
+	break;
     case PROP_ADDRESS:
-        qofCoOwnerSetAddr(coowner, g_value_get_object(value));
-        break;
+	qofCoOwnerSetAddr(coowner, g_value_get_object(value));
+	break;
     case PROP_APT_SHARE:
-        gncCoOwnerSetAptShare(coowner, *(gnc_numeric*)g_value_get_boxed(value));
-        break;
+	gncCoOwnerSetAptShare(coowner, *(gnc_numeric*)g_value_get_boxed(value));
+	break;
     case PROP_APT_UNIT:
-        gncCoOwnerSetAptUnit(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetAptUnit(coowner, g_value_get_string(value));
+	break;
     case PROP_CCARD:
-        gncCoOwnerSetCCard(coowner, g_value_get_object(value));
-        break;
+	gncCoOwnerSetCCard(coowner, g_value_get_object(value));
+	break;
     case PROP_CURRENCY:
-        gncCoOwnerSetCurrency(coowner, g_value_get_object(value));
-        break;
+	gncCoOwnerSetCurrency(coowner, g_value_get_object(value));
+	break;
     case PROP_DISTRIBUTION_KEY:
-        gncCoOwnerSetDistributionKey(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetDistributionKey(coowner, g_value_get_string(value));
+	break;
     case PROP_ID:
-        gncCoOwnerSetID(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetID(coowner, g_value_get_string(value));
+	break;
     case PROP_LANGUAGE:
-        gncCoOwnerSetLanguage(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetLanguage(coowner, g_value_get_string(value));
+	break;
     case PROP_LAST_POSTED:
-        qof_instance_set_kvp (QOF_INSTANCE (coowner), value, 1, LAST_POSTED_TO_ACCT);
-        break;
+	qof_instance_set_kvp (QOF_INSTANCE (coowner), value, 1, LAST_POSTED_TO_ACCT);
+	break;
     case PROP_NAME:
-        gncCoOwnerSetName(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetName(coowner, g_value_get_string(value));
+	break;
     case PROP_NOTES:
-        gncCoOwnerSetNotes(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetNotes(coowner, g_value_get_string(value));
+	break;
     case PROP_PAYMENT_LAST_ACCT:
-        qof_instance_set_kvp (QOF_INSTANCE (coowner), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
-        break;
+	qof_instance_set_kvp (QOF_INSTANCE (coowner), value, 2, GNC_PAYMENT, GNC_LAST_ACCOUNT);
+	break;
     case PROP_PDF_DIRNAME:
-        qof_instance_set_kvp (QOF_INSTANCE (coowner), value, 1, OWNER_EXPORT_PDF_DIRNAME);
-        break;
+	qof_instance_set_kvp (QOF_INSTANCE (coowner), value, 1, OWNER_EXPORT_PDF_DIRNAME);
+	break;
     case PROP_TAX_INCLUDED:
-        gncCoOwnerSetTaxIncluded(coowner, (GncTaxIncluded)g_value_get_int(value));
-        break;
+	gncCoOwnerSetTaxIncluded(coowner, (GncTaxIncluded)g_value_get_int(value));
+	break;
     case PROP_TENANT_ACTIVE:
-        gncCoOwnerSetTenantActive(coowner, g_value_get_boolean(value));
-        break;
+	gncCoOwnerSetTenantActive(coowner, g_value_get_boolean(value));
+	break;
     case PROP_TENANT_ID:
-        gncCoOwnerSetID(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetID(coowner, g_value_get_string(value));
+	break;
     case PROP_TENANT_NAME:
-        gncCoOwnerSetTenantName(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetTenantName(coowner, g_value_get_string(value));
+	break;
     case PROP_TENANT_NOTES:
-        gncCoOwnerSetTenantNotes(coowner, g_value_get_string(value));
-        break;
+	gncCoOwnerSetTenantNotes(coowner, g_value_get_string(value));
+	break;
     default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-        break;
+	G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+	break;
    }
 }
 
@@ -354,15 +354,15 @@ impl_refers_to_object(const QofInstance* inst, const QofInstance* ref)
 
     if (GNC_IS_ACCOUNT(ref))
     {
-        return (coowner->ccard_acc == GNC_ACCOUNT(ref));
+	return (coowner->ccard_acc == GNC_ACCOUNT(ref));
     }
     else if (GNC_IS_BILLTERM(ref))
     {
-        return (coowner->coowner_terms == GNC_BILLTERM(ref));
+	return (coowner->coowner_terms == GNC_BILLTERM(ref));
     }
     else if (GNC_IS_COMMODITY(ref))
     {
-        return (coowner->currency == GNC_COMMODITY(ref));
+	return (coowner->currency == GNC_COMMODITY(ref));
     }
     /* TODO: Language selection list */
     /* else if (GNC_IS_LANGUAGE(ref)) */
@@ -371,30 +371,30 @@ impl_refers_to_object(const QofInstance* inst, const QofInstance* ref)
     /* } */
     else if (GNC_IS_TAXTABLE(ref))
     {
-        return (coowner->tax_table == GNC_TAXTABLE(ref));
+	return (coowner->tax_table == GNC_TAXTABLE(ref));
     }
 
     return FALSE;
 }
 
 /** Returns a list of my type of object which refers to an object.
-        For example, when called as
-        qof_instance_get_typed_referring_object_list(tax_table,
-        account); it will return the list of tax_tables which refer to
-        a specific account.  The result should be the same regardless
-        of which tax_table ojbect is used.  The list must be freed by
-        the caller but the objects on the list must not.
+	For example, when called as
+	qof_instance_get_typed_referring_object_list(tax_table,
+	account); it will return the list of tax_tables which refer to
+	a specific account.  The result should be the same regardless
+	of which tax_table ojbect is used.  The list must be freed by
+	the caller but the objects on the list must not.
  */
 static GList*
 impl_get_typed_referring_object_list(const QofInstance* inst, const QofInstance* ref)
 {
     if (!GNC_IS_ACCOUNT(ref) && !GNC_IS_BILLTERM(ref)
-        && !GNC_IS_COMMODITY(ref)
-        /* TODO */
-        /* !GNC_IS_LANGUAGE(ref) */
-        && !GNC_IS_TAXTABLE(ref))
+	&& !GNC_IS_COMMODITY(ref)
+	/* TODO */
+	/* !GNC_IS_LANGUAGE(ref) */
+	&& !GNC_IS_TAXTABLE(ref))
     {
-        return NULL;
+	return NULL;
     }
 
     return qof_instance_get_referring_object_list_from_collection
@@ -420,224 +420,224 @@ gnc_coowner_class_init (GncCoOwnerClass *klass)
       gobject_class,
       PROP_ACL,
       g_param_spec_string ("acl",
-                           "CoOwner ACL",
-                           "The acl is an arbitrary string "
-                           "assigned by the user which provides ??? "
-                           " for the coowner.",
-                           NULL,
-                           G_PARAM_READWRITE));
+			   "CoOwner ACL",
+			   "The acl is an arbitrary string "
+			   "assigned by the user which provides ??? "
+			   " for the coowner.",
+			   NULL,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_ACTIVE,
       g_param_spec_boolean ("active",
-                            "Co-Owner active",
-                            "TRUE if the Co-Owner is active.  FALSE if inactive.",
-                            FALSE,
-                            G_PARAM_READWRITE));
+			    "Co-Owner active",
+			    "TRUE if the Co-Owner is active.  FALSE if inactive.",
+			    FALSE,
+			    G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_ADDRESS,
       g_param_spec_object ("addr",
-                           "Address",
-                           "The Co-Owner address assigned to this property.",
-                           GNC_TYPE_ADDRESS,
-                           G_PARAM_READWRITE));
+			   "Address",
+			   "The Co-Owner address assigned to this property.",
+			   GNC_TYPE_ADDRESS,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_APT_SHARE,
       g_param_spec_boxed("apt-share",
-                         "Apartment share",
-                         "Co-Owners apartment share assigned to this property.",
-                         GNC_TYPE_NUMERIC,
-                         G_PARAM_READWRITE));
+			 "Apartment share",
+			 "Co-Owners apartment share assigned to this property.",
+			 GNC_TYPE_NUMERIC,
+			 G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_APT_UNIT,
       g_param_spec_string("apt-unit",
-                          "Apartment Unit",
-                          "Apartment unit assigned to a Co-Owner.",
-                          NULL,
-                          G_PARAM_READWRITE));
+			  "Apartment Unit",
+			  "Apartment unit assigned to a Co-Owner.",
+			  NULL,
+			  G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_CCARD,
       g_param_spec_object ("credit-card-account",
-                           "Credit card account",
-                           "The credit card account for this Co-Owner.",
-                           GNC_TYPE_ACCOUNT,
-                           G_PARAM_READWRITE));
+			   "Credit card account",
+			   "The credit card account for this Co-Owner.",
+			   GNC_TYPE_ACCOUNT,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_CURRENCY,
       g_param_spec_object ("currency",
-                           "Currency",
-                           "The currency property denotes the currency used by this Co-Owner.",
-                           GNC_TYPE_COMMODITY,
-                           G_PARAM_READWRITE));
+			   "Currency",
+			   "The currency property denotes the currency used by this Co-Owner.",
+			   GNC_TYPE_COMMODITY,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property(
        gobject_class,
        PROP_DISTRIBUTION_KEY,
        g_param_spec_string ("distribution-key",
-                            "Distribution Key",
-                            "Distribution key to be applied for the Co-Owner share.",
-                            NULL,
-                            G_PARAM_READWRITE));
+			    "Distribution Key",
+			    "Distribution key to be applied for the Co-Owner share.",
+			    NULL,
+			    G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_PDF_DIRNAME,
       g_param_spec_string ("export-pdf-dir",
-                           "Export PDF Directory Name",
-                           "A subdirectory for exporting PDF reports which is "
-                           "appended to the target directory when writing them "
-                           "out. It is retrieved from preferences and stored on "
-                           "each 'Co-Owner' object which prints items after "
-                           "printing.",
-                           NULL,
-                           G_PARAM_READWRITE));
+			   "Export PDF Directory Name",
+			   "A subdirectory for exporting PDF reports which is "
+			   "appended to the target directory when writing them "
+			   "out. It is retrieved from preferences and stored on "
+			   "each 'Co-Owner' object which prints items after "
+			   "printing.",
+			   NULL,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_ID,
       g_param_spec_string ("id",
-                           "Co-Owner ID",
-                           "The Co-Owner ID is an arbitrary string "
-                           "assigned by the user which provides the Co-Owner "
-                           "ID.",
-                           NULL,
-                           G_PARAM_READWRITE));
+			   "Co-Owner ID",
+			   "The Co-Owner ID is an arbitrary string "
+			   "assigned by the user which provides the Co-Owner "
+			   "ID.",
+			   NULL,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property(
        gobject_class,
        PROP_LAST_POSTED,
        g_param_spec_boxed("invoice-last-posted-account",
-                          "Invoice Last Posted Account",
-                          "The last account to which an invoice belonging to "
-                          "this Co-Owner was posted.",
-                          GNC_TYPE_GUID,
-                          G_PARAM_READWRITE));
+			  "Invoice Last Posted Account",
+			  "The last account to which an invoice belonging to "
+			  "this Co-Owner was posted.",
+			  GNC_TYPE_GUID,
+			  G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_LANGUAGE,
       g_param_spec_string ("language",
-                           "Co-Owners language",
-                           "The language is an arbitrary string "
-                           "assigned by the user which provides the language spoken "
-                           " by the Co-Owner.",
-                           NULL,
-                           G_PARAM_READWRITE));
+			   "Co-Owners language",
+			   "The language is an arbitrary string "
+			   "assigned by the user which provides the language spoken "
+			   " by the Co-Owner.",
+			   NULL,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property
     (gobject_class,
      PROP_NAME,
      g_param_spec_string ("name",
-                          "Co-Owners name",
-                          "The Co-Owner is an arbitrary string "
-                          "assigned by the user which provides the "
-                          "co-owner name.",
-                          NULL,
-                          G_PARAM_READWRITE));
+			  "Co-Owners name",
+			  "The Co-Owner is an arbitrary string "
+			  "assigned by the user which provides the "
+			  "co-owner name.",
+			  NULL,
+			  G_PARAM_READWRITE));
 
     g_object_class_install_property
     (gobject_class,
      PROP_NOTES,
      g_param_spec_string ("notes",
-                          "Co-Owner notes",
-                          "The Co-Owner notes is an arbitrary string "
-                          "assigned by the user to add extra information about the Co-Owner.",
-                          NULL,
-                          G_PARAM_READWRITE));
+			  "Co-Owner notes",
+			  "The Co-Owner notes is an arbitrary string "
+			  "assigned by the user to add extra information about the Co-Owner.",
+			  NULL,
+			  G_PARAM_READWRITE));
 
     g_object_class_install_property(
        gobject_class,
        PROP_PAYMENT_LAST_ACCT,
        g_param_spec_boxed("payment-last-account",
-                          "Payment Last Account",
-                          "The last account to which an payment belonging to "
-                          "this Co-Owner was posted.",
-                          GNC_TYPE_GUID,
-                          G_PARAM_READWRITE));
+			  "Payment Last Account",
+			  "The last account to which an payment belonging to "
+			  "this Co-Owner was posted.",
+			  GNC_TYPE_GUID,
+			  G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_ADDRESS,
       g_param_spec_object ("ship_addr",
-                           "Shipping Address",
-                           "The shipaddress property contains the divergent address "
-                           "information, that is assigned to this Co-Owner when "
-                           "delivering documents.",
-                           GNC_TYPE_ADDRESS,
-                           G_PARAM_READWRITE));
+			   "Shipping Address",
+			   "The shipaddress property contains the divergent address "
+			   "information, that is assigned to this Co-Owner when "
+			   "delivering documents.",
+			   GNC_TYPE_ADDRESS,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property
     (gobject_class,
      PROP_TAX_INCLUDED,
      g_param_spec_int  ("tax_included",
-                        "Tax included",
-                        "The tax-included property contains the information about "
-                        "tax calculation this vendor.",
-                        GNC_TAXINCLUDED_YES,       /* min */
-                        GNC_TAXINCLUDED_USEGLOBAL, /* max */
-                        GNC_TAXINCLUDED_USEGLOBAL, /* default */
-                        G_PARAM_READWRITE));
+			"Tax included",
+			"The tax-included property contains the information about "
+			"tax calculation this vendor.",
+			GNC_TAXINCLUDED_YES,       /* min */
+			GNC_TAXINCLUDED_USEGLOBAL, /* max */
+			GNC_TAXINCLUDED_USEGLOBAL, /* default */
+			G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_TENANT_ACTIVE,
       g_param_spec_boolean ("tenant_active",
-                            "Tenant active",
-                            "TRUE if the Tenant is active.  FALSE if inactive.",
-                            FALSE,
-                            G_PARAM_READWRITE));
+			    "Tenant active",
+			    "TRUE if the Tenant is active.  FALSE if inactive.",
+			    FALSE,
+			    G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_ADDRESS,
       g_param_spec_object ("tenant_addr",
-                           "Shipping Address",
-                           "The tenant address property contains the address "
-                           "information, that is assigned to the tenant of "
-                           "this property unit.",
-                           GNC_TYPE_ADDRESS,
-                           G_PARAM_READWRITE));
+			   "Shipping Address",
+			   "The tenant address property contains the address "
+			   "information, that is assigned to the tenant of "
+			   "this property unit.",
+			   GNC_TYPE_ADDRESS,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
       PROP_TENANT_ID,
       g_param_spec_string ("tenant_id",
-                           "Tenant ID",
-                           "The Tenant ID is an arbitrary string "
-                           "assigned by the user which provides the Tenant "
-                           "ID.",
-                           NULL,
-                           G_PARAM_READWRITE));
+			   "Tenant ID",
+			   "The Tenant ID is an arbitrary string "
+			   "assigned by the user which provides the Tenant "
+			   "ID.",
+			   NULL,
+			   G_PARAM_READWRITE));
 
     g_object_class_install_property(
      gobject_class,
      PROP_TENANT_NAME,
      g_param_spec_string ("tenant_name",
-                          "Tenant Name",
-                          "The active apartment unit tenant name.",
-                          NULL,
-                          G_PARAM_READWRITE));
+			  "Tenant Name",
+			  "The active apartment unit tenant name.",
+			  NULL,
+			  G_PARAM_READWRITE));
 
     g_object_class_install_property
     (gobject_class,
      PROP_TENANT_NOTES,
      g_param_spec_string ("tenant_notes",
-                          "Tenant notes",
-                          "The Tenant notes is an arbitrary string "
-                          "assigned by the user to add extra information about the Tenant.",
-                          NULL,
-                          G_PARAM_READWRITE));
+			  "Tenant notes",
+			  "The Tenant notes is an arbitrary string "
+			  "assigned by the user to add extra information about the Tenant.",
+			  NULL,
+			  G_PARAM_READWRITE));
 
 }
 
@@ -673,7 +673,7 @@ GncCoOwner *gncCoOwnerCreate (QofBook *book)
     coowner->tenant_notes= CACHE_INSERT ("");
 
     if (coowner_qof_event_handler_id == 0)
-        coowner_qof_event_handler_id = qof_event_register_handler (coowner_handle_qof_events, NULL);
+	coowner_qof_event_handler_id = qof_event_register_handler (coowner_handle_qof_events, NULL);
 
     qof_event_gen (&coowner->inst, QOF_EVENT_CREATE, NULL);
 
@@ -709,10 +709,10 @@ static void gncCoOwnerFree (GncCoOwner *coowner)
 
     if (coowner->tax_table)
     {
-        gncTaxTableDecRef (coowner->tax_table);
+	gncTaxTableDecRef (coowner->tax_table);
     }
     if (coowner->coowner_terms)
-        gncBillTermDecRef (coowner->coowner_terms);
+	gncBillTermDecRef (coowner->coowner_terms);
 
     gncAddressBeginEdit (coowner->tenant_addr);
     gncAddressDestroy (coowner->tenant_addr);
@@ -805,18 +805,18 @@ GList *gncCoOwnerGetJoblist (const GncCoOwner *coowner, gboolean show_all)
 
     if (show_all)
     {
-        return (g_list_copy (coowner->jobs));
+	return (g_list_copy (coowner->jobs));
     }
     else
     {
-        GList *list = NULL, *iterator;
-        for (iterator = coowner->jobs; iterator; iterator = iterator->next)
-        {
-            GncJob *j = iterator->data;
-            if (gncJobGetActive (j))
-                list = g_list_prepend (list, j);
-        }
-        return g_list_reverse (list);
+	GList *list = NULL, *iterator;
+	for (iterator = coowner->jobs; iterator; iterator = iterator->next)
+	{
+	    GncJob *j = iterator->data;
+	    if (gncJobGetActive (j))
+		list = g_list_prepend (list, j);
+	}
+	return g_list_reverse (list);
     }
 }
 
@@ -905,10 +905,10 @@ const char *gncCoOwnerGetTenantNotes (const GncCoOwner *coowner)
 /* Set Functions */
 
 #define SET_STR(obj, member, str) { \
-        if (!g_strcmp0 (member, str)) return; \
-        gncCoOwnerBeginEdit (obj); \
-        CACHE_REPLACE (member, str); \
-        }
+	if (!g_strcmp0 (member, str)) return; \
+	gncCoOwnerBeginEdit (obj); \
+	CACHE_REPLACE (member, str); \
+	}
 
 void gncCoOwnerSetAcl (GncCoOwner *coowner, const char *acl)
 {
@@ -936,17 +936,17 @@ qofCoOwnerSetAddr (GncCoOwner *coowner, QofInstance *addr_ent)
 
     if (!coowner || !addr_ent)
     {
-        return;
+	return;
     }
     addr = (GncAddress*)addr_ent;
     if (addr == coowner->addr)
     {
-        return;
+	return;
     }
     if (coowner->addr != NULL)
     {
-        gncAddressBeginEdit(coowner->addr);
-        gncAddressDestroy(coowner->addr);
+	gncAddressBeginEdit(coowner->addr);
+	gncAddressDestroy(coowner->addr);
     }
     gncCoOwnerBeginEdit(coowner);
     coowner->addr = addr;
@@ -997,8 +997,8 @@ void gncCoOwnerSetCurrency (GncCoOwner *coowner, gnc_commodity *currency)
 {
     if (!coowner || !currency) return;
     if (coowner->currency &&
-            gnc_commodity_equal (coowner->currency, currency))
-        return;
+	    gnc_commodity_equal (coowner->currency, currency))
+	return;
     gncCoOwnerBeginEdit (coowner);
     coowner->currency = currency;
     mark_coowner (coowner);
@@ -1077,17 +1077,17 @@ void qofCoOwnerSetShipAddr (GncCoOwner *coowner, QofInstance *ship_addr_ent)
 
     if (!coowner || !ship_addr_ent)
     {
-        return;
+	return;
     }
     ship_addr = (GncAddress*)ship_addr_ent;
     if (ship_addr == coowner->ship_addr)
     {
-        return;
+	return;
     }
     if (coowner->ship_addr != NULL)
     {
-        gncAddressBeginEdit(coowner->ship_addr);
-        gncAddressDestroy(coowner->ship_addr);
+	gncAddressBeginEdit(coowner->ship_addr);
+	gncAddressDestroy(coowner->ship_addr);
     }
     gncCoOwnerBeginEdit(coowner);
     coowner->ship_addr = ship_addr;
@@ -1121,9 +1121,9 @@ void gncCoOwnerSetTaxTable (GncCoOwner *coowner, GncTaxTable *table)
 
     gncCoOwnerBeginEdit (coowner);
     if (coowner->tax_table)
-        gncTaxTableDecRef (coowner->tax_table);
+	gncTaxTableDecRef (coowner->tax_table);
     if (table)
-        gncTaxTableIncRef (table);
+	gncTaxTableIncRef (table);
     coowner->tax_table = table;
     mark_coowner (coowner);
     gncCoOwnerCommitEdit (coowner);
@@ -1136,10 +1136,10 @@ void gncCoOwnerSetTerms (GncCoOwner *coowner, GncBillTerm *coowner_terms)
 
     gncCoOwnerBeginEdit (coowner);
     if (coowner->coowner_terms)
-        gncBillTermDecRef (coowner->coowner_terms);
+	gncBillTermDecRef (coowner->coowner_terms);
     coowner->coowner_terms = coowner_terms;
     if (coowner->coowner_terms)
-        gncBillTermIncRef (coowner->coowner_terms);
+	gncBillTermIncRef (coowner->coowner_terms);
     mark_coowner (coowner);
     gncCoOwnerCommitEdit (coowner);
 }
@@ -1161,17 +1161,17 @@ void qofCoOwnerSetTenantAddr (GncCoOwner *coowner, QofInstance *tenant_addr_ent)
 
     if (!coowner || !tenant_addr_ent)
     {
-        return;
+	return;
     }
     tenant_addr = (GncAddress*)tenant_addr_ent;
     if (tenant_addr == coowner->tenant_addr)
     {
-        return;
+	return;
     }
     if (coowner->tenant_addr != NULL)
     {
-        gncAddressBeginEdit(coowner->tenant_addr);
-        gncAddressDestroy(coowner->tenant_addr);
+	gncAddressBeginEdit(coowner->tenant_addr);
+	gncAddressDestroy(coowner->tenant_addr);
     }
     gncCoOwnerBeginEdit(coowner);
     coowner->tenant_addr = tenant_addr;
@@ -1221,8 +1221,8 @@ void gncCoOwnerAddJob (GncCoOwner *coowner, GncJob *job)
     if (!job) return;
 
     if (g_list_index(coowner->jobs, job) == -1)
-        coowner->jobs = g_list_insert_sorted (coowner->jobs, job,
-            (GCompareFunc)gncJobCompare);
+	coowner->jobs = g_list_insert_sorted (coowner->jobs, job,
+	    (GCompareFunc)gncJobCompare);
 
     qof_event_gen (&coowner->inst, QOF_EVENT_MODIFY, NULL);
 }
@@ -1257,9 +1257,9 @@ gboolean gncCoOwnerIsDirty (const GncCoOwner *coowner)
 {
     if (!coowner) return FALSE;
     return (qof_instance_get_dirty_flag(coowner)
-            || gncAddressIsDirty (coowner->addr)
-            || gncAddressIsDirty (coowner->ship_addr)
-            || gncAddressIsDirty (coowner->tenant_addr));
+	    || gncAddressIsDirty (coowner->addr)
+	    || gncAddressIsDirty (coowner->ship_addr)
+	    || gncAddressIsDirty (coowner->tenant_addr));
 }
 
 void gncCoOwnerRemoveJob (GncCoOwner *coowner, GncJob *job)
@@ -1272,12 +1272,12 @@ void gncCoOwnerRemoveJob (GncCoOwner *coowner, GncJob *job)
     node = g_list_find (coowner->jobs, job);
     if (!node)
     {
-        /*    PERR ("split not in account"); */
+	/*    PERR ("split not in account"); */
     }
     else
     {
-        coowner->jobs = g_list_remove_link (coowner->jobs, node);
-        g_list_free_1 (node);
+	coowner->jobs = g_list_remove_link (coowner->jobs, node);
+	g_list_free_1 (node);
     }
 
     qof_event_gen (&coowner->inst, QOF_EVENT_MODIFY, NULL);
@@ -1305,128 +1305,128 @@ gboolean gncCoOwnerEqual(const GncCoOwner* a, const GncCoOwner* b)
 
     if (a->active != b->active)
     {
-        PWARN("Active flags differ");
-        return FALSE;
+	PWARN("Active flags differ");
+	return FALSE;
     }
 
     if (g_strcmp0(a->acl, b->acl) != 0)
     {
-        PWARN("ACLs differ: %s vs %s", a->acl, b->acl);
-        return FALSE;
+	PWARN("ACLs differ: %s vs %s", a->acl, b->acl);
+	return FALSE;
     }
 
     if (!xaccAccountEqual(a->ccard_acc, b->ccard_acc, TRUE))
     {
-        PWARN("Accounts differ");
-        return FALSE;
+	PWARN("Accounts differ");
+	return FALSE;
     }
 
     if (!gncAddressEqual(a->addr, b->addr))
     {
-        PWARN("Addresses differ");
-        return FALSE;
+	PWARN("Addresses differ");
+	return FALSE;
     }
 
     if (!gnc_numeric_equal(a->apt_share, b->apt_share))
     {
-        PWARN("Apartment shares differ");
-        return FALSE;
+	PWARN("Apartment shares differ");
+	return FALSE;
     }
 
     if (g_strcmp0(a->apt_unit, b->apt_unit) != 0)
     {
-        PWARN("Apartment units differ: %s vs %s", a->apt_unit, b->apt_unit);
-        return FALSE;
+	PWARN("Apartment units differ: %s vs %s", a->apt_unit, b->apt_unit);
+	return FALSE;
     }
 
     if (!gnc_numeric_equal(a->credit, b->credit))
     {
-        PWARN("Credit amounts differ");
-        return FALSE;
+	PWARN("Credit amounts differ");
+	return FALSE;
     }
 
     if (!gnc_commodity_equal(a->currency, b->currency))
     {
-        PWARN("Currencies differ");
-        return FALSE;
+	PWARN("Currencies differ");
+	return FALSE;
     }
 
     if (!gnc_numeric_equal(a->discount, b->discount))
     {
-        PWARN("Discount amounts differ");
-        return FALSE;
+	PWARN("Discount amounts differ");
+	return FALSE;
     }
 
     if (g_strcmp0(a->id, b->id) != 0)
     {
-        PWARN("IDs differ: %s vs %s", a->id, b->id);
-        return FALSE;
+	PWARN("IDs differ: %s vs %s", a->id, b->id);
+	return FALSE;
     }
 
     if (g_strcmp0(a->language, b->language) != 0)
     {
-        PWARN("Languages differ: %s vs %s", a->language, b->language);
-        return FALSE;
+	PWARN("Languages differ: %s vs %s", a->language, b->language);
+	return FALSE;
     }
 
     if (g_strcmp0(a->name, b->name) != 0)
     {
-        PWARN("Name differ: %s vs %s", a->name, b->name);
-        return FALSE;
+	PWARN("Name differ: %s vs %s", a->name, b->name);
+	return FALSE;
     }
 
     if (g_strcmp0(a->notes, b->notes) != 0)
     {
-        PWARN("Notes differ: %s vs %s", a->notes, b->notes);
-        return FALSE;
+	PWARN("Notes differ: %s vs %s", a->notes, b->notes);
+	return FALSE;
     }
 
     if (!gncAddressEqual(a->ship_addr, b->ship_addr))
     {
-        PWARN("Shipping addresses differ");
-        return FALSE;
+	PWARN("Shipping addresses differ");
+	return FALSE;
     }
 
     if (!gncTaxTableEqual(a->tax_table, b->tax_table))
     {
-        PWARN("tax tables differ");
-        return FALSE;
+	PWARN("tax tables differ");
+	return FALSE;
     }
 
     if (a->tax_table_override != b->tax_table_override)
     {
-        PWARN("Tax table override flags differ");
-        return FALSE;
+	PWARN("Tax table override flags differ");
+	return FALSE;
     }
 
     if (a->tax_included != b->tax_included)
     {
-        PWARN("Tax included flags differ");
-        return FALSE;
+	PWARN("Tax included flags differ");
+	return FALSE;
     }
 
     if (!gncBillTermEqual(a->coowner_terms, b->coowner_terms))
     {
-        PWARN("Co-Owner bill terms differ");
-        return FALSE;
+	PWARN("Co-Owner bill terms differ");
+	return FALSE;
     }
 
     if (!gncAddressEqual(a->tenant_addr, b->tenant_addr))
     {
-        PWARN("Tenant addresses differ");
-        return FALSE;
+	PWARN("Tenant addresses differ");
+	return FALSE;
     }
 
     if (g_strcmp0(a->tenant_name, b->tenant_name) != 0)
     {
-        PWARN("Tenant names differ: %s vs %s", a->tenant_name, b->tenant_name);
-        return FALSE;
+	PWARN("Tenant names differ: %s vs %s", a->tenant_name, b->tenant_name);
+	return FALSE;
     }
 
     if (g_strcmp0(a->tenant_notes, b->tenant_notes) != 0)
     {
-        PWARN("Tenant notes differ: %s vs %s", a->tenant_notes, b->tenant_notes);
-        return FALSE;
+	PWARN("Tenant notes differ: %s vs %s", a->tenant_notes, b->tenant_notes);
+	return FALSE;
     }
 
     return TRUE;
@@ -1458,42 +1458,42 @@ coowner_handle_qof_events (QofInstance *entity, QofEventId event_type,
 
     /* Handle address change events */
     if ((GNC_IS_ADDRESS (entity) &&
-        (event_type & QOF_EVENT_MODIFY) != 0))
+	(event_type & QOF_EVENT_MODIFY) != 0))
     {
-        if (GNC_IS_COOWNER (event_data))
-        {
-            GncCoOwner* coowner = GNC_COOWNER (event_data);
-            gncCoOwnerBeginEdit (coowner);
-            mark_coowner (coowner);
-            gncCoOwnerCommitEdit (coowner);
-        }
-        return;
+	if (GNC_IS_COOWNER (event_data))
+	{
+	    GncCoOwner* coowner = GNC_COOWNER (event_data);
+	    gncCoOwnerBeginEdit (coowner);
+	    mark_coowner (coowner);
+	    gncCoOwnerCommitEdit (coowner);
+	}
+	return;
     }
 
     /* Handle lot change events */
     if (GNC_IS_LOT (entity))
     {
-        GNCLot *lot = GNC_LOT (entity);
-        GncOwner lot_owner;
-        const GncOwner *end_owner = NULL;
-        GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+	GNCLot *lot = GNC_LOT (entity);
+	GncOwner lot_owner;
+	const GncOwner *end_owner = NULL;
+	GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
 
-        /* Determine the owner associated with the lot */
-        if (invoice)
-            /* Invoice lots */
-            end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
-        else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
-            /* Pre-payment lots */
-            end_owner = gncOwnerGetEndOwner (&lot_owner);
+	/* Determine the owner associated with the lot */
+	if (invoice)
+	    /* Invoice lots */
+	    end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+	else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
+	    /* Pre-payment lots */
+	    end_owner = gncOwnerGetEndOwner (&lot_owner);
 
-        if (gncOwnerGetType (end_owner) == GNC_OWNER_COOWNER)
-        {
-            /* Clear the cached balance */
-            GncCoOwner* coowner = gncOwnerGetCoOwner (end_owner);
-            g_free (coowner->balance);
-            coowner->balance = NULL;
-        }
-        return;
+	if (gncOwnerGetType (end_owner) == GNC_OWNER_COOWNER)
+	{
+	    /* Clear the cached balance */
+	    GncCoOwner* coowner = gncOwnerGetCoOwner (end_owner);
+	    g_free (coowner->balance);
+	    coowner->balance = NULL;
+	}
+	return;
     }
 }
 
@@ -1538,128 +1538,127 @@ gboolean gncCoOwnerRegister (void)
 {
     static QofParam params[] =
     {
-        {
-            QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN,
-            (QofAccessFunc)gncCoOwnerGetActive,
-            (QofSetterFunc)gncCoOwnerSetActive
-        },
-        {
-            COOWNER_ACL, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetAcl,
-            (QofSetterFunc)gncCoOwnerSetAcl
-        },
-        {
-            COOWNER_ADDR, GNC_ID_ADDRESS,
-            (QofAccessFunc)gncCoOwnerGetAddr,
-            (QofSetterFunc)qofCoOwnerSetAddr
-        },
-        {
-            COOWNER_APT_SHARE, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)gncCoOwnerGetAptShare,
-            (QofSetterFunc)gncCoOwnerSetAptShare
-        },
-        {
-            COOWNER_APT_UNIT, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetAptUnit,
-            (QofSetterFunc)gncCoOwnerSetAptUnit
-        },
-        {
-            QOF_PARAM_BOOK, QOF_ID_BOOK,
-            (QofAccessFunc)qof_instance_get_book, NULL
-        },
-        {
-            COOWNER_CC, GNC_ID_ACCOUNT,
-            (QofAccessFunc)gncCoOwnerGetCCard,
-            (QofSetterFunc)gncCoOwnerSetCCard },
-        {
-            COOWNER_CREDIT, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)gncCoOwnerGetCredit,
-            (QofSetterFunc)gncCoOwnerSetCredit
-        },
-        {
-            COOWNER_DISCOUNT, QOF_TYPE_NUMERIC,
-            (QofAccessFunc)gncCoOwnerGetDiscount,
-            (QofSetterFunc)gncCoOwnerSetDiscount
-        },
-        {
-            COOWNER_DISTRIBUTION_KEY, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetDistributionKey,
-            (QofSetterFunc)gncCoOwnerSetAcl
-        },
-        {
-            QOF_PARAM_GUID, QOF_TYPE_GUID,
-            (QofAccessFunc)qof_instance_get_guid, NULL
-        },
-        {
-            COOWNER_ID, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetID,
-            (QofSetterFunc)gncCoOwnerSetID
-        },
-        {
-            COOWNER_LANGUAGE, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetLanguage,
-            (QofSetterFunc)gncCoOwnerSetLanguage
-        },
-        {
-            COOWNER_NAME, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetName,
-            (QofSetterFunc)gncCoOwnerSetName
-        },
-        {
-            COOWNER_NOTES, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetNotes,
-            (QofSetterFunc)gncCoOwnerSetNotes
-        },
-        {
-            COOWNER_SHIP_ADDRESS, GNC_ID_ADDRESS,
-            (QofAccessFunc)gncCoOwnerGetShipAddr,
-            (QofSetterFunc)qofCoOwnerSetShipAddr
-        },
-        {
-            COOWNER_TAXTABLE_OVERRIDE, QOF_TYPE_BOOLEAN,
-            (QofAccessFunc)gncCoOwnerGetTaxTableOverride,
-            (QofSetterFunc)gncCoOwnerSetTaxTableOverride
-        },
-        {
-            COOWNER_TAXTABLE, GNC_ID_TAXTABLE,
-            (QofAccessFunc)gncCoOwnerGetTaxTable,
-            (QofSetterFunc)gncCoOwnerSetTaxTable
-        },
-        {
-            QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN,
-            (QofAccessFunc)gncCoOwnerGetTenantActive,
-            (QofSetterFunc)gncCoOwnerSetTenantActive
-        },
-        {
-            COOWNER_TENANT_ADDRESS, GNC_ID_ADDRESS,
-            (QofAccessFunc)gncCoOwnerGetTenantAddr,
-            (QofSetterFunc)qofCoOwnerSetTenantAddr
-        },
-        {
-            COOWNER_TENANT_ID, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetTenantID,
-            (QofSetterFunc)gncCoOwnerSetTenantID
-        },
-        {
-            COOWNER_TENANT_NAME, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetTenantName,
-            (QofSetterFunc)gncCoOwnerSetTenantName
-        },
-        {
-            COOWNER_TENANT_NOTES, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetTenantNotes,
-            (QofSetterFunc)gncCoOwnerSetTenantNotes
-        },
-        {
-            COOWNER_TERMS, GNC_ID_BILLTERM,
-            (QofAccessFunc)gncCoOwnerGetTerms,
-            (QofSetterFunc)gncCoOwnerSetTerms
-        },
-        { NULL },
+	{
+	    QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN,
+	    (QofAccessFunc)gncCoOwnerGetActive,
+	    (QofSetterFunc)gncCoOwnerSetActive
+	},
+	{
+	    COOWNER_ACL, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetAcl,
+	    (QofSetterFunc)gncCoOwnerSetAcl
+	},
+	{
+	    COOWNER_ADDR, GNC_ID_ADDRESS,
+	    (QofAccessFunc)gncCoOwnerGetAddr,
+	    (QofSetterFunc)qofCoOwnerSetAddr
+	},
+	{
+	    COOWNER_APT_SHARE, QOF_TYPE_NUMERIC,
+	    (QofAccessFunc)gncCoOwnerGetAptShare,
+	    (QofSetterFunc)gncCoOwnerSetAptShare
+	},
+	{
+	    COOWNER_APT_UNIT, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetAptUnit,
+	    (QofSetterFunc)gncCoOwnerSetAptUnit
+	},
+	{
+	    QOF_PARAM_BOOK, QOF_ID_BOOK,
+	    (QofAccessFunc)qof_instance_get_book, NULL
+	},
+	{
+	    COOWNER_CC, GNC_ID_ACCOUNT,
+	    (QofAccessFunc)gncCoOwnerGetCCard,
+	    (QofSetterFunc)gncCoOwnerSetCCard },
+	{
+	    COOWNER_CREDIT, QOF_TYPE_NUMERIC,
+	    (QofAccessFunc)gncCoOwnerGetCredit,
+	    (QofSetterFunc)gncCoOwnerSetCredit
+	},
+	{
+	    COOWNER_DISCOUNT, QOF_TYPE_NUMERIC,
+	    (QofAccessFunc)gncCoOwnerGetDiscount,
+	    (QofSetterFunc)gncCoOwnerSetDiscount
+	},
+	{
+	    COOWNER_DISTRIBUTION_KEY, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetDistributionKey,
+	    (QofSetterFunc)gncCoOwnerSetAcl
+	},
+	{
+	    QOF_PARAM_GUID, QOF_TYPE_GUID,
+	    (QofAccessFunc)qof_instance_get_guid, NULL
+	},
+	{
+	    COOWNER_ID, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetID,
+	    (QofSetterFunc)gncCoOwnerSetID
+	},
+	{
+	    COOWNER_LANGUAGE, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetLanguage,
+	    (QofSetterFunc)gncCoOwnerSetLanguage
+	},
+	{
+	    COOWNER_NAME, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetName,
+	    (QofSetterFunc)gncCoOwnerSetName
+	},
+	{
+	    COOWNER_NOTES, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetNotes,
+	    (QofSetterFunc)gncCoOwnerSetNotes
+	},
+	{
+	    COOWNER_SHIP_ADDRESS, GNC_ID_ADDRESS,
+	    (QofAccessFunc)gncCoOwnerGetShipAddr,
+	    (QofSetterFunc)qofCoOwnerSetShipAddr
+	},
+	{
+	    COOWNER_TAXTABLE_OVERRIDE, QOF_TYPE_BOOLEAN,
+	    (QofAccessFunc)gncCoOwnerGetTaxTableOverride,
+	    (QofSetterFunc)gncCoOwnerSetTaxTableOverride
+	},
+	{
+	    COOWNER_TAXTABLE, GNC_ID_TAXTABLE,
+	    (QofAccessFunc)gncCoOwnerGetTaxTable,
+	    (QofSetterFunc)gncCoOwnerSetTaxTable
+	},
+	{
+	    QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN,
+	    (QofAccessFunc)gncCoOwnerGetTenantActive,
+	    (QofSetterFunc)gncCoOwnerSetTenantActive
+	},
+	{
+	    COOWNER_TENANT_ADDRESS, GNC_ID_ADDRESS,
+	    (QofAccessFunc)gncCoOwnerGetTenantAddr,
+	    (QofSetterFunc)qofCoOwnerSetTenantAddr
+	},
+	{
+	    COOWNER_TENANT_ID, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetTenantID,
+	    (QofSetterFunc)gncCoOwnerSetTenantID
+	},
+	{
+	    COOWNER_TENANT_NAME, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetTenantName,
+	    (QofSetterFunc)gncCoOwnerSetTenantName
+	},
+	{
+	    COOWNER_TENANT_NOTES, QOF_TYPE_STRING,
+	    (QofAccessFunc)gncCoOwnerGetTenantNotes,
+	    (QofSetterFunc)gncCoOwnerSetTenantNotes
+	},
+	{
+	    COOWNER_TERMS, GNC_ID_BILLTERM,
+	    (QofAccessFunc)gncCoOwnerGetTerms,
+	    (QofSetterFunc)gncCoOwnerSetTerms
+	},
+	{ NULL },
     };
 
     qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncCoOwnerCompare, params);
-
 
     /* temp */
     _gncCoOwnerPrintable(NULL);
@@ -1681,16 +1680,16 @@ void gncCoOwnerSetCachedBalance (GncCoOwner *coowner, const gnc_numeric *new_bal
 {
     if (!new_bal)
     {
-        if (coowner->balance)
-        {
-            g_free (coowner->balance);
-            coowner->balance = NULL;
-        }
-        return;
+	if (coowner->balance)
+	{
+	    g_free (coowner->balance);
+	    coowner->balance = NULL;
+	}
+	return;
     }
 
     if (!coowner->balance)
-        coowner->balance = g_new0 (gnc_numeric, 1);
+	coowner->balance = g_new0 (gnc_numeric, 1);
 
     *coowner->balance = *new_bal;
 }
