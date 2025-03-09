@@ -28,8 +28,8 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 
-#include "gncDistributionListP.h"
-#include "gncDistributionListP.h"
+#include "gnc-distribution-list-p.h"
+//#include "gnc-distribution-list.h"
 // #include "gncOwner.h"
 #include "qof.h"
 }
