@@ -1,4 +1,4 @@
-/***************************************************************************
+***************************************************************************
  *            test-dbi-business-stuff.c
  *
  *  Tests saving and loading business objects to a dbi/sqlite3 db
@@ -33,7 +33,7 @@
 #include "Split.h"
 #include "Transaction.h"
 #include "gnc-commodity.h"
-#include "gncDistributionList.h"
+#include "gnc-distribution-list.h"
 #include "gncCoOwner.h"
 #include "gncCustomer.h"
 #include "gncEmployee.h"
