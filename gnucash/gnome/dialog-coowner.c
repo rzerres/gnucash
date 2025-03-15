@@ -1333,6 +1333,7 @@ gnc_ui_to_coowner (CoOwnerWindow *ow, GncCoOwner *coowner)
 
     /* Fill in the address values */
     coowner_addr = gncCoOwnerGetAddr (coowner);
+    gncAddressSetName (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_addrname)));
     gncAddressSetAddr1 (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_addr1)));
     gncAddressSetAddr2 (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_addr2)));
     gncAddressSetAddr3 (coowner_addr, gtk_entry_get_text (GTK_ENTRY (ow->coowner_entry_coowner_addr3)));
