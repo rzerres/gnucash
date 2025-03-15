@@ -71,6 +71,8 @@ gcoi_create_dialog(Split* split)
 
     /* Get the title widget and set the title */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "title_label"));
+
+    // TODO: Enhance and adapt to support selection per owner types (e.g. CoOwner, Customer, Empoloyee)
     if (1 == 1)
     {
         gncOwnerInitCustomer(&(dco->owner), NULL);
