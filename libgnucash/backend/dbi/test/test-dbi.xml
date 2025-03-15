@@ -787,6 +787,7 @@
   </taxtable:entries>
 </gnc:GncTaxTable>
 <gnc:GncCoOwner version="2.0.0">
+  <coowner:guid type="guid">ee7fda5745d342db9844ecc133f07f03</coowner:guid>
   <coowner:active>1</coowner:active>
   <coowner:addr version="2.0.0">
     <addr:name>Co-Owner Name 1</addr:name>
@@ -808,12 +809,11 @@
   </coowner:currency>
   <coowner:discount>500000/100000</coowner:discount>
   <coowner:distribution_key>Test-DistributionKey</coowner:distribution_key>
-  <coowner:guid type="guid">ee7fda5745d342db9844ecc133f07f03</coowner:guid>
   <coowner:id>000001</coowner:id>
   <coowner:language>English</coowner:language>
   <coowner:name>Co-Owner 1</coowner:name>
   <coowner:notes>Note for Co-Owner 1</coowner:notes>
-  <coowner:shipaddr version="2.0.0">
+  <coowner:ship_addr version="2.0.0">
     <addr:name>Co-Owner 1 - Shipment</addr:name>
     <addr:addr1>Shipaddress 1</addr:addr1>
     <addr:addr2>Shipaddress 2</addr:addr2>
@@ -823,10 +823,8 @@
     <addr:phone>+49 228 222 221</addr:phone>
     <addr:fax>+49 228 222 221</addr:fax>
     <addr:email>coowner1-ship@nonexistent.com</addr:email>
-  </coowner:shipaddr>
-  <coowner:taxincluded>YES</coowner:taxincluded>
-  <coowner:use-tt>0</coowner:use-tt>
-  <coowner:terms type="guid">b92e0642f6934f1c8292ace3d66543ad</coowner:terms>
+  </coowner:ship_addr>
+  <coowner:taxincluded>USEGLOBAL</coowner:taxincluded>
   <coowner:tenant_active>1</coowner:tenant_active>
   <coowner:tenant_addr version="2.0.0">
     <addr:name>Tenant Name 1</addr:name>
@@ -842,6 +840,8 @@
   <coowner:tenant_id>000001</coowner:tenant_id>
   <coowner:tenant_name>Tenant 1</coowner:tenant_name>
   <coowner:tenant_notes>Notes for Tenant1</coowner:tenant_notes>
+  <coowner:terms type="guid">b92e0642f6934f1c8292ace3d66543ad</coowner:terms>
+  <coowner:use-tt>0</coowner:use-tt>
 </gnc:GncCoOwner>
 <gnc:GncVendor version="2.0.0">
   <vendor:guid type="guid">aa9051c0623c97b80cbdc14171e532ab</vendor:guid>
