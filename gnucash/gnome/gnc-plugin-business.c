@@ -125,9 +125,12 @@ static void gnc_plugin_business_cmd_tax_tables (GSimpleAction *simple, GVariant 
 static void update_inactive_actions (GncPluginPage *page);
 static void bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow);
 
+static void gnc_plugin_business_cmd_coowner_test_init_data (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_customer_test_init_data (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+static void gnc_plugin_business_cmd_test_search (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
+
 /* depreciated: use dedicated coowner/customer functions */
 static void gnc_plugin_business_cmd_test_init_data (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
-static void gnc_plugin_business_cmd_test_search (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
@@ -143,8 +146,8 @@ static void gnc_plugin_business_cmd_test_search (GSimpleAction *simple, GVariant
  */
 static GncMainWindow *last_window = NULL;
 
-/** This entry list is not sorted. Entries will be added to the page
- *   in order listed
+/** This entry list is not sorted. The action entries will be added to the Widget
+ *   in the given order
  */
 static GActionEntry gnc_plugin_actions [] =
 {
@@ -191,6 +194,7 @@ static GActionEntry gnc_plugin_actions [] =
     { "InvoicesDueReminderOpenAction", gnc_plugin_business_cmd_invoices_due_reminder, NULL, NULL, NULL },
 
     { "BusinessTestSearchAction", gnc_plugin_business_cmd_test_search, NULL, NULL, NULL },
+    /* Deprecated: use the new owner type specific function */
     { "BusinessTestInitDataAction", gnc_plugin_business_cmd_test_init_data, NULL, NULL, NULL },
     { "BusinessTestCoOwnerInitDataAction", gnc_plugin_business_cmd_coowner_test_init_data, NULL, NULL, NULL },
     { "BusinessTestCustomerInitDataAction", gnc_plugin_business_cmd_customer_test_init_data, NULL, NULL, NULL },
@@ -324,7 +328,10 @@ gnc_plugin_business_cmd_coowner_page (GSimpleAction *simple,
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
+    /* assign all valid Co-Owner entities to the tree */
     page = gnc_plugin_page_owner_tree_new (GNC_OWNER_COOWNER);
+
+    /* show the tree in a new notebook inside the main window */
     gnc_main_window_open_page (mw->window, page);
 }
 
