@@ -143,6 +143,9 @@ static void gnc_plugin_business_cmd_test_search (GSimpleAction *simple, GVariant
  */
 static GncMainWindow *last_window = NULL;
 
+/** This entry list is not sorted. Entries will be added to the page
+ *   in order listed
+ */
 static GActionEntry gnc_plugin_actions [] =
 {
     { "CoOwnerOverviewPageAction", gnc_plugin_business_cmd_coowner_page, NULL, NULL, NULL },
