@@ -27,7 +27,7 @@
     @{ */
 /** @file gnc-plugin-page-owner-tree.h
     @brief Functions providing a page which lists owners of one type. This type
-           can be vendors, customers or employees.
+           can be coowners, customers, employees or vendors.
     @author Copyright (C) 2011 Geert Janssens <geert@kobaltwit.be>
 */
 
