@@ -3,7 +3,7 @@
 
   <menu id="BusinessPlaceholder0">
     <submenu>
-      <attribute name="label" translatable="yes">_Co-Owner</attribute>
+      <attribute name="label" translatable="yes">Co-_Owner</attribute>
       <attribute name="action">gnc-plugin-business-actions.Co-OwnerMenuAction</attribute>
       <item>
         <attribute name="label" translatable="yes">Co-Owners Overview</attribute>
@@ -227,6 +227,16 @@
           <attribute name="label" translatable="yes">Initialize Test Data</attribute>
           <attribute name="action">gnc-plugin-business-actions.BusinessTestInitDataAction</attribute>
           <attribute name="tooltip" translatable="yes">Initialize Test Data</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Initialize CoOwner Test Data</attribute>
+          <attribute name="action">gnc-plugin-business-actions.BusinessTestCoOwnerInitDataAction</attribute>
+          <attribute name="tooltip" translatable="yes">Initialize CoOwner specific Test Data</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Initialize Customer Test Data</attribute>
+          <attribute name="action">gnc-plugin-business-actions.BusinessTestCustomerInitDataAction</attribute>
+          <attribute name="tooltip" translatable="yes">Initialize Customer specific Test Data</attribute>
         </item>
       </section>
     </submenu>
