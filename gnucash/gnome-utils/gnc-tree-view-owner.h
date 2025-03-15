@@ -97,7 +97,7 @@ gboolean gnc_plugin_page_owner_tree_filter_owners (GncOwner *owner,
 
 /* "Filter By" dialog callbacks */
 void gppot_filter_show_inactive_toggled_cb (GtkToggleButton *togglebutton,
-        OwnerFilterDialog *fd);
+                                            OwnerFilterDialog *fd);
 void gppot_filter_show_zero_toggled_cb (GtkToggleButton *togglebutton,
                                         OwnerFilterDialog *fd);
 void gppot_filter_response_cb (GtkWidget *dialog, gint response,
