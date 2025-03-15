@@ -30,10 +30,10 @@
 
 #include "cashobjects.h"
 #include "gncOwner.h"
-#include "gncDistributionListP.h"
+#include "gnc-distribution-list-p.h"
 #include "test-stuff.h"
 
-static int count = 0;
+static int entity_count = 0;
 
 // function header definitions
 static void
@@ -76,19 +76,23 @@ test_distriblist (void)
 
     /* Test creation/destruction */
     {
-        do_test (gncDistribListCreate (NULL) == NULL, "Create - NULL");
+        /* 1 - ignore creation, if the distribution list is not assigned inside a book */
+        do_test (gncDistribListCreate (NULL) == NULL, "Create - ignore if not assigned to book");
 
+        /* 2 - create a distribution list inside a valid book */
         distriblist = gncDistribListCreate (book);
         do_test (distriblist != NULL, "Create - book");
 
         // Do we need this deprecated function any more?
         //do_test (qof_instance_get_book(QOF_INSTANCE(distriblist)) == book,
         //    "getbook");
+        //do_test (gncDistribListGetBook (distriblist) == book, "Get - from book");
 
-        do_test (gncDistribListGetBook (distriblist) == book, "Get book - book");
-
+        /* 3 - mark the distribution list to be ready for value changes */
         gncDistribListBeginEdit (distriblist);
         success ("Edit - distriblist");
+
+        /* 4 - destroy the distribution list */
         gncDistribListDestroy (distriblist);
         success ("Destroy - distriblist ");
     }
@@ -104,7 +108,7 @@ test_distriblist (void)
 
         guid_replace (&guid);
         distriblist = gncDistribListCreate (book);
-        count++;
+        entity_count++;
         gncDistribListSetGUID (distriblist, &guid);
         do_test (guid_equal (
             &guid, gncDistribListGetGUID (distriblist)), "Compare guid - distriblist");
@@ -169,13 +173,13 @@ test_distriblist (void)
         const char *res = NULL;
 
         // gncDistribListCreate() and each test_xxx_fcn() call
-        // increment the counter. Result: count => should be 8.
+        // increment the entity_counter. Result: entity_count => should be 8.
         list = gncDistribListGetLists (book);
         //list = gncBusinessGetList (book, GNC_ID_DISTRIBLIST, FALSE);
         do_test (list != NULL, "Get distribution lists");
-        // printf ("list entry count: '%i'\n", count);
+        // printf ("list entry entity_count: '%i'\n", entity_count);
         //printf ("g_list_length: '%i'\n", g_list_length (list));
-        do_test (g_list_length (list) == count, "Number of created list elements");
+        do_test (g_list_length (list) == entity_count, "Number of created list elements");
 
         gncDistribListSetName (distriblist, name);
         res = gncDistribListGetName (distriblist);
@@ -241,7 +245,7 @@ test_bool_fcn (
      */
     // do_test (!gncDistribListIsDirty (distriblist), "test dirty after commit");
     do_test (get (distriblist) == num, message);
-    count++;
+    entity_count++;
 }
 
 static void
@@ -267,7 +271,7 @@ test_int_fcn (
      */
     // do_test (!gncDistribListIsDirty (distriblist), "test dirty after commit");
     do_test (get (distriblist) == num, message);
-    count++;
+    entity_count++;
 }
 
 /* static void */
@@ -293,7 +297,7 @@ test_int_fcn (
 /*      *\/ */
 /*     // do_test (!gncDistribListIsDirty (distriblist), "test dirty after commit"); */
 /*     do_test (gnc_numeric_equal (get (distriblist), num), message); */
-/*     count++; */
+/*     entity_count++; */
 /* } */
 
 static void
@@ -319,7 +323,7 @@ test_string_fcn (
      */
     // do_test (!gncDistribListIsDirty (distriblist), "test dirty after commit");
     do_test (g_strcmp0 (get (distriblist), str) == 0, message);
-    count++;
+    entity_count++;
 }
 
 int
