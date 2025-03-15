@@ -75,6 +75,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 
 static EntryVec col_table
 ({
+    gnc_sql_make_table_entry<CT_GUID>(
+        "guid", 0, COL_NNUL | COL_PKEY, "guid"),
     gnc_sql_make_table_entry<CT_STRING>(
         "acl", MAX_ACL_LEN, COL_NNUL, COOWNER_ACL),
     gnc_sql_make_table_entry<CT_BOOLEAN>(
@@ -87,24 +89,22 @@ static EntryVec col_table
         "apt_unit", MAX_APT_UNIT_LEN, COL_NNUL, COOWNER_APT_UNIT),
     gnc_sql_make_table_entry<CT_ACCOUNTREF>(
         "ccard_guid", 0, 0, "credit-card-account"),
+    gnc_sql_make_table_entry<CT_NUMERIC>(
+        "credit", 0, COL_NNUL, COOWNER_CREDIT, true),
     gnc_sql_make_table_entry<CT_COMMODITYREF>(
         "currency", 0, COL_NNUL,
         (QofAccessFunc)gncCoOwnerGetTaxIncluded,
         (QofSetterFunc)gncCoOwnerSetTaxIncluded),
     gnc_sql_make_table_entry<CT_NUMERIC>(
         "discount", 0, COL_NNUL, COOWNER_DISCOUNT, true),
-    gnc_sql_make_table_entry<CT_NUMERIC>(
-        "credit", 0, COL_NNUL, COOWNER_CREDIT, true),
     gnc_sql_make_table_entry<CT_STRING>(
         "distribution_key", MAX_DISTRIB_KEY_LEN, COL_NNUL,
         COOWNER_DISTRIBUTION_KEY),
-    gnc_sql_make_table_entry<CT_GUID>(
-        "guid", 0, COL_NNUL | COL_PKEY, "guid"),
+    gnc_sql_make_table_entry<CT_STRING>(
+        "id", MAX_ID_LEN, COL_NNUL, COOWNER_ID, true),
     gnc_sql_make_table_entry<CT_STRING>(
         "language", MAX_LANGUAGE_LEN, COL_NNUL,
         COOWNER_LANGUAGE),
-    gnc_sql_make_table_entry<CT_STRING>(
-        "id", MAX_ID_LEN, COL_NNUL, COOWNER_ID, true),
     gnc_sql_make_table_entry<CT_STRING>(
         "name", MAX_NAME_LEN, COL_NNUL, COOWNER_NAME),
     gnc_sql_make_table_entry<CT_STRING>(
