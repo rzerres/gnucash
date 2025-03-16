@@ -31,6 +31,7 @@
     @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
 */
 
+
 #ifndef __GNC_TREE_VIEW_OWNER_H
 #define __GNC_TREE_VIEW_OWNER_H
 
@@ -86,6 +87,7 @@ typedef struct
 #define GNC_OWNER_TREE_BALANCE_REPORT_COL       "balance-report"
 #define GNC_OWNER_TREE_BALANCE_PERIOD_COL       "balance-period"
 #define GNC_OWNER_TREE_NOTES_COL                "notes"
+#define GNC_OWNER_TREE_TENANT_NAME_COL          "tenant-name"
 #define GNC_OWNER_TREE_ACTIVE_COL               "active"
 
 

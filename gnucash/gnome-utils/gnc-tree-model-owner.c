@@ -349,9 +349,11 @@ gnc_tree_model_owner_get_column_type (GtkTreeModel *tree_model,
     case GNC_TREE_MODEL_OWNER_COL_BALANCE:
     case GNC_TREE_MODEL_OWNER_COL_BALANCE_REPORT:
     case GNC_TREE_MODEL_OWNER_COL_NOTES:
+    case GNC_TREE_MODEL_OWNER_COL_TENANT_NAME:
 
     case GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE:
         return G_TYPE_STRING;
+
 
     case GNC_TREE_MODEL_OWNER_COL_ACTIVE:
         return G_TYPE_BOOLEAN;
@@ -585,6 +587,7 @@ gnc_tree_model_owner_get_value (GtkTreeModel *tree_model,
         string = gnc_ui_owner_get_print_report_balance(owner, &negative);
         g_value_take_string (value, string);
         break;
+
     case GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE:
         g_value_init (value, G_TYPE_STRING);
         string = gnc_ui_owner_get_print_balance(owner, &negative);
@@ -611,6 +614,25 @@ gnc_tree_model_owner_get_value (GtkTreeModel *tree_model,
             break;
         case GNC_OWNER_VENDOR:
             g_value_set_string (value, gncVendorGetNotes (gncOwnerGetVendor (owner)));
+            break;
+        }
+        break;
+
+    case GNC_TREE_MODEL_OWNER_COL_TENANT_NAME:
+        g_value_init (value, G_TYPE_STRING);
+        switch (gncOwnerGetType (owner))
+        {
+        case GNC_OWNER_NONE:
+        case GNC_OWNER_UNDEFINED:
+        case GNC_OWNER_CUSTOMER:
+        case GNC_OWNER_EMPLOYEE:
+        case GNC_OWNER_JOB:
+        case GNC_OWNER_VENDOR:
+       default:
+            g_value_set_static_string (value, "");
+            break;
+        case GNC_OWNER_COOWNER:
+            g_value_set_string (value, gncCoOwnerGetTenantName (gncOwnerGetCoOwner (owner)));
             break;
         }
         break;

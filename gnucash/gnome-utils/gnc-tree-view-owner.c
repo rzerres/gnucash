@@ -85,6 +85,7 @@ struct _GncTreeViewOwner
     GtkTreeViewColumn *id_column;
     GtkTreeViewColumn *balance_report_column;
     GtkTreeViewColumn *notes_column;
+    GtkTreeViewColumn *tenant_column;
 };
 
 
@@ -466,6 +467,14 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                         GNC_TREE_MODEL_OWNER_COL_NOTES,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_string);
+
+    view->tenant_column
+        = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Tenant Name"), GNC_OWNER_TREE_TENANT_NAME_COL,
+                                  NULL, "Gnucash tenant name.",
+                                  GNC_TREE_MODEL_OWNER_COL_TENANT_NAME,
+                                  GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                  sort_by_string);
+
     gnc_tree_view_add_toggle_column (GNC_TREE_VIEW(view), _("Active"),
                                      C_("Column letter for 'Active'", "A"),
                                      GNC_OWNER_TREE_ACTIVE_COL,
