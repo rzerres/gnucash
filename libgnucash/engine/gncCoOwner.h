@@ -122,7 +122,6 @@ static inline GncCoOwner * gncCoOwnerLookup (const QofBook *book, const GncGUID 
 
 QofBook * gncCoOwnerGetBook (GncCoOwner *coowner);
 const char * gncCoOwnerGetID (const GncCoOwner *coowner);
-const char * gncCoOwnerGetAcl (const GncCoOwner *coowner);
 gboolean gncCoOwnerGetActive (const GncCoOwner *coowner);
 const char * gncCoOwnerGetAddrName (const GncCoOwner *coowner);
 GncAddress * gncCoOwnerGetAddr (const GncCoOwner *coowner);
@@ -152,7 +151,6 @@ const char * gncCoOwnerGetTenantNotes (const GncCoOwner *coowner);
 /** @name Set Functions
  @{ */
 void gncCoOwnerSetID (GncCoOwner *coowner, const char *id);
-void gncCoOwnerSetAcl (GncCoOwner *coowner, const char *acl);
 void gncCoOwnerSetActive (GncCoOwner *coowner, gboolean active);
 void qofCoOwnerSetAddr (GncCoOwner *coowner, QofInstance *addr_ent);
 void gncCoOwnerSetAptShare (GncCoOwner *coowner, gnc_numeric apt_share);
@@ -192,7 +190,6 @@ int gncCoOwnerCompare (const GncCoOwner *a, const GncCoOwner *b);
 
 /** Constants used as identifier keys */
 #define COOWNER_ID                "id"
-#define COOWNER_ACL               "acl"
 #define COOWNER_ACTIVE            "active"
 #define COOWNER_ADDR              "addr"
 #define COOWNER_APT_SHARE         "apt_share"

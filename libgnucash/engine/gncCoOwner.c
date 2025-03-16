@@ -52,7 +52,6 @@ struct _gncCoOwner
     QofInstance inst;
 
     /* Generic properties: all business entities */
-    const char *acl;
     gboolean active;
     GncAddress *addr;
     gnc_numeric *balance;
@@ -107,7 +106,6 @@ void mark_coowner (GncCoOwner *coowner)
 enum
 {
     PROP_0,
-    PROP_ACL,                   /* Table */
     PROP_ACTIVE,                /* Table */
     PROP_ADDRESS,               /* Table, 9 fields */
     PROP_APT_SHARE,             /* Table (numeric) */
@@ -169,9 +167,6 @@ gnc_coowner_get_property (
     {
     case PROP_ACTIVE:
         g_value_set_boolean(value, coowner->active);
-        break;
-    case PROP_ACL:
-        g_value_set_string(value, coowner->acl);
         break;
     case PROP_ADDRESS:
         g_value_take_object(value, coowner->addr);
@@ -261,9 +256,6 @@ gnc_coowner_set_property (
 
     switch (prop_id)
     {
-    case PROP_ACL:
-        gncCoOwnerSetAcl(coowner, g_value_get_string(value));
-        break;
     case PROP_ACTIVE:
         gncCoOwnerSetActive(coowner, g_value_get_boolean(value));
         break;
@@ -415,17 +407,6 @@ gnc_coowner_class_init (GncCoOwnerClass *klass)
     qof_class->get_display_name = impl_get_display_name;
     qof_class->get_typed_referring_object_list = impl_get_typed_referring_object_list;
     qof_class->refers_to_object = impl_refers_to_object;
-
-    g_object_class_install_property(
-      gobject_class,
-      PROP_ACL,
-      g_param_spec_string ("acl",
-                           "CoOwner ACL",
-                           "The acl is an arbitrary string "
-                           "assigned by the user which provides ??? "
-                           " for the coowner.",
-                           NULL,
-                           G_PARAM_READWRITE));
 
     g_object_class_install_property(
       gobject_class,
@@ -652,7 +633,6 @@ GncCoOwner *gncCoOwnerCreate (QofBook *book)
     qof_instance_init_data (&coowner->inst, _GNC_MOD_NAME, book);
 
     coowner->active = TRUE;
-    coowner->acl = CACHE_INSERT ("");
     coowner->addr = gncAddressCreate (book, &coowner->inst);
     coowner->apt_share = gnc_numeric_zero();
     coowner->apt_unit = CACHE_INSERT ("");
@@ -693,7 +673,6 @@ static void gncCoOwnerFree (GncCoOwner *coowner)
 
     qof_event_gen (&coowner->inst, QOF_EVENT_DESTROY, NULL);
 
-    CACHE_REMOVE (coowner->acl);
     gncAddressBeginEdit (coowner->addr);
     gncAddressDestroy (coowner->addr);
     g_free (coowner->balance);
@@ -727,12 +706,6 @@ static void gncCoOwnerFree (GncCoOwner *coowner)
 
 /* ============================================================== */
 /* Get Functions */
-const char *gncCoOwnerGetAcl (const GncCoOwner *coowner)
-{
-    if (!coowner) return NULL;
-    return coowner->acl;
-}
-
 gboolean gncCoOwnerGetActive (const GncCoOwner *coowner)
 {
     if (!coowner) return FALSE;
@@ -909,15 +882,6 @@ const char *gncCoOwnerGetTenantNotes (const GncCoOwner *coowner)
         gncCoOwnerBeginEdit (obj); \
         CACHE_REPLACE (member, str); \
         }
-
-void gncCoOwnerSetAcl (GncCoOwner *coowner, const char *acl)
-{
-    if (!coowner) return;
-    if (!acl) return;
-    SET_STR(coowner, coowner->acl, acl);
-    mark_coowner (coowner);
-    gncCoOwnerCommitEdit (coowner);
-}
 
 void gncCoOwnerSetActive (GncCoOwner *coowner, gboolean active)
 {
@@ -1309,12 +1273,6 @@ gboolean gncCoOwnerEqual(const GncCoOwner* a, const GncCoOwner* b)
         return FALSE;
     }
 
-    if (g_strcmp0(a->acl, b->acl) != 0)
-    {
-        PWARN("ACLs differ: %s vs %s", a->acl, b->acl);
-        return FALSE;
-    }
-
     if (!xaccAccountEqual(a->ccard_acc, b->ccard_acc, TRUE))
     {
         PWARN("Accounts differ");
@@ -1544,11 +1502,6 @@ gboolean gncCoOwnerRegister (void)
             (QofSetterFunc)gncCoOwnerSetActive
         },
         {
-            COOWNER_ACL, QOF_TYPE_STRING,
-            (QofAccessFunc)gncCoOwnerGetAcl,
-            (QofSetterFunc)gncCoOwnerSetAcl
-        },
-        {
             COOWNER_ADDR, GNC_ID_ADDRESS,
             (QofAccessFunc)gncCoOwnerGetAddr,
             (QofSetterFunc)qofCoOwnerSetAddr
@@ -1584,7 +1537,7 @@ gboolean gncCoOwnerRegister (void)
         {
             COOWNER_DISTRIBUTION_KEY, QOF_TYPE_STRING,
             (QofAccessFunc)gncCoOwnerGetDistributionKey,
-            (QofSetterFunc)gncCoOwnerSetAcl
+            (QofSetterFunc)gncCoOwnerSetDistributionKey
         },
         {
             QOF_PARAM_GUID, QOF_TYPE_GUID,
