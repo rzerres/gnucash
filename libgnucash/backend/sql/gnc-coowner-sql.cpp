@@ -59,7 +59,6 @@ extern "C"
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-#define MAX_ACL_LEN 2048
 #define MAX_APT_UNIT_LEN 2048
 #define MAX_ID_LEN 2048
 #define MAX_DISTRIB_KEY_LEN 2048
@@ -77,8 +76,6 @@ static EntryVec col_table
 ({
     gnc_sql_make_table_entry<CT_GUID>(
         "guid", 0, COL_NNUL | COL_PKEY, "guid"),
-    gnc_sql_make_table_entry<CT_STRING>(
-        "acl", MAX_ACL_LEN, COL_NNUL, COOWNER_ACL),
     gnc_sql_make_table_entry<CT_BOOLEAN>(
         "active", 0, COL_NNUL, QOF_PARAM_ACTIVE, true),
     gnc_sql_make_table_entry<CT_ADDRESS>(
