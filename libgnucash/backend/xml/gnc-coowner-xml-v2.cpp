@@ -56,7 +56,6 @@ const gchar* coowner_version_string = "2.0.0";
 
 /* constants */
 #define gnc_coowner_string "gnc:GncCoOwner"
-#define coowner_acl_string "coowner:acl"
 #define coowner_active_string "coowner:active"
 #define coowner_addr_string "coowner:addr"
 #define coowner_apt_share_string "coowner:apt_share"
