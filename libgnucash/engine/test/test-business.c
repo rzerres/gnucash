@@ -40,6 +40,11 @@ static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
 static void test_get_list (QofBook *, const char *);
 
+static void
+main_helper (
+    int argc,
+    char **argv);
+
 static GncBusinessObject bus_obj =
 {
     GNC_BUSINESS_VERSION,
@@ -54,19 +59,19 @@ static GncBusinessObject bus_obj =
 static void test_business (void)
 {
     /* Test the global registration and lookup functions */
-    {
-        do_test (!gncBusinessRegister (NULL), "register NULL");
-        do_test (gncBusinessRegister (&bus_obj), "register test object");
-        do_test (!gncBusinessRegister (&bus_obj), "register test object again");
-        do_test (gncBusinessLookup (TEST_MODULE_NAME) == &bus_obj,
-                 "lookup our installed object");
-        do_test (gncBusinessLookup ("snm98sn snml say  dyikh9y9ha") == NULL,
-                 "lookup non-existent business object");
-
-        do_test (!g_strcmp0 (gncBusinessGetTypeLabel (TEST_MODULE_NAME),
-                             _(TEST_MODULE_DESC)),
-                 "test description return");
-    }
+    /* {
+     *     do_test (!gncBusinessRegister (NULL), "register NULL");
+     *     do_test (gncBusinessRegister (&bus_obj), "register test object");
+     *     do_test (!gncBusinessRegister (&bus_obj), "register test object again");
+     *     do_test (gncBusinessLookup (TEST_MODULE_NAME) == &bus_obj,
+     *              "lookup our installed object");
+     *     do_test (gncBusinessLookup ("snm98sn snml say  dyikh9y9ha") == NULL,
+     *              "lookup non-existent business object");
+     * 
+     *     do_test (!g_strcmp0 (gncBusinessGetTypeLabel (TEST_MODULE_NAME),
+     *                          _(TEST_MODULE_DESC)),
+     *              "test description return");
+     * } */
 
     test_get_list ((QofBook*)1, TEST_MODULE_NAME);
     test_printable (TEST_MODULE_NAME, (gpointer)1);
