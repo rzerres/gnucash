@@ -19,7 +19,6 @@
       <attribute name="tooltip" translatable="yes">Edit the selected coowner</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
-
     <item>
       <attribute name="label" translatable="yes">_New Co-Owner…</attribute>
       <attribute name="action">GncPluginPageOwnerTreeActions.OTNewCoOwnerAction</attribute>
@@ -89,10 +88,10 @@
 
   <menu id="EditPlaceholder5">
     <item>
-<!-- Translators: remember to reuse this translation in dialog-account.glade -->
+      <!-- Translators: remember to reuse this translation in dialog-account.glade -->
       <attribute name="label" translatable="yes">Ta_x Report Options</attribute>
       <attribute name="action">GncPluginPageOwnerTreeActions.EditTaxOptionsAction</attribute>
-<!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
+      <!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
       <attribute name="tooltip" translatable="yes">Setup relevant accounts for tax reports, e.g. US income tax</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
@@ -187,7 +186,7 @@
     </section>
     <section>
       <item>
-        <attribute name="label" translatable="yes">New _Invoice…</attribute>
+        <attribute name="label" translatable="yes">New _Invoice</attribute>
         <attribute name="action">GncPluginPageOwnerTreeActions.OTNewInvoiceAction</attribute>
         <attribute name="tooltip" translatable="yes">Create a new invoice</attribute>
       </item>
