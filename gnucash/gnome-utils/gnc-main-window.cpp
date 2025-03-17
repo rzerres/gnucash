@@ -3667,7 +3667,7 @@ gnc_main_window_find_action_in_group (GncMainWindow *window,
 
 
 /*  Retrieve a specific set of user interface actions from a window.
- *  This function can be used to get an group of action to be
+ *  This function can be used to get a group of actions to be
  *  manipulated when the front page of a window has changed.
  */
 GSimpleActionGroup *
