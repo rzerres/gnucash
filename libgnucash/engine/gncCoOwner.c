@@ -523,7 +523,7 @@ gnc_coowner_class_init (GncCoOwnerClass *klass)
                           "Co-Owners name",
                           "The Co-Owner is an arbitrary string "
                           "assigned by the user which provides the "
-                          "co-owner name.",
+                          "Co-Owner name.",
                           NULL,
                           G_PARAM_READWRITE));
 
