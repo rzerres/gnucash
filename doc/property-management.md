@@ -7,7 +7,7 @@ a community property you have to get hold of some other tasks.
 
 ## Background
 
-In Germany, a co-owners' association (WEG) is free to decide to
+In Germany, a Co-Owner association (WEG) is free to decide to
 self-manage their property in an owner administration. Tasks of
 [property][property_mgmt] management can then be taken over by an
 owner of the WEG appointed for this purpose.
@@ -18,7 +18,7 @@ The rules may be adopted to the needs in other countries as well.
 
 ## Implementation
 
-Following the management of customers and suppliers a new entity `Co-Owner`
+Following the management of customers, employees and suppliers a new entity `Co-Owner`
 has been introduced. It offers to
 
 * Create
@@ -27,6 +27,14 @@ has been introduced. It offers to
 * Search
 
 the new entity type.
+
+To get a list of stored Co-Owner entities, open up the Co-Owner
+overview. Inside this table-view, you are able to sort each row. When
+you activate the arrow (last column) a selector list is offered, where
+you can choose which attributes to be presented in the table.
+To adapt the ordering of the visible rows, select a given header with
+your mouse and move to the appropriate position. Arrows in the row
+header will allow to sort the items (ascending, descending).
 
 Similar to customers, is enables the handling `Co-Owner` assigned
 
@@ -48,8 +56,8 @@ With regard to accounting tasks a suitable account structure is
 required. As usual you will manage the necessary bookings adressing
 the given accounts.
 
-The legal regulations that exist in Germany stipulate that individual
-settlements must be created annually for the Co-Ownersi. In particular
+For example, legal regulations exist for German WEG's, that stipulate that individual
+settlements must be created annually for all Co-Owners. In particular
 this settlements must show and proportionately allocate
 
 * apportionable amounts
@@ -63,16 +71,16 @@ as well as a report of the
 
 ## Distribution lists
 
-Distribution lists allow the definition of parameters that are
-required for the calculation of settlement values for the respective
-co-ownership share.
+Distribution lists allow parameter definitions that are taken into
+account when cost values are calculated to make up individual Co-Owner
+settlements.
 
-The type of distribution list groups relevant attributes.
+To split up the total coste, there are two distribution procedures:
 
 ### Shares
 
 The distribution and calculation is performed using the numerical
-values of the ownership shares in relation to the sum of all shares.
+values of the ownership shares in relation to the total number of all shares.
 
 * LabelSettlement: The identifier shown in a settlement.
 * SharesTotal: Sum of all shares (default: 1000 shares).
@@ -82,8 +90,9 @@ values of the ownership shares in relation to the sum of all shares.
 
 ### Percentage shares
 
-The distribution and calculation is made using the percentage values
-of the ownership shares in relation to the sum of the percentage share
+The distribution and calculation is made up using the percentage values
+of the ownership shares in relation to the total number that make up
+100% of the property.
 values.
 
 * LabelSettlement: The identifier shown in a settlement.
@@ -141,7 +150,7 @@ existing charts of accounts.
 ## Co-Owner billing reports
 
 The aim of this new report is to provide an individual statement, that
-provides co-owner bills for a given property.
+provides Co-Owner bills for a given property.
 
 ## Property managment idioms
 
