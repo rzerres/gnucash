@@ -70,15 +70,15 @@ test_job (void)
 
     /* Test creation/destruction */
     {
-        do_test (gncJobCreate (NULL) == NULL, "job create NULL");
+        do_test (gncJobCreate (NULL) == NULL, "job: create NULL");
         job = gncJobCreate (book);
-        do_test (job != NULL, "job create");
+        do_test (job != NULL, "job: create");
         do_test (qof_instance_get_book(QOF_INSTANCE(job)) == book,
-                 "getbook");
+                 "job: is inside given book");
 
         gncJobBeginEdit (job);
         gncJobDestroy (job);
-        success ("create/destroy");
+        success ("job: create/destroy");
     }
 
     /* Test setting/getting routines; does the active flag get set right? */
@@ -90,13 +90,13 @@ test_job (void)
         test_string_fcn (book, "Reference", gncJobSetReference, gncJobGetReference);
         test_numeric_fcn (book, "Rate", gncJobSetRate, gncJobGetRate);
 
-        test_bool_fcn (book, "Active", gncJobSetActive, gncJobGetActive);
+        test_bool_fcn (book, "Handle: Active", gncJobSetActive, gncJobGetActive);
 
         guid_replace (&guid);
         job = gncJobCreate (book);
         count++;
         gncJobSetGUID (job, &guid);
-        do_test (guid_equal (&guid, qof_instance_get_guid(QOF_INSTANCE(job))), "guid compare");
+        do_test (guid_equal (&guid, qof_instance_get_guid(QOF_INSTANCE(job))), "Handle: guid");
     }
 #if 0
     {
@@ -110,7 +110,7 @@ test_job (void)
         list = gncBusinessGetList (book, GNC_ID_JOB, FALSE);
         do_test (list != NULL, "getList active");
         do_test (g_list_length (list) == 1, "correct length: active");
-        g_list_free (list);
+        //g_list_free (list);
     }
 #endif
     {
@@ -118,80 +118,82 @@ test_job (void)
 
         gncJobSetName (job, str);
         const char *res = qof_object_printable (GNC_ID_JOB, job);
-        do_test (res != NULL, "Printable NULL?");
-        do_test (g_strcmp0 (str, res) == 0, "Printable equals");
+        do_test (res != NULL, "Printable set to random string");
+        do_test (g_strcmp0 (str, res) == 0, "Printable equals preset random string");
         g_free (str);
     }
     {
-        GList *list;
+        GList *list = NULL;
+        GList *elem;
+        char *item;
+        int i;
         GncOwner owner;
         GncCoOwner *coowner = gncCoOwnerCreate (book);
 
         gncOwnerInitCoOwner (&owner, coowner);
 
-        do_test (gncCoOwnerGetJoblist (coowner, TRUE) == NULL, "empty list at start");
+        printf("Testing Owner-Type: '%s' (%d)\n", gncOwnerGetTypeString (&owner), gncOwnerGetType (&owner));
+        do_test (gncCoOwnerGetJoblist (coowner, TRUE) == NULL, "CoOwner test: get empty job list at start");
         gncJobSetOwner (job, &owner);
         list = gncCoOwnerGetJoblist (coowner, FALSE);
-        do_test (list != NULL, "added to coowner");
-        do_test (g_list_length (list) == 1, "correct joblist length");
+        do_test (list != NULL, "add job to coowner");
+        printf("List length: '%i'\n", g_list_length (list));
+        do_test (g_list_length (list) == 1, "check correct joblist length: 1");
         do_test (list->data == job, "verify job in list");
+        //list = gncJobGetEntries (job);
+        for (elem = list; elem; elem = elem->next) {
+          item = elem->data;
+          /* do something with item */
+          printf("List entry %i: '%s'\n", i, item);
+          i++;
+        }
+        /* Add a job to the given owner type job list */
+        /* gncJobSetOwner (job, &owner); */
         gncJobSetActive (job, FALSE);
         list = gncCoOwnerGetJoblist (coowner, FALSE);
+        printf("List length: %i\n", g_list_length (list));
         do_test (list == NULL, "no active jobs");
+        /* for given owner type iterate through all jobs (boolean TRUE) and prepend active jobs */
         list = gncCoOwnerGetJoblist (coowner, TRUE);
-        do_test (list != NULL, "all jobs");
+        do_test (list != NULL, "new prepended job");
         gncJobBeginEdit (job);
         gncJobDestroy (job);
+        printf("List length: '%i'\n", g_list_length (list));
+        g_list_free (list);
         list = gncCoOwnerGetJoblist (coowner, TRUE);
-        do_test (list == NULL, "no more jobs");
+        printf("Freed list length: '%i'\n", g_list_length (list));
+        do_test (list == NULL, "no more Co-Owner jobs");
     }
     {
         GList *list;
         GncOwner owner;
-        GncCoOwner *coowner = gncCoOwnerCreate (book);
+        GncCustomer *customer = gncCustomerCreate (book);
 
-        gncOwnerInitCoOwner (&owner, coowner);
+        gncOwnerInitCustomer (&owner, customer);
 
-        do_test (gncCoOwnerGetJoblist (coowner, TRUE) == NULL, "empty list at start");
+        /* initialize the job using a new book */
+        job = gncJobCreate (book);
+        printf("Testing Owner-Type: '%s' (%d)\n", gncOwnerGetTypeString (&owner), gncOwnerGetType (&owner));
+        do_test (gncCustomerGetJoblist (customer, TRUE) == NULL, "Customer test: get empty jobs list at start");
+        /* Add a job to the given owner type job list */
         gncJobSetOwner (job, &owner);
-        list = gncCoOwnerGetJoblist (coowner, FALSE);
-        do_test (list != NULL, "added to coowner");
-        do_test (g_list_length (list) == 1, "correct joblist length");
-        do_test (list->data == job, "verify job in list");
-        gncJobSetActive (job, FALSE);
-        list = gncCoOwnerGetJoblist (coowner, FALSE);
-        do_test (list == NULL, "no active jobs");
-        list = gncCoOwnerGetJoblist (coowner, TRUE);
-        do_test (list != NULL, "all jobs");
-        gncJobBeginEdit (job);
-        gncJobDestroy (job);
-        list = gncCoOwnerGetJoblist (coowner, TRUE);
-        do_test (list == NULL, "no more jobs");
-    }
-    {
-        GList *list;
-        GncOwner owner;
-        GncCustomer *cust = gncCustomerCreate (book);
-
-        gncOwnerInitCustomer (&owner, cust);
-
-        do_test (gncCustomerGetJoblist (cust, TRUE) == NULL, "empty list at start");
-        gncJobSetOwner (job, &owner);
-        list = gncCustomerGetJoblist (cust, FALSE);
-        do_test (list != NULL, "added to cust");
-        do_test (g_list_length (list) == 1, "correct joblist length");
+        list = gncCustomerGetJoblist (customer, FALSE);
+        printf("List length: %i\n", g_list_length (list));
+        do_test (list != NULL, "added to customer");
+        do_test (g_list_length (list) == 1, "check correct joblist length: 1");
         do_test (list->data == job, "verify job in list");
         gncJobSetActive (job, FALSE);
         g_list_free (list);
-        list = gncCustomerGetJoblist (cust, FALSE);
+        list = gncCustomerGetJoblist (customer, FALSE);
         do_test (list == NULL, "no active jobs");
-        list = gncCustomerGetJoblist (cust, TRUE);
-        do_test (list != NULL, "all jobs");
+        list = gncCustomerGetJoblist (customer, TRUE);
+        do_test (list != NULL, "jobs list not empty");
         gncJobBeginEdit (job);
         gncJobDestroy (job);
         g_list_free (list);
-        list = gncCustomerGetJoblist (cust, TRUE);
-        do_test (list == NULL, "no more jobs");
+        list = gncCustomerGetJoblist (customer, TRUE);
+        printf("Freed list length: %i)\n", g_list_length (list));
+        do_test (list == NULL, "no more Customer jobs");
     }
 
     qof_book_destroy (book);
@@ -312,6 +314,8 @@ int
 main (int argc, char **argv)
 {
     qof_init();
+    /* Print out successfull tests */
+    set_success_print(TRUE);
     do_test (gncCoOwnerRegister(), "Cannot register GncCoOwner");
     do_test (gncCustomerRegister(), "Cannot register GncCustomer");
     do_test (gncInvoiceRegister(), "Cannot register GncInvoice");
