@@ -94,6 +94,9 @@ struct _job_window
     GncJob *created_job;
 };
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = GNC_MOD_GUI;
+
 /*******************************************************************************/
 /* JOB WINDOW */
 
@@ -306,6 +309,8 @@ gnc_job_type_toggled_cb (GtkWidget *widget, gpointer data)
     if (!jw) return;
 
     //jw->job_type_is_coowner = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+    // @@fixme -- correct handling of invoice owner
+    PINFO("Job type has toggled '%d", gncJobGetType(jw->created_job));
 }
 
 static void
