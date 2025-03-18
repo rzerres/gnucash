@@ -102,7 +102,7 @@ GncOwnerType gncJobGetOwnerType (const GncJob *job);
 GncJobType gncJobGetType (const GncJob *job);
 gnc_numeric gncJobGetRate (const GncJob *job);
 const char *gncJobGetReference (const GncJob *job);
-gboolean gncJobGetTypeIsCoOwner (const GncJob *job);
+//gboolean gncJobGetTypeIsCoOwner (const GncJob *job);
 
 /** \name Set Functions
 @{
@@ -114,7 +114,7 @@ void gncJobSetName (GncJob *job, const char *jobname);
 void gncJobSetOwner (GncJob *job, GncOwner *owner);
 void gncJobSetRate (GncJob *job, gnc_numeric rate);
 void gncJobSetReference (GncJob *job, const char *owner_reference);
-void gncJobSetTypeIsCoOwner (GncJob *job, gboolean type_coowner);
+//void gncJobSetTypeIsCoOwner (GncJob *job, gboolean type_coowner);
 
 /** @} */
 void gncJobBeginEdit (GncJob *job);

@@ -460,18 +460,18 @@ void gncJobSetActive (GncJob *job, gboolean active)
     gncJobCommitEdit (job);
 }
 
-void gncJobSetTypeIsCoOwner (GncJob *job, gboolean type_coowner)
-{
-     GValue v = G_VALUE_INIT;
-     if (!job) return;
-     gncJobBeginEdit (job);
-     g_value_init (&v, G_TYPE_INT64);
-     g_value_set_int64 (&v, type_coowner ? 1 : 0);
-     qof_instance_set_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_TYPE_IS_COOWNER);
-     g_value_unset (&v);
-     mark_job (job);
-     gncJobCommitEdit (job);
-}
+/* void gncJobSetTypeIsCoOwner (GncJob *job, gboolean type_coowner)
+ * {
+ *      GValue v = G_VALUE_INIT;
+ *      if (!job) return;
+ *      gncJobBeginEdit (job);
+ *      g_value_init (&v, G_TYPE_INT64);
+ *      g_value_set_int64 (&v, type_coowner ? 1 : 0);
+ *      qof_instance_set_kvp (QOF_INSTANCE (job), &v, 1, GNC_JOB_TYPE_IS_COOWNER);
+ *      g_value_unset (&v);
+ *      mark_job (job);
+ *      gncJobCommitEdit (job);
+ * } */
 
 static void
 qofJobSetOwner (GncJob *job, QofInstance *ent)
@@ -582,16 +582,16 @@ GncJobType gncJobGetType (const GncJob *job)
     return (gncOwnerGetType (owner));
 }
 
-gboolean gncJobGetTypeIsCoOwner (const GncJob *job)
-{
-    GValue v = G_VALUE_INIT;
-    gboolean retval;
-    if (!job) return FALSE;
-    qof_instance_get_kvp (QOF_INSTANCE(job), &v, 1, GNC_JOB_TYPE_IS_COOWNER);
-    retval = G_VALUE_HOLDS_INT64(&v) && g_value_get_int64 (&v);
-    g_value_unset (&v);
-    return retval;
-}
+/* gboolean gncJobGetTypeIsCoOwner (const GncJob *job)
+ * {
+ *     GValue v = G_VALUE_INIT;
+ *     gboolean retval;
+ *     if (!job) return FALSE;
+ *     qof_instance_get_kvp (QOF_INSTANCE(job), &v, 1, GNC_JOB_TYPE_IS_COOWNER);
+ *     retval = G_VALUE_HOLDS_INT64(&v) && g_value_get_int64 (&v);
+ *     g_value_unset (&v);
+ *     return retval;
+ * } */
 
 static QofInstance*
 qofJobGetOwner (GncJob *job)
@@ -696,7 +696,7 @@ gboolean gncJobRegister (void)
         { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
         { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, (QofSetterFunc)gncJobSetReference },
         { JOB_RATE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncJobGetRate, (QofSetterFunc)gncJobSetRate },
-        { JOB_TYPE_IS_COOWNER, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetTypeIsCoOwner, (QofSetterFunc)gncJobSetTypeIsCoOwner },
+        /* { JOB_TYPE_IS_COOWNER, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetTypeIsCoOwner, (QofSetterFunc)gncJobSetTypeIsCoOwner },  */
         { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
         { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
         { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

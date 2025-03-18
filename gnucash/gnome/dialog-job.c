@@ -89,7 +89,7 @@ struct _job_window
     gint component_id;
     JobDialogType dialog_type;
     GncGUID job_guid;
-    gboolean job_type_is_coowner;
+    //gboolean job_type_is_coowner;
     GncOwner owner;
     GncJob *created_job;
 };
@@ -304,7 +304,8 @@ gnc_job_type_toggled_cb (GtkWidget *widget, gpointer data)
     JobWindow *jw = data;
 
     if (!jw) return;
-    jw->job_type_is_coowner = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+    //jw->job_type_is_coowner = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 }
 
 static void
@@ -393,12 +394,12 @@ gnc_job_window_new (GtkWindow *parent, JobDialogType dialog_type, QofBook *bookp
     jw->dialog_type = NEW_JOB;
     jw->job_guid = *gncJobGetGUID (job);
     /* The default GUI activates radiobutton "Customer", change if needed */
-    jw->job_type_is_coowner = gncJobGetTypeIsCoOwner (job);
+    //jw->job_type_is_coowner = gncJobGetTypeIsCoOwner (job);
 
     if (dialog_type == DUP_JOB)
     {
         GtkWidget *radiobutton_owner = GTK_WIDGET (gtk_builder_get_object (builder, "radiobutton_customer"));
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(radiobutton_owner), gncJobGetTypeIsCoOwner (job));
+        //gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(radiobutton_owner), gncGetTypeIsCoOwner (job));
     }
 
     /* Save for later usage */
