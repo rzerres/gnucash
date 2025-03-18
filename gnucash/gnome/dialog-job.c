@@ -405,6 +405,7 @@ gnc_job_window_new (GtkWindow *parent, JobDialogType dialog_type, QofBook *bookp
     {
         GtkWidget *radiobutton_owner = GTK_WIDGET (gtk_builder_get_object (builder, "radiobutton_customer"));
         //gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(radiobutton_owner), gncGetTypeIsCoOwner (job));
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(radiobutton_owner), gncJobGetType (job));
     }
 
     /* Save for later usage */
@@ -585,6 +586,7 @@ gnc_ui_job_new (GtkWindow *parent, GncOwner *ownerp, QofBook *bookp)
     {
         g_return_val_if_fail ((gncOwnerGetType (ownerp) == GNC_OWNER_COOWNER) ||
                               (gncOwnerGetType (ownerp) == GNC_OWNER_CUSTOMER) ||
+                              (gncOwnerGetType (ownerp) == GNC_OWNER_EMPLOYEE) ||
                               (gncOwnerGetType (ownerp) == GNC_OWNER_VENDOR),
                               NULL);
         /* Copy pointer values of given ownerp to be assessible inside the new job window struct (owner) */
@@ -592,12 +594,32 @@ gnc_ui_job_new (GtkWindow *parent, GncOwner *ownerp, QofBook *bookp)
     }
     else
     {
-      /* Customer or CoOwner */
-      if (gncOwnerGetType (ownerp) == GNC_OWNER_COOWNER)
+      /* /\* Customer or CoOwner *\/
+       * if (gncOwnerGetType (ownerp) == GNC_OWNER_COOWNER)
+       *     gncOwnerInitCoOwner (&owner, NULL);
+       * else
+       *     gncOwnerInitCustomer (&owner, NULL);
+       * } */
+
+      /* Handle the correct owner type */
+      switch (gncOwnerGetType (ownerp))
+      {
+      case GNC_OWNER_COOWNER:
           gncOwnerInitCoOwner (&owner, NULL);
-      else
+          break;
+      case GNC_OWNER_CUSTOMER:
           gncOwnerInitCustomer (&owner, NULL);
+          break;
+      case GNC_OWNER_VENDOR:
+          gncOwnerInitVendor (&owner, NULL);
+          break;
+      case GNC_OWNER_EMPLOYEE:
+          gncOwnerInitEmployee (&owner, NULL);
+          break;
+      default:
+          break;
       }
+    }
 
     jw = gnc_job_window_new (parent, dialog_type, bookp, &owner, NULL);
     return jw;
