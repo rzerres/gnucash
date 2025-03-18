@@ -47,7 +47,7 @@ extern "C" {
 typedef enum
 {
     GNC_JOB_UNDEFINED,
-    GNC_JOB_COOWNER_INVOICE,      /* Settlement */
+    GNC_JOB_COOWNER_INVOICE,      /* Invoice */
     GNC_JOB_CUST_INVOICE,         /* Invoice */
     GNC_JOB_EMPL_INVOICE,         /* Voucher */
     GNC_JOB_VEND_INVOICE,         /* Bill */
@@ -55,6 +55,7 @@ typedef enum
     GNC_JOB_CUST_CREDIT_NOTE,     /* Credit Note for a customer */
     GNC_JOB_EMPL_CREDIT_NOTE,     /* Credit Note from an employee */
     GNC_JOB_VEND_CREDIT_NOTE,     /* Credit Note from a vendor */
+    GNC_JOB_COOWNER_SETTLEMENT,   /* Settlement */
     GNC_JOB_NUM_TYPES
 } GncJobType;
 
