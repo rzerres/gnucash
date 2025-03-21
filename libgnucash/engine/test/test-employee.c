@@ -30,7 +30,6 @@
 #include <qofinstance-p.h>
 
 #include "gncEmployeeP.h"
-#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
 #include "gncInvoiceP.h"
