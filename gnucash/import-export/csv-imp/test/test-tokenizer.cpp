@@ -28,7 +28,11 @@
 #include "../gnc-tokenizer.hpp"
 #include "../gnc-tokenizer-csv.hpp"
 #include "../gnc-tokenizer-fw.hpp"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
+
 #include <iostream>
 #include <fstream>      // fstream
 

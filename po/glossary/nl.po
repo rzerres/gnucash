@@ -6,14 +6,15 @@
 # Jaimie85 <alsemgeest@gmail.com>, 2022.
 # Stephan Paternotte <stephan@paternottes.net>, 2023, 2024.
 # Paul Oranje <por@oranjevos.nl>, 2024.
+# BlueRains <lu@schoevaars.eu>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2024-06-25 19:09+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2025-05-05 12:13+0000\n"
+"Last-Translator: BlueRains <lu@schoevaars.eu>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/glossary/"
 "nl/>\n"
 "Language: nl\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -753,7 +754,7 @@ msgstr "bron"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "deling"
+msgstr "boekregel"
 
 #. "Alias of 'shares'"
 msgid "stocks"

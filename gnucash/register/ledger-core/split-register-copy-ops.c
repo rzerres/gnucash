@@ -357,7 +357,7 @@ FloatingTxn *gnc_txn_to_float_txn (Transaction *txn, gboolean use_cut_semantics)
     for (iter = xaccTransGetSplitList (txn); iter ; iter = iter->next)
     {
         Split *split = iter->data;
-        if (split)
+        if (split && xaccTransStillHasSplit (txn, split))
         {
             FloatingSplit *fs = gnc_split_to_float_split (split);
             ft->m_splits = g_list_prepend (ft->m_splits, fs);

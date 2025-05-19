@@ -38,6 +38,7 @@ public:
     GncSqlCustomerBackend();
     void load_all(GncSqlBackend*) override;
     void create_tables(GncSqlBackend*) override;
+    bool commit(GncSqlBackend*, QofInstance*) override;
     bool write(GncSqlBackend*) override;
 };
 

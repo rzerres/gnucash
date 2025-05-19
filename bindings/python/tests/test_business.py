@@ -74,5 +74,14 @@ class TestBusiness(BusinessSession):
     def test_commodities(self):
         self.assertTrue( self.currency.equal( self.customer.GetCommoditiesList()[0] ) )
 
+    def test_invoice_transaction(self):
+        """
+        Test that you can get the posted transaction from a posted invoice and that you can get the invoice back from the transaction.
+        """
+        posted_transaction = self.invoice.GetPostedTxn()
+        self.assertTrue( posted_transaction != None )
+        invoice_from_transaction = posted_transaction.GetInvoiceFromTxn()
+        self.assertTrue( invoice_from_transaction != None and invoice_from_transaction.GetID() == self.invoice.GetID() )
+
 if __name__ == '__main__':
     main()

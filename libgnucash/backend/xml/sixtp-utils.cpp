@@ -21,7 +21,6 @@
  *                                                                  *
  ********************************************************************/
 
-#define __EXTENSIONS__
 #include <guid.hpp>
 #include <config.h>
 

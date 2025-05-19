@@ -3,14 +3,15 @@
 # Christian Stimming <stimming@tuhh.de>, 2001
 # An's Page <anspage@outlook.com>, 2020.
 # Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>, 2022.
+# Ivan Kostov <jiveq1@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/"
+"enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2022-04-21 01:13+0000\n"
-"Last-Translator: Aleksandar Hadzhivelichkov <Raphaelo245@gmail.com>\n"
+"PO-Revision-Date: 2025-04-21 20:05+0000\n"
+"Last-Translator: Ivan Kostov <jiveq1@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/bg/>\n"
 "Language: bg\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -33,7 +34,7 @@ msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr "сметка"
+msgstr "Акаунт"
 
 #. "An alphanumerical code applied to accounts for sorting. Some jurisdictions mandate codes and some GnuCash book templates include codes as part of the tree structure. Account codes can be set and changed in the Edit Account dialog."
 msgid "account code"

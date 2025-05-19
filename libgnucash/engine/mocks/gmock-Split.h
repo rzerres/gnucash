@@ -1,7 +1,11 @@
 #ifndef GMOCK_SPLIT_H
 #define GMOCK_SPLIT_H
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gmock/gmock.h>
+#pragma GCC diagnostic pop
+
 
 #include <Split.h>
 #include <SplitP.hpp>

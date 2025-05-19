@@ -37,13 +37,14 @@
 /* For cleaning up the database */
 #include <dbi/dbi.h>
 #include <gnc-uri-utils.h>
-    /* For setup_business */
+/* For setup_business */
 #include "Account.h"
 #include <TransLog.h>
 #include "Transaction.h"
 #include "Split.h"
 #include "gnc-commodity.h"
 #include "gncAddress.h"
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
 #include "gncInvoice.h"
     /* For version_control */
@@ -175,6 +176,9 @@ setup_business (Fixture* fixture, gconstpointer pData)
     gnc_commodity_table* table;
     gnc_commodity* currency;
     GncAddress* addr;
+    GncAddress* shipaddr;
+    GncAddress* tenantaddr;
+    GncCoOwner* coowner;
     GncCustomer* cust;
     GncEmployee* emp;
     GncTaxTable* tt;
@@ -212,6 +216,45 @@ setup_business (Fixture* fixture, gconstpointer pData)
     gncTaxTableEntrySetType (tte, GNC_AMT_TYPE_PERCENT);
     gncTaxTableEntrySetAmount (tte, gnc_numeric_zero ());
     gncTaxTableAddEntry (tt, tte);
+
+    coowner = gncCoOwnerCreate (book);
+    gncCoOwnerSetID (coowner, "0000001");
+    gncCoOwnerSetCurrency (coowner, currency);
+    addr = gncAddressCreate (book, QOF_INSTANCE (coowner));
+    gncAddressSetName (addr, "Recipient Name");
+    gncAddressSetAddr1 (addr, "Address line #1");
+    gncAddressSetAddr2 (addr, "Address line #2");
+    gncAddressSetAddr3 (addr, "Address line #3");
+    gncAddressSetAddr4 (addr, "Address line #4");
+    gncAddressSetPhone (addr, "(123) 555-1212");
+    gncAddressSetMobile (addr, "(987) 555-2121");
+    gncAddressSetFax (addr, "(123) 555-1213");
+    gncAddressSetEmail (addr, "coowner@mycoowner.com");
+    gncCoOwnerSetAptShare (coowner, gnc_numeric_create (15200, 100));
+    gncCoOwnerSetAptUnit (coowner, "Apartment Unit 0001");
+    gncCoOwnerSetNotes (coowner, "Here are some coowner notes");
+    gncCoOwnerSetTenantID (coowner, "000001");
+    gncCoOwnerSetTenantName (coowner, "Tenant 1");
+    tenantaddr = gncAddressCreate (book, QOF_INSTANCE (coowner));
+    gncAddressSetName (tenantaddr, "Tenant Name");
+    gncAddressSetAddr1 (tenantaddr, "Tenent Address line #1");
+    gncAddressSetAddr2 (tenantaddr, "Tenent Address line #2");
+    gncAddressSetAddr3 (tenantaddr, "Tenent Address line #3");
+    gncAddressSetAddr4 (tenantaddr, "Tenent Address line #4");
+    gncAddressSetPhone (tenantaddr, "(123) 666-1212");
+    gncAddressSetMobile (tenantaddr, "(987) 666-2121");
+    gncAddressSetFax (tenantaddr, "(123) 666-121");
+    gncAddressSetEmail (tenantaddr, "tenent@mycoowner.com");
+    shipaddr = gncAddressCreate (book, QOF_INSTANCE (coowner));
+    gncAddressSetName (shipaddr, "Shipment Assignee");
+    gncAddressSetAddr1 (shipaddr, "Ship Address line #1");
+    gncAddressSetAddr2 (shipaddr, "Ship Address line #2");
+    gncAddressSetAddr3 (shipaddr, "Ship Address line #3");
+    gncAddressSetAddr4 (shipaddr, "Ship Address line #4");
+    gncAddressSetPhone (shipaddr, "(123) 777-1212");
+    gncAddressSetMobile (shipaddr, "(987) 777-2121");
+    gncAddressSetFax (shipaddr, "(123) 777-121");
+    gncAddressSetEmail (shipaddr, "shipowner@mycoowner.com");
 
     cust = gncCustomerCreate (book);
     gncCustomerSetID (cust, "0001");
@@ -379,11 +422,11 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     const gchar* url = (const gchar*)pData;
     auto msg = "[GncDbiSqlConnection::unlock_database()] There was no lock entry in the Lock table";
     auto log_domain = nullptr;
-    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
-                                                 G_LOG_FLAG_FATAL);
+    auto loglevel = static_cast<GLogLevelFlags> (
+        G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
     TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
-    fixture->hdlrs = test_log_set_fatal_handler (fixture->hdlrs, check,
-                                                 (GLogFunc)test_checked_handler);
+    fixture->hdlrs = test_log_set_fatal_handler (
+        fixture->hdlrs, check, (GLogFunc)test_checked_handler);
     if (fixture->filename)
         url = fixture->filename;
 
@@ -410,8 +453,9 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     g_assert_true (session_3 != NULL);
     g_assert_cmpint (qof_session_get_error (session_3), == , ERR_BACKEND_NO_ERR);
     // Compare with the original data
-    compare_books (qof_session_get_book (session_2),
-                   qof_session_get_book (session_3));
+    compare_books (
+        qof_session_get_book (session_2),
+        qof_session_get_book (session_3));
     /* fixture->session belongs to the fixture and teardown() will clean it up */
     qof_session_end (session_2);
     qof_session_destroy (session_2);
@@ -572,8 +616,8 @@ test_dbi_business_store_and_reload (Fixture* fixture, gconstpointer pData)
 
     auto msg = "[GncDbiSqlConnection::unlock_database()] There was no lock entry in the Lock table";
     auto log_domain = nullptr;
-    auto loglevel = static_cast<GLogLevelFlags> (G_LOG_LEVEL_WARNING |
-                                                 G_LOG_FLAG_FATAL);
+    auto loglevel = static_cast<GLogLevelFlags> (
+        G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL);
     TestErrorStruct* check = test_error_struct_new (log_domain, loglevel, msg);
     if (fixture->filename)
         url = fixture->filename;

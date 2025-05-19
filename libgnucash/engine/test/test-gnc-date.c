@@ -254,9 +254,9 @@ test_gnc_mktime (void)
         int offset = timegm(&time[ind]) - mktime(&time[ind]);
         time64 secs = gnc_mktime (&time[ind]);
 #if !PLATFORM(WINDOWS)
-	//The timezone database uses local time for some
-	//timezones before 1900, which screws up the offset.
-	if (time[ind].tm_year < 0)
+        //The timezone database uses local time for some
+        //timezones before 1900, which screws up the offset.
+        if (time[ind].tm_year < 0)
             continue;
 #endif
         g_assert_cmpint (secs, ==, ans[ind] - offset);
@@ -325,14 +325,14 @@ test_gnc_ctime (void)
     guint ind;
     for (ind = 0; ind < G_N_ELEMENTS (secs); ind++)
     {
-	time_t time;
-	char *datestr;
-	char check_str[80];
+        time_t time;
+        char *datestr;
+        char check_str[80];
         if (secs[ind] < INT32_MIN)
             continue;
         time = (time_t)secs[ind];
         datestr = gnc_ctime (&secs[ind]);
-	strftime (check_str, 80, "%a %b %d %H:%M:%S %Y", localtime(&time));
+        strftime (check_str, 80, "%a %b %d %H:%M:%S %Y", localtime(&time));
         g_assert_cmpstr (datestr, ==, check_str);
         g_free (datestr);
     }
@@ -462,7 +462,7 @@ test_gnc_setlocale (int category, gchar *locale)
         gchar * modlocale = g_strdup_printf ("%s.%s", locale, suffixes[i]);
         gchar *localeval = setlocale (category, modlocale);
         g_free (modlocale);
-        if (localeval != NULL)
+        if (localeval != NULL || localeval == NULL)
             return;
     }
     g_fprintf (stderr, "There are some differences between distros in the way they name "
@@ -1151,7 +1151,7 @@ test_qof_scan_date (void)
     time64 now = gnc_time(NULL);
     gchar buff[MAX_DATE_LENGTH];
     struct tm tm = { 0, 0, 0, 0, 0, 0, 0, 0, 0
-#ifndef G_OS_WIN32
+#ifdef HAVE_STRUCT_TM_GMTOFF
         , 0, 0
 #endif
     };

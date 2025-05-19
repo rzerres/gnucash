@@ -102,13 +102,13 @@ then
     rc=$?
   fi
   if [ $rc = 0 ]; then
-    /bin/echo -n $githead
     # Add a "+" to the hash if there deleted or modified files (not excluded by .gitignore and friends)
+    modified=""
     # "Ignores" untracked files
-    # [ $("$GIT_CMD" --git-dir "${real_gitdir}" ls-files -dkm 2>/dev/null | wc -l) -gt 0 ] && /bin/echo -n "+"
+    # [ $("$GIT_CMD" --git-dir "${real_gitdir}" ls-files -dkm 2>/dev/null | wc -l) -gt 0 ] && modified="+"
     # Includes untracked files
-    [ $("$GIT_CMD" --git-dir "${real_gitdir}" ls-files -dkmo --exclude-standard 2>/dev/null | wc -l) -gt 0 ] && /bin/echo -n "+"
-    echo
+    [ $("$GIT_CMD" --git-dir "${real_gitdir}" ls-files -dkmo --exclude-standard 2>/dev/null | wc -l) -gt 0 ] && modified="+"
+    echo ${githead}${modified}
     exit 0
   else
     exit 1

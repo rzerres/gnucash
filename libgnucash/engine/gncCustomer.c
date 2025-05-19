@@ -271,10 +271,10 @@ gnc_customer_class_init (GncCustomerClass *klass)
      g_param_spec_string ("export-pdf-dir",
                           "Export PDF Directory Name",
                           "A subdirectory for exporting PDF reports which is "
-			  "appended to the target directory when writing them "
-			  "out. It is retrieved from preferences and stored on "
-			  "each 'Owner' object which prints items after "
-			  "printing.",
+                          "appended to the target directory when writing them "
+                          "out. It is retrieved from preferences and stored on "
+                          "each 'Owner' object which prints items after "
+                          "printing.",
                           NULL,
                           G_PARAM_READWRITE));
 
@@ -282,21 +282,21 @@ gnc_customer_class_init (GncCustomerClass *klass)
        gobject_class,
        PROP_LAST_POSTED,
        g_param_spec_boxed("invoice-last-posted-account",
-			  "Invoice Last Posted Account",
-			  "The last account to which an invoice belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
+                          "Invoice Last Posted Account",
+                          "The last account to which an invoice belonging to "
+                          "this owner was posted.",
+                          GNC_TYPE_GUID,
+                          G_PARAM_READWRITE));
 
     g_object_class_install_property(
        gobject_class,
        PROP_PAYMENT_LAST_ACCT,
        g_param_spec_boxed("payment-last-account",
-			  "Payment Last Account",
-			  "The last account to which an payment belonging to "
-			  "this owner was posted.",
-			  GNC_TYPE_GUID,
-			  G_PARAM_READWRITE));
+                          "Payment Last Account",
+                          "The last account to which an payment belonging to "
+                          "this owner was posted.",
+                          GNC_TYPE_GUID,
+                          G_PARAM_READWRITE));
 }
 
 /* Create/Destroy Functions */
@@ -716,7 +716,7 @@ gboolean gncCustomerIsDirty (GncCustomer *cust)
             gncAddressIsDirty (cust->shipaddr));
 }
 
-/* Other functions */
+/* Helper functions */
 
 int gncCustomerCompare (const GncCustomer *a, const GncCustomer *b)
 {
@@ -881,7 +881,6 @@ cust_handle_qof_events (QofInstance *entity, QofEventId event_type,
 /* Package-Private functions */
 static const char * _gncCustomerPrintable (gpointer item)
 {
-//  GncCustomer *c = item;
     if (!item) return "failed";
     return gncCustomerGetName((GncCustomer*)item);
 }
@@ -952,6 +951,7 @@ gboolean gncCustomerRegister (void)
     };
 
     qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncCustomerCompare, params);
+
     /* temp */
     _gncCustomerPrintable(NULL);
     return qof_object_register (&gncCustomerDesc);

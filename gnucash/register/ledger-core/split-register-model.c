@@ -107,6 +107,10 @@ gnc_split_register_get_rbaln (VirtualLocation virt_loc, gpointer user_data,
         for (node = xaccTransGetSplitList (trans); node; node = node->next)
         {
             Split* secondary = node->data;
+
+            if (!xaccTransStillHasSplit (trans, secondary))
+              continue;
+
             i++;
 
             if (subaccounts)
@@ -2193,6 +2197,10 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
         for (GList *node = xaccTransGetSplitList (trans); node; node = node->next)
         {
             Split* split = node->data;
+
+            if (!xaccTransStillHasSplit (trans, split))
+                continue;
+
             if (xaccSplitGetReconcile (split) == YREC)
             {
                 gchar* name = gnc_account_get_full_name (xaccSplitGetAccount (split));

@@ -1140,7 +1140,7 @@ gnc_split_register_change_blank_split_ref (SplitRegister* reg, Split* split)
     for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
     {
         Split *s = n->data;
-        if (s != current_blank_split)
+        if (s != current_blank_split && xaccTransStillHasSplit (trans, s))
         {
             if (blank_split_account == xaccSplitGetAccount (s))
                 pref_split = s;  // prefer same account
@@ -1153,6 +1153,8 @@ gnc_split_register_change_blank_split_ref (SplitRegister* reg, Split* split)
         info->blank_split_guid = *xaccSplitGetGUID (pref_split);
     else if (other_split != NULL)
         info->blank_split_guid = *xaccSplitGetGUID (other_split);
+    else
+      info->blank_split_guid = *guid_null();
 }
 
 void

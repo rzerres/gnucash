@@ -40,7 +40,11 @@
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
-#define DEFAULT_HOST "localhost"
+/* MariaDB/MySQL/Postgres optimize localhost to a unix socket but
+ * flatpak won't connect to unix sockets without gymnastics default to
+ * the localhost IP to force a network connection.
+ */
+#define DEFAULT_HOST "127.0.0.1"
 #define DEFAULT_DATABASE PROJECT_NAME
 #define FILE_ACCESS_OPEN    0
 #define FILE_ACCESS_SAVE_AS 1
@@ -140,8 +144,7 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
         }
         if (g_str_has_prefix (url, "file://"))
         {
-            if ( g_file_test( g_filename_from_uri( url, NULL, NULL ),
-                              G_FILE_TEST_IS_DIR ))
+          if ( g_file_test (gnc_uri_get_path (url), G_FILE_TEST_IS_DIR))
             {
                 gtk_file_chooser_set_current_folder_uri( faw->fileChooser, url );
                 return;

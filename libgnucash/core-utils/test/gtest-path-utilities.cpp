@@ -6,7 +6,10 @@
 #include <binreloc.h>
 #include <gnc-filepath-utils.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
 
 
 /* Variant of EXPECT_STREQ that calls g_free()

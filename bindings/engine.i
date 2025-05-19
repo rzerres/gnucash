@@ -28,6 +28,7 @@
 #include "qoflog.h"
 #include "Query.h"
 #include "gnc-budget.h"
+#include "gnc-distribution-list.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
@@ -44,6 +45,7 @@
 #include "Account.hpp"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
 #include "gncEmployee.h"
 #include "gncEntry.h"
@@ -65,6 +67,22 @@ using AccountVec = std::vector<Account*>;
 
 SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date,
                                           time64 end_date, gnc_commodity *comm, bool sort);
+
+/* scans account splits, in posted date order, calling split_fn(split)
+   at each split and accumulate the result at each date in the SCM
+   list dates into a new SCM list. Parameters are:
+
+   acc            the account
+   dates          the SCM list of posted dates, assumed to be in chronological order
+   init           the result to be pushed into the result for dates prior to first split date
+   split_fn       the split->elt procedure whose result of (split_fn split) will be pushed
+                  into the returned SCM list */
+SCM gnc_account_accumulate_to_dates (const Account *acc, SCM dates,
+                                     SCM split_fn, SCM init);
+
+/* as above, but the split_to_date function to use a different date order. */
+SCM gnc_account_accumulate_to_dates (const Account *acc, SCM dates,
+                                     SCM split_fn, SCM init, SCM split_to_date);
 
 AccountVec gnc_accounts_and_all_descendants (AccountVec accounts);
 
@@ -159,6 +177,51 @@ SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date
         std::sort (rv.begin(), rv.end(), [](auto a, auto b){ return xaccSplitOrder (a, b) < 0; });
     return rv;
 }
+
+static SCM
+accumulate_splits_by_dates (const SplitsVec& splits, SCM dates, SCM result,
+                            std::function<bool(Split*,SCM)> no_later_than_date,
+                            std::function<SCM(Split*)> get_result)
+{
+    SCM rv = SCM_EOL;
+    auto splits_it = splits.begin();
+    for (; !scm_is_null(dates); dates = scm_cdr (dates))
+    {
+        while (splits_it != splits.end() && no_later_than_date (*splits_it, scm_car (dates)))
+            result = get_result (*splits_it++);
+
+        rv = scm_cons (result, rv);
+    }
+    return scm_reverse_x (rv, SCM_EOL);
+}
+
+SCM
+gnc_account_accumulate_to_dates (const Account *acc, SCM dates,
+                                 SCM split_fn, SCM init)
+{
+    const auto& splits = xaccAccountGetSplits(acc);
+    auto get_result = [&](Split* s) -> SCM { return scm_call_1(split_fn, gnc_split_to_scm(s)); };
+    auto no_later_than_date = [&](Split* s, SCM date) -> bool
+        { return xaccTransGetDate (xaccSplitGetParent (s)) <= scm_to_int64 (date); };
+
+    return accumulate_splits_by_dates (splits, dates, init, no_later_than_date, get_result);
+}
+
+SCM
+gnc_account_accumulate_to_dates (const Account *acc, SCM dates,
+                                 SCM split_fn, SCM init, SCM split_to_date)
+{
+    auto splits = xaccAccountGetSplits(acc);
+    auto less_scm = [](SCM a, SCM b) -> bool { return scm_is_true(scm_less_p(a, b)); };
+    auto get_date = [&](Split* s) -> SCM { return scm_call_1(split_to_date, gnc_split_to_scm(s)); };
+    auto get_result = [&](Split* s) -> SCM { return scm_call_1(split_fn, gnc_split_to_scm(s)); };
+    auto no_later_than_date = [&](auto s, SCM date) -> bool { return !less_scm(date, get_date(s)); };
+    std::sort(splits.begin(), splits.end(), [&](auto a, auto b) -> bool
+              { return less_scm(get_date(a), get_date(b)); });
+
+    return accumulate_splits_by_dates (splits, dates, init, no_later_than_date, get_result);
+}
+
 
 using AccountSet = std::unordered_set<Account*>;
 static void maybe_add_descendants (Account* acc, AccountSet* accset)

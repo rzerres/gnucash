@@ -22,7 +22,11 @@
 \********************************************************************/
 
 #include <gtk/gtk.h>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
+
 #include <gmock/gmock.h>
 
 #include <config.h>

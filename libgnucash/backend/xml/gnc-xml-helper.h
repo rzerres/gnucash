@@ -29,7 +29,6 @@
 
 #include <libxml/xmlversion.h>
 
-#  include <libxml/SAX.h>
 #  include <libxml/tree.h>
 #  include <libxml/parser.h>
 #  include <libxml/xmlmemory.h>

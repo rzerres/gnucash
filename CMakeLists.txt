@@ -16,7 +16,7 @@ if (POLICY CMP0167)
 endif()
 
 project (gnucash
-    VERSION 5.10
+    VERSION 5.11
 )
 
 enable_testing()
@@ -50,6 +50,7 @@ include (GncGenerateGResources)
 include (MakeDistFiles)
 include (GNUInstallDirs)
 include (TestBigEndian)
+include (CheckStructHasMember)
 
 # ############################################################
 # These options are settable from the CMake command line. For example, to disable
@@ -262,7 +263,7 @@ if (NOT GLIB_COMPILE_SCHEMAS)
 endif()
 
 find_path (REGEX_INCLUDE_PATH NAMES regex.h
-		  PATHS /usr/include /opt/gnome/include)
+                  PATHS /usr/include /opt/gnome/include)
 find_library (REGEX_LIBRARY NAMES regex)
 
 # I18N
@@ -280,7 +281,7 @@ if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
 endif()
 
 find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
-		  PATHS /usr/include /opt/gnome/include)
+                  PATHS /usr/include /opt/gnome/include)
 find_library (LIBINTL_LIBRARY NAMES intl)
 
 # HELP
@@ -606,8 +607,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
 if (UNIX)
-  set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations ${CMAKE_CXX_FLAGS}")
+  set( CMAKE_C_FLAGS "-Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Wall -Wmissing-declarations ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif()
 if (MINGW)
@@ -693,7 +694,8 @@ endif()
 gnc_gtest_configure()
 
 # There are targets that need to build before tests will run
-add_custom_target(check
+add_custom_target(testbuild)
+add_custom_target(check DEPENDS testbuild
   COMMAND ${CMAKE_CTEST_COMMAND}
 )
 
@@ -786,7 +788,18 @@ set (_ALL_SOURCE 1)
 set (_GNU_SOURCE 1)
 set (_POSIX_PTHREAD_SEMANTICS 1)
 set (_TANDEM_SOURCE 1)
-set (__EXTENSIONS__ 1)
+endif()
+
+# Solaris header files limit the visibility of non-standard extensions
+# unless __EXTENSIONS__ is defined.  We need some of those
+# non-standard interfaces.
+if (CMAKE_SYSTEM_NAME MATCHES "SunOS")
+add_compile_definitions(__EXTENSIONS__=1)
+endif()
+
+check_struct_has_member("struct tm" tm_gmtoff time.h have_struct_tm_gmtoff)
+if (have_struct_tm_gmtoff)
+    set(HAVE_STRUCT_TM_GMTOFF 1)
 endif()
 
 if (UNIX)
@@ -808,7 +821,6 @@ set (HAVE_PTHREAD_PRIO_INHERIT 1)
 set (HAVE_SETENV 1)
 set (HAVE_STPCPY 1)
 set (HAVE_STRPTIME 1)
-set (HAVE_STRUCT_TM_GMTOFF 1)
 set (HAVE_TIMEGM 1)
 set (HAVE_TOWUPPER 1)
 set (GNC_PLATFORM_POSIX 1)

@@ -106,20 +106,24 @@
 (export gnc:dump-lot)
 
 (define (list-ref-safe list elt)
-  (and (> (length list) elt)
-       (list-ref list elt)))
+  (and (pair? list)
+       (if (<= elt 0)
+           (car list)
+           (list-ref-safe (cdr list) (1- elt)))))
 
 (define (list-set-safe! l elt val)
-  (unless (list? l)
-    (set! l '()))
-  (if (> (length l) elt)
-      (list-set! l elt val)
-      (let loop ((filler (list val))
-                 (i (length l)))
-        (if (< i elt)
-            (loop (cons #f filler) (1+ i))
-            (set! l (append! l filler)))))
-  l)
+  (define (extend-tail i)
+    (if (>= i elt)
+        (list val)
+        (cons #f (extend-tail (1+ i)))))
+  (if (null? l)
+      (extend-tail 0)
+      (let loop ((i 0) (curr l))
+        (cond
+         ((not (pair? curr)) (error "list-set-safe: improper list"))
+         ((>= i elt)         (set-car! curr val) l)
+         ((null? (cdr curr)) (set-cdr! curr (extend-tail (1+ i))) l)
+         (else               (loop (1+ i) (cdr curr)))))))
 
 ;; Just for convenience. But in reports you should rather stick to the
 ;; style-info mechanism and simple plug the <gnc-monetary> into the
@@ -472,41 +476,9 @@
           (nosplit->elt #f)
           (split->date #f)
           (split->elt xaccSplitGetBalance))
-  (define to-date (or split->date (compose xaccTransGetDate xaccSplitGetParent)))
-  (define (less? a b) (< (to-date a) (to-date b)))
-
-  (let lp ((splits (if split->date
-                       (sort (xaccAccountGetSplits acc) less?)
-                       (xaccAccountGetSplits acc)))
-           (dates (sort dates <))
-           (result '())
-           (last-result nosplit->elt))
-    (match dates
-
-      ;; end of dates. job done!
-      (() (reverse result))
-
-      ((date . rest)
-       (define (before-date? s) (<= (to-date s) date))
-       (define (after-date? s) (< date (to-date s)))
-       (cond
-
-        ;; end of splits, but still has dates. pad with last-result
-        ;; until end of dates.
-        ((null? splits) (lp '() rest (cons last-result result) last-result))
-
-        ;; the next split is still before date.
-        ((and (pair? (cdr splits)) (before-date? (cadr splits)))
-         (lp (cdr splits) dates result (split->elt (car splits))))
-
-        ;; head split after date, accumulate previous result
-        ((after-date? (car splits))
-         (lp splits rest (cons last-result result) last-result))
-
-        ;; head split before date, next split after date, or end.
-        (else
-         (let ((head-result (split->elt (car splits))))
-           (lp (cdr splits) rest (cons head-result result) head-result))))))))
+  (if split->date
+      (gnc-account-accumulate-to-dates acc dates split->elt nosplit->elt split->date)
+      (gnc-account-accumulate-to-dates acc dates split->elt nosplit->elt)))
 
 ;; This works similar as above but returns a commodity-collector,
 ;; thus takes care of children accounts with different currencies.

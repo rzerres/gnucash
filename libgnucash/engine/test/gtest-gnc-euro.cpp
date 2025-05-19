@@ -20,7 +20,11 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
+
 #include "../gnc-numeric.hpp"
 #include <config.h>
 #include "../gnc-euro.h"

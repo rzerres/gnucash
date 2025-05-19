@@ -169,6 +169,7 @@ typedef enum
     GNC_IRATE_APR_WEEKLY,
     GNC_IRATE_APR_MONTHLY,
     GNC_IRATE_APR_QUARTERLY,
+    GNC_IRATE_APR_SEMIANNUALLY,
     GNC_IRATE_APR_ANNUALLY
 } IRateType;
 
@@ -201,7 +202,7 @@ typedef struct LoanData_
     int numMonRemain;
 
     char *repMemo;
-    char *repAmount;
+    std::string repAmount;
     Account *repFromAcct;
     Account *repPriAcct;
     Account *repIntAcct;
@@ -364,10 +365,10 @@ static void loan_rev_sched_list_free( gpointer data, gpointer user_data );
 static void loan_rev_hash_to_list( gpointer key, gpointer val, gpointer user_data );
 static void loan_rev_hash_free_date_keys( gpointer key, gpointer val, gpointer user_data );
 
-static void loan_get_pmt_formula( LoanAssistantData *ldd, GString *gstr );
-static void loan_get_ppmt_formula( LoanAssistantData *ldd, GString *gstr );
-static void loan_get_ipmt_formula( LoanAssistantData *ldd, GString *gstr );
-static float loan_apr_to_simple_formula (float rate, float compounding_periods);
+static std::string loan_get_pmt_formula(LoanAssistantData *ldd);
+static std::string loan_get_ppmt_formula(LoanAssistantData *ldd);
+static std::string loan_get_ipmt_formula(LoanAssistantData *ldd);
+static float loan_apr_to_simple_formula (double rate, double pmt_periods, double comp_periods);
 
 static void loan_create_sxes( LoanAssistantData *ldd );
 static void loan_create_sx_from_tcSX( LoanAssistantData *ldd, toCreateSX *tcSX );
@@ -434,9 +435,6 @@ loan_assistant_window_destroy_cb( GtkWidget *object, gpointer user_data )
         }
         g_free( ldd->ld.repayOpts );
         g_free( ldd->repayOptsUI );
-
-        if ( ldd->ld.repAmount )
-            g_free( ldd->ld.repAmount );
 
         g_date_free( ldd->ld.repStartDate );
     }
@@ -923,7 +921,6 @@ loan_assistant_data_init( LoanAssistantData *ldd )
     }
 
     ldd->ld.repMemo = g_strdup( _("Loan") );
-    ldd->ld.repAmount = NULL;
     ldd->ld.repStartDate = g_date_new();
     ldd->ld.repayOptCount = optCount;
     ldd->ld.repayOpts = g_new0( RepayOptData*, optCount );
@@ -1322,27 +1319,41 @@ loan_opt_page_complete( GtkAssistant *assistant, gpointer user_data )
 
 /************************************************************************/
 
-static
-void
+static void
+update_repayment_formula_cb(GtkWidget *widget, gpointer user_data)
+{
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
+
+    recurrenceListFree(&ldd->ld.repayment_schedule);
+    gnc_frequency_save_to_recurrence(ldd->repGncFreq,
+                                     &ldd->ld.repayment_schedule,
+                                     ldd->ld.repStartDate);
+
+    ldd->ld.repAmount = loan_get_pmt_formula(ldd);
+    if (!ldd->ld.repAmount.empty() )
+        gtk_entry_set_text(ldd->repAmtEntry, ldd->ld.repAmount.c_str());
+
+}
+
+static void
 loan_rep_prep( GtkAssistant *assistant, gpointer user_data )
 {
     LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
-    GString *str;
+    static gulong date_changed_handler_id = 0;
 
-    if ( ldd->ld.repAmount )
+    if (date_changed_handler_id)
     {
-        g_free( ldd->ld.repAmount );
+        g_signal_handler_disconnect(ldd->repGncFreq, date_changed_handler_id);
+        date_changed_handler_id = 0;
     }
 
-    str = g_string_sized_new( 64 );
-    loan_get_pmt_formula( ldd, str);
-    ldd->ld.repAmount = g_string_free (str, false);
+    ldd->ld.repAmount = loan_get_pmt_formula(ldd);
 
     if ( ldd->ld.repMemo )
         gtk_entry_set_text( ldd->repTxnName, ldd->ld.repMemo );
 
-    if ( ldd->ld.repAmount )
-        gtk_entry_set_text( ldd->repAmtEntry, ldd->ld.repAmount );
+    if (!ldd->ld.repAmount.empty() )
+        gtk_entry_set_text(ldd->repAmtEntry, ldd->ld.repAmount.c_str());
 
     gnc_account_sel_set_account( ldd->repAssetsFromGAS, ldd->ld.repFromAcct, FALSE );
     gnc_account_sel_set_account( ldd->repPrincToGAS, ldd->ld.repPriAcct, FALSE );
@@ -1350,7 +1361,10 @@ loan_rep_prep( GtkAssistant *assistant, gpointer user_data )
 
     g_signal_handlers_block_by_func( ldd->repGncFreq,
                                      (gpointer) loan_rep_page_valid_cb, ldd );
-    gnc_frequency_setup_recurrence(ldd->repGncFreq, ldd->ld.repayment_schedule, ldd->ld.repStartDate);
+    gnc_frequency_setup_recurrence(ldd->repGncFreq, ldd->ld.repayment_schedule,
+                                   ldd->ld.repStartDate);
+    date_changed_handler_id = g_signal_connect (ldd->repGncFreq, "changed",
+                                                G_CALLBACK (update_repayment_formula_cb), ldd);
     g_signal_handlers_unblock_by_func( ldd->repGncFreq,
                                        (gpointer) loan_rep_page_valid_cb, ldd );
 
@@ -1422,10 +1436,9 @@ loan_rep_page_save( GtkAssistant *assistant, gpointer user_data )
     ldd->ld.repMemo =
         gtk_editable_get_chars( GTK_EDITABLE(ldd->repTxnName), 0, -1 );
 
-    if ( ldd->ld.repAmount )
-        g_free( ldd->ld.repAmount );
-    ldd->ld.repAmount =
-        gtk_editable_get_chars( GTK_EDITABLE(ldd->repAmtEntry), 0, -1 );
+
+    ldd->ld.repAmount.replace(0, ldd->ld.repAmount.size(),
+                              gtk_editable_get_chars(GTK_EDITABLE(ldd->repAmtEntry), 0, -1));
 
     ldd->ld.repFromAcct =
         gnc_account_sel_get_account( ldd->repAssetsFromGAS );
@@ -1435,11 +1448,6 @@ loan_rep_page_save( GtkAssistant *assistant, gpointer user_data )
 
     ldd->ld.repIntAcct =
         gnc_account_sel_get_account( ldd->repIntToGAS );
-
-    recurrenceListFree(&ldd->ld.repayment_schedule);
-    gnc_frequency_save_to_recurrence(ldd->repGncFreq,
-                                     &ldd->ld.repayment_schedule,
-                                     ldd->ld.repStartDate);
 }
 
 /************************************************************************/
@@ -2079,16 +2087,12 @@ loan_rev_recalc_schedule( LoanAssistantData *ldd )
     /* Do the master repayment */
     {
         GDate curDate, nextDate;
-        GString *pmtFormula, *ppmtFormula, *ipmtFormula;
         int i;
         GHashTable *ivar;
 
-        pmtFormula = g_string_sized_new( 64 );
-        loan_get_pmt_formula( ldd, pmtFormula );
-        ppmtFormula = g_string_sized_new( 64 );
-        loan_get_ppmt_formula( ldd, ppmtFormula );
-        ipmtFormula = g_string_sized_new( 64 );
-        loan_get_ipmt_formula( ldd, ipmtFormula );
+        auto pmtFormula = loan_get_pmt_formula(ldd);
+        auto ppmtFormula = loan_get_ppmt_formula(ldd);
+        auto ipmtFormula = loan_get_ipmt_formula(ldd);
 
         ivar = g_hash_table_new( g_str_hash, g_str_equal );
         g_date_clear( &curDate, 1 );
@@ -2133,7 +2137,7 @@ loan_rev_recalc_schedule( LoanAssistantData *ldd )
             g_hash_table_insert( ivar, (gpointer) "i", &ival );
 
             if ( ! gnc_exp_parser_parse_separate_vars(
-                        pmtFormula->str, &val, &eloc, ivar ) )
+                     pmtFormula.c_str(), &val, &eloc, ivar ) )
             {
                 PERR( "pmt Parsing error at %s", eloc );
                 continue;
@@ -2142,7 +2146,7 @@ loan_rev_recalc_schedule( LoanAssistantData *ldd )
             rowNumData[0] = val;
 
             if ( ! gnc_exp_parser_parse_separate_vars(
-                        ppmtFormula->str, &val, &eloc, ivar ) )
+                     ppmtFormula.c_str(), &val, &eloc, ivar ) )
             {
                 PERR( "ppmt Parsing error at %s", eloc );
                 continue;
@@ -2151,7 +2155,7 @@ loan_rev_recalc_schedule( LoanAssistantData *ldd )
             rowNumData[1] = val;
 
             if ( ! gnc_exp_parser_parse_separate_vars(
-                        ipmtFormula->str, &val, &eloc, ivar ) )
+                     ipmtFormula.c_str(), &val, &eloc, ivar ) )
             {
                 PERR( "ipmt Parsing error at %s", eloc );
                 continue;
@@ -2159,10 +2163,6 @@ loan_rev_recalc_schedule( LoanAssistantData *ldd )
             val = gnc_numeric_convert( val, 100, GNC_HOW_RND_ROUND_HALF_UP );
             rowNumData[2] = val;
         }
-
-        g_string_free( ipmtFormula, TRUE );
-        g_string_free( ppmtFormula, TRUE );
-        g_string_free( pmtFormula, TRUE );
 
         g_hash_table_destroy( ivar );
     }
@@ -2307,14 +2307,23 @@ loan_rev_update_view( LoanAssistantData *ldd, GDate *start, GDate *end )
 
 /************************* Worker functions *****************************/
 
-/* convert APR rate to simple rate based on formula r=q((1+i)^(1/q)-1) (r=interest rate, i=apr, q=compounding periods) */
+/* From https://bugs.gnucash.org/show_bug.cgi?id=799582#c0:
+ * INPUTS
+ * n = number of payments per year (pmt_periods)
+ * i = stated annual interest rate
+ * m = number of compounding periods per year (comp_periods)
+ *
+ * OUTPUT
+ * r = effective interest rate per payment
+ * r = { [ 1 + (i / m) ] ^ (m / n) } - 1
+ */
 
-gfloat loan_apr_to_simple_formula (gfloat rate, gfloat compounding_periods)
+gfloat loan_apr_to_simple_formula (double rate, double pmt_periods, double comp_periods)
 {
     /* float percent_to_frac; - redundant */
     gfloat simple_rate;
     /* percent_to_frac= compounding_periods/100; - redundant */
-    simple_rate = compounding_periods * ((pow((1 + rate), (1 / compounding_periods))) - 1);
+    simple_rate = pow(1 + (rate / comp_periods), comp_periods / pmt_periods) - 1;
     return (simple_rate);
 }
 
@@ -2384,15 +2393,56 @@ std::string to_str_with_prec (const gdouble val)
 #endif
 }
 
-static
-void
-loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar *tpl )
+static constexpr std::tuple<double, double>
+periods_per_year( LoanAssistantData *ldd)
+{
+    double ppy = 0.0, periods = 1.0;
+    auto recurrences = ldd->ld.repayment_schedule;
+    for (auto node = recurrences; node; node = g_list_next(node))
+    {
+        auto recurrence = static_cast<Recurrence*>(node->data);
+        auto period_type = recurrenceGetPeriodType(recurrence);
+        auto multiplier = recurrenceGetMultiplier(recurrence);
+        if (multiplier < 1)
+            multiplier = 1;
+
+        switch(period_type)
+        {
+            case PERIOD_YEAR:
+                ppy += 1.0 / multiplier;
+                break;
+            case PERIOD_DAY:
+                ppy = 365 / multiplier;
+                break;
+            case PERIOD_WEEK:
+                ppy += 52.0 / multiplier;
+                break;
+            case PERIOD_MONTH:
+            case PERIOD_END_OF_MONTH:
+            case PERIOD_NTH_WEEKDAY:
+            case PERIOD_LAST_WEEKDAY:
+                ppy += 12.0 / multiplier;
+                break;
+            case PERIOD_ONCE:
+            default:
+                break;
+        }
+    }
+
+    auto months = (ldd->ld.numPer * (ldd->ld.perSize == GNC_MONTHS ? 1 : 12));
+    if ((int)(months * ppy / 12) > 1)
+        periods = (int)(months * ppy / 12) * 1.0;
+
+    return {ppy, periods};
+}
+
+static std::string
+loan_get_formula_internal( LoanAssistantData *ldd, const gchar *tpl )
 {
     g_assert( ldd != NULL );
-    g_assert( gstr != NULL );
 
+    auto [ppy, periods] = periods_per_year(ldd);
     gdouble pass_thru_rate = ldd->ld.interestRate / 100.0;
-    gdouble periods = (ldd->ld.numPer * (ldd->ld.perSize == GNC_MONTHS ? 1 : 12)) * 1.;
     auto principal = gnc_numeric_to_double(ldd->ld.principal);
 
     gdouble period_rate;
@@ -2403,26 +2453,29 @@ loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar *t
         period_rate = pass_thru_rate;
         break;
     case GNC_IRATE_APR_DAILY:
-        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 365);
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, ppy, 365);
         break;
     case GNC_IRATE_APR_WEEKLY:
-        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 52);
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, ppy, 52);
         break;
     case GNC_IRATE_APR_MONTHLY:
-        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 12);
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, ppy, 12);
         break;
     case GNC_IRATE_APR_QUARTERLY:
-        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 4);
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, ppy, 4);
+        break;
+    case GNC_IRATE_APR_SEMIANNUALLY:
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, ppy, 2);
         break;
     case GNC_IRATE_APR_ANNUALLY:
-        period_rate = loan_apr_to_simple_formula (pass_thru_rate, 1);
+        period_rate = loan_apr_to_simple_formula (pass_thru_rate, ppy, 1);
         break;
     default:
         period_rate = ldd->ld.interestRate / 100;
         break;
     }
     auto period_rate_str = to_str_with_prec<5> (period_rate);
-    auto period_base_str = to_str_with_prec<2> (12.0);
+    auto period_base_str = to_str_with_prec<2> (ppy);
     auto periods_str = to_str_with_prec<2> (periods);
     auto principal_str = to_str_with_prec<2> (principal);
 
@@ -2434,32 +2487,42 @@ loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar *t
     // So instead of bl::format we could also have used boost::format.
     // However at the time of this writing that sublibrary is not yet a requirement
     // for gnucash. So I stuck with bl::format, which is.
-    auto formula = (bl::format (tpl) % period_rate_str %
-                    period_base_str % periods_str % principal_str).str();
-    g_string_append (gstr, formula.c_str());
+    std::string formula;
+    if (rate_case == GNC_IRATE_SIMPLE)
+        formula = (bl::format (tpl) % period_rate_str %
+                   period_base_str % periods_str % principal_str).str();
+    else
+        formula = (bl::format (tpl) % period_rate_str % periods_str % principal_str).str();
+    return formula;
 }
 
-static
-void
-loan_get_pmt_formula( LoanAssistantData *ldd, GString *gstr )
+static std::string
+loan_get_pmt_formula(LoanAssistantData *ldd)
 {
-    loan_get_formula_internal (ldd, gstr, "pmt( {1} / {2} : {3} : {4} : 0 : 0 )");
+    if (ldd->ld.rateType == GNC_IRATE_SIMPLE)
+        return loan_get_formula_internal (ldd, "pmt( {1} / {2} : {3} : {4} : 0 : 0 )");
+    else
+        return loan_get_formula_internal (ldd, "pmt( {1} : {2} : {3} : 0 : 0 )");
 }
 
 
-static
-void
-loan_get_ppmt_formula( LoanAssistantData *ldd, GString *gstr )
+static std::string
+loan_get_ppmt_formula(LoanAssistantData *ldd)
 {
-    loan_get_formula_internal (ldd, gstr, "ppmt( {1} / {2} : i : {3} : {4} : 0 : 0 )");
+    if (ldd->ld.rateType == GNC_IRATE_SIMPLE)
+        return loan_get_formula_internal (ldd, "ppmt( {1} / {2} : i : {3} : {4} : 0 : 0 )");
+    else
+        return loan_get_formula_internal (ldd, "ppmt( {1} : i : {2} : {3} : 0 : 0 )");
 }
 
 
-static
-void
-loan_get_ipmt_formula( LoanAssistantData *ldd, GString *gstr )
+static std::string
+loan_get_ipmt_formula(LoanAssistantData *ldd)
 {
-    loan_get_formula_internal (ldd, gstr, "ipmt( {1} / {2} : i : {3} : {4} : 0 : 0 )");
+    if (ldd->ld.rateType == GNC_IRATE_SIMPLE)
+        return loan_get_formula_internal (ldd, "ipmt( {1} / {2} : i : {3} : {4} : 0 : 0 )");
+    else
+        return loan_get_formula_internal (ldd, "ipmt( {1} : i : {2} : {3} : 0 : 0 )");
 }
 
 /******************* Scheduled Transaction Functions ********************/
@@ -2782,7 +2845,6 @@ loan_create_sxes( LoanAssistantData *ldd )
     int i;
     TTInfoPtr ttxn;
     TTSplitInfoPtr ttsi;
-    GString *gstr;
 
     paymentSX = g_new0( toCreateSX, 1 );
     paymentSX->name  = g_strdup(ldd->ld.repMemo);
@@ -2842,14 +2904,13 @@ loan_create_sxes( LoanAssistantData *ldd )
         {
             Account *realSrcAcct = srcAcct;
             srcAcct = ldd->ld.escrowAcct;
-            gstr = g_string_sized_new( 32 );
-            loan_get_pmt_formula( ldd, gstr );
+            auto formula = loan_get_pmt_formula(ldd);
             /* ttxn.splits += split( realSrcAcct, -pmt ); */
             {
                 ttsi = std::make_shared<TTSplitInfo>();
                 ttsi->set_memo (ldd->ld.repMemo);
                 ttsi->set_account (realSrcAcct);
-                ttsi->set_credit_formula (gstr->str);
+                ttsi->set_credit_formula (formula.c_str());
                 ttxn->append_template_split (ttsi);
                 ttsi = NULL;
             }
@@ -2858,12 +2919,10 @@ loan_create_sxes( LoanAssistantData *ldd )
                 ttsi = std::make_shared<TTSplitInfo>();
                 ttsi->set_memo (ldd->ld.repMemo);
                 ttsi->set_account (ldd->ld.escrowAcct);
-                ttsi->set_debit_formula (gstr->str);
+                ttsi->set_debit_formula (formula.c_str());
                 ttxn->append_template_split (ttsi);
                 ttsi = NULL;
             }
-            g_string_free( gstr, TRUE );
-            gstr = NULL;
             paymentSX->escrowTxn = std::make_shared<TTInfo>();
             paymentSX->escrowTxn->set_currency (gnc_default_currency());
 
@@ -2880,60 +2939,48 @@ loan_create_sxes( LoanAssistantData *ldd )
         {
             ttsi = std::make_shared<TTSplitInfo>();
             {
-                gstr = g_string_new( ldd->ld.repMemo );
+                auto gstr = g_string_new( ldd->ld.repMemo );
                 g_string_append_printf( gstr, " - %s",
                                         _("Payment") );
                 ttsi->set_memo (gstr->str);
                 g_string_free( gstr, TRUE );
-                gstr = NULL;
             }
             ttsi->set_account (srcAcct);
-            gstr = g_string_sized_new( 32 );
-            loan_get_pmt_formula( ldd, gstr );
-            ttsi->set_credit_formula (gstr->str);
+            auto formula = loan_get_pmt_formula(ldd);
+            ttsi->set_credit_formula (formula.c_str());
             ttxn->append_template_split (ttsi);
-            g_string_free( gstr, TRUE );
-            gstr = NULL;
             ttsi = NULL;
         }
         /* ttxn.splits += split( ldd->ld.repPriAcct, +ppmt ); */
         {
             ttsi = std::make_shared<TTSplitInfo>();
             {
-                gstr = g_string_new( ldd->ld.repMemo );
+                auto gstr = g_string_new( ldd->ld.repMemo );
                 g_string_append_printf( gstr, " - %s",
                                         _("Principal") );
                 ttsi->set_memo (gstr->str);
                 g_string_free( gstr, TRUE );
-                gstr = NULL;
             }
             ttsi->set_account (ldd->ld.repPriAcct);
-            gstr = g_string_sized_new( 32 );
-            loan_get_ppmt_formula( ldd, gstr );
-            ttsi->set_debit_formula (gstr->str);
+            auto formula = loan_get_ppmt_formula(ldd);
+            ttsi->set_debit_formula (formula.c_str());
             ttxn->append_template_split (ttsi);
-            g_string_free( gstr, TRUE );
-            gstr = NULL;
             ttsi = NULL;
         }
         /* ttxn.splits += split( ldd->ld.repIntAcct, +ipmt ); */
         {
             ttsi = std::make_shared<TTSplitInfo>();
             {
-                gstr = g_string_new( ldd->ld.repMemo );
+                auto gstr = g_string_new( ldd->ld.repMemo );
                 g_string_append_printf( gstr, " - %s",
                                         _("Interest") );
                 ttsi->set_memo (gstr->str);
                 g_string_free( gstr, TRUE );
-                gstr = NULL;
             }
             ttsi->set_account (ldd->ld.repIntAcct);
-            gstr = g_string_sized_new( 32 );
-            loan_get_ipmt_formula( ldd, gstr );
-            ttsi->set_debit_formula (gstr->str);
+            auto formula = loan_get_ipmt_formula(ldd);
+            ttsi->set_debit_formula (formula.c_str());
             ttxn->append_template_split (ttsi);
-            g_string_free( gstr, TRUE );
-            gstr = NULL;
             ttsi = NULL;
         }
     }
@@ -2947,7 +2994,7 @@ loan_create_sxes( LoanAssistantData *ldd )
         if ( rod->schedule != NULL )
         {
             tcSX = g_new0( toCreateSX, 1 );
-            gstr = g_string_new( ldd->ld.repMemo );
+            auto gstr = g_string_new( ldd->ld.repMemo );
             g_string_append_printf( gstr, " - %s",
                                     rod->name );
             tcSX->name    = g_strdup(gstr->str);
@@ -2971,8 +3018,6 @@ loan_create_sxes( LoanAssistantData *ldd )
             tcSX->escrowTxn->set_description(gstr->str);
 
             g_string_free( gstr, TRUE );
-            gstr = NULL;
-
             repaySXes = g_list_prepend (repaySXes, tcSX);
 
         }

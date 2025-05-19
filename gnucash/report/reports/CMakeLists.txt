@@ -1,4 +1,3 @@
-
 add_subdirectory(standard/test)
 add_subdirectory(support)
 
@@ -52,6 +51,7 @@ set (reports_standard_SCHEME
     standard/invoice.scm
     standard/balsheet-eg.scm
 )
+    #standard/coowner-settlement.scm
 
 # Reports depending on one of the generator functions from
 # scm-reports-standard-with-exposed-generator:

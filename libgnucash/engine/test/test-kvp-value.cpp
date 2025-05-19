@@ -29,7 +29,11 @@
 #include "../gnc-date.h"
 #include <memory>
 #include <cstdint>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
+
 
 TEST (KvpValueTest, Equality)
 {

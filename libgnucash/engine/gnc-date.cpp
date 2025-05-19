@@ -25,7 +25,6 @@
  *                                                                  *
 \********************************************************************/
 
-#define __EXTENSIONS__
 #include <glib.h>
 
 #include <config.h>
@@ -908,9 +907,16 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     if (iyear < 100)
         iyear += ((int) ((now_year + 50 - iyear) / 100)) * 100;
 
-    if (year) *year = iyear;
-    if (month) *month = imonth;
-    if (day) *day = iday;
+    /* Fix up any goofy dates */
+    struct tm tm{};
+    tm.tm_year = iyear - 1900;
+    tm.tm_mon = imonth - 1;
+    tm.tm_mday = iday;
+    normalize_struct_tm(&tm);
+
+    if (year) *year = tm.tm_year + 1900;
+    if (month) *month = tm.tm_mon + 1;
+    if (day) *day = tm.tm_mday;
     return(TRUE);
 }
 

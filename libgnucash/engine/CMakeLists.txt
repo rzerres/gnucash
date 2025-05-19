@@ -12,6 +12,7 @@ set(engine_noinst_HEADERS
   TransactionP.hpp
   gnc-backend-prov.hpp
   gnc-date-p.h
+  gnc-distribution-list-p.h
   gnc-int128.hpp
   gnc-lot.h
   gnc-lot-p.h
@@ -58,6 +59,7 @@ set (engine_HEADERS
   gnc-commodity.hpp
   gnc-date.h
   gnc-datetime.hpp
+  gnc-distribution-list.h
   gnc-engine.h
   gnc-euro.h
   gnc-event.h
@@ -79,6 +81,8 @@ set (engine_HEADERS
   gncBillTerm.h
   gncBillTermP.h
   gncBusiness.h
+  gncCoOwner.h
+  gncCoOwnerP.h
   gncCustomer.h
   gncCustomerP.h
   gncEmployee.h
@@ -158,6 +162,7 @@ set (engine_SOURCES
   gnc-commodity.cpp
   gnc-date.cpp
   gnc-datetime.cpp
+  gnc-distribution-list.c
   gnc-engine.cpp
   gnc-euro.cpp
   gnc-event.c
@@ -181,6 +186,7 @@ set (engine_SOURCES
   gncAddress.c
   gncBillTerm.c
   gncBusiness.c
+  gncCoOwner.c
   gncCustomer.c
   gncEmployee.c
   gncEntry.c

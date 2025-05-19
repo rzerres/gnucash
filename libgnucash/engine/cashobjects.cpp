@@ -36,9 +36,11 @@
 #include "gnc-pricedb-p.h"
 #include "gnc-lot-p.h"
 #include "gnc-budget.h"
+#include "gnc-distribution-list-p.h"
 
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"
 #include "gncEntryP.h"
@@ -53,11 +55,13 @@ static void
 business_core_init(void)
 {
     /* initialize known types */
+    gncAddressRegister ();
     gncInvoiceRegister ();
     gncJobRegister ();
     gncBillTermRegister ();
+    gncDistribListRegister ();
+    gncCoOwnerRegister ();
     gncCustomerRegister ();
-    gncAddressRegister ();
     gncEmployeeRegister ();
     gncEntryRegister ();
     gncOrderRegister ();
@@ -84,4 +88,3 @@ cashobjects_register(void)
 
     return TRUE;
 }
-

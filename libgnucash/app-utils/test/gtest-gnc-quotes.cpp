@@ -38,8 +38,10 @@ gnc_default_currency(void)
     return gnc_commodity_table_lookup(table, GNC_COMMODITY_NS_CURRENCY, "USD");
 }
 }
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
 #include "../gnc-quotes.cpp"
 
 class GncMockQuoteSource final : public GncQuoteSource

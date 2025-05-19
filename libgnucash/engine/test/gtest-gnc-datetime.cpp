@@ -24,7 +24,10 @@
 
 #include "../gnc-datetime.hpp"
 #include "../gnc-date.h"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
 
 /* Backdoor to enable unittests to temporarily override the timezone: */
 class TimeZoneProvider;

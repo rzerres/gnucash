@@ -272,6 +272,10 @@ add_quickfill_completions (TableLayout* layout, Transaction* trans,
     for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
     {
         Split *s = n->data;
+
+        if (!xaccTransStillHasSplit (trans, s))
+            continue;
+
         gnc_quickfill_cell_add_completion (
             (QuickFillCell*) gnc_table_layout_get_cell (layout, MEMO_CELL),
             xaccSplitGetMemo (s));
@@ -281,7 +285,6 @@ add_quickfill_completions (TableLayout* layout, Transaction* trans,
 static Split*
 create_blank_split (Account* default_account, SRInfo* info)
 {
-    Transaction* new_trans;
     gboolean currency_from_account = TRUE;
     Split* blank_split = NULL;
     /* Determine the proper currency to use for this transaction.
@@ -300,14 +303,21 @@ create_blank_split (Account* default_account, SRInfo* info)
     }
 
     gnc_suspend_gui_refresh();
+    Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                                  gnc_get_current_book());
 
-    new_trans = xaccMallocTransaction (gnc_get_current_book());
+    if (!pending_trans)
+    {
+        pending_trans = xaccMallocTransaction (gnc_get_current_book());
+        xaccTransBeginEdit (pending_trans);
+        xaccTransSetCurrency (pending_trans, currency);
+        xaccTransSetDatePostedSecsNormalized (pending_trans,
+                                              info->last_date_entered);
+        info->pending_trans_guid = *xaccTransGetGUID (pending_trans);
+    }
 
-    xaccTransBeginEdit (new_trans);
-    xaccTransSetCurrency (new_trans, currency);
-    xaccTransSetDatePostedSecsNormalized (new_trans, info->last_date_entered);
     blank_split = xaccMallocSplit (gnc_get_current_book());
-    xaccSplitSetParent (blank_split, new_trans);
+    xaccSplitSetParent (blank_split, pending_trans);
     /* We don't want to commit this transaction yet, because the split
        doesn't even belong to an account yet.  But, we don't want to
        set this transaction as the pending transaction either, because
@@ -476,13 +486,8 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
 
     /* make sure we have a blank split */
     if (blank_split == NULL)
-    {
-        /* Wouldn't it be a bug to open the new transaction if there was
-         * already a pending transaction?
-        */
-        g_assert (pending_trans == NULL);
         blank_split = create_blank_split (default_account, info);
-    }
+
     blank_trans = xaccSplitGetParent (blank_split);
 
     DEBUG ("blank_split=%p, blank_trans=%p, pending_trans=%p",

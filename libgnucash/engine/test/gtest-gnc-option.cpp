@@ -21,7 +21,11 @@
  *                                                                  *
  *******************************************************************/
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
+
 #include "gnc-option.hpp"
 #include "gnc-option-impl.hpp"
 #include "gnc-option-ui.hpp"
@@ -29,6 +33,9 @@
 #include <config.h>
 #include "qof.h"
 #include "Account.h"
+#include <gnc-accounting-period.h>
+#include <gnc-prefs.h>
+#include <gnc-prefs-p.h>
 #include "gnc-budget.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
@@ -941,7 +948,124 @@ TEST(GncOptionDate, test_not_using_32bit_time_t_in_2038)
     EXPECT_FALSE(sizeof (time_t) == 4 && time(nullptr) <= 0) << "Time to upgrade 32bit time_t!";
 }
 
-TEST(GncOptionDate, test_gnc_relative_date_to_time64)
+class FakePrefsBackend
+{
+    int m_startabs = 0;
+    int m_endabs = 0;
+    int m_startperiod = GNC_ACCOUNTING_PERIOD_CYEAR;
+    int m_endperiod = GNC_ACCOUNTING_PERIOD_CYEAR;
+    time64 m_startdate = 0;
+    time64 m_enddate = 0;
+public:
+    int get_bool([[maybe_unused]] const char* group, const char* setting)
+    {
+        if (strcmp (setting, GNC_PREF_START_CHOICE_ABS) == 0)
+            return m_startabs;
+        if (strcmp (setting, GNC_PREF_END_CHOICE_ABS) == 0)
+            return m_endabs;
+        return -1;
+    }
+
+    void set_bool([[maybe_unused]] const char* group, const char* setting, int value)
+    {
+        if (strcmp (setting, GNC_PREF_START_CHOICE_ABS) == 0)
+            m_startabs = value;
+        if (strcmp (setting, GNC_PREF_END_CHOICE_ABS) == 0)
+            m_endabs = value;
+    }
+
+    int get_int([[maybe_unused]] const char* group, const char* setting)
+    {
+        if (strcmp (setting, GNC_PREF_START_PERIOD) == 0)
+            return m_startperiod;
+        if (strcmp (setting, GNC_PREF_END_PERIOD) == 0)
+            return m_endperiod;
+        return -1;
+    }
+
+    void set_int([[maybe_unused]] const char* group, const char* setting, int value)
+    {
+        if (strcmp (setting, GNC_PREF_START_PERIOD) == 0)
+            m_startperiod = value;
+        if (strcmp (setting, GNC_PREF_END_PERIOD) == 0)
+            m_endperiod = value;
+    }
+
+    time64 get_time64([[maybe_unused]] const char* group, const char* setting)
+    {
+        if (strcmp (setting, GNC_PREF_START_DATE) == 0)
+            return m_startdate;
+        if (strcmp (setting, GNC_PREF_END_DATE) == 0)
+            return m_enddate;
+        return -1;
+    }
+
+    void set_time64([[maybe_unused]] const char* group, const char* setting, time64 value)
+    {
+        if (strcmp (setting, GNC_PREF_START_DATE) == 0)
+            m_startdate = value;
+        if (strcmp (setting, GNC_PREF_END_DATE) == 0)
+            m_enddate = value;
+    }
+};
+
+FakePrefsBackend fpb;
+
+static int get_bool(const char* group, const char* setting)
+{
+    return fpb.get_bool(group, setting);
+}
+
+static int set_bool(const char* group, const char* setting, int value)
+{
+    fpb.set_bool(group, setting, value);
+    return 1;
+}
+
+static int get_int(const char* group, const char* setting)
+{
+    return fpb.get_int(group, setting);
+}
+
+static int set_int(const char* group, const char* setting, int value)
+{
+    fpb.set_int(group, setting, value);
+    return 1;
+}
+
+static GVariant* get_value(const char* group, const char* setting)
+{
+    return g_variant_new("x", fpb.get_time64(group, setting));
+}
+
+static int set_value(const char* group, const char* setting, GVariant *value)
+{
+    fpb.set_int(group, setting, g_variant_get_int64(value));
+    g_variant_unref(value);
+    return 1;
+}
+
+class GncOptionDateTest : public ::testing::Test
+{
+protected:
+    GncOptionDateTest()
+    {
+        prefsbackend = g_new0(PrefsBackend, 1);
+        prefsbackend->get_bool = get_bool;
+        prefsbackend->set_bool = set_bool;
+        prefsbackend->get_int = get_int;
+        prefsbackend->set_int = set_int;
+        prefsbackend->get_value = get_value;
+        prefsbackend->set_value = set_value;
+    }
+    ~GncOptionDateTest()
+    {
+        g_free(prefsbackend);
+        prefsbackend = nullptr;
+    }
+};
+
+TEST_F(GncOptionDateTest, test_gnc_relative_date_to_time64)
 {
     GDate date;
     g_date_set_time_t(&date, time(nullptr));
@@ -1012,12 +1136,119 @@ TEST(GncOptionDate, test_gnc_relative_date_to_time64)
               gnc_relative_date_to_time64(RelativeDatePeriod::END_PREV_YEAR));
 }
 
+static void
+set_fy(int year, int month, int day)
+{
+    auto start{static_cast<time64>(GncDateTime(GncDate(year, month, day), DayPart::start))};
+    fpb.set_time64(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_DATE, start);
+}
+
+static time64
+time64_from_ymd(int year, int month, int day)
+{
+    return static_cast<time64>(GncDateTime(GncDate(year, month, day)));
+}
+
+static time64
+time64_from_ymd_start(int year, int month, int day)
+{
+    return static_cast<time64>(GncDateTime(GncDate(year, month, day), DayPart::start));
+}
+
+static time64
+time64_from_ymd_end(int year, int month, int day)
+{
+    return static_cast<time64>(GncDateTime(GncDate(year, month, day), DayPart::end));
+}
+
+TEST_F(GncOptionDateTest, test_fiscal_quarter_variation)
+{
+    fpb.set_bool(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_CHOICE_ABS, TRUE);
+    fpb.set_bool(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_CHOICE_ABS, TRUE);
+
+    auto this_year{GncDate().year_month_day().year};
+    auto last_year = this_year - 1;
+    set_fy(last_year, 7, 1);
+    auto at_date{time64_from_ymd(this_year, 1, 1)};
+    EXPECT_EQ(time64_from_ymd_start(this_year, 1, 1),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_CURRENT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(this_year, 3, 31),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_CURRENT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_start(last_year, 10, 1),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_PREV_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(last_year, 12, 31),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_PREV_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_start(this_year, 4, 1),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_NEXT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(this_year, 6, 30),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_NEXT_QUARTER, at_date));
+
+    at_date = time64_from_ymd(this_year, 2, 15);
+    EXPECT_EQ(time64_from_ymd_start(this_year, 1, 1),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_CURRENT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(this_year, 3, 31),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_CURRENT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_start(last_year, 10, 1),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_PREV_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(last_year, 12, 31),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_PREV_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_start(this_year, 4, 1),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_NEXT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(this_year, 6, 30),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_NEXT_QUARTER, at_date));
+
+    at_date = time64_from_ymd(this_year, 3, 31);
+    EXPECT_EQ(time64_from_ymd_start(this_year, 1, 1),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_CURRENT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(this_year, 3, 31),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_CURRENT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_start(last_year, 10, 1),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_PREV_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(last_year, 12, 31),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_PREV_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_start(this_year, 4, 1),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_NEXT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(this_year, 6, 30),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_NEXT_QUARTER, at_date));
+
+    set_fy(last_year, 4, 6);
+
+    at_date = time64_from_ymd(this_year, 2, 15);
+    EXPECT_EQ(time64_from_ymd_start(this_year, 1, 6),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_CURRENT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(this_year, 4, 5),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_CURRENT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_start(last_year, 10, 6),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_PREV_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(this_year, 1, 5),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_PREV_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_start(this_year, 4, 6),
+              gnc_relative_date_to_time64(RelativeDatePeriod::START_NEXT_QUARTER, at_date));
+    EXPECT_EQ(time64_from_ymd_end(this_year, 7, 5),
+              gnc_relative_date_to_time64(RelativeDatePeriod::END_NEXT_QUARTER, at_date));
+}
+
 class GncOptionDateOptionTest : public ::testing::Test
 {
 protected:
     GncOptionDateOptionTest() :
         m_option{GncOptionDateValue{"foo", "bar", "a", "Phony Date Option",
-                                    GncOptionUIType::DATE_BOTH}} {}
+                                    GncOptionUIType::DATE_BOTH}}
+    {
+        prefsbackend = g_new0(PrefsBackend, 1);
+        prefsbackend->get_bool = get_bool;
+        prefsbackend->set_bool = set_bool;
+        prefsbackend->get_int = get_int;
+        prefsbackend->set_int = set_int;
+        prefsbackend->get_value = get_value;
+        prefsbackend->set_value = set_value;
+    }
+    ~GncOptionDateOptionTest()
+    {
+        g_free(prefsbackend);
+        prefsbackend = nullptr;
+    }
+
     GncOption m_option;
 };
 
@@ -1077,6 +1308,9 @@ TEST_F(GncDateOptionList, test_set_and_get_relative)
 
 TEST_F(GncDateOption, test_stream_out)
 {
+    fpb.set_bool(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_CHOICE_ABS, FALSE);
+    fpb.set_bool(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_CHOICE_ABS, FALSE);
+
     time64 time1{static_cast<time64>(GncDateTime("2019-07-19 15:32:26 +05:00"))};
     m_option.set_value(time1);
     std::ostringstream oss;

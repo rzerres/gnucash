@@ -66,6 +66,8 @@ SCM gnc_commodity_to_scm(const gnc_commodity* commodity);
 
 SCM gnc_book_to_scm(const QofBook* book);
 
+SCM gnc_split_to_scm (const Split *split);
+
 /* Conversion routines used with tax tables */
 GncAccountValue* gnc_scm_to_account_value_ptr(SCM valuearg);
 

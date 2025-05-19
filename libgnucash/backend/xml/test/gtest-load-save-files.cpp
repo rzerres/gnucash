@@ -41,7 +41,10 @@
 #include <gnc-engine.h>
 #include <gnc-prefs.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
 #include <unittest-support.h>
 
 #include "../gnc-backend-xml.h"

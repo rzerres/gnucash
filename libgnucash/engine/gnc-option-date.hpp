@@ -32,7 +32,7 @@
 #define GNC_OPTION_DATE_HPP_
 
 #include "gnc-date.h"
-
+#include "gnc-datetime.hpp"
 #include <vector>
 #include <iostream>
 /**
@@ -167,9 +167,11 @@ RelativeDatePeriod gnc_relative_date_from_storage_string(const char*);
  * both in the current time zone.
  *
  * @param period The relative date period to use to calculate the concrete date.
+ * @param now_t Optional "now" date. Primarily for testing.
  * @return a time64.
  */
-time64 gnc_relative_date_to_time64(RelativeDatePeriod);
+time64 gnc_relative_date_to_time64(RelativeDatePeriod,
+                                   time64 now_t = static_cast<time64>(GncDateTime()));
 
 /**
  * Add the display string to the provided std::ostream.

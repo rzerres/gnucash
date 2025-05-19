@@ -1,6 +1,10 @@
 #include <glib.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gmock/gmock.h>
+#pragma GCC diagnostic pop
+
 
 #include <qofinstance.h>
 #include <qofinstance-p.h>

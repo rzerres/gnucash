@@ -184,7 +184,7 @@
                           <object class="GtkEntry" id="id_entry">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="tooltip-text" translatable="yes">The customer ID number. If left blank a reasonable number will be chosen for you</property>
+                            <property name="tooltip-text" translatable="yes">The coowner ID number. If left blank a reasonable number will be chosen for you</property>
                             <property name="hexpand">True</property>
                             <property name="activates-default">True</property>
                             <signal name="changed" handler="gnc_customer_name_changed_cb" swapped="no"/>

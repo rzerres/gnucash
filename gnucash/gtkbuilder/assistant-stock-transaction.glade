@@ -489,7 +489,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible-char">●</property>
                 <property name="text" translatable="yes">Cash</property>
               </object>
               <packing>
@@ -602,7 +601,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible-char">●</property>
                 <property name="text" translatable="yes">Fees</property>
               </object>
               <packing>
@@ -729,7 +727,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible-char">●</property>
                 <property name="text" translatable="yes">Dividend</property>
               </object>
               <packing>
@@ -842,7 +839,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="invisible-char">●</property>
                 <property name="text" translatable="yes">Capital Gain</property>
               </object>
               <packing>

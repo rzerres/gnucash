@@ -819,6 +819,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     while (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
     {
+        if (gnc_date_edit_get_date_end(GNC_DATE_EDIT(date_value)) != *statement_date)
+            recn_date_changed_cb(date_value, &data);
+        
         /* If response is OK but end_value not valid, try again */
         if (gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(end_value), NULL))
         {

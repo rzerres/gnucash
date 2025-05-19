@@ -7,7 +7,11 @@
 #ifndef FAKE_QOFQUERY_H
 #define FAKE_QOFQUERY_H
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gmock/gmock.h>
+#pragma GCC diagnostic pop
+
 
 #include <qofquery.h>
 

@@ -181,7 +181,7 @@ date point, a projected minimum balance including scheduled transactions."))
        (gnc:html-make-no-account-warning
         report-title (gnc:report-id report-obj))))
 
-     ((every zero? (map gnc:gnc-monetary-amount (apply append accounts-balancelist)))
+     ((every (lambda (lst) (every (compose zero? gnc:gnc-monetary-amount) lst)) accounts-balancelist)
       (gnc:html-document-add-object!
        document
        (gnc:html-make-empty-data-warning
@@ -191,10 +191,13 @@ date point, a projected minimum balance including scheduled transactions."))
       ;; initialize the SX balance accumulator with the instantiated SX
       ;; amounts starting from the earliest split date in the list of
       ;; accounts up to the report start date.
-      (let* ((accounts-dates (map (compose xaccTransGetDate xaccSplitGetParent car)
-                                  (filter pair?
-                                          (map xaccAccountGetSplits accounts))))
-             (earliest (and (pair? accounts-dates) (apply min accounts-dates)))
+      (let* ((earliest
+              (fold
+               (lambda (a b)
+                 (if (zero? (xaccAccountGetSplitsSize a)) b
+                     (let ((date (xaccTransGetDate (xaccSplitGetParent (car (xaccAccountGetSplits a))))))
+                       (if b (min date b) date))))
+               #f accounts))
              (sx-hash (if earliest
                           (gnc-sx-all-instantiate-cashflow-all earliest from-date)
                           (make-hash-table))))

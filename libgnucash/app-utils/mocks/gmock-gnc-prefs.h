@@ -1,7 +1,11 @@
 #ifndef GMOCK_GNC_PREFS_H
 #define GMOCK_GNC_PREFS_H
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gmock/gmock.h>
+#pragma GCC diagnostic pop
+
 
 #include <gnc-prefs.h>
 

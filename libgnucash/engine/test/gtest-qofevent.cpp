@@ -27,7 +27,11 @@
 #include "../test-core/test-engine-stuff.h"
 #include "../qofevent.h"
 #include "../qofevent-p.h"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
+
 
 static void
 easy_handler (QofInstance *ent,  QofEventId event_type,

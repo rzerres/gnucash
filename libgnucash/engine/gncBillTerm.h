@@ -68,7 +68,24 @@
 #ifndef GNC_BILLTERM_H_
 #define GNC_BILLTERM_H_
 
+/** @struct GncBillTerm
+
+@param  QofInstance inst - The instance entity.
+@param  const char* name - Pointer to the name of the bill term.
+@param  const char* descrition - Pointer to the description for the bill term.
+@param  GncBillTermType type - The type of the bill term.
+@param  gint due_days - Due days.
+@param  gint disc_days - Discount days.
+@param  gnc_numeric discount - The Discount amount.
+@param  gint cutff - Days the cuttoff will take effect.
+*/
 typedef struct _gncBillTerm GncBillTerm;
+
+
+/** @struct GncBillTermClass
+
+@param  QofInstanceClass parent_class - The parent entity class.
+*/
 typedef struct _gncBillTermClass GncBillTermClass;
 
 #include "qof.h"
@@ -96,14 +113,14 @@ GType gnc_billterm_get_type(void);
 
 /** @name BillTerm parameter names
  @{ */
-#define GNC_BILLTERM_NAME 		"name"
-#define GNC_BILLTERM_DESC 		"description"
-#define GNC_BILLTERM_DUEDAYS 	"number of days due"
-#define GNC_BILLTERM_DISCDAYS 	"number of discounted days"
-#define GNC_BILLTERM_CUTOFF 	"cut off"
-#define GNC_BILLTERM_TYPE 		"bill type"
-#define GNC_BILLTERM_DISCOUNT	"amount of discount"
-#define GNC_BILLTERM_REFCOUNT	"reference count"
+#define GNC_BILLTERM_NAME "name"
+#define GNC_BILLTERM_DESC "description"
+#define GNC_BILLTERM_DUEDAYS "number of days due"
+#define GNC_BILLTERM_DISCDAYS "number of discounted days"
+#define GNC_BILLTERM_CUTOFF "cut off"
+#define GNC_BILLTERM_TYPE "bill type"
+#define GNC_BILLTERM_DISCOUNT "amount of discount"
+#define GNC_BILLTERM_REFCOUNT "reference count"
 /** @} */
 
 /**
@@ -136,11 +153,11 @@ void gncBillTermDecRef (GncBillTerm *term);
 void gncBillTermChanged (GncBillTerm *term);
 void gncBillTermBeginEdit (GncBillTerm *term);
 void gncBillTermCommitEdit (GncBillTerm *term);
+
 /** @} */
 
 /** @name Set Functions
-@{
-*/
+ @{ */
 void gncBillTermSetName (GncBillTerm *term, const char *name);
 void gncBillTermSetDescription (GncBillTerm *term, const char *name);
 void gncBillTermSetType (GncBillTerm *term, GncBillTermType type);

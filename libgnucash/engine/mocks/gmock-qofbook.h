@@ -1,7 +1,11 @@
 #ifndef GMOCK_QOFBOOK_H
 #define GMOCK_QOFBOOK_H
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gmock/gmock.h>
+#pragma GCC diagnostic pop
+
 
 #include <qofbook.h>
 #include <qofbook-p.h>

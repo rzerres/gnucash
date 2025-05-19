@@ -32,6 +32,7 @@
 
 #include "gncAddress.h"
 #include "gncAddressP.h"
+#include "gncCoOwnerP.h"
 #include "gncCustomerP.h"
 #include "gnc-features.h"
 
@@ -39,17 +40,18 @@ struct _gncAddress
 {
     QofInstance inst;
 
-    QofBook *     book;
-    QofInstance * parent;
-    gboolean      dirty;
-    const char *  name;
-    const char *  addr1;
-    const char *  addr2;
-    const char *  addr3;
-    const char *  addr4;
-    const char *  phone;
-    const char *  fax;
-    const char *  email;
+    QofBook *book;
+    QofInstance *parent;
+    gboolean dirty;
+    const char *name;
+    const char *addr1;
+    const char *addr2;
+    const char *addr3;
+    const char *addr4;
+    const char *mobile;
+    const char *phone;
+    const char *fax;
+    const char *email;
 };
 
 struct _gncAddressClass
@@ -59,7 +61,7 @@ struct _gncAddressClass
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
 
-#define _GNC_MOD_NAME	GNC_ADDRESS_MODULE_NAME
+#define _GNC_MOD_NAME   GNC_ADDRESS_MODULE_NAME
 
 static inline void mark_address (GncAddress *address);
 void mark_address (GncAddress *address)
@@ -80,6 +82,7 @@ enum
     PROP_ADDR2,
     PROP_ADDR3,
     PROP_ADDR4,
+    PROP_MOBILE,
     PROP_PHONE,
     PROP_FAX,
     PROP_EMAIL
@@ -106,10 +109,10 @@ gnc_address_finalize(GObject* addrp)
 }
 
 static void
-gnc_address_get_property (GObject         *object,
-                          guint            prop_id,
-                          GValue          *value,
-                          GParamSpec      *pspec)
+gnc_address_get_property (GObject *object,
+                          guint prop_id,
+                          GValue *value,
+                          GParamSpec *pspec)
 {
     GncAddress *address;
 
@@ -133,6 +136,9 @@ gnc_address_get_property (GObject         *object,
     case PROP_ADDR4:
         g_value_set_string(value, address->addr4);
         break;
+    case PROP_MOBILE:
+        g_value_set_string(value, address->mobile);
+        break;
     case PROP_PHONE:
         g_value_set_string(value, address->phone);
         break;
@@ -149,10 +155,10 @@ gnc_address_get_property (GObject         *object,
 }
 
 static void
-gnc_address_set_property (GObject         *object,
-                          guint            prop_id,
-                          const GValue          *value,
-                          GParamSpec      *pspec)
+gnc_address_set_property (GObject *object,
+                          guint prop_id,
+                          const GValue *value,
+                          GParamSpec *pspec)
 {
     GncAddress *address;
 
@@ -175,6 +181,9 @@ gnc_address_set_property (GObject         *object,
         break;
     case PROP_ADDR4:
         gncAddressSetAddr4(address, g_value_get_string(value));
+        break;
+    case PROP_MOBILE:
+        gncAddressSetMobile(address, g_value_get_string(value));
         break;
     case PROP_PHONE:
         gncAddressSetPhone(address, g_value_get_string(value));
@@ -277,10 +286,19 @@ gnc_address_class_init (GncAddressClass *klass)
 
     g_object_class_install_property
     (gobject_class,
+     PROP_MOBILE,
+     g_param_spec_string ("mobile",
+                          "Mobile",
+                          "Stores the mobile phone number for this address.",
+                          NULL,
+                          G_PARAM_READWRITE));
+
+    g_object_class_install_property
+    (gobject_class,
      PROP_PHONE,
      g_param_spec_string ("phone",
                           "Phone",
-                          "The phone number is the number at this address.",
+                          "Stores the phone number for this address.",
                           NULL,
                           G_PARAM_READWRITE));
 
@@ -323,6 +341,7 @@ gncAddressCreate (QofBook *book, QofInstance *prnt)
     addr->addr2 = CACHE_INSERT ("");
     addr->addr3 = CACHE_INSERT ("");
     addr->addr4 = CACHE_INSERT ("");
+    addr->mobile = CACHE_INSERT ("");
     addr->phone = CACHE_INSERT ("");
     addr->fax = CACHE_INSERT ("");
     addr->email = CACHE_INSERT ("");
@@ -381,6 +400,7 @@ gncAddressFree (GncAddress *addr)
     CACHE_REMOVE (addr->addr2);
     CACHE_REMOVE (addr->addr3);
     CACHE_REMOVE (addr->addr4);
+    CACHE_REMOVE (addr->mobile);
     CACHE_REMOVE (addr->phone);
     CACHE_REMOVE (addr->fax);
     CACHE_REMOVE (addr->email);
@@ -393,11 +413,11 @@ gncAddressFree (GncAddress *addr)
 /* Set functions */
 
 #define SET_STR(obj, member, str) { \
-	if (member == str) return; \
-	if (!g_strcmp0 (member, str)) return; \
-	gncAddressBeginEdit (obj); \
-	CACHE_REPLACE(member, str); \
-	}
+        if (member == str) return; \
+        if (!g_strcmp0 (member, str)) return; \
+        gncAddressBeginEdit (obj); \
+        CACHE_REPLACE(member, str); \
+        }
 
 void gncAddressSetName (GncAddress *addr, const char *name)
 {
@@ -440,6 +460,15 @@ void gncAddressSetAddr4 (GncAddress *addr, const char *addr4)
     if (!addr) return;
     if (!addr4) return;
     SET_STR(addr, addr->addr4, addr4);
+    mark_address (addr);
+    gncAddressCommitEdit (addr);
+}
+
+void gncAddressSetMobile (GncAddress *addr, const char *mobile)
+{
+    if (!addr) return;
+    if (!mobile) return;
+    SET_STR(addr, addr->mobile, mobile);
     mark_address (addr);
     gncAddressCommitEdit (addr);
 }
@@ -494,11 +523,12 @@ void gncAddressCommitEdit (GncAddress *addr)
 {
     /* GnuCash 2.6.3 and earlier didn't handle address kvp's... */
      if (qof_instance_has_kvp(QOF_INSTANCE(addr)))
-        gnc_features_set_used (qof_instance_get_book (QOF_INSTANCE (addr)), GNC_FEATURE_KVP_EXTRA_DATA);
+        gnc_features_set_used (qof_instance_get_book
+           (QOF_INSTANCE (addr)), GNC_FEATURE_KVP_EXTRA_DATA);
 
     if (!qof_commit_edit (QOF_INSTANCE(addr))) return;
     qof_commit_edit_part2 (&addr->inst, gncAddressOnError,
-                           gncAddressOnDone, address_free);
+        gncAddressOnDone, address_free);
 }
 
 
@@ -532,6 +562,12 @@ const char * gncAddressGetAddr4 (const GncAddress *addr)
 {
     if (!addr) return NULL;
     return addr->addr4;
+}
+
+const char * gncAddressGetMobile (const GncAddress *addr)
+{
+    if (!addr) return NULL;
+    return addr->mobile;
 }
 
 const char * gncAddressGetPhone (const GncAddress *addr)
@@ -607,6 +643,11 @@ gncAddressEqual(const GncAddress* a, const GncAddress* b)
         PWARN("address lines 4 differ: %s vs %s", a->addr4, b->addr4);
         return FALSE;
     }
+    if (g_strcmp0(a->mobile, b->mobile) != 0)
+    {
+        PWARN("mobile numbers differ: %s vs %s", a->mobile, b->mobile);
+        return FALSE;
+    }
     if (g_strcmp0(a->phone, b->phone) != 0)
     {
         PWARN("phone numbers differ: %s vs %s", a->phone, b->phone);
@@ -646,17 +687,54 @@ gboolean gncAddressRegister (void)
     static QofParam params[] =
     {
 
-        { ADDRESS_NAME,  QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName,  (QofSetterFunc)gncAddressSetName },
-        { ADDRESS_ONE,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr1, (QofSetterFunc)gncAddressSetAddr1 },
-        { ADDRESS_TWO,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr2, (QofSetterFunc)gncAddressSetAddr2 },
-        { ADDRESS_THREE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr3, (QofSetterFunc)gncAddressSetAddr3 },
-        { ADDRESS_FOUR,  QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr4, (QofSetterFunc)gncAddressSetAddr4 },
-        { ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone, (QofSetterFunc)gncAddressSetPhone },
-        { ADDRESS_FAX,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax,   (QofSetterFunc)gncAddressSetFax },
-        { ADDRESS_EMAIL, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail, (QofSetterFunc)gncAddressSetEmail },
-        { ADDRESS_OWNER, QOF_TYPE_CHOICE, (QofAccessFunc)qofAddressGetOwner, (QofSetterFunc)qofAddressSetOwner },
-        { QOF_PARAM_BOOK, QOF_ID_BOOK,   (QofAccessFunc)qof_instance_get_book, NULL },
-        { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+        {
+            ADDRESS_NAME,  QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName,
+            (QofSetterFunc)gncAddressSetName
+        },
+        {
+            ADDRESS_ONE,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr1,
+            (QofSetterFunc)gncAddressSetAddr1
+        },
+        {
+            ADDRESS_TWO,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr2,
+            (QofSetterFunc)gncAddressSetAddr2
+        },
+        {
+            ADDRESS_THREE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr3,
+            (QofSetterFunc)gncAddressSetAddr3
+        },
+        {
+            ADDRESS_FOUR,  QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr4,
+            (QofSetterFunc)gncAddressSetAddr4
+        },
+        {
+            ADDRESS_MOBILE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetMobile,
+            (QofSetterFunc)gncAddressSetMobile
+        },
+        {
+            ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone,
+            (QofSetterFunc)gncAddressSetPhone
+        },
+        {
+            ADDRESS_FAX,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax,
+            (QofSetterFunc)gncAddressSetFax
+        },
+        {
+            ADDRESS_EMAIL, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail,
+            (QofSetterFunc)gncAddressSetEmail
+        },
+        {
+            ADDRESS_OWNER, QOF_TYPE_CHOICE, (QofAccessFunc)qofAddressGetOwner,
+            (QofSetterFunc)qofAddressSetOwner
+        },
+        {
+            QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book,
+            NULL
+        },
+        {
+            QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid,
+            NULL
+        },
         { NULL },
     };
 

@@ -892,7 +892,6 @@ recurrenceListCmp(GList *a, GList *b)
 void
 recurrenceListFree(GList **recurrences)
 {
-    g_list_foreach(*recurrences, (GFunc)g_free, NULL);
-    g_list_free(*recurrences);
+    g_list_free_full(*recurrences, (GDestroyNotify)g_free);
     *recurrences = NULL;
 }

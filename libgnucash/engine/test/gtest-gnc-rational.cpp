@@ -21,7 +21,11 @@
  *                                                                  *
  *******************************************************************/
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
+
 #include <random>
 #include <cstdint>
 #include "../gnc-rational.hpp"

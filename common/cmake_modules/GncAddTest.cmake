@@ -102,7 +102,7 @@ function(gnc_add_test _TARGET _SOURCE_FILES TEST_INCLUDE_VAR_NAME TEST_LIBS_VAR_
   target_link_libraries(${_TARGET} PRIVATE ${TEST_LIBS})
   target_include_directories(${_TARGET} PRIVATE ${TEST_INCLUDE_DIRS})
   set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "${ENVVARS}$<$<CONFIG:Asan>:;ASAN_OPTIONS=${ASAN_TEST_OPTIONS}>")
-  add_dependencies(check ${_TARGET})
+  add_dependencies(testbuild ${_TARGET})
 endfunction()
 
 function(gnc_add_test_with_guile _TARGET _SOURCE_FILES TEST_INCLUDE_VAR_NAME TEST_LIBS_VAR_NAME)

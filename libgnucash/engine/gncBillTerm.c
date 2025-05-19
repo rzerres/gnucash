@@ -1,23 +1,23 @@
-/********************************************************************\
- * gncBillTerm.c -- the Gnucash Billing Terms interface             *
- *                                                                  *
- * This program is free software; you can redistribute it and/or    *
- * modify it under the terms of the GNU General Public License as   *
- * published by the Free Software Foundation; either version 2 of   *
- * the License, or (at your option) any later version.              *
- *                                                                  *
- * This program is distributed in the hope that it will be useful,  *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
- * GNU General Public License for more details.                     *
- *                                                                  *
- * You should have received a copy of the GNU General Public License*
- * along with this program; if not, contact:                        *
- *                                                                  *
- * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
- *                                                                  *
+/********************************************************************* \
+ * gncBillTerm.c -- the Gnucash Billing Terms interface              *
+ *                                                                   *
+ * This program is free software; you can redistribute it and/or     *
+ * modify it under the terms of the GNU General Public License as    *
+ * published by the Free Software Foundation; either version 2 of    *
+ * the License, or (at your option) any later version.               *
+ *                                                                   *
+ * This program is distributed in the hope that it will be useful,   *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     *
+ * GNU General Public License for more details.                      *
+ *                                                                   *
+ * You should have received a copy of the GNU General Public License *
+ * along with this program; if not, contact:                         *
+ *                                                                   *
+ * Free Software Foundation           Voice:  +1-617-542-5942        *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652        *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                    *
+ *                                                                   *
 \********************************************************************/
 
 /*
@@ -39,8 +39,8 @@ struct _gncBillTerm
     QofInstance     inst;
 
     /* 'visible' data fields directly manipulated by user */
-    const char *    name;
-    const char *    desc;
+    const char      *name;
+    const char      *desc;
     GncBillTermType type;
     gint            due_days;
     gint            disc_days;
@@ -50,11 +50,11 @@ struct _gncBillTerm
     /* Internal management fields */
     /* See libgnucash/engine/TaxTableBillTermImmutability.txt for an explanation of the following */
     /* Code that handles this is *identical* to that in gncTaxTable */
-    gint64          refcount;
-    GncBillTerm *   parent;      /* if non-null, we are an immutable child */
-    GncBillTerm *   child;       /* if non-null, we have not changed */
-    gboolean        invisible;
-    GList *         children;    /* list of children for disconnection */
+    gint64      refcount;
+    GncBillTerm *parent;      /* if non-null, we are an immutable child */
+    GncBillTerm *child;       /* if non-null, we have not changed */
+    gboolean    invisible;
+    GList       *children;    /* list of children for disconnection */
 };
 
 struct _gncBillTermClass
@@ -64,7 +64,7 @@ struct _gncBillTermClass
 
 struct _book_info
 {
-    GList *         terms;        /* visible terms */
+    GList * terms;        /* visible terms */
 };
 
 static QofLogModule log_module = GNC_MOD_BUSINESS;
@@ -157,10 +157,11 @@ gnc_billterm_finalize(GObject* btp)
 }
 
 static void
-gnc_billterm_get_property (GObject         *object,
-                           guint            prop_id,
-                           GValue          *value,
-                           GParamSpec      *pspec)
+gnc_billterm_get_property (
+    GObject *object,
+    guint prop_id,
+    GValue *value,
+    GParamSpec *pspec)
 {
     GncBillTerm *bt;
 
@@ -179,10 +180,11 @@ gnc_billterm_get_property (GObject         *object,
 }
 
 static void
-gnc_billterm_set_property (GObject         *object,
-                           guint            prop_id,
-                           const GValue          *value,
-                           GParamSpec      *pspec)
+gnc_billterm_set_property (
+    GObject *object,
+    guint prop_id,
+    const GValue *value,
+    GParamSpec *pspec)
 {
     GncBillTerm *bt;
 
@@ -256,7 +258,7 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
     term->desc = CACHE_INSERT ("");
     term->discount = gnc_numeric_zero ();
     addObj (term);
-    qof_event_gen (&term->inst,  QOF_EVENT_CREATE, NULL);
+    qof_event_gen (&term->inst, QOF_EVENT_CREATE, NULL);
     return term;
 }
 
@@ -884,16 +886,66 @@ gboolean gncBillTermRegister (void)
 {
     static QofParam params[] =
     {
-        { GNC_BILLTERM_NAME, 		QOF_TYPE_STRING,  (QofAccessFunc)gncBillTermGetName,			(QofSetterFunc)gncBillTermSetName },
-        { GNC_BILLTERM_DESC, 		QOF_TYPE_STRING,  (QofAccessFunc)gncBillTermGetDescription,		(QofSetterFunc)gncBillTermSetDescription },
-        { GNC_BILLTERM_TYPE, QOF_TYPE_STRING, (QofAccessFunc)qofBillTermGetType, (QofSetterFunc)qofBillTermSetType },
-        { GNC_BILLTERM_DUEDAYS, 	QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetDueDays, 		(QofSetterFunc)gncBillTermSetDueDays },
-        { GNC_BILLTERM_DISCDAYS, 	QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetDiscountDays,	(QofSetterFunc)gncBillTermSetDiscountDays },
-        { GNC_BILLTERM_DISCOUNT, 	QOF_TYPE_NUMERIC, (QofAccessFunc)gncBillTermGetDiscount,		(QofSetterFunc)gncBillTermSetDiscount },
-        { GNC_BILLTERM_CUTOFF, 		QOF_TYPE_INT32,   (QofAccessFunc)gncBillTermGetCutoff, 			(QofSetterFunc)gncBillTermSetCutoff },
-        { GNC_BILLTERM_REFCOUNT, 	QOF_TYPE_INT64,   (QofAccessFunc)gncBillTermGetRefcount, 		NULL },
-        { QOF_PARAM_BOOK, 			QOF_ID_BOOK, 	  (QofAccessFunc)qof_instance_get_book, 		NULL },
-        { QOF_PARAM_GUID, 			QOF_TYPE_GUID, 	  (QofAccessFunc)qof_instance_get_guid, 		NULL },
+        {
+            GNC_BILLTERM_NAME,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)gncBillTermGetName,
+            (QofSetterFunc)gncBillTermSetName
+        },
+        {
+            GNC_BILLTERM_DESC,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)gncBillTermGetDescription,
+            (QofSetterFunc)gncBillTermSetDescription
+        },
+        {
+            GNC_BILLTERM_TYPE,
+            QOF_TYPE_STRING,
+            (QofAccessFunc)qofBillTermGetType,
+            (QofSetterFunc)qofBillTermSetType
+        },
+        {
+            GNC_BILLTERM_DUEDAYS,
+            QOF_TYPE_INT32,
+            (QofAccessFunc)gncBillTermGetDueDays,
+            (QofSetterFunc)gncBillTermSetDueDays
+        },
+        {
+            GNC_BILLTERM_DISCDAYS,
+            QOF_TYPE_INT32,
+            (QofAccessFunc)gncBillTermGetDiscountDays,
+            (QofSetterFunc)gncBillTermSetDiscountDays
+        },
+        {
+            GNC_BILLTERM_DISCOUNT,
+            QOF_TYPE_NUMERIC,
+            (QofAccessFunc)gncBillTermGetDiscount,
+            (QofSetterFunc)gncBillTermSetDiscount
+        },
+        {
+            GNC_BILLTERM_CUTOFF,
+            QOF_TYPE_INT32,
+            (QofAccessFunc)gncBillTermGetCutoff,
+            (QofSetterFunc)gncBillTermSetCutoff
+        },
+        {
+            GNC_BILLTERM_REFCOUNT,
+            QOF_TYPE_INT64,
+            (QofAccessFunc)gncBillTermGetRefcount,
+            NULL
+        },
+        {
+            QOF_PARAM_BOOK,
+            QOF_ID_BOOK,
+            (QofAccessFunc)qof_instance_get_book,
+            NULL
+        },
+        {
+            QOF_PARAM_GUID,
+            QOF_TYPE_GUID,
+            (QofAccessFunc)qof_instance_get_guid,
+            NULL
+        },
         { NULL },
     };
 

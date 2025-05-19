@@ -32,22 +32,24 @@
 #include "qof.h"
 #include "stdint.h"
 
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
-#include "gncJob.h"
-#include "gncVendor.h"
 #include "gncEmployee.h"
 #include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncVendor.h"
 
 #include "business-urls.h"
+#include "dialog-coowner.h"
 #include "dialog-customer.h"
 #include "dialog-employee.h"
-#include "dialog-vendor.h"
 #include "dialog-invoice.h"
 #include "dialog-job.h"
+#include "dialog-vendor.h"
 
 #define HANDLE_TYPE(URL_TYPE_STR,OBJ_TYPE) {                                 \
   QofBook *book;                                                             \
-  GncGUID guid;                                                                 \
+  GncGUID guid;                                                              \
   QofCollection *coll;                                                       \
                                                                              \
   g_return_val_if_fail (location != NULL, FALSE);                            \
@@ -75,6 +77,21 @@
                 location);                                                   \
     return FALSE;                                                            \
   }                                                                          \
+}
+
+static gboolean
+coownerCB (const char *location, const char *label,
+            gboolean new_window, GNCURLResult * result)
+{
+    QofInstance *entity;
+    GncCoOwner *coowner;
+
+    /* href="...:coowner=<guid>" */
+    HANDLE_TYPE ("coowner=", GNC_ID_COOWNER);
+    coowner = (GncCoOwner *) entity;
+    gnc_ui_coowner_edit (result->parent, coowner);
+
+    return TRUE;
 }
 
 static gboolean
@@ -140,15 +157,16 @@ invoiceCB (const char *location, const char *label,
 
 static gboolean
 jobCB (const char *location, const char *label,
-       gboolean new_window, GNCURLResult * result)
+       gboolean new_window, GNCURLResult *result)
 {
     QofInstance *entity;
+    GncOwner owner;
     GncJob *job;
 
     /* href="...:job=<guid>" */
     HANDLE_TYPE ("job=", GNC_ID_JOB);
     job = (GncJob *) entity;
-    gnc_ui_job_edit (result->parent, job);
+    gnc_ui_job_edit (result->parent, &owner, job);
 
     return TRUE;
 }
@@ -233,6 +251,15 @@ ownerreportCB (const char *location, const char *label,
     memset (&owner, 0, sizeof (owner));
     switch (*ownerptr)
     {
+    case 'o':
+    {
+        GncCoOwner *coowner =
+            gncCoOwnerLookup (gnc_get_current_book (), &guid);
+        DISABLE_REPORT_IF_NULL (coowner);
+        gncOwnerInitCoOwner (&owner, coowner);
+        etype = "Co-Owner";
+        break;
+    }
     case 'c':
     {
         GncCustomer *customer =
@@ -307,6 +334,7 @@ gnc_business_urls_initialize (void)
         GncHTMLUrlCB handler;
     } types[] =
     {
+        { GNC_ID_COOWNER, GNC_ID_COOWNER, coownerCB },
         { GNC_ID_CUSTOMER, GNC_ID_CUSTOMER, customerCB },
         { GNC_ID_VENDOR, GNC_ID_VENDOR, vendorCB },
         { GNC_ID_EMPLOYEE, GNC_ID_EMPLOYEE, employeeCB },

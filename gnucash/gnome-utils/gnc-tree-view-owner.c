@@ -332,9 +332,17 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
         owner_name = _("Name");
         owner_id = _("ID #");
         break;
+    case GNC_OWNER_COOWNER :
+        owner_name = _("Co-Owner Name");
+        owner_id = _("Co-Owner Number");
+        break;
     case GNC_OWNER_CUSTOMER :
         owner_name = _("Company Name");
         owner_id = _("Customer Number");
+        break;
+    case GNC_OWNER_EMPLOYEE :
+        owner_name = _("Employee Name");
+        owner_id = _("Employee Number");
         break;
     case GNC_OWNER_JOB :
         owner_name = _("Job Name");
@@ -343,10 +351,6 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     case GNC_OWNER_VENDOR :
         owner_name = _("Company Name");
         owner_id = _("Vendor Number");
-        break;
-    case GNC_OWNER_EMPLOYEE :
-        owner_name = _("Employee Name");
-        owner_id = _("Employee Number");
         break;
     }
     /* Create our view */
@@ -419,6 +423,11 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Address 4"), GNC_OWNER_TREE_ADDRESS_4_COL,
                                   NULL, "USA",
                                   GNC_TREE_MODEL_OWNER_COL_ADDRESS_4,
+                                  GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                  sort_by_string);
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Mobile"), GNC_OWNER_TREE_MOBILE_COL,
+                                  NULL, "+1-617-542-5999",
+                                  GNC_TREE_MODEL_OWNER_COL_MOBILE,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
     gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Phone"), GNC_OWNER_TREE_PHONE_COL,

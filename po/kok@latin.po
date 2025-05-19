@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.10\n"
+"Project-Id-Version: GnuCash 5.11\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-12-08 11:07-0800\n"
+"POT-Creation-Date: 2025-03-23 15:35-0700\n"
 "PO-Revision-Date: 2014-10-19 16:48-0500\n"
 "Last-Translator: Ravikumar Ragam <ragamrravi@gmail.com>\n"
 "Language-Team: NONE\n"
@@ -209,7 +209,7 @@ msgid "Business"
 msgstr "Vepar"
 
 #: bindings/guile/options.scm:389 gnucash/gnome/dialog-customer.c:892
-#: gnucash/gnome/dialog-invoice.c:3573 gnucash/gnome/dialog-invoice.c:3607
+#: gnucash/gnome/dialog-invoice.c:3576 gnucash/gnome/dialog-invoice.c:3610
 #: gnucash/gnome/dialog-vendor.c:694
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:336
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:344
@@ -1164,7 +1164,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1531
 #: gnucash/gnome/assistant-hierarchy.cpp:1550
-#: gnucash/gnome-utils/dialog-utils.c:810
+#: gnucash/gnome-utils/dialog-utils.c:804
 msgid "New Book Options"
 msgstr "Nove pustokache poriai"
 
@@ -1271,8 +1271,8 @@ msgstr "Rinn feddpacho poriai:\"%s\""
 msgid "Date"
 msgstr "Tarikh"
 
-#: gnucash/gnome/assistant-loan.cpp:1883 gnucash/gnome/assistant-loan.cpp:2812
-#: gnucash/gnome/assistant-loan.cpp:2872 gnucash/gnome/assistant-loan.cpp:2884
+#: gnucash/gnome/assistant-loan.cpp:1883 gnucash/gnome/assistant-loan.cpp:2813
+#: gnucash/gnome/assistant-loan.cpp:2873 gnucash/gnome/assistant-loan.cpp:2885
 #: gnucash/gtkbuilder/dialog-payment.glade:445
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
 #: gnucash/register/ledger-core/split-register.c:2567
@@ -1280,17 +1280,17 @@ msgstr "Tarikh"
 #: gnucash/register/ledger-core/split-register.c:2613
 #: gnucash/register/ledger-core/split-register.c:2624
 #: gnucash/report/reports/standard/new-owner-report.scm:282
-#: libgnucash/engine/Account.cpp:150 libgnucash/engine/Account.cpp:158
-#: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncOwner.c:836
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:160
+#: libgnucash/engine/Account.cpp:181 libgnucash/engine/gncOwner.c:836
 #: libgnucash/engine/gncOwner.c:859
 msgid "Payment"
 msgstr "Farik korop"
 
-#: gnucash/gnome/assistant-loan.cpp:1889 gnucash/gnome/assistant-loan.cpp:2904
+#: gnucash/gnome/assistant-loan.cpp:1889 gnucash/gnome/assistant-loan.cpp:2905
 msgid "Principal"
 msgstr "Mukhel"
 
-#: gnucash/gnome/assistant-loan.cpp:1895 gnucash/gnome/assistant-loan.cpp:2924
+#: gnucash/gnome/assistant-loan.cpp:1895 gnucash/gnome/assistant-loan.cpp:2925
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:77
 #: gnucash/register/ledger-core/split-register.c:2562
 #: gnucash/register/ledger-core/split-register.c:2599
@@ -1301,7 +1301,7 @@ msgstr "Mukhel"
 msgid "Interest"
 msgstr "Jur"
 
-#: gnucash/gnome/assistant-loan.cpp:2813
+#: gnucash/gnome/assistant-loan.cpp:2814
 msgid "Escrow Payment"
 msgstr "Escrow farik korop"
 
@@ -1403,8 +1403,8 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register.c:2632
 #: gnucash/register/ledger-core/split-register.c:2637
 #: gnucash/register/ledger-core/split-register.c:2664
-#: libgnucash/engine/Account.cpp:153 libgnucash/engine/Account.cpp:154
-#: libgnucash/engine/Account.cpp:155
+#: libgnucash/engine/Account.cpp:155 libgnucash/engine/Account.cpp:156
+#: libgnucash/engine/Account.cpp:157
 msgid "Buy"
 msgstr "Viktem ghe"
 
@@ -1423,8 +1423,8 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register.c:2633
 #: gnucash/register/ledger-core/split-register.c:2638
 #: gnucash/register/ledger-core/split-register.c:2665
-#: libgnucash/engine/Account.cpp:173 libgnucash/engine/Account.cpp:174
-#: libgnucash/engine/Account.cpp:175
+#: libgnucash/engine/Account.cpp:175 libgnucash/engine/Account.cpp:176
+#: libgnucash/engine/Account.cpp:177
 msgid "Sell"
 msgstr "Vik"
 
@@ -1869,19 +1869,19 @@ msgid "Memo"
 msgstr "Nivedon"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2339
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3410
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3462
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2460
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:336
 #: gnucash/report/reports/standard/trial-balance.scm:555
 #: gnucash/report/trep-engine.scm:1343 gnucash/report/trep-engine.scm:1447
-#: libgnucash/engine/Account.cpp:163
+#: libgnucash/engine/Account.cpp:165
 msgid "Debit"
 msgstr "Dennem rok'kom"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2346
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3406
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3458
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2483
 #: gnucash/register/ledger-core/split-register.c:2578
@@ -1891,7 +1891,7 @@ msgstr "Dennem rok'kom"
 #: gnucash/report/reports/standard/register.scm:338
 #: gnucash/report/reports/standard/trial-balance.scm:558
 #: gnucash/report/trep-engine.scm:1350 gnucash/report/trep-engine.scm:1454
-#: libgnucash/engine/Account.cpp:183
+#: libgnucash/engine/Account.cpp:185
 msgid "Credit"
 msgstr "Zomo rok'kom"
 
@@ -1905,8 +1905,8 @@ msgid "Units"
 msgstr "nog"
 
 #: gnucash/gnome/business-gnome-utils.c:195
-#: gnucash/gnome/business-gnome-utils.c:392 gnucash/gnome/dialog-invoice.c:1676
-#: gnucash/gnome/dialog-invoice.c:1754
+#: gnucash/gnome/business-gnome-utils.c:392 gnucash/gnome/dialog-invoice.c:1679
+#: gnucash/gnome/dialog-invoice.c:1757
 #: gnucash/gnome-utils/gnc-general-select.c:179
 #, fuzzy
 #| msgid "Select"
@@ -1921,25 +1921,25 @@ msgid "Edit…"
 msgstr "Sudar"
 
 #: gnucash/gnome/business-gnome-utils.c:351 gnucash/gnome/dialog-doclink.c:813
-#: gnucash/gnome/dialog-invoice.c:2803 gnucash/gnome/dialog-invoice.c:3028
-#: gnucash/gnome/dialog-invoice.c:3029 gnucash/gnome/dialog-invoice.c:3750
+#: gnucash/gnome/dialog-invoice.c:2806 gnucash/gnome/dialog-invoice.c:3031
+#: gnucash/gnome/dialog-invoice.c:3032 gnucash/gnome/dialog-invoice.c:3753
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:774
-#: libgnucash/engine/Account.cpp:178 libgnucash/engine/gncInvoice.c:1097
+#: libgnucash/engine/Account.cpp:180 libgnucash/engine/gncInvoice.c:1097
 msgid "Bill"
 msgstr "Noganchi topxil"
 
 #: gnucash/gnome/business-gnome-utils.c:354 gnucash/gnome/dialog-doclink.c:817
-#: gnucash/gnome/dialog-invoice.c:2809 gnucash/gnome/dialog-invoice.c:3035
-#: gnucash/gnome/dialog-invoice.c:3036
+#: gnucash/gnome/dialog-invoice.c:2812 gnucash/gnome/dialog-invoice.c:3038
+#: gnucash/gnome/dialog-invoice.c:3039
 msgid "Voucher"
 msgstr "Pavti"
 
 #: gnucash/gnome/business-gnome-utils.c:357 gnucash/gnome/dialog-doclink.c:821
-#: gnucash/gnome/dialog-invoice.c:3764
+#: gnucash/gnome/dialog-invoice.c:3767
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:397
-#: gnucash/gnome/gnc-plugin-page-register.cpp:397
+#: gnucash/gnome/gnc-plugin-page-register.cpp:407
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1920
 #: gnucash/gnome-search/dialog-search.c:1093
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:167
@@ -1954,7 +1954,7 @@ msgstr "Pavti"
 #: gnucash/report/reports/standard/taxinvoice.scm:177
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
-#: libgnucash/engine/Account.cpp:159 libgnucash/engine/gncInvoice.c:1095
+#: libgnucash/engine/Account.cpp:161 libgnucash/engine/gncInvoice.c:1095
 msgid "Invoice"
 msgstr "Vikrechem sotr"
 
@@ -2001,15 +2001,15 @@ msgstr "Toslea malkachi nond na: %s"
 msgid "Entity type does not match %s: %s"
 msgstr "Nondnnecho prokar zullna %s: %s"
 
-#: gnucash/gnome/dialog-billterms.c:270
+#: gnucash/gnome/dialog-billterms.c:271
 msgid "Discount days cannot be more than due days."
 msgstr ""
 
-#: gnucash/gnome/dialog-billterms.c:324
+#: gnucash/gnome/dialog-billterms.c:325
 msgid "You must provide a name for this Billing Term."
 msgstr "Hea noganche topxilechea Sotrak tuvem nanv purvonn korunk zai"
 
-#: gnucash/gnome/dialog-billterms.c:331
+#: gnucash/gnome/dialog-billterms.c:332
 #, c-format
 msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
@@ -2018,7 +2018,7 @@ msgstr ""
 "Tuvem hea Nogacnhe topxilechea Sotrak ek ekmev nanv purvonn korunk zai. Tuji "
 "nivodd\"%s\" adinch vaporant asa"
 
-#: gnucash/gnome/dialog-billterms.c:531
+#: gnucash/gnome/dialog-billterms.c:532
 #: gnucash/gtkbuilder/dialog-billterms.glade:183
 #: gnucash/gtkbuilder/dialog-billterms.glade:766
 #: gnucash/gtkbuilder/gnc-frequency.glade:968
@@ -2026,13 +2026,13 @@ msgstr ""
 msgid "Days"
 msgstr "Dis"
 
-#: gnucash/gnome/dialog-billterms.c:534
+#: gnucash/gnome/dialog-billterms.c:535
 #: gnucash/gtkbuilder/dialog-billterms.glade:370
 #: gnucash/gtkbuilder/dialog-billterms.glade:769
 msgid "Proximo"
 msgstr "Fuddlem"
 
-#: gnucash/gnome/dialog-billterms.c:537 gnucash/gnome/dialog-doclink.c:587
+#: gnucash/gnome/dialog-billterms.c:538 gnucash/gnome/dialog-doclink.c:587
 #: gnucash/gnome/dialog-doclink.c:840 gnucash/gnome/dialog-doclink.c:884
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:552
 #: gnucash/gtkbuilder/dialog-price.glade:24
@@ -2040,12 +2040,12 @@ msgstr "Fuddlem"
 msgid "Unknown"
 msgstr "Onvollkhi"
 
-#: gnucash/gnome/dialog-billterms.c:672
+#: gnucash/gnome/dialog-billterms.c:673
 #, c-format
 msgid "Term \"%s\" is in use. You cannot delete it."
 msgstr "Sotr \"%s\" vaporant asa. Tujean tem dosovnk zaina"
 
-#: gnucash/gnome/dialog-billterms.c:678
+#: gnucash/gnome/dialog-billterms.c:679
 #: gnucash/gnome-utils/dialog-tax-table.c:737
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
@@ -2092,11 +2092,11 @@ msgstr "mhal dosonv?"
 
 #: gnucash/gnome/dialog-commodities.cpp:221 gnucash/gnome/dialog-doclink.c:164
 #: gnucash/gnome/dialog-price-edit-db.cpp:214
-#: gnucash/gnome/dialog-price-editor.c:238 gnucash/gnome/dialog-tax-info.c:1189
+#: gnucash/gnome/dialog-price-editor.c:238 gnucash/gnome/dialog-tax-info.c:1188
 #: gnucash/gnome/gnc-plugin-budget.c:321
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1660
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1663
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1061
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1875
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1885
 #: gnucash/gnome/gnc-split-reg.c:939 gnucash/gnome/gnc-split-reg.c:977
 #: gnucash/gnome/gnc-split-reg.c:1199 gnucash/gnome/gnc-split-reg.c:1466
 #: gnucash/gnome/gnc-split-reg.c:1506 gnucash/gnome-search/search-account.c:239
@@ -2106,8 +2106,8 @@ msgstr "mhal dosonv?"
 #: gnucash/gnome-utils/gnc-file.c:120 gnucash/gnome-utils/gnc-file.c:368
 #: gnucash/gnome-utils/gnc-file.c:666 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-gui-query.c:332
-#: gnucash/gnome-utils/gnc-main-window.cpp:1246
-#: gnucash/gnome-utils/gnc-main-window.cpp:1403
+#: gnucash/gnome-utils/gnc-main-window.cpp:1270
+#: gnucash/gnome-utils/gnc-main-window.cpp:1427
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:181
 #: gnucash/gtkbuilder/dialog-account.glade:20
 #: gnucash/gtkbuilder/dialog-account.glade:381
@@ -2164,9 +2164,9 @@ msgstr "mhal dosonv?"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:425
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:851
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:31
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:583
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:788
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1126
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:598
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:803
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1141
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:24
 #: gnucash/gtkbuilder/window-autoclear.glade:22
 #: gnucash/gtkbuilder/window-reconcile.glade:21
@@ -2179,7 +2179,7 @@ msgstr "mhal dosonv?"
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2102
 #: gnucash/register/ledger-core/gncEntryLedger.c:921
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
-#: gnucash/register/ledger-core/split-register-control.cpp:1577
+#: gnucash/register/ledger-core/split-register-control.cpp:1578
 #: gnucash/ui/gnc-plugin-page-invoice.ui:141
 #: gnucash/ui/gnc-plugin-page-invoice.ui:230
 #: gnucash/ui/gnc-plugin-page-invoice.ui:422
@@ -2189,7 +2189,7 @@ msgstr "_Rod'd kor"
 
 #: gnucash/gnome/dialog-commodities.cpp:222
 #: gnucash/gnome/dialog-price-edit-db.cpp:215
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1661
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1664
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1062
 #: gnucash/gtkbuilder/dialog-account.glade:396
 #: gnucash/gtkbuilder/dialog-billterms.glade:476
@@ -2246,9 +2246,9 @@ msgid "Customer's Invoices"
 msgstr "Giraikachim noganchi topxil"
 
 #: gnucash/gnome/dialog-customer.c:876 gnucash/gnome/dialog-employee.c:670
-#: gnucash/gnome/dialog-invoice.c:3516 gnucash/gnome/dialog-invoice.c:3525
-#: gnucash/gnome/dialog-invoice.c:3536 gnucash/gnome/dialog-invoice.c:3791
-#: gnucash/gnome/dialog-invoice.c:3797 gnucash/gnome/dialog-job.c:551
+#: gnucash/gnome/dialog-invoice.c:3519 gnucash/gnome/dialog-invoice.c:3528
+#: gnucash/gnome/dialog-invoice.c:3539 gnucash/gnome/dialog-invoice.c:3795
+#: gnucash/gnome/dialog-invoice.c:3801 gnucash/gnome/dialog-job.c:551
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:230
 #: gnucash/gtkbuilder/dialog-payment.glade:61
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:169
@@ -2282,8 +2282,8 @@ msgstr "Giraikacho ID"
 msgid "Contact"
 msgstr "Sompork"
 
-#: gnucash/gnome/dialog-customer.c:903 gnucash/gnome/dialog-invoice.c:3661
-#: gnucash/gnome/dialog-invoice.c:3815 gnucash/gnome/dialog-job.c:581
+#: gnucash/gnome/dialog-customer.c:903 gnucash/gnome/dialog-invoice.c:3664
+#: gnucash/gnome/dialog-invoice.c:3819 gnucash/gnome/dialog-job.c:581
 #: gnucash/gnome/dialog-order.c:887 gnucash/gnome/dialog-vendor.c:703
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:124
 #: gnucash/report/reports/standard/new-aging.scm:176
@@ -2346,19 +2346,21 @@ msgid "Placeholder account selected. Please try again."
 msgstr "Zagodhorpeachem katem venchlam. Portun proiotn kor"
 
 #: gnucash/gnome/dialog-doclink.c:160
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4636
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4688
 #, fuzzy
 #| msgid "Select Account"
 msgid "Select document"
 msgstr "khatem vench"
 
 #: gnucash/gnome/dialog-doclink.c:163 gnucash/gnome/gnc-plugin-budget.c:322
+#: gnucash/gnome/gnc-plugin-page-register.cpp:5064
+#: gnucash/gnome/gnc-plugin-page-register.cpp:5093
 #: gnucash/gnome-search/search-account.c:240
 #: gnucash/gnome-utils/dialog-account.c:845
 #: gnucash/gnome-utils/gnc-gui-query.c:297
 #: gnucash/gnome-utils/gnc-gui-query.c:331
 #: gnucash/gnome-utils/gnc-gui-query.c:417
-#: gnucash/gnome-utils/gnc-main-window.cpp:1404
+#: gnucash/gnome-utils/gnc-main-window.cpp:1428
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:196
 #: gnucash/gtkbuilder/dialog-account.glade:35
 #: gnucash/gtkbuilder/dialog-account.glade:832
@@ -2412,9 +2414,9 @@ msgstr "khatem vench"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:439
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:866
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:46
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:598
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:803
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1141
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:613
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:818
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1156
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:39
 #: gnucash/gtkbuilder/window-autoclear.glade:38
 #: gnucash/gtkbuilder/window-reconcile.glade:36
@@ -2474,7 +2476,7 @@ msgstr "bhorvonnichi fail ugddunk zavnk na"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:224
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:249
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:1265
-#: gnucash/gnome/gnc-plugin-page-register.cpp:395
+#: gnucash/gnome/gnc-plugin-page-register.cpp:405
 msgid "Manage Document Link"
 msgstr ""
 
@@ -2498,7 +2500,7 @@ msgstr "Vevharachi bariksann"
 
 #: gnucash/gnome/dialog-doclink.c:1086
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:1001 gnucash/gnome/dialog-tax-info.c:1397
+#: gnucash/gnome/dialog-lot-viewer.c:1001 gnucash/gnome/dialog-tax-info.c:1396
 #: gnucash/gnome/gnc-split-reg.c:672 gnucash/gnome/reconcile-view.c:441
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
@@ -2582,7 +2584,7 @@ msgstr "Kamdara ID"
 msgid "Employee Username"
 msgstr "Kamdara vaporpa nanv"
 
-#: gnucash/gnome/dialog-employee.c:683 gnucash/gnome/dialog-invoice.c:3641
+#: gnucash/gnome/dialog-employee.c:683 gnucash/gnome/dialog-invoice.c:3644
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:348
 msgid "Employee Name"
 msgstr "Kamdara nanv"
@@ -2594,7 +2596,7 @@ msgid "Username"
 msgstr "Vaporpeachem nanv"
 
 #: gnucash/gnome/dialog-employee.c:694 gnucash/gnome/dialog-sx-editor.c:1820
-#: gnucash/gnome/dialog-tax-info.c:1200 gnucash/gnome-utils/gnc-dense-cal.c:391
+#: gnucash/gnome/dialog-tax-info.c:1199 gnucash/gnome-utils/gnc-dense-cal.c:391
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:332
@@ -2704,7 +2706,7 @@ msgid "Closing Entries"
 msgstr "Xevottcheo nondnneo"
 
 #: gnucash/gnome/dialog-find-transactions.c:118
-#: gnucash/gnome/gnc-plugin-page-register.cpp:393
+#: gnucash/gnome/gnc-plugin-page-register.cpp:403
 #: gnucash/gnome/window-reconcile.cpp:1450
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:369
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:394
@@ -2728,8 +2730,8 @@ msgid "Value"
 msgstr "mol"
 
 #: gnucash/gnome/dialog-find-transactions.c:126
-#: gnucash/gnome/dialog-invoice.c:3561 gnucash/gnome/dialog-invoice.c:3595
-#: gnucash/gnome/dialog-invoice.c:3629
+#: gnucash/gnome/dialog-invoice.c:3564 gnucash/gnome/dialog-invoice.c:3598
+#: gnucash/gnome/dialog-invoice.c:3632
 #: gnucash/gtkbuilder/dialog-invoice.glade:94
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:157
 #: gnucash/report/trep-engine.scm:539
@@ -2748,8 +2750,8 @@ msgstr "zulloileli tarikh"
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2340
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4046
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2350
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4098
 #: gnucash/gnome-search/dialog-search.c:879
 #: gnucash/gnome-search/dialog-search.c:885
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
@@ -2760,7 +2762,7 @@ msgstr "Ankddo/Kario"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2345
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2355
 #: gnucash/gnome/gnc-split-reg.c:675 gnucash/gnome-search/dialog-search.c:878
 #: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:103
@@ -2777,8 +2779,8 @@ msgstr "Kria"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2339
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4045
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2349
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4097
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/gnome-search/dialog-search.c:887
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:366
@@ -2790,7 +2792,7 @@ msgstr "Vevharacho ankddo"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2344
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2354
 #: gnucash/gnome/gnc-split-reg.c:663 gnucash/gnome-search/dialog-search.c:880
 #: gnucash/gnome-search/dialog-search.c:888
 #: gnucash/gtkbuilder/dialog-payment.glade:268
@@ -2905,26 +2907,26 @@ msgstr "Online"
 #. label in the frame and means
 #. e.g. customer i.e. the company being
 #. invoiced.
-#: gnucash/gnome/dialog-invoice.c:468 gnucash/gnome/dialog-order.c:180
+#: gnucash/gnome/dialog-invoice.c:471 gnucash/gnome/dialog-order.c:180
 msgid "You need to supply Billing Information."
 msgstr "Tuvem Noganche topxilechi Mhaiti purvonn korunk zai"
 
-#: gnucash/gnome/dialog-invoice.c:724
+#: gnucash/gnome/dialog-invoice.c:727
 msgid "Are you sure you want to delete the selected entry?"
 msgstr "Tum khorench hi venchleli nondnni dosovnk sodta?"
 
-#: gnucash/gnome/dialog-invoice.c:726
+#: gnucash/gnome/dialog-invoice.c:729
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
 msgstr ""
 "Hi nond mhalachea magnnek zoddleli asa ani tantuntleanui dosovpant ietli!"
 
-#: gnucash/gnome/dialog-invoice.c:921
+#: gnucash/gnome/dialog-invoice.c:924
 msgid "Choose a different report template or Printable Invoice will be used"
 msgstr ""
 
-#: gnucash/gnome/dialog-invoice.c:1035 gnucash/gnome/dialog-invoice.c:3570
-#: gnucash/gnome/dialog-invoice.c:3604 gnucash/gnome/dialog-invoice.c:3638
+#: gnucash/gnome/dialog-invoice.c:1038 gnucash/gnome/dialog-invoice.c:3573
+#: gnucash/gnome/dialog-invoice.c:3607 gnucash/gnome/dialog-invoice.c:3641
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:158
 #: gnucash/register/ledger-core/split-register-model.c:240
 #: gnucash/report/reports/standard/invoice.scm:251
@@ -2936,29 +2938,29 @@ msgstr ""
 msgid "Due Date"
 msgstr "Denneachi tarikh"
 
-#: gnucash/gnome/dialog-invoice.c:1036
+#: gnucash/gnome/dialog-invoice.c:1039
 #: gnucash/report/reports/standard/new-aging.scm:113
 #: gnucash/report/reports/standard/new-owner-report.scm:938
 msgid "Post Date"
 msgstr "Ttopal tarikh"
 
-#: gnucash/gnome/dialog-invoice.c:1037
+#: gnucash/gnome/dialog-invoice.c:1040
 msgid "Post to Account"
 msgstr "Khateant nond kor"
 
-#: gnucash/gnome/dialog-invoice.c:1038
+#: gnucash/gnome/dialog-invoice.c:1041
 msgid "Accumulate Splits?"
 msgstr "Futtalli ektthaim korum?"
 
-#: gnucash/gnome/dialog-invoice.c:1130
+#: gnucash/gnome/dialog-invoice.c:1133
 msgid "The Invoice must have at least one Entry."
 msgstr "Nogache topxilent ek tori nond asunk zai"
 
-#: gnucash/gnome/dialog-invoice.c:1150
+#: gnucash/gnome/dialog-invoice.c:1153
 msgid "Do you really want to post the invoice?"
 msgstr "Tuka khorench hea nogache topxilent nond korunk zai?"
 
-#: gnucash/gnome/dialog-invoice.c:1168
+#: gnucash/gnome/dialog-invoice.c:1171
 #, fuzzy
 #| msgid ""
 #| "One or more of the entries are for accounts different from the invoice/"
@@ -2970,184 +2972,184 @@ msgstr ""
 "Eka vo odik nondnneo khateanchea vegllea noganche vikrechea sotra/noganche "
 "topxile khatir asat. Protekak ek vattavpachi dor tuka vicharpant ietli"
 
-#: gnucash/gnome/dialog-invoice.c:1301
+#: gnucash/gnome/dialog-invoice.c:1304
 msgid "The post action was canceled because not all exchange rates were given."
 msgstr "Vattavacheo doro divnk nant dekhun hi nondnni rod'd korpant aili."
 
-#: gnucash/gnome/dialog-invoice.c:1586
+#: gnucash/gnome/dialog-invoice.c:1589
 msgid "Total:"
 msgstr "Beriz:"
 
-#: gnucash/gnome/dialog-invoice.c:1592
+#: gnucash/gnome/dialog-invoice.c:1595
 msgid "Subtotal:"
 msgstr "Up Beriz"
 
-#: gnucash/gnome/dialog-invoice.c:1593
+#: gnucash/gnome/dialog-invoice.c:1596
 msgid "Tax:"
 msgstr "Kor"
 
-#: gnucash/gnome/dialog-invoice.c:1597
+#: gnucash/gnome/dialog-invoice.c:1600
 msgid "Total Cash:"
 msgstr "Rokodd beriz:"
 
-#: gnucash/gnome/dialog-invoice.c:1598
+#: gnucash/gnome/dialog-invoice.c:1601
 msgid "Total Charge:"
 msgstr "Ekunn Khorch:"
 
-#: gnucash/gnome/dialog-invoice.c:2071 gnucash/gnome/dialog-payment.c:1358
+#: gnucash/gnome/dialog-invoice.c:2074 gnucash/gnome/dialog-payment.c:1373
 #: gnucash/gtkbuilder/dialog-invoice.glade:976
 #: gnucash/report/reports/standard/invoice.scm:780
 #: libgnucash/engine/gncInvoice.c:1103
 msgid "Credit Note"
 msgstr "Zomo roko'komachi nond"
 
-#: gnucash/gnome/dialog-invoice.c:2267
+#: gnucash/gnome/dialog-invoice.c:2270
 msgid "PAID"
 msgstr ""
 
-#: gnucash/gnome/dialog-invoice.c:2269
+#: gnucash/gnome/dialog-invoice.c:2272
 #: gnucash/report/reports/standard/new-owner-report.scm:570
 msgid "UNPAID"
 msgstr ""
 
-#: gnucash/gnome/dialog-invoice.c:2317 gnucash/gnome/dialog-invoice.c:2336
-#: gnucash/gnome/dialog-invoice.c:2355
+#: gnucash/gnome/dialog-invoice.c:2320 gnucash/gnome/dialog-invoice.c:2339
+#: gnucash/gnome/dialog-invoice.c:2358
 msgid "New Credit Note"
 msgstr "Novi zomo rokk'komachi nond"
 
-#: gnucash/gnome/dialog-invoice.c:2318
+#: gnucash/gnome/dialog-invoice.c:2321
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:226
 #: gnucash/gnome-search/dialog-search.c:1095
 #: gnucash/gtkbuilder/dialog-invoice.glade:760
 msgid "New Invoice"
 msgstr "Novi nogachi topxil"
 
-#: gnucash/gnome/dialog-invoice.c:2323 gnucash/gnome/dialog-invoice.c:2342
-#: gnucash/gnome/dialog-invoice.c:2361
+#: gnucash/gnome/dialog-invoice.c:2326 gnucash/gnome/dialog-invoice.c:2345
+#: gnucash/gnome/dialog-invoice.c:2364
 msgid "Edit Credit Note"
 msgstr "Zomo rok'komachi nond sudar"
 
-#: gnucash/gnome/dialog-invoice.c:2324
+#: gnucash/gnome/dialog-invoice.c:2327
 msgid "Edit Invoice"
 msgstr "Vikrechem sotr sudar"
 
-#: gnucash/gnome/dialog-invoice.c:2327 gnucash/gnome/dialog-invoice.c:2346
-#: gnucash/gnome/dialog-invoice.c:2365
+#: gnucash/gnome/dialog-invoice.c:2330 gnucash/gnome/dialog-invoice.c:2349
+#: gnucash/gnome/dialog-invoice.c:2368
 msgid "View Credit Note"
 msgstr "Zomo rok'komechi nond polle"
 
-#: gnucash/gnome/dialog-invoice.c:2328
+#: gnucash/gnome/dialog-invoice.c:2331
 msgid "View Invoice"
 msgstr "Nogachi topxil polle"
 
-#: gnucash/gnome/dialog-invoice.c:2337
+#: gnucash/gnome/dialog-invoice.c:2340
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:225
 #: gnucash/gnome-search/dialog-search.c:1079
 msgid "New Bill"
 msgstr "Novi nogachi topxil"
 
-#: gnucash/gnome/dialog-invoice.c:2343
+#: gnucash/gnome/dialog-invoice.c:2346
 msgid "Edit Bill"
 msgstr "Nogachi topxil sudar"
 
-#: gnucash/gnome/dialog-invoice.c:2347
+#: gnucash/gnome/dialog-invoice.c:2350
 msgid "View Bill"
 msgstr "Nogachi topxil polle"
 
-#: gnucash/gnome/dialog-invoice.c:2356
+#: gnucash/gnome/dialog-invoice.c:2359
 #: gnucash/gnome-search/dialog-search.c:1091
 msgid "New Expense Voucher"
 msgstr "Novi khorcha pavti"
 
-#: gnucash/gnome/dialog-invoice.c:2362
+#: gnucash/gnome/dialog-invoice.c:2365
 msgid "Edit Expense Voucher"
 msgstr "Khorcha pavti sudar"
 
-#: gnucash/gnome/dialog-invoice.c:2366
+#: gnucash/gnome/dialog-invoice.c:2369
 msgid "View Expense Voucher"
 msgstr "Khorcha pavti polle"
 
-#: gnucash/gnome/dialog-invoice.c:2688
+#: gnucash/gnome/dialog-invoice.c:2691
 #, fuzzy
 msgid "Open Linked Document:"
 msgstr "novem khatem"
 
-#: gnucash/gnome/dialog-invoice.c:2802 gnucash/gnome/dialog-invoice.c:3027
+#: gnucash/gnome/dialog-invoice.c:2805 gnucash/gnome/dialog-invoice.c:3030
 msgid "Bill Information"
 msgstr "Nogache topxilechi mhaiti"
 
-#: gnucash/gnome/dialog-invoice.c:2804 gnucash/gnome/dialog-invoice.c:3030
-#: gnucash/gnome/dialog-invoice.c:3611
+#: gnucash/gnome/dialog-invoice.c:2807 gnucash/gnome/dialog-invoice.c:3033
+#: gnucash/gnome/dialog-invoice.c:3614
 msgid "Bill ID"
 msgstr "Nogache topxilechi ID"
 
-#: gnucash/gnome/dialog-invoice.c:2808 gnucash/gnome/dialog-invoice.c:3034
+#: gnucash/gnome/dialog-invoice.c:2811 gnucash/gnome/dialog-invoice.c:3037
 msgid "Voucher Information"
 msgstr "Pavtechi mhaiti"
 
-#: gnucash/gnome/dialog-invoice.c:2810 gnucash/gnome/dialog-invoice.c:3037
-#: gnucash/gnome/dialog-invoice.c:3645
+#: gnucash/gnome/dialog-invoice.c:2813 gnucash/gnome/dialog-invoice.c:3040
+#: gnucash/gnome/dialog-invoice.c:3648
 msgid "Voucher ID"
 msgstr "Pavtechi ID"
 
-#: gnucash/gnome/dialog-invoice.c:3368
+#: gnucash/gnome/dialog-invoice.c:3371
 msgid "Date of duplicated entries"
 msgstr "Protirupachea nondnnechi tarikh"
 
-#: gnucash/gnome/dialog-invoice.c:3423
+#: gnucash/gnome/dialog-invoice.c:3426
 msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
 msgstr ""
 
-#: gnucash/gnome/dialog-invoice.c:3427
+#: gnucash/gnome/dialog-invoice.c:3430
 msgid "Do you really want to post these invoices?"
 msgstr "Tuka khorench heo nogancheo topxil nond korunk zai?"
 
-#: gnucash/gnome/dialog-invoice.c:3515 gnucash/gnome/dialog-invoice.c:3796
+#: gnucash/gnome/dialog-invoice.c:3518 gnucash/gnome/dialog-invoice.c:3800
 msgid "View/Edit Invoice"
 msgstr "Vikrechem sotr polle/sudar"
 
-#: gnucash/gnome/dialog-invoice.c:3517 gnucash/gnome/dialog-invoice.c:3526
-#: gnucash/gnome/dialog-invoice.c:3537
+#: gnucash/gnome/dialog-invoice.c:3520 gnucash/gnome/dialog-invoice.c:3529
+#: gnucash/gnome/dialog-invoice.c:3540
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:285
-#: gnucash/gnome/gnc-plugin-page-register.cpp:386
+#: gnucash/gnome/gnc-plugin-page-register.cpp:396
 #: gnucash/ui/gnc-embedded-register-window.ui:155
 msgid "Duplicate"
 msgstr "Protirup"
 
-#: gnucash/gnome/dialog-invoice.c:3518 gnucash/gnome/dialog-invoice.c:3527
-#: gnucash/gnome/dialog-invoice.c:3538
+#: gnucash/gnome/dialog-invoice.c:3521 gnucash/gnome/dialog-invoice.c:3530
+#: gnucash/gnome/dialog-invoice.c:3541
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:289
 msgid "Post"
 msgstr "Ttopal"
 
-#: gnucash/gnome/dialog-invoice.c:3519 gnucash/gnome/dialog-invoice.c:3528
-#: gnucash/gnome/dialog-invoice.c:3539
+#: gnucash/gnome/dialog-invoice.c:3522 gnucash/gnome/dialog-invoice.c:3531
+#: gnucash/gnome/dialog-invoice.c:3542
 msgid "Printable Report"
 msgstr "Chap'pacho vako"
 
-#: gnucash/gnome/dialog-invoice.c:3524 gnucash/gnome/dialog-invoice.c:3790
+#: gnucash/gnome/dialog-invoice.c:3527 gnucash/gnome/dialog-invoice.c:3794
 msgid "View/Edit Bill"
 msgstr "Nogachi topxil polle/sudar"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
-#: gnucash/gnome/dialog-invoice.c:3535
+#: gnucash/gnome/dialog-invoice.c:3538
 msgid "View/Edit Voucher"
 msgstr "Pavti polle/sudar"
 
-#: gnucash/gnome/dialog-invoice.c:3549
+#: gnucash/gnome/dialog-invoice.c:3552
 msgid "Invoice Owner"
 msgstr "Nogache topxilecho malok"
 
-#: gnucash/gnome/dialog-invoice.c:3552
+#: gnucash/gnome/dialog-invoice.c:3555
 #: gnucash/report/reports/standard/invoice.scm:502
 msgid "Invoice Notes"
 msgstr "Vikrechea sotracheo nondnneo"
 
-#: gnucash/gnome/dialog-invoice.c:3555 gnucash/gnome/dialog-invoice.c:3589
-#: gnucash/gnome/dialog-invoice.c:3623 gnucash/gnome/dialog-invoice.c:3652
+#: gnucash/gnome/dialog-invoice.c:3558 gnucash/gnome/dialog-invoice.c:3592
+#: gnucash/gnome/dialog-invoice.c:3626 gnucash/gnome/dialog-invoice.c:3655
 #: gnucash/gnome/dialog-job.c:564 gnucash/gnome/dialog-job.c:577
 #: gnucash/gnome/dialog-order.c:885 gnucash/gtkbuilder/dialog-invoice.glade:304
 #: gnucash/gtkbuilder/dialog-invoice.glade:1064
@@ -3156,18 +3158,18 @@ msgstr "Vikrechea sotracheo nondnneo"
 msgid "Billing ID"
 msgstr "Nogachea topxilechi ID"
 
-#: gnucash/gnome/dialog-invoice.c:3558 gnucash/gnome/dialog-invoice.c:3592
-#: gnucash/gnome/dialog-invoice.c:3626
+#: gnucash/gnome/dialog-invoice.c:3561 gnucash/gnome/dialog-invoice.c:3595
+#: gnucash/gnome/dialog-invoice.c:3629
 msgid "Is Paid?"
 msgstr "Farik kelam?"
 
-#: gnucash/gnome/dialog-invoice.c:3564 gnucash/gnome/dialog-invoice.c:3598
-#: gnucash/gnome/dialog-invoice.c:3632
+#: gnucash/gnome/dialog-invoice.c:3567 gnucash/gnome/dialog-invoice.c:3601
+#: gnucash/gnome/dialog-invoice.c:3635
 msgid "Is Posted?"
 msgstr "Ttopalant ghatlam?"
 
-#: gnucash/gnome/dialog-invoice.c:3567 gnucash/gnome/dialog-invoice.c:3601
-#: gnucash/gnome/dialog-invoice.c:3635 gnucash/gnome/dialog-order.c:874
+#: gnucash/gnome/dialog-invoice.c:3570 gnucash/gnome/dialog-invoice.c:3604
+#: gnucash/gnome/dialog-invoice.c:3638 gnucash/gnome/dialog-order.c:874
 #: gnucash/gtkbuilder/dialog-invoice.glade:68
 #: gnucash/gtkbuilder/dialog-invoice.glade:881
 #: gnucash/gtkbuilder/dialog-order.glade:136
@@ -3176,30 +3178,30 @@ msgstr "Ttopalant ghatlam?"
 msgid "Date Opened"
 msgstr "Ugoddpachi tarikh"
 
-#: gnucash/gnome/dialog-invoice.c:3577
+#: gnucash/gnome/dialog-invoice.c:3580
 #: gnucash/gtkbuilder/dialog-invoice.glade:42
 #: gnucash/gtkbuilder/dialog-invoice.glade:868
 msgid "Invoice ID"
 msgstr "Nogache topxilechi ID"
 
-#: gnucash/gnome/dialog-invoice.c:3583
+#: gnucash/gnome/dialog-invoice.c:3586
 msgid "Bill Owner"
 msgstr "Nogache topxilecho malok"
 
-#: gnucash/gnome/dialog-invoice.c:3586
+#: gnucash/gnome/dialog-invoice.c:3589
 msgid "Bill Notes"
 msgstr "Nogachea topxilecheo nondnneo"
 
-#: gnucash/gnome/dialog-invoice.c:3617
+#: gnucash/gnome/dialog-invoice.c:3620
 msgid "Voucher Owner"
 msgstr "Pavtecho malok"
 
-#: gnucash/gnome/dialog-invoice.c:3620
+#: gnucash/gnome/dialog-invoice.c:3623
 msgid "Voucher Notes"
 msgstr "Pavtecheo nonddnneo"
 
-#: gnucash/gnome/dialog-invoice.c:3654 gnucash/gnome/dialog-invoice.c:3813
-#: gnucash/gnome/dialog-lot-viewer.c:908 gnucash/gnome/dialog-tax-info.c:1235
+#: gnucash/gnome/dialog-invoice.c:3657 gnucash/gnome/dialog-invoice.c:3817
+#: gnucash/gnome/dialog-lot-viewer.c:908 gnucash/gnome/dialog-tax-info.c:1234
 #: gnucash/gnome-utils/gnc-tree-view-account.c:794
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:383
 #: gnucash/gnome-utils/gnc-tree-view-price.c:410
@@ -3220,27 +3222,27 @@ msgstr "Pavtecheo nonddnneo"
 msgid "Type"
 msgstr "Prokar"
 
-#: gnucash/gnome/dialog-invoice.c:3656
+#: gnucash/gnome/dialog-invoice.c:3659
 #: gnucash/register/ledger-core/split-register-model.c:314
 #: gnucash/report/reports/standard/new-owner-report.scm:808
 msgid "Paid"
 msgstr "Farik kelam"
 
-#: gnucash/gnome/dialog-invoice.c:3659
+#: gnucash/gnome/dialog-invoice.c:3662
 msgid "Posted"
 msgstr "Ttopalant ghatlam"
 
-#: gnucash/gnome/dialog-invoice.c:3664 gnucash/gnome/dialog-invoice.c:3817
+#: gnucash/gnome/dialog-invoice.c:3667 gnucash/gnome/dialog-invoice.c:3821
 msgid "Due"
 msgstr "Dennem"
 
-#: gnucash/gnome/dialog-invoice.c:3666 gnucash/gnome/dialog-lot-viewer.c:914
+#: gnucash/gnome/dialog-invoice.c:3669 gnucash/gnome/dialog-lot-viewer.c:914
 #: gnucash/gnome/dialog-order.c:892
 #: gnucash/report/reports/standard/investment-lots.scm:102
 msgid "Opened"
 msgstr "Ugoddlam"
 
-#: gnucash/gnome/dialog-invoice.c:3668 gnucash/gnome/dialog-lot-viewer.c:995
+#: gnucash/gnome/dialog-invoice.c:3671 gnucash/gnome/dialog-lot-viewer.c:995
 #: gnucash/gnome/dialog-order.c:894 gnucash/gnome/reconcile-view.c:445
 #: gnucash/gnome/reconcile-view.c:449
 #: gnucash/gtkbuilder/dialog-payment.glade:482
@@ -3256,25 +3258,25 @@ msgstr "Ugoddlam"
 msgid "Num"
 msgstr "Ankddo"
 
-#: gnucash/gnome/dialog-invoice.c:3749
+#: gnucash/gnome/dialog-invoice.c:3752
 msgid "Find Bill"
 msgstr "Nogancho topxil sod"
 
-#: gnucash/gnome/dialog-invoice.c:3756
+#: gnucash/gnome/dialog-invoice.c:3759
 msgid "Find Expense Voucher"
 msgstr "Khorchachi pavti sod"
 
-#: gnucash/gnome/dialog-invoice.c:3757
+#: gnucash/gnome/dialog-invoice.c:3760
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/report/reports/standard/invoice.scm:776
 msgid "Expense Voucher"
 msgstr "Khorchachi pavti"
 
-#: gnucash/gnome/dialog-invoice.c:3763
+#: gnucash/gnome/dialog-invoice.c:3766
 msgid "Find Invoice"
 msgstr "Vikrechem sotr sod"
 
-#: gnucash/gnome/dialog-invoice.c:3810 gnucash/gnome/dialog-lot-viewer.c:1015
+#: gnucash/gnome/dialog-invoice.c:3814 gnucash/gnome/dialog-lot-viewer.c:1015
 #: gnucash/gnome/gnc-split-reg.c:666 gnucash/gnome/reconcile-view.c:437
 #: gnucash/gtkbuilder/assistant-loan.glade:191
 #: gnucash/gtkbuilder/assistant-loan.glade:610
@@ -3302,27 +3304,27 @@ msgstr "Rok'kom"
 
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
-#: gnucash/gnome/dialog-invoice.c:3897
+#: gnucash/gnome/dialog-invoice.c:3902
 #, fuzzy, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
 msgstr[0] "Sokoili noganchi topxil(am) dennem zaleant:"
 msgstr[1] "Sokoili noganchi %d topxil dennem zaleant:"
 
-#: gnucash/gnome/dialog-invoice.c:3901
+#: gnucash/gnome/dialog-invoice.c:3906
 msgid "Due Bills Reminder"
 msgstr "Nogachea topxilanchi denneanchi ugddas chitt"
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
-#: gnucash/gnome/dialog-invoice.c:3908
+#: gnucash/gnome/dialog-invoice.c:3914
 #, fuzzy, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
 msgstr[0] "Sokoili noganchi topxil(am) dennem zaleant:"
 msgstr[1] "Sokoili noganchi %d topxil dennem zaleant:"
 
-#: gnucash/gnome/dialog-invoice.c:3912
+#: gnucash/gnome/dialog-invoice.c:3918
 #, fuzzy
 msgid "Due Invoices Reminder"
 msgstr "Nogachea topxilanchi denneanchi ugddas chitt"
@@ -3491,38 +3493,38 @@ msgstr "Magnnechi ID"
 msgid "Find Order"
 msgstr "Magnni sod"
 
-#: gnucash/gnome/dialog-payment.c:237
+#: gnucash/gnome/dialog-payment.c:238
 msgid "You must enter a valid account name for posting."
 msgstr "Tuvem ek void nanv nond korpak bhorunk zai"
 
-#: gnucash/gnome/dialog-payment.c:246
+#: gnucash/gnome/dialog-payment.c:247
 msgid "You must select a company for payment processing."
 msgstr "Poixe divpachem kario korpak tuvem komponi vinchunk zai"
 
-#: gnucash/gnome/dialog-payment.c:260
+#: gnucash/gnome/dialog-payment.c:261
 #, fuzzy
 #| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
 msgstr "Aiatak lagun prosn aslo"
 
-#: gnucash/gnome/dialog-payment.c:281
+#: gnucash/gnome/dialog-payment.c:282
 msgid "You must select a transfer account from the account tree."
 msgstr "Khateachea zhaddantlo tuvem ek bodol korpachem khatem venchunk zai"
 
-#: gnucash/gnome/dialog-payment.c:292
+#: gnucash/gnome/dialog-payment.c:293
 msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:541 gnucash/gnome/dialog-payment.c:1353
+#: gnucash/gnome/dialog-payment.c:543 gnucash/gnome/dialog-payment.c:1368
 #: gnucash/report/reports/standard/new-aging.scm:177
 #: gnucash/report/reports/standard/new-owner-report.scm:305
 #: gnucash/report/reports/standard/new-owner-report.scm:699
 msgid "Pre-Payment"
 msgstr "Purv-poixe farik korop"
 
-#: gnucash/gnome/dialog-payment.c:1002
+#: gnucash/gnome/dialog-payment.c:1004
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
@@ -3530,7 +3532,7 @@ msgstr ""
 "Bodli ani khateanchi nondnni vegllea cholonant sombondit asat. Rupantorachi "
 "dor tharai"
 
-#: gnucash/gnome/dialog-payment.c:1288 gnucash/gnome/search-owner.c:196
+#: gnucash/gnome/dialog-payment.c:1303 gnucash/gnome/search-owner.c:196
 #: gnucash/gnome-search/dialog-search.c:1081
 #: gnucash/gtkbuilder/dialog-customer.glade:473
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:153
@@ -3545,7 +3547,7 @@ msgstr ""
 msgid "Customer"
 msgstr "Giraik"
 
-#: gnucash/gnome/dialog-payment.c:1292 gnucash/gnome/search-owner.c:197
+#: gnucash/gnome/dialog-payment.c:1307 gnucash/gnome/search-owner.c:197
 #: gnucash/gnome-search/dialog-search.c:1113
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:170
 #: gnucash/gtkbuilder/dialog-payment.glade:44
@@ -3556,7 +3558,7 @@ msgstr "Giraik"
 msgid "Vendor"
 msgstr "Vikpi"
 
-#: gnucash/gnome/dialog-payment.c:1296 gnucash/gnome/search-owner.c:198
+#: gnucash/gnome/dialog-payment.c:1311 gnucash/gnome/search-owner.c:198
 #: gnucash/gnome-search/dialog-search.c:1085
 #: gnucash/gtkbuilder/dialog-employee.glade:504
 #: gnucash/gtkbuilder/dialog-payment.glade:48
@@ -3565,7 +3567,7 @@ msgstr "Vikpi"
 msgid "Employee"
 msgstr "kamdar"
 
-#: gnucash/gnome/dialog-payment.c:1449
+#: gnucash/gnome/dialog-payment.c:1468
 #, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type "
@@ -3576,16 +3578,16 @@ msgstr ""
 "hem poixe farik korpachem kario chalu dovorche poilim. Ghoddiek tuka ek Bil "
 "poilem rochunk zai asot?"
 
-#: gnucash/gnome/dialog-payment.c:1574
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3246
+#: gnucash/gnome/dialog-payment.c:1593
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3298
 #: gnucash/gnome-search/search-reconciled.c:216
 #: gnucash/gnome-utils/gnc-tree-view-account.c:858
 #: gnucash/report/trep-engine.scm:158
 msgid "Cleared"
 msgstr "Nivllaileat"
 
-#: gnucash/gnome/dialog-payment.c:1576
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3248
+#: gnucash/gnome/dialog-payment.c:1595
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3300
 #: gnucash/gnome-search/search-reconciled.c:219
 #: gnucash/gnome-utils/gnc-tree-view-account.c:872
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
@@ -3594,13 +3596,13 @@ msgstr "Nivllaileat"
 msgid "Reconciled"
 msgstr "Zulloileat"
 
-#: gnucash/gnome/dialog-payment.c:1614
+#: gnucash/gnome/dialog-payment.c:1633
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1626
+#: gnucash/gnome/dialog-payment.c:1645
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', GnuCash only knows how to handle one.\n"
@@ -3608,24 +3610,24 @@ msgid ""
 "\n"
 msgstr ""
 
-#: gnucash/gnome/dialog-payment.c:1630
+#: gnucash/gnome/dialog-payment.c:1649
 #, fuzzy
 msgid "Warning"
 msgstr "Xittkavnneo porot bosoi"
 
-#: gnucash/gnome/dialog-payment.c:1633
+#: gnucash/gnome/dialog-payment.c:1652
 #, fuzzy
 msgid "Continue"
 msgstr "eksarkem"
 
-#: gnucash/gnome/dialog-payment.c:1634
+#: gnucash/gnome/dialog-payment.c:1653
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:283
-#: gnucash/gnome/gnc-plugin-page-register.cpp:384
+#: gnucash/gnome/gnc-plugin-page-register.cpp:394
 #: gnucash/ui/gnc-embedded-register-window.ui:210
 msgid "Cancel"
 msgstr "Rod'd kor"
 
-#: gnucash/gnome/dialog-payment.c:1758
+#: gnucash/gnome/dialog-payment.c:1777
 #, c-format
 msgid ""
 "This transaction has splits in multiple business accounts:\n"
@@ -3750,7 +3752,7 @@ msgid "Custom"
 msgstr "chalichem"
 
 #: gnucash/gnome/dialog-print-check.c:2645
-#: gnucash/gtkbuilder/dialog-preferences.glade:3460
+#: gnucash/gtkbuilder/dialog-preferences.glade:3544
 #: gnucash/gtkbuilder/dialog-print-check.glade:261
 #: gnucash/report/reports/standard/investment-lots.scm:197
 msgid "Top"
@@ -3911,7 +3913,7 @@ msgstr ""
 "Tharavik vevhar somtolit nant. Tuka khorponni hi sthiti sarki korunk protsan "
 "asa"
 
-#: gnucash/gnome/dialog-sx-from-trans.cpp:773
+#: gnucash/gnome/dialog-sx-from-trans.cpp:774
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
@@ -3983,7 +3985,7 @@ msgid "Transaction"
 msgstr "vevhar"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1402
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:512
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:527
 msgid "Status"
 msgstr "sthiti"
 
@@ -4008,12 +4010,19 @@ msgstr "sonket"
 msgid "now"
 msgstr "atam"
 
-#: gnucash/gnome/dialog-tax-info.c:1185
+#: gnucash/gnome/dialog-tax-info.c:871
+#: gnucash/import-export/csv-exp/assistant-csv-export.c:401
+#, fuzzy, c-format
+#| msgid "Accounts Selected:"
+msgid "Accounts Selected: %d"
+msgstr "vinchlelim khatim"
+
+#: gnucash/gnome/dialog-tax-info.c:1184
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "Income Tax Identity"
 msgstr "Zoddichea korachi vollokh"
 
-#: gnucash/gnome/dialog-tax-info.c:1191
+#: gnucash/gnome/dialog-tax-info.c:1190
 #: gnucash/gtkbuilder/dialog-options.glade:55
 #: gnucash/gtkbuilder/dialog-price.glade:91
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
@@ -4021,7 +4030,7 @@ msgstr "Zoddichea korachi vollokh"
 msgid "_Apply"
 msgstr ""
 
-#: gnucash/gnome/dialog-tax-info.c:1240
+#: gnucash/gnome/dialog-tax-info.c:1239
 msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
@@ -4029,7 +4038,7 @@ msgstr ""
 "'chotrai:Tuvem zor TXF vorgonna bosoilear, ani uprant 'Prokar' bodlit "
 "zalear, tuka hostukim tim vorgonna eka vella ek portun bosoichim poddttelim."
 
-#: gnucash/gnome/dialog-tax-info.c:1393
+#: gnucash/gnome/dialog-tax-info.c:1392
 msgid "Form"
 msgstr "akar"
 
@@ -4078,8 +4087,8 @@ msgstr "Vikpeak sod"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1211
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:176
-#: libgnucash/engine/Account.cpp:4280
+#: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:178
+#: libgnucash/engine/Account.cpp:4296
 msgid "Income"
 msgstr "zodd"
 
@@ -4093,7 +4102,7 @@ msgid "Expenses"
 msgstr "khorch"
 
 #: gnucash/gnome/gnc-budget-view.c:506
-#: gnucash/gnome/gnc-plugin-page-register.cpp:382
+#: gnucash/gnome/gnc-plugin-page-register.cpp:392
 #: gnucash/register/ledger-core/split-register.c:2580
 #: gnucash/register/ledger-core/split-register-layout.c:721
 #: gnucash/register/ledger-core/split-register-model.c:353
@@ -4176,13 +4185,13 @@ msgstr "novem"
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:297
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:178
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:284
-#: gnucash/gnome/gnc-plugin-page-register.cpp:385
+#: gnucash/gnome/gnc-plugin-page-register.cpp:395
 #: gnucash/ui/gnc-embedded-register-window.ui:170
 msgid "Delete"
 msgstr "Dosoi"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:332
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1813
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1823
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
 
@@ -4235,18 +4244,18 @@ msgstr "bodli khatem vench (_S)"
 msgid "_Do it anyway"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1394
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1536
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1395
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1538
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1044
 msgid "(no name)"
 msgstr "(nanv na)"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1406
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1407
 #, c-format
 msgid "Deleting account %s"
 msgstr "%skhatem dosoitam"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1526
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1527
 msgid ""
 "The list below shows objects which make use of the account which you want to "
 "delete.\n"
@@ -4255,7 +4264,7 @@ msgid ""
 "of another account"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1539
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1541
 #, c-format
 msgid ""
 "The account \"%s\" has more than one subaccount.\n"
@@ -4263,40 +4272,40 @@ msgid ""
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1599
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1602
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "%shem khatem dosovpant ietlem"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1608
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1611
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "Hea khateantle sorv vevhar novea khateant %s halovpant ietle"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1615
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1618
 msgid "All transactions in this account will be deleted."
 msgstr "hea khateantle sorv vevhar dosoitele"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1624
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1627
 #, fuzzy, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "Tanchim up-khatim %s khateant halovpant ietlim"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1630
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1633
 #, fuzzy
 msgid "Its subaccount will be deleted."
 msgstr "tache sorv up khatim dosovpant ietlim"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1634
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1637
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "tache sorv up khateache vevhar %s khateant halovpant ietle"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1641
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1644
 msgid "All sub-account transactions will be deleted."
 msgstr "sorv up-khateache vevhar dosvpant ietle"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1647
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1650
 msgid "Are you sure you want to do this?"
 msgstr "tuka hem korpak zai?"
 
@@ -4436,7 +4445,7 @@ msgstr "Zoxem chalont asa toxem teach malkachem novem vikrechem sotr roch"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:288
-#: gnucash/gnome/gnc-plugin-page-register.cpp:392
+#: gnucash/gnome/gnc-plugin-page-register.cpp:402
 #: gnucash/ui/gnc-embedded-register-window.ui:225
 msgid "Blank"
 msgstr "Korem"
@@ -4478,7 +4487,7 @@ msgstr "Hea vikrechea sotrachea malkechea komponechea vakeachem zonel ugodd"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:224
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:249
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
-#: gnucash/gnome/gnc-plugin-page-register.cpp:262
+#: gnucash/gnome/gnc-plugin-page-register.cpp:272
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:393
 #: gnucash/ui/gnc-plugin-page-register.ui:505
@@ -4494,7 +4503,7 @@ msgstr "Vollokh pott'ttent aiat dostavez ugodd"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:225
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:250
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:275
-#: gnucash/gnome/gnc-plugin-page-register.cpp:266
+#: gnucash/gnome/gnc-plugin-page-register.cpp:276
 #: gnucash/ui/gnc-plugin-page-register.ui:211
 #: gnucash/ui/gnc-plugin-page-register.ui:398
 #: gnucash/ui/gnc-plugin-page-register.ui:510
@@ -4506,7 +4515,7 @@ msgstr "novem khatem"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:225
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:250
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:275
-#: gnucash/gnome/gnc-plugin-page-register.cpp:396
+#: gnucash/gnome/gnc-plugin-page-register.cpp:406
 #, fuzzy
 msgid "Open Linked Document"
 msgstr "novem khatem"
@@ -4816,7 +4825,7 @@ msgid "Manage Document Link…"
 msgstr "Vollokh pott'ttent aiat dostavez ugodd"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:282
-#: gnucash/gnome/gnc-plugin-page-register.cpp:383
+#: gnucash/gnome/gnc-plugin-page-register.cpp:393
 #: gnucash/ui/gnc-embedded-register-window.ui:195
 msgid "Enter"
 msgstr "bhor"
@@ -4885,22 +4894,22 @@ msgstr ""
 "Malok%s dosovpant ietlo.\n"
 "Tum khorench hem korunk sodta?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:254
+#: gnucash/gnome/gnc-plugin-page-register.cpp:264
 #: gnucash/ui/gnc-plugin-page-register.ui:130
 msgid "Cu_t Transaction"
 msgstr "vevhar kator"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:255
+#: gnucash/gnome/gnc-plugin-page-register.cpp:265
 #: gnucash/ui/gnc-plugin-page-register.ui:136
 msgid "_Copy Transaction"
 msgstr "vevhar nokol kor"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:256
+#: gnucash/gnome/gnc-plugin-page-register.cpp:266
 #: gnucash/ui/gnc-plugin-page-register.ui:142
 msgid "_Paste Transaction"
 msgstr "vevhar chittkai "
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:257
+#: gnucash/gnome/gnc-plugin-page-register.cpp:267
 #: gnucash/ui/gnc-embedded-register-window.ui:111
 #: gnucash/ui/gnc-plugin-page-register.ui:148
 #: gnucash/ui/gnc-plugin-page-register.ui:364
@@ -4909,7 +4918,7 @@ msgstr "vevhar chittkai "
 msgid "Dup_licate Transaction"
 msgstr "vevharachem protirup"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:258
+#: gnucash/gnome/gnc-plugin-page-register.cpp:268
 #: gnucash/gnome/gnc-split-reg.c:1507
 #: gnucash/ui/gnc-embedded-register-window.ui:116
 #: gnucash/ui/gnc-plugin-page-register.ui:154
@@ -4921,7 +4930,7 @@ msgstr "vevhar dosoi"
 
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
-#: gnucash/gnome/gnc-plugin-page-register.cpp:269
+#: gnucash/gnome/gnc-plugin-page-register.cpp:279
 #: gnucash/ui/gnc-plugin-page-register.ui:220
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
@@ -4930,47 +4939,47 @@ msgstr "vevhar dosoi"
 msgid "Jump to Invoice"
 msgstr "Vikrechem sotr sudar"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:270
+#: gnucash/gnome/gnc-plugin-page-register.cpp:280
 msgid "Cu_t Split"
 msgstr "Futall kator"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:271
+#: gnucash/gnome/gnc-plugin-page-register.cpp:281
 msgid "_Copy Split"
 msgstr "Futall nokol kor"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:272
+#: gnucash/gnome/gnc-plugin-page-register.cpp:282
 msgid "_Paste Split"
 msgstr "Futall chittkai"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:273
+#: gnucash/gnome/gnc-plugin-page-register.cpp:283
 #: gnucash/ui/gnc-plugin-page-register.ui:476
 #: gnucash/ui/gnc-plugin-page-register.ui:613
 msgid "Dup_licate Split"
 msgstr "Futall protirup kor"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:274
+#: gnucash/gnome/gnc-plugin-page-register.cpp:284
 #: gnucash/gnome/gnc-split-reg.c:1467
 #: gnucash/ui/gnc-plugin-page-register.ui:481
 #: gnucash/ui/gnc-plugin-page-register.ui:618
 msgid "_Delete Split"
 msgstr "Futall dosoi"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:275
+#: gnucash/gnome/gnc-plugin-page-register.cpp:285
 #: gnucash/ui/gnc-embedded-register-window.ui:35
 msgid "Cut the selected transaction into clipboard"
 msgstr "venchlelo vevharfolkant kator "
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:276
+#: gnucash/gnome/gnc-plugin-page-register.cpp:286
 #: gnucash/ui/gnc-embedded-register-window.ui:40
 msgid "Copy the selected transaction into clipboard"
 msgstr "venchlolo vevhar folkacher nokol kor"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:277
+#: gnucash/gnome/gnc-plugin-page-register.cpp:287
 #: gnucash/ui/gnc-embedded-register-window.ui:45
 msgid "Paste the transaction from the clipboard"
 msgstr "Folkaveleo vevharchittkai"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:278
+#: gnucash/gnome/gnc-plugin-page-register.cpp:288
 #: gnucash/ui/gnc-embedded-register-window.ui:50
 #: gnucash/ui/gnc-embedded-register-window.ui:113
 #: gnucash/ui/gnc-embedded-register-window.ui:157
@@ -4978,7 +4987,7 @@ msgstr "Folkaveleo vevharchittkai"
 msgid "Make a copy of the current transaction"
 msgstr "chalont vevharachi proti kadd"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:279
+#: gnucash/gnome/gnc-plugin-page-register.cpp:289
 #: gnucash/ui/gnc-embedded-register-window.ui:55
 #: gnucash/ui/gnc-embedded-register-window.ui:118
 #: gnucash/ui/gnc-embedded-register-window.ui:172
@@ -4986,64 +4995,64 @@ msgstr "chalont vevharachi proti kadd"
 msgid "Delete the current transaction"
 msgstr "chalont vevhar dosoi"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:280
+#: gnucash/gnome/gnc-plugin-page-register.cpp:290
 #, fuzzy
 #| msgid "Associate a file with the current transaction"
 msgid "Add, change, or unlink the document linked with the current transaction"
 msgstr "chalont vevharant ek fail bhagidar kor"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:281
+#: gnucash/gnome/gnc-plugin-page-register.cpp:291
 #, fuzzy
 msgid "Open the linked document for the current transaction"
 msgstr "Chalont vevhar eka sthollant bhagidar kor"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:282
+#: gnucash/gnome/gnc-plugin-page-register.cpp:292
 msgid "Jump to the linked bill, invoice, or voucher"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:283
+#: gnucash/gnome/gnc-plugin-page-register.cpp:293
 msgid "Cut the selected split into clipboard"
 msgstr "Klipfolleant venchleli futall kator"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:284
+#: gnucash/gnome/gnc-plugin-page-register.cpp:294
 msgid "Copy the selected split into clipboard"
 msgstr "venchleli futall klipfolleant nokol kor"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:285
+#: gnucash/gnome/gnc-plugin-page-register.cpp:295
 msgid "Paste the split from the clipboard"
 msgstr "clipfolleantlean futall chittkai"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:286
+#: gnucash/gnome/gnc-plugin-page-register.cpp:296
 msgid "Make a copy of the current split"
 msgstr "chalont futallachi ek nokol kor"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:287
+#: gnucash/gnome/gnc-plugin-page-register.cpp:297
 msgid "Delete the current split"
 msgstr "chalont futall dosoi"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
-#: gnucash/gnome/gnc-plugin-page-register.cpp:389
+#: gnucash/gnome/gnc-plugin-page-register.cpp:399
 #, fuzzy
 #| msgid "Stock Split"
 msgid "Show Splits"
 msgstr "santtheachi futall"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:390
+#: gnucash/gnome/gnc-plugin-page-register.cpp:400
 #, fuzzy
 #| msgid "_Jump"
 msgid "Jump"
 msgstr "uddki mar"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:391
+#: gnucash/gnome/gnc-plugin-page-register.cpp:401
 msgid "Schedule"
 msgstr "futall"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:394
+#: gnucash/gnome/gnc-plugin-page-register.cpp:404
 #: gnucash/gnome/window-autoclear.c:88
 msgid "Auto-clear"
 msgstr "Apoap nivllai"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:398
+#: gnucash/gnome/gnc-plugin-page-register.cpp:408
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:146
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:251
 #: gnucash/ui/gnc-plugin-page-register.ui:250
@@ -5053,21 +5062,21 @@ msgstr "Apoap nivllai"
 msgid "Stock Assistant"
 msgstr "Santtheachea futallecho adari"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:647
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1930
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3341
+#: gnucash/gnome/gnc-plugin-page-register.cpp:657
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1940
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3393
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "Sadharonn Nemallem"
 
 #. Translators: %s is the name
 #. of the tab page
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1864
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1874
 #, c-format
 msgid "Save changes to %s?"
 msgstr "%s haka bodol samballum?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1869
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1879
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -5076,107 +5085,107 @@ msgstr ""
 "He nondpott'ttent lollttechim bodlopam eka vevharak asat. Hea vevharache "
 "bodol tum samballunk sodta, vevhar kaddunk sodta vo kario rod'd orunk sodta?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1872
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1882
 msgid "_Discard Transaction"
 msgstr "vevhar kaddun uddoi"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1876
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1886
 msgid "_Save Transaction"
 msgstr "vevhar samball"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1909
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1944
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1957
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2014
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2112
-#: gnucash/gnome/gnc-plugin-page-register.cpp:2235
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1919
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1954
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1967
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2024
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2122
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2245
 msgid "unknown"
 msgstr "onvollkhi"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1932
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3347
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1942
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3399
 msgid "Portfolio"
 msgstr "Khatem"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:1934
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3353
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1944
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3405
 msgid "Search Results"
 msgstr "Porinnam sod"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3219
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3271
 msgid "Start Date:"
 msgstr "survatechi tarikh"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3226
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3278
 #, fuzzy
 msgid "Show previous number of days:"
 msgstr "vantteancho ankddo dakhoi"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3234
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3286
 msgid "End Date:"
 msgstr "xevottchi tarikh:"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3244
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3296
 #: gnucash/report/trep-engine.scm:157
 #, fuzzy
 msgid "Unreconciled"
 msgstr "zullovnk naslelem"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3250
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3302
 #: gnucash/gnome-search/search-reconciled.c:222
 #: gnucash/report/trep-engine.scm:160
 msgid "Frozen"
 msgstr "Gotthoilelem"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3252
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3304
 #: gnucash/gnome-search/search-reconciled.c:225
 #: gnucash/report/trep-engine.scm:161
 msgid "Voided"
 msgstr "nul'l"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3262
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3314
 msgid "Show:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3270
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3322
 msgid "Hide:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3281
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3333
 #, fuzzy
 msgid "Filter By:"
 msgstr "hantlean gall..."
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3343
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3361
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3395
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3413
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "vevhara niall"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3349
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3401
 msgid "Portfolio Report"
 msgstr "Khateacho niall"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3355
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3407
 msgid "Search Results Report"
 msgstr "Porinnamache niall sod"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3359
-#: gnucash/gtkbuilder/dialog-preferences.glade:2791
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3411
+#: gnucash/gtkbuilder/dialog-preferences.glade:2875
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
 msgstr "nondnni pott'tti"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3377
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3429
 msgid "and subaccounts"
 msgstr "ani upkhatim"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3554
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3606
 msgid "Print checks from multiple accounts?"
 msgstr "bhov khateam khatir check chhapum"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3556
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3608
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5184,57 +5193,57 @@ msgstr ""
 "Ho sodavcho porinnam eka von odik khatea khatirasa. Tuka check chhapunk zai "
 "zorui te soglle teach khateache nant?"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3566
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3618
 msgid "_Print checks"
 msgstr "Check chhap (_P)"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3585
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3637
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
 "tujean fokt chek eka benkechea khateachea nondpott'ttintle chhapunk zatat vo "
 "porinnam sod"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3801
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3853
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "Tujean ek vevhar ritem korunk zaina jem zulloilam vo futallantlem nivllailam"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3808
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3860
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "ho vevhar fokt vachpachem oso vivek khunnaila: %s"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3909
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3961
 #: gnucash/gnome/gnc-split-reg.c:1095
 msgid "A reversing entry has already been created for this transaction."
 msgstr "hea vevharak virud nond adinch rochlea"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3910
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3962
 #, fuzzy
 msgid "Jump to the transaction?"
 msgstr "chalont vevhar sompadon kor"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3919
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3971
 #, fuzzy
 msgid "Reverse Transaction"
 msgstr "Vevhar ulottpachi zodd"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:3919
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3971
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:640
 #, fuzzy
 msgid "New Transaction Information"
 msgstr "Vevharachi mhaiti"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4010
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4062
 #, c-format
 msgid "Sort %s by…"
 msgstr "%s thavn vorgikoronn kor…"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4100
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4152
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1148
 #, c-format
 msgid "Filter %s by…"
@@ -5243,27 +5252,46 @@ msgstr "%s savn gall"
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4627
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4679
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4637
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4689
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4638
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4690
 #: gnucash/gnome-search/dialog-search.c:323
 msgid "Select"
 msgstr "vench"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4700
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4752
 #, fuzzy
 #| msgid "Post Date"
 msgid "Go to Date"
 msgstr "Ttopal tarikh"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:5004
+#: gnucash/gnome/gnc-plugin-page-register.cpp:5060
+#: gnucash/gnome/gnc-plugin-page-register.cpp:5089
+#, fuzzy
+#| msgid "Display the other account code?"
+msgid "Unable to jump to other account"
+msgstr "Her khateacho sonket dakhol korum?"
+
+#: gnucash/gnome/gnc-plugin-page-register.cpp:5063
+msgid ""
+"This transaction involves more than one other account. Select a specific "
+"split to jump to that account."
+msgstr ""
+
+#: gnucash/gnome/gnc-plugin-page-register.cpp:5092
+msgid ""
+"This transaction only involves the current account so there is no other "
+"account to jump to."
+msgstr ""
+
+#: gnucash/gnome/gnc-plugin-page-register.cpp:5246
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr ""
@@ -5364,8 +5392,8 @@ msgid "You cannot save to that file."
 msgstr "Tem tujean te failik samballunk zaina"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1644
-#: gnucash/gnome-utils/gnc-file.c:1363 gnucash/gnome-utils/gnc-file.c:1610
-#: gnucash/import-export/csv-exp/assistant-csv-export.c:739
+#: gnucash/gnome-utils/gnc-file.c:1363 gnucash/gnome-utils/gnc-file.c:1614
+#: gnucash/import-export/csv-exp/assistant-csv-export.c:738
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "Fail%sadinch protiokxant asa. Tuka khorench ti rod'd korunk zai?"
@@ -5729,12 +5757,12 @@ msgstr ""
 "bodlak"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
-#: gnucash/gnome/gnucash.desktop.in.in:6
+#: gnucash/gnome/gnucash.desktop.in.in:5
 msgid "GnuCash"
 msgstr "GnuCash"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:6
-#: gnucash/gnome/gnucash.desktop.in.in:8
+#: gnucash/gnome/gnucash.desktop.in.in:7
 msgid "Manage your finances, accounts, and investments"
 msgstr "Tuji duddu, khatim ani guntovnnuk hatall"
 
@@ -5797,7 +5825,7 @@ msgstr "Arthik gonnit kor zoxe porim ek rinnachem feddop koxem"
 msgid "GnuCash Project"
 msgstr "GnuCash Posonti"
 
-#: gnucash/gnome/gnucash.desktop.in.in:7
+#: gnucash/gnome/gnucash.desktop.in.in:6
 msgid "Finance Management"
 msgstr "Arthik karbhar"
 
@@ -6408,7 +6436,7 @@ msgid "There was an error parsing the file."
 msgstr "Failichi foddnixi kortana chuk zali"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1452 gnucash/gnome-utils/gnc-file.c:1691
+#: gnucash/gnome-utils/gnc-file.c:1452 gnucash/gnome-utils/gnc-file.c:1695
 msgid "Writing file…"
 msgstr "Fail boroitam"
 
@@ -6506,7 +6534,7 @@ msgid ""
 msgstr "Hea khateant fokot vachpacho vevhara asa zo dosovnk zaina"
 
 #: gnucash/gnome-utils/dialog-account.c:1745
-#: gnucash/gnome-utils/dialog-utils.c:842
+#: gnucash/gnome-utils/dialog-utils.c:836
 msgid "<No name>"
 msgstr "<nanv na>"
 
@@ -6635,7 +6663,7 @@ msgstr "Cholon"
 #: gnucash/gtkbuilder/dialog-transfer.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:431
 #: gnucash/gtkbuilder/dialog-vendor.glade:502
-#: gnucash/report/trep-engine.scm:110 libgnucash/engine/Account.cpp:4279
+#: gnucash/report/trep-engine.scm:110 libgnucash/engine/Account.cpp:4295
 msgid "Currency"
 msgstr "cholon"
 
@@ -6816,17 +6844,17 @@ msgstr "Pan"
 msgid "Income%sSalary%sTaxable"
 msgstr "Zodd%sPagar%sKor akarop"
 
-#: gnucash/gnome-utils/dialog-preferences.c:904
+#: gnucash/gnome-utils/dialog-preferences.c:908
 msgid "Path does not exist, "
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-preferences.c:960
-#: gnucash/gnome-utils/dialog-preferences.c:1455
+#: gnucash/gnome-utils/dialog-preferences.c:964
+#: gnucash/gnome-utils/dialog-preferences.c:1461
 #, fuzzy
 msgid "Select a folder"
 msgstr "odmaspotr vench"
 
-#: gnucash/gnome-utils/dialog-preferences.c:1458
+#: gnucash/gnome-utils/dialog-preferences.c:1464
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1534
 #: gnucash/gtkbuilder/dialog-fincalc.glade:270
 #: gnucash/gtkbuilder/dialog-fincalc.glade:285
@@ -6993,19 +7021,19 @@ msgstr ""
 msgid "Date out of range"
 msgstr "tarkhechi rank"
 
-#: gnucash/gnome-utils/dialog-utils.c:766
+#: gnucash/gnome-utils/dialog-utils.c:760
 msgid "Remember and don't _ask me again."
 msgstr "ugddas dhor ani mhaka porot vicharnaka"
 
-#: gnucash/gnome-utils/dialog-utils.c:767
+#: gnucash/gnome-utils/dialog-utils.c:761
 msgid "Don't _tell me again."
 msgstr "mhaka porot sangnaka"
 
-#: gnucash/gnome-utils/dialog-utils.c:770
+#: gnucash/gnome-utils/dialog-utils.c:764
 msgid "Remember and don't ask me again this _session."
 msgstr "hea sotra vixim ugddas dhor ani mhaka porot vicharnaka"
 
-#: gnucash/gnome-utils/dialog-utils.c:771
+#: gnucash/gnome-utils/dialog-utils.c:765
 msgid "Don't tell me again this _session."
 msgstr "hea sotra vixim mhaka porot vicharnaka"
 
@@ -7199,7 +7227,7 @@ msgid "Import"
 msgstr "aiat"
 
 #: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:668
-#: gnucash/gnome-utils/gnc-main-window.cpp:1247
+#: gnucash/gnome-utils/gnc-main-window.cpp:1271
 #: gnucash/html/gnc-html-webkit1.c:1215 gnucash/ui/gnc-main-window.ui:547
 #: gnucash/ui/gnc-plugin-basic-commands.ui:21
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:307
@@ -7497,7 +7525,7 @@ msgid "Save changes to the file?"
 msgstr "Failiche bodol samballum?"
 
 #: gnucash/gnome-utils/gnc-file.c:658
-#: gnucash/gnome-utils/gnc-main-window.cpp:1240
+#: gnucash/gnome-utils/gnc-main-window.cpp:1264
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
@@ -7601,15 +7629,15 @@ msgid ""
 msgstr ""
 "Mhaitekox fokot vachpak ugto kelo. Tuka to dusrea zagear samballunk zai?"
 
-#: gnucash/gnome-utils/gnc-file.c:1735
+#: gnucash/gnome-utils/gnc-file.c:1739
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed?"
 msgstr "Fail%sadinch protiokxant asa. Tuka khorench ti rod'd korunk zai?"
 
-#: gnucash/gnome-utils/gnc-file.c:1743
-#: gnucash/gnome-utils/gnc-main-window.cpp:1208
+#: gnucash/gnome-utils/gnc-file.c:1747
+#: gnucash/gnome-utils/gnc-main-window.cpp:1232
 msgid "<unknown>"
 msgstr "<onvollkhichem>"
 
@@ -7662,12 +7690,12 @@ msgstr "Zoddni korchea khatir vaparpea nanv ani gupit utor bhor: %s"
 msgid "Changes will be saved automatically in %u seconds"
 msgstr "Bodol apoap%u sekondamni samballpant ietleo"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1191
+#: gnucash/gnome-utils/gnc-main-window.cpp:1215
 #, c-format
 msgid "Save changes to file %s before closing?"
 msgstr "%s bond korchea poilim failiche bodol samballum?"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1194
+#: gnucash/gnome-utils/gnc-main-window.cpp:1218
 #, c-format
 msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
@@ -7676,7 +7704,7 @@ msgstr ""
 "Tum samballna zalear fattle bodol %d voram ani %d minut kaddun uddovpant "
 "ietleo"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1196
+#: gnucash/gnome-utils/gnc-main-window.cpp:1220
 #, c-format
 msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
@@ -7684,15 +7712,15 @@ msgid ""
 msgstr ""
 "Tum samballna zalear fattle% dis ani %d voram savn kaddun uddovpant ietlem"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1245
+#: gnucash/gnome-utils/gnc-main-window.cpp:1269
 msgid "Close _Without Saving"
 msgstr "samballnastana bond kor"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1392
+#: gnucash/gnome-utils/gnc-main-window.cpp:1416
 msgid "This window is closing and will not be restored."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1398
+#: gnucash/gnome-utils/gnc-main-window.cpp:1422
 #, fuzzy
 #| msgid "Close this window"
 msgid "Close Window?"
@@ -7700,45 +7728,45 @@ msgstr "zonel damp"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
-#: gnucash/gnome-utils/gnc-main-window.cpp:1528
+#: gnucash/gnome-utils/gnc-main-window.cpp:1552
 msgid "(read-only)"
 msgstr "(fokot vach)"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1536
+#: gnucash/gnome-utils/gnc-main-window.cpp:1560
 msgid "Unsaved Book"
 msgstr "samballnaslelem pustok"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1702
+#: gnucash/gnome-utils/gnc-main-window.cpp:1753
 #, fuzzy
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
 msgstr "%a, %b %e, %Y at %I:%M%P hantunt nimanno bodol kela"
 
 #. Translators: This message appears in the status bar after opening the file.
-#: gnucash/gnome-utils/gnc-main-window.cpp:1705
+#: gnucash/gnome-utils/gnc-main-window.cpp:1756
 #, c-format
 msgid "File %s opened. %s"
 msgstr "Fail %s ugti kelea. %s"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:2941
+#: gnucash/gnome-utils/gnc-main-window.cpp:3000
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:3028
+#: gnucash/gnome-utils/gnc-main-window.cpp:3087
 msgid "Unable to save to database."
 msgstr "mhaitikoxant samballunk zaina"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:3030
+#: gnucash/gnome-utils/gnc-main-window.cpp:3089
 msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
 "mhaiti koxant samballunk zaina. Pustok fokt vachunk zata oxem khunnailam"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4665
+#: gnucash/gnome-utils/gnc-main-window.cpp:4749
 #: gnucash/gtkbuilder/assistant-qif-import.glade:943
 msgid "Book Options"
 msgstr "pustok poriai"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4989
+#: gnucash/gnome-utils/gnc-main-window.cpp:5073
 #, fuzzy
 #| msgid "The minimum number of invoice entries to display."
 msgid ""
@@ -7746,28 +7774,28 @@ msgid ""
 "added."
 msgstr "Unneant unnem vikrechea sotracheo nondnneo dakhol korpacheo"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5227
+#: gnucash/gnome-utils/gnc-main-window.cpp:5311
 #: gnucash/gnucash-core-app.cpp:241
 msgid "(user modifiable)"
 msgstr ""
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.cpp:5252
+#: gnucash/gnome-utils/gnc-main-window.cpp:5336
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5264
+#: gnucash/gnome-utils/gnc-main-window.cpp:5348
 #: gnucash/gnome-utils/gnc-splash.c:99
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5265
+#: gnucash/gnome-utils/gnc-main-window.cpp:5349
 #: gnucash/gnome-utils/gnc-splash.c:100 gnucash/gnucash-core-app.cpp:257
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5273
+#: gnucash/gnome-utils/gnc-main-window.cpp:5357
 #, fuzzy
 msgid "Accounting for personal and small business finance."
 msgstr "GnuCash khasgi ani dhakttea vepar vrutacheo karbhar"
@@ -7776,12 +7804,11 @@ msgstr "GnuCash khasgi ani dhakttea vepar vrutacheo karbhar"
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.cpp:5282
+#: gnucash/gnome-utils/gnc-main-window.cpp:5366
 msgid "translator-credits"
-msgstr ""
-"Ravikumar Ragam: 2014"
+msgstr "Ravikumar Ragam: 2014"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5285
+#: gnucash/gnome-utils/gnc-main-window.cpp:5369
 msgid "Visit the GnuCash website."
 msgstr ""
 
@@ -8556,25 +8583,29 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:110
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:10
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:5
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:33
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:43
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:53
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:63
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:73
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:83
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:93
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:108
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:118
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:128
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:175
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:185
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:205
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:223
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:246
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:256
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:266
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:276
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:286
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:37
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:47
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:57
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:67
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:77
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:87
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:97
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:107
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:117
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:127
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:142
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:152
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:162
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:209
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:219
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:239
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:257
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:280
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:290
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:300
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:310
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:320
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:330
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:61
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:76
@@ -8601,25 +8632,29 @@ msgstr "Nimanni zonelachi sthiti ani akar"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:111
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.commodities.gschema.xml.in:11
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:6
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:34
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:44
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:54
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:64
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:74
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:84
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:94
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:109
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:119
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:129
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:176
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:186
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:206
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:224
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:247
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:257
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:267
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:277
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:287
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:38
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:48
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:58
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:68
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:78
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:88
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:98
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:108
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:118
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:128
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:143
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:153
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:163
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:210
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:220
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:240
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:258
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:281
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:291
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:301
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:311
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:321
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:331
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:6
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:62
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:77
@@ -8648,7 +8683,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:69
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:84
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:99
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:135
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:169
 msgid "Search only in active items"
 msgstr "Fokot kriaxil nogant sod"
 
@@ -9082,10 +9117,10 @@ msgid "Show currencies in this dialog"
 msgstr "hea sonvadontlm cholon dakhoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:12
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:143
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:151
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:159
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:167
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:177
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:185
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:193
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:201
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:12
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:27
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:55
@@ -9094,10 +9129,10 @@ msgid "Last pathname used"
 msgstr "nimannem vaporlelem vatte nanv"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:13
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:144
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:152
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:160
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:168
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:178
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:186
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:194
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:202
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.csv.gschema.xml.in:13
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:28
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:56
@@ -9118,14 +9153,14 @@ msgstr "zonelachem rekhagonnit"
 msgid "The position of paned window when it was last closed."
 msgstr "Kanchechea zonelachi sthiti jen'na tem nimanne bond kelelem"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:103
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:104
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:195
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:196
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:137
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:138
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:229
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:230
 msgid "Position of the horizontal pane divider."
 msgstr "Sopatt harso bagovpichi sthiti"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:136
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:170
 msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
@@ -9133,27 +9168,27 @@ msgstr ""
 "Hembosovp chalont vorgant soglle nog sodche vo na tem dakhoita, vo fokt "
 "'kriaxil' nog chalont vorgant"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:200
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:201
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:234
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:235
 msgid "Position of the vertical pane divider."
 msgstr "ubea harxeachea bagovpachi sthiti"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:215
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:249
 msgid "Show the new user window"
 msgstr "fuddlo zonelacho vaporpi dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:216
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:250
 msgid ""
 "If active, the new user window will be shown. Otherwise it will not be shown."
 msgstr ""
 "Kriaxil aslear, novo zonelacho vaporpi dakhovpant ietlo. Na zalear tem "
 "dakhovpant ievchemna"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:230
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:264
 msgid "New hierarchy window on \"New File\""
 msgstr "\"Novea Failint\" novea kromporomporachem zonel"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:231
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:265
 msgid ""
 "If active, the \"New Hierarchy\" window will be shown whenever the \"New "
 "File\" menu item is chosen. Otherwise it will not be shown."
@@ -9162,8 +9197,8 @@ msgstr ""
 "\"Novi fail\"hichi nogachi volleri venchtoch. Na zalear ti dakhovpant "
 "ievchina"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:238
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:239
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:272
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:273
 msgid "Default to 'new search' if fewer than this number of items is returned"
 msgstr ""
 "'Novea sod' ant default zor hea nogachea ankddeam poros unnem porot korpant "
@@ -9586,13 +9621,13 @@ msgstr ""
 "dakhovpant ieta. Na zalear tem dakhovpant iena"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:5
-#: gnucash/gtkbuilder/dialog-preferences.glade:3663
+#: gnucash/gtkbuilder/dialog-preferences.glade:3747
 msgid "Alpha Vantage API key"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:6
-#: gnucash/gtkbuilder/dialog-preferences.glade:3662
-#: gnucash/gtkbuilder/dialog-preferences.glade:3674
+#: gnucash/gtkbuilder/dialog-preferences.glade:3746
+#: gnucash/gtkbuilder/dialog-preferences.glade:3758
 msgid ""
 "Alpha Vantage requires an API key to use their service. You can obtain a key "
 "by registering for a free account at the Alpha Vantage website, https://www."
@@ -9600,13 +9635,13 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
-#: gnucash/gtkbuilder/dialog-preferences.glade:3687
+#: gnucash/gtkbuilder/dialog-preferences.glade:3771
 msgid "YH Finance (FinanceAPI) API key"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
-#: gnucash/gtkbuilder/dialog-preferences.glade:3686
-#: gnucash/gtkbuilder/dialog-preferences.glade:3698
+#: gnucash/gtkbuilder/dialog-preferences.glade:3770
+#: gnucash/gtkbuilder/dialog-preferences.glade:3782
 msgid ""
 "YH Finance requires an API key to use their FinanceAPI service. You can "
 "obtain a key by registering for a free account at the YH Finance website, "
@@ -9940,7 +9975,7 @@ msgstr "Novean rochlelea sorv khateank thollavem cholonachi pod'dot vapor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:141
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:146
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:355
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:366
 msgid ""
 "This setting controls the source of the default currency for new accounts. "
 "If set to \"locale\" then GnuCash will retrieve the default currency from "
@@ -10078,7 +10113,7 @@ msgstr ""
 "xitoddeacho poddo dakhol zavchona"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:195
-#: gnucash/gtkbuilder/dialog-preferences.glade:3377
+#: gnucash/gtkbuilder/dialog-preferences.glade:3461
 msgid "Display the notebook tabs at the top of the window."
 msgstr "nond pustokache vollokh pott'tti zonelachea voir dakhoi"
 
@@ -10096,22 +10131,22 @@ msgstr ""
 "\"ujvean\". Defaulta vorvim \"voir\""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
-#: gnucash/gtkbuilder/dialog-preferences.glade:3396
+#: gnucash/gtkbuilder/dialog-preferences.glade:3480
 msgid "Display the notebook tabs at the bottom of the window."
 msgstr "nond pustokache vollokh pott'tti zonelachea sokoil dakhoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:205
-#: gnucash/gtkbuilder/dialog-preferences.glade:3415
+#: gnucash/gtkbuilder/dialog-preferences.glade:3499
 msgid "Display the notebook tabs at the left of the window."
 msgstr "nondpustokachevollokh pott'tti zonelachea davean dakhoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:210
-#: gnucash/gtkbuilder/dialog-preferences.glade:3434
+#: gnucash/gtkbuilder/dialog-preferences.glade:3518
 msgid "Display the notebook tabs at the right of the window."
 msgstr "nond pustokache vollokh pott'tti zonelachea uzvean dakhoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:215
-#: gnucash/gtkbuilder/dialog-preferences.glade:3466
+#: gnucash/gtkbuilder/dialog-preferences.glade:3550
 msgid "Display the summary bar at the top of the page."
 msgstr "Saranvx kanddi panachea voir dakhoi"
 
@@ -10127,12 +10162,12 @@ msgstr ""
 "zata"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
-#: gnucash/gtkbuilder/dialog-preferences.glade:3485
+#: gnucash/gtkbuilder/dialog-preferences.glade:3569
 msgid "Display the summary bar at the bottom of the page."
 msgstr "Saranvx kanddi panachea sokoil dakhoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:225
-#: gnucash/gtkbuilder/dialog-preferences.glade:3335
+#: gnucash/gtkbuilder/dialog-preferences.glade:3419
 msgid "Closing a tab moves to the most recently visited tab."
 msgstr ""
 "Vollokh pott'tti bond korop mhonnche chodd halim bhett dilelea vollokh "
@@ -10181,12 +10216,12 @@ msgstr ""
 "pustokacho poriai novea failink oso bosovpant ieta jea vorvim'Ankddea' khonn "
 "nondpott'ttent dakhoita/ aichea tarkhent vevhar korta"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
 #, fuzzy
 msgid "Color the register using a gnucash specific color theme"
 msgstr "nondpott'ttek iontronnachea vixoian ltharailolo rong di "
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:242
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:248
 msgid ""
 "When enabled the register will use a GnuCash specific color theme (green/"
 "yellow). Otherwise it will use the system color theme. Regardless of this "
@@ -10195,11 +10230,11 @@ msgid ""
 "can be found in the gnucash FAQ."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:246
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:252
 msgid "\"Enter\" key moves to bottom of register"
 msgstr "\"bhor\" chavi nondpott'ttint sokoil halta"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:247
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:253
 msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
@@ -10207,16 +10242,16 @@ msgstr ""
 "Kriaxil kelear,nond damlea, chavi nondpott'ttechea sokoil halteli.Na zalear "
 "nond chavi damlear, chavi fuddlea vevharachea vollint halteli"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:251
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:252
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:257
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:258
 msgid "Automatically raise the list of accounts or actions during input"
 msgstr "Bhorvonne vellar khateanchi volleri vo kario apoap choddoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:256
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:262
 msgid "Move to Transfer field when memorised transaction auto filled"
 msgstr "Jen'na smrutintlo vevhar apoap bhorpant ieta Bodlechea mollant hal"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:257
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:263
 msgid ""
 "If active then after a memorised transaction is automatically filled in the "
 "cursor will move to the Transfer field. If not active then it skips to the "
@@ -10226,11 +10261,21 @@ msgstr ""
 "cursor Stholantor mollant haltolo. Kriaxil naslear, tem molachea mollant "
 "talltta"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:261
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:267
+msgid "\"Jump\" behaviour when there are multiple splits"
+msgstr ""
+
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:268
+msgid ""
+"Select how the \"Jump\" operation should behave when a transaction has "
+"multiple splits."
+msgstr ""
+
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:272
 msgid "Create a new window for each new register"
 msgstr "dor novea nonpott'ttek ek novel zonel roch"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:262
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:273
 msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
@@ -10239,11 +10284,11 @@ msgstr ""
 "zalear dor novi nondpott'tti mukhel zonelant ek vollokh pott'tti mhonn "
 "ugoddpant ietli"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:266
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:277
 msgid "Color all lines of a transaction the same"
 msgstr "vevharachea sorv vollink toch rong di"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:267
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:278
 msgid ""
 "If active all lines that make up a single transaction will use the same "
 "color for their background. Otherwise the background colors are alternated "
@@ -10252,11 +10297,11 @@ msgstr ""
 "Kriaxil aslear, soglleo volli jeo ek ekoddo vevhar ghoddttat teo toch rong "
 "fattbhuienk vaportat.Na zalear fattbhuinche rong dor vollint ek soddun astat"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:271
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:282
 msgid "Show horizontal borders in a register"
 msgstr "nondpott'ttint addveo dego dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:272
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:283
 msgid ""
 "Show horizontal borders between rows in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
@@ -10266,11 +10311,11 @@ msgstr ""
 "modli ek zodd vollint dakhovpant ieta. Na zalear khonna modli deg "
 "khunnavpant iena "
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:276
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
 msgid "Show vertical borders in a register"
 msgstr "nondpott'ttent ubio dego dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:277
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:288
 msgid ""
 "Show vertical borders between columns in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
@@ -10280,12 +10325,12 @@ msgstr ""
 "modli deg eka zodd vollint dakhovpant ietli.Na zalear khonna modli deg "
 "khunnavpant iena"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:281
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
 #, fuzzy
 msgid "Show future transactions after the blank transaction in a register"
 msgstr "nond pott'tichea khala koro vevhar haloi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:282
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:293
 msgid ""
 "Show future transactions after the blank transaction in a register. If "
 "active then transactions with a date in the future will be displayed at the "
@@ -10293,16 +10338,16 @@ msgid ""
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
-#: gnucash/gtkbuilder/dialog-preferences.glade:2850
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
+#: gnucash/gtkbuilder/dialog-preferences.glade:2934
 #, fuzzy
 #| msgid "Delete all _transactions"
 msgid "Hide splits in all transactions."
 msgstr "sorv vevhar dosoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:298
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:303
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:308
 #, fuzzy
 #| msgid ""
 #| "This field specifies the default view style when opening a new register "
@@ -10326,8 +10371,8 @@ msgstr ""
 "ledger\" sthapop tench korta punnchalont vevharui vistarit korta soglle "
 "futall dakhovpak. \"nemallem\" sthapop sorv vevhar vistarit akarant dakhoita."
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
-#: gnucash/gtkbuilder/dialog-preferences.glade:2869
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
+#: gnucash/gtkbuilder/dialog-preferences.glade:2953
 #, fuzzy
 #| msgid ""
 #| "Automatically expand the current transaction to show all splits. All "
@@ -10340,19 +10385,19 @@ msgstr ""
 "Soglle futall dakhovpak apoap chalont vevhar vistarit kor. Soglle her vevhar "
 "eka vollint dakhovpant ietat (Don eka dobrad vollichea prokarant)"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:296
-#: gnucash/gtkbuilder/dialog-preferences.glade:2888
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:307
+#: gnucash/gtkbuilder/dialog-preferences.glade:2972
 msgid "All transactions are expanded to show all splits."
 msgstr "sorv vevhar sorv futall dahkonvk vistarit keleat"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:301
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:312
 #, fuzzy
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
 msgstr "dor eka vevharacheo don volli dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:313
 #, fuzzy
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
@@ -10364,11 +10409,11 @@ msgstr ""
 "bosovp jen'na nondpott'tii poilech pavtt ugoddpant ieta. Hembosovp ken'naim "
 "bodlum ieta \"View-&gt;Double Line\" nogache volleri vaprun"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:306
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:317
 msgid "Only display leaf account names."
 msgstr "fokot panachea khateachim nanvam dakhol kor"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:307
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:318
 msgid ""
 "Show only the names of the leaf accounts in the register and in the account "
 "selection popup. The default behaviour is to display the full name, "
@@ -10380,11 +10425,11 @@ msgstr ""
 "vattecho aspav zavn asa. Hi nivodd kriaxil korp mhonnche tum ekmev panachim "
 "nanvam vaporta"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:311
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:322
 msgid "Show the entered and reconcile dates"
 msgstr "Nond keleleo ani zulloileleo tarkho dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:312
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:323
 msgid ""
 "Show the date when the transaction was entered below the posted date and "
 "reconciled date on split row."
@@ -10392,50 +10437,50 @@ msgstr ""
 "Ken'na vevhar nond kelolo ti tarikh nond kelelea tarkhe sokoil ani "
 "zulloilelea futallachea ranke sokoil dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:316
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:327
 msgid "Show entered and reconciled dates on selection"
 msgstr "Venchlea uprant nond keleleo ani zulloilelo tarkho dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:317
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:328
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr "Nond keleli tarikh ani zulloileli tarikh vevhar venchtoch dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:321
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:332
 msgid "Show the calendar buttons"
 msgstr "Ponnchangache butanv dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:322
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:333
 msgid "Show the calendar buttons Cancel, Today and Select."
 msgstr "Ponchangache butanv, Rod'dkor, Aiz ani vench dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:326
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:337
 msgid "Move the selection to the blank split on expand"
 msgstr "Venchop korea futallent vistar kelea uprant haloi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:327
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:338
 msgid ""
 "This will move the selection to the blank split when the transaction is "
 "expanded."
 msgstr ""
 "Jen'na vevhar vistarit korpant ieta ten'na hem korea futalla kodden haltolem"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:331
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:342
 msgid "Number of transactions to show in a register."
 msgstr "Eka nondpott'ttent vevharache ankdde dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:332
-#: gnucash/gtkbuilder/dialog-preferences.glade:2919
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:343
+#: gnucash/gtkbuilder/dialog-preferences.glade:3003
 msgid ""
 "Show this many transactions in a register. A value of zero means show all "
 "transactions."
 msgstr ""
 "Itle vevhar nondpott'ttent dahkoi.Xunio mol mhullear sorv vevhar dahkoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:336
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:347
 msgid "Number of characters for auto complete."
 msgstr "Apoap purnn hantunt okxoranche ankdde dakhoi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:337
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:348
 msgid ""
 "This sets the number of characters before auto complete starts for "
 "description, notes and memo fields."
@@ -10443,11 +10488,11 @@ msgstr ""
 "Apoap vornnon, nondnneo ani nivedonachim mollam suru zavche poilim hem "
 "okxorache ankdde bosoita"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:344
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:355
 msgid "Create a new window for each new report"
 msgstr "dor novea niallak ek novem zonel ugodd"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:345
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:356
 msgid ""
 "If active, each new report will be opened in its own window. Otherwise new "
 "reports will be opened as tabs in the main window."
@@ -10455,13 +10500,13 @@ msgstr ""
 "Kriaxil aslear,dor novo niall aplea khas zonelant ugoddpant ietlo.Na zalear "
 "nove niall vollkh pott'tti koxe mukhel zonelant ugte korpant ietat"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:349
-#: gnucash/gtkbuilder/dialog-preferences.glade:3203
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:360
+#: gnucash/gtkbuilder/dialog-preferences.glade:3287
 msgid "Use the system locale currency for all newly created reports."
 msgstr "Novean rochlelea sorv vakeank pod'dotichem thollavem cholon vapor"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:350
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:360
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:361
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:371
 msgid ""
 "This setting controls the default currency used for reports. If set to "
 "\"locale\" then GnuCash will retrieve the default currency from the user's "
@@ -10473,32 +10518,32 @@ msgstr ""
 "bosovpantlean. \"her\" bosovp kelar GnuCash tharailolem bosovp cholonachea-"
 "her chavi vaportelem"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:354
-#: gnucash/gtkbuilder/dialog-preferences.glade:3183
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:365
+#: gnucash/gtkbuilder/dialog-preferences.glade:3267
 msgid "Use the specified currency for all newly created reports."
 msgstr "Novean rochlelea sogllea vakeank tharavik cholon vapor"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:359
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:370
 msgid "Default currency for new reports"
 msgstr "novea niallank default cholon"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:364
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
 msgid "Zoom factor to use by default for reports."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:365
-#: gnucash/gtkbuilder/dialog-preferences.glade:3218
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:376
+#: gnucash/gtkbuilder/dialog-preferences.glade:3302
 msgid ""
 "On high resolution screens reports tend to be hard to read. This option "
 "allows you to scale reports up by the set factor. For example setting this "
 "to 2.0 will display reports at twice their typical size."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:374
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:385
 msgid "PDF export file name format"
 msgstr "PDF niriat failichea nanvachem soruponn"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:386
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -10516,11 +10561,11 @@ msgstr ""
 "na zoxe porim '/', tim underscores '_' hantunt bodolpant ietlim zache vorvim "
 "failichem nanv mellttolem."
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:379
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:390
 msgid "PDF export file name date format choice"
 msgstr "PDF niriat failichea nanvachea tarkechea soruponnachi nivodd"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:380
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:391
 msgid ""
 "This setting chooses the way dates are used in the filename of PDF export. "
 "Possible values for this setting are \"locale\" to use the system locale "
@@ -10534,11 +10579,11 @@ msgstr ""
 "ISO 8601 promann tarkhank,\"uk\" United Kingdom xoilichea tarkhank ani "
 "\"us\" United States xoilichea tarkhank"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:386
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:397
 msgid "Allow file incompatibility with older versions."
 msgstr "pornea avrut'tek failichi oxokio vagpak porvangi di"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:387
+#: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:398
 msgid ""
 "If active, gnucash will be allowed to intentionally break file compatibility "
 "with older versions, so that a data file saved in this version cannot be "
@@ -10599,12 +10644,12 @@ msgstr ""
 "Hea mollant fuddlea chodd halinch ugoddlelea failichi pure vattecho aspav asa"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:9
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:132
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:142
 msgid "Print checks from multiple accounts"
 msgstr "bhov khateantle chhaplele chek"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:133
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:143
 msgid ""
 "This dialog is presented if you try to print checks from multiple accounts "
 "at the same time."
@@ -10613,12 +10658,12 @@ msgstr ""
 "sonvad bhettovpant ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:14
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:137
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:147
 msgid "Confirm Window Close"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:15
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:138
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:148
 #, fuzzy
 #| msgid "This dialog is presented when a read-only register is opened."
 msgid "This dialog is presented when there is more than one window."
@@ -10627,12 +10672,12 @@ msgstr ""
 "ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:19
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:142
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
 msgid "Commit changes to a invoice entry"
 msgstr "Vikrechea sotrache nondnent bodol supurd kor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:20
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:143
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:153
 msgid ""
 "This dialog is presented when you attempt to move out of a modified invoice "
 "entry. The changed data must be either saved or discarded."
@@ -10642,12 +10687,12 @@ msgstr ""
 "tor kaddun uddovnk zai."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:24
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:147
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:157
 msgid "Duplicating a changed invoice entry"
 msgstr "Ek bodolelea vikrechea sotrachi nond nokol kortam"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:25
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:148
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:158
 msgid ""
 "This dialog is presented when you attempt to duplicate a modified invoice "
 "entry. The changed data must be saved or the duplication canceled."
@@ -10657,22 +10702,22 @@ msgstr ""
 "pratirup rod'd korunk zai"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:29
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:152
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:162
 msgid "Delete a commodity"
 msgstr "ek mhal dosoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:30
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:153
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:163
 msgid "This dialog is presented before allowing you to delete a commodity."
 msgstr "tuvem mhal dosovnk divchea adim ho sonvad tuka sador korpant ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:34
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:157
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:167
 msgid "Delete a commodity with price quotes"
 msgstr "Molacheo sangnneo aslolo mhal dosoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:35
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:158
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:168
 msgid ""
 "This dialog is presented before allowing you to delete a commodity that has "
 "price quotes attached. Deleting the commodity will delete the quotes as well."
@@ -10681,12 +10726,12 @@ msgstr ""
 "bhettovpant ieta. Mhal dosovpant utarei dosovpant ietle."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:39
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:162
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:172
 msgid "Delete multiple price quotes"
 msgstr "Bhov molache utare dosoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:40
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:163
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:173
 msgid ""
 "This dialog is presented before allowing you to delete multiple price quotes "
 "at one time."
@@ -10694,24 +10739,24 @@ msgstr ""
 "tuvem bhov molache utare eka vellar dosoiche adim ho sonvad bhettovpant ieta."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:44
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:167
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:177
 msgid "Replace existing price"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:45
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:168
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:178
 #, fuzzy
 msgid ""
 "This dialog is presented before allowing you to replace an existing price."
 msgstr "tuvem vevhar dosoichea adim ho sonvad tuka bhettovpant ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:49
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:172
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:182
 msgid "Edit account payable/accounts receivable register"
 msgstr "Hixob farik korpacho/hixob mellpacho nondpott'tti sudar"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:50
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:173
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:183
 msgid ""
 "This dialog is presented before allowing you to edit an accounts payable/"
 "accounts receivable account. These account types are reserved for the "
@@ -10722,24 +10767,24 @@ msgstr ""
 "te kuxaltaien hatallop kochit korunk zai"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:54
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:177
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:187
 msgid "Read only register"
 msgstr "Fokt vachpachi nondpott'tti"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:55
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:178
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:188
 msgid "This dialog is presented when a read-only register is opened."
 msgstr ""
 "Jen'na ek fokot vachpachi nondpott'tti ugoddtta ten'na ho sonvad bhettovpant "
 "ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:59
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:182
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
 msgid "Change contents of reconciled split"
 msgstr "zulloilelea futtalacho mozkur bodol"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:60
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:183
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:193
 msgid ""
 "This dialog is presented before allowing you to change the contents of a "
 "reconciled split. Allowing these changes can make it hard to perform future "
@@ -10749,12 +10794,12 @@ msgstr ""
 "ieta. He bodol toxech dovorlear fuddleo zullovnneo korunk avgodd zatlem"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:64
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:187
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:197
 msgid "Mark transaction split as unreconciled"
 msgstr "vevharacho futall zullovnk na mhonn khunnai"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:65
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:188
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:198
 msgid ""
 "This dialog is presented before allowing you to mark a transaction split as "
 "unreconciled. Doing so will throw off the reconciled value of the register "
@@ -10765,14 +10810,14 @@ msgstr ""
 "zullovnneo korunk kotthin zatlem"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:202
 #, fuzzy
 #| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
 msgstr "vevhara thavn ek futall kadd"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:193
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:203
 #, fuzzy
 #| msgid ""
 #| "This dialog is presented before allowing you to remove a split from a "
@@ -10783,14 +10828,14 @@ msgid ""
 msgstr "vevhara thavn futall kaddche adim ho sonvad tuka bhettovpant ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:197
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:207
 #, fuzzy
 #| msgid "Remove a reconciled split from a transaction"
 msgid "Cut a reconciled split from a transaction"
 msgstr "vevhara thavn ek zulloilelo futall kadd"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:198
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:208
 #, fuzzy
 #| msgid ""
 #| "This dialog is presented before allowing you to remove a reconciled split "
@@ -10806,24 +10851,24 @@ msgstr ""
 "korunk avghodd zatlem"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:79
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:202
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:212
 msgid "Remove a split from a transaction"
 msgstr "vevhara thavn ek futall kadd"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:80
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:203
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:213
 msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
 msgstr "vevhara thavn futall kaddche adim ho sonvad tuka bhettovpant ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:84
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:207
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:217
 msgid "Remove a reconciled split from a transaction"
 msgstr "vevhara thavn ek zulloilelo futall kadd"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:85
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:208
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:218
 msgid ""
 "This dialog is presented before allowing you to remove a reconciled split "
 "from a transaction. Doing so will throw off the reconciled value of the "
@@ -10835,20 +10880,20 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:89
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:94
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:212
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:217
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:222
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:227
 msgid "Remove all the splits from a transaction"
 msgstr "vevhara thavn sorv futall kadd"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:90
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:213
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:223
 msgid ""
 "This dialog is presented before allowing you to remove all splits from a "
 "transaction."
 msgstr "vevhara thavn sorv futall kaddche adim ho sonvad bhettovpant ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:95
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:218
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:228
 msgid ""
 "This dialog is presented before allowing you to remove all splits (including "
 "some reconciled splits) from a transaction. Doing so will throw off the "
@@ -10861,13 +10906,13 @@ msgstr ""
 "zatlem"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:222
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:232
 #, fuzzy
 msgid "Cut a transaction"
 msgstr "vevhar kator"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:223
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:233
 #, fuzzy
 #| msgid ""
 #| "This dialog is presented before allowing you to delete a transaction."
@@ -10875,14 +10920,14 @@ msgid "This dialog is presented before allowing you to cut a transaction."
 msgstr "tuvem vevhar dosoichea adim ho sonvad tuka bhettovpant ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:227
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:237
 #, fuzzy
 #| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
 msgstr "Zulloilea futallacho ek vevhar dosoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:228
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:238
 #, fuzzy
 #| msgid ""
 #| "This dialog is presented before allowing you to delete a transaction that "
@@ -10898,22 +10943,22 @@ msgstr ""
 "zatlem"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:232
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:242
 msgid "Delete a transaction"
 msgstr "vevhar dosoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:110
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:233
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:243
 msgid "This dialog is presented before allowing you to delete a transaction."
 msgstr "tuvem vevhar dosoichea adim ho sonvad tuka bhettovpant ieta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:114
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:237
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:247
 msgid "Delete a transaction with reconciled splits"
 msgstr "Zulloilea futallacho ek vevhar dosoi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:115
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:238
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:248
 msgid ""
 "This dialog is presented before allowing you to delete a transaction that "
 "contains reconciled splits. Doing so will throw off the reconciled value of "
@@ -10924,12 +10969,12 @@ msgstr ""
 "zatlem"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:119
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:242
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:252
 msgid "Duplicating a changed transaction"
 msgstr "bodolelo vevhar nokol kotamr"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:120
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:243
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:253
 msgid ""
 "This dialog is presented when you attempt to duplicate a modified "
 "transaction. The changed data must be saved or the duplication canceled."
@@ -10938,18 +10983,53 @@ msgstr ""
 "tor samballunk zai vo nokol rod'd korunk zai"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:124
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:247
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:257
 msgid "Commit changes to a transaction"
 msgstr "vevharachem bodlop supurd kor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:125
-#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:248
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:258
 msgid ""
 "This dialog is presented when you attempt to move out of a modified "
 "transaction. The changed data must be either saved or discarded."
 msgstr ""
 "Bodolelea vevharantlo tum bhair sortana ho sonvad bhettovpant ieta. Bodoleli "
 "mhaiti ek tor samballunk zai vo kaddun uddovnk zai."
+
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:129
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:262
+#, fuzzy
+#| msgid "Display the other account code?"
+msgid "Jump when there are multiple other accounts"
+msgstr "Her khateacho sonket dakhol korum?"
+
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:130
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:263
+msgid ""
+"This dialog is presented when you are unable to jump on a transaction "
+"because it has splits for multiple other accounts. A specific split must be "
+"selected to jump to the other account."
+msgstr ""
+
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:134
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:267
+#, fuzzy
+#| msgid "Display the other account code?"
+msgid "Jump when there are no other accounts"
+msgstr "Her khateacho sonket dakhol korum?"
+
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:135
+#: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:268
+#, fuzzy
+#| msgid ""
+#| "This dialog is presented when you attempt to duplicate a modified "
+#| "transaction. The changed data must be saved or the duplication canceled."
+msgid ""
+"This dialog is presented when you are unable to jump on a transaction "
+"because it only has splits for the current account."
+msgstr ""
+"Ho sonvad tum sudharit vevhar nokol kortana sador zata. Bodloleli mhait ek "
+"tor samballunk zai vo nokol rod'd korunk zai"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:6
@@ -11246,7 +11326,7 @@ msgid "Import Account Preview, first 10 rows only"
 msgstr "Khateacho purvvimorso aiat kor, fokt poile 10 ranko"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:277
-#: gnucash/gtkbuilder/assistant-csv-export.glade:706
+#: gnucash/gtkbuilder/assistant-csv-export.glade:692
 msgid ""
 "Press Apply to create export file.\n"
 "Cancel to abort."
@@ -11292,87 +11372,82 @@ msgstr "Niriat bosovpam vench"
 msgid "Select the accounts to be exported and date range if required."
 msgstr "Niriat korpachim khatim ani goroz zalear tarkhanchi rank vench"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:320
-#: gnucash/gtkbuilder/dialog-tax-info.glade:376
-msgid "Accounts Selected:"
-msgstr "vinchlelim khatim"
-
-#: gnucash/gtkbuilder/assistant-csv-export.glade:367
-#: gnucash/gtkbuilder/dialog-tax-info.glade:422
+#: gnucash/gtkbuilder/assistant-csv-export.glade:353
+#: gnucash/gtkbuilder/dialog-tax-info.glade:408
 msgid "_Select Subaccounts"
 msgstr "upkhatim vench "
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:382
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:470
+#: gnucash/gtkbuilder/assistant-csv-export.glade:368
 msgid "Select _All"
 msgstr "sorv vinch (_A)"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:426
+#: gnucash/gtkbuilder/assistant-csv-export.glade:412
 #: gnucash/gtkbuilder/assistant-loan.glade:1205
 #: gnucash/report/reports/standard/new-owner-report.scm:1131
 msgid "Date Range"
 msgstr "tarkhechi rank"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:439
+#: gnucash/gtkbuilder/assistant-csv-export.glade:425
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:256
 #: gnucash/gtkbuilder/dialog-account.glade:890
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:104
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:470
 msgid "_Select All"
 msgstr "sorv vinch (_S)"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:456
+#: gnucash/gtkbuilder/assistant-csv-export.glade:442
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
 msgstr "ontor vench"
 
 #. Filter By Dialog, Date Tab, Start section
-#: gnucash/gtkbuilder/assistant-csv-export.glade:484
+#: gnucash/gtkbuilder/assistant-csv-export.glade:470
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:170
 msgid "Start"
 msgstr "suru kor"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:493
+#: gnucash/gtkbuilder/assistant-csv-export.glade:479
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:179
 msgid "_Earliest"
 msgstr "soglleavon adlem"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:510
+#: gnucash/gtkbuilder/assistant-csv-export.glade:496
 msgid "Cho_ose Date"
 msgstr "tarikh vench"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:527
+#: gnucash/gtkbuilder/assistant-csv-export.glade:513
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:211
 msgid "Toda_y"
 msgstr "aiz "
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:544
+#: gnucash/gtkbuilder/assistant-csv-export.glade:530
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:228
 msgid "_Latest"
 msgstr "halinchem"
 
 #. Filter By Dialog, Date Tab, End section
-#: gnucash/gtkbuilder/assistant-csv-export.glade:566
+#: gnucash/gtkbuilder/assistant-csv-export.glade:552
 #: gnucash/gtkbuilder/dialog-fincalc.glade:613
 #: gnucash/gtkbuilder/dialog-sx.glade:422
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:258
 msgid "End"
 msgstr "Xevott"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:575
+#: gnucash/gtkbuilder/assistant-csv-export.glade:561
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:267
 msgid "C_hoose Date"
 msgstr "tarikh vench"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:592
+#: gnucash/gtkbuilder/assistant-csv-export.glade:578
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:284
 msgid "_Today"
 msgstr "aiz "
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:673
+#: gnucash/gtkbuilder/assistant-csv-export.glade:659
 msgid "Account Selection"
 msgstr "Khateanchem venchop"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:687
+#: gnucash/gtkbuilder/assistant-csv-export.glade:673
 #, fuzzy
 #| msgid ""
 #| "\n"
@@ -11382,19 +11457,19 @@ msgstr ""
 "\n"
 "Niriate khatir failichem nanv ani zago bhor...\n"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:698
+#: gnucash/gtkbuilder/assistant-csv-export.glade:684
 msgid "Choose File Name for Export"
 msgstr "Niriate khatir failichem nanv vench"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:712
+#: gnucash/gtkbuilder/assistant-csv-export.glade:698
 msgid "Export Now…"
 msgstr "Atam niriat kor…"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:720
+#: gnucash/gtkbuilder/assistant-csv-export.glade:706
 msgid "Summary"
 msgstr "Sonkxep"
 
-#: gnucash/gtkbuilder/assistant-csv-export.glade:725
+#: gnucash/gtkbuilder/assistant-csv-export.glade:711
 msgid "Export Summary"
 msgstr "Niriat sonkxep"
 
@@ -11826,7 +11901,6 @@ msgid "<b>Categories</b>"
 msgstr "<b>vorgonna</b>"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:272
-#: gnucash/gtkbuilder/dialog-account.glade:906
 msgid "C_lear All"
 msgstr "sorv nivllai"
 
@@ -12730,8 +12804,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-account.glade:1851
 #: gnucash/gtkbuilder/dialog-price.glade:182
 #: gnucash/gtkbuilder/dialog-print-check.glade:700
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:651
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:862
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:666
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:877
 #: gnucash/ui/gnc-plugin-page-invoice.ui:90
 msgid "_Date"
 msgstr "_Tarikh"
@@ -12792,7 +12866,7 @@ msgstr "rok'kom:"
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:830
 #: gnucash/gtkbuilder/dialog-import.glade:958
 #: gnucash/gtkbuilder/dialog-print-check.glade:1129
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:957
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:972
 msgid "_Memo"
 msgstr "nivedon"
 
@@ -12911,7 +12985,7 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4273
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4289
 msgid "Cash"
 msgstr "rokodd"
 
@@ -13306,6 +13380,13 @@ msgstr ""
 msgid "Filter By…"
 msgstr "hantlean gall…"
 
+#: gnucash/gtkbuilder/dialog-account.glade:906
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:498
+#, fuzzy
+#| msgid "Clear All"
+msgid "Clear _All"
+msgstr "sorv nivoll kor"
+
 #: gnucash/gtkbuilder/dialog-account.glade:922
 msgid "_Default"
 msgstr "default"
@@ -13413,7 +13494,7 @@ msgid "Smallest fraction of this commodity that can be referenced."
 msgstr "hea mhalachea tukddeacho ul'lekh kounk zata tea vixim"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1451
-#: gnucash/gtkbuilder/dialog-tax-info.glade:646
+#: gnucash/gtkbuilder/dialog-tax-info.glade:632
 msgid "_Parent Account"
 msgstr "vhoddil khatem"
 
@@ -14810,7 +14891,7 @@ msgstr "vehara vornnonachi bariksann chhapinaka"
 #: gnucash/gtkbuilder/dialog-import.glade:944
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
 #: gnucash/gtkbuilder/dialog-print-check.glade:745
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1014
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1029
 msgid "_Notes"
 msgstr "nondnneo"
 
@@ -15349,7 +15430,7 @@ msgid "<b>Default Currency</b>"
 msgstr "<b>default cholon</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:756
-#: gnucash/gtkbuilder/dialog-preferences.glade:3076
+#: gnucash/gtkbuilder/dialog-preferences.glade:3160
 msgid "US Dollars (USD)"
 msgstr "US Dollar (USD)"
 
@@ -15391,12 +15472,12 @@ msgstr ""
 "\"slash\", \"backslash\", \"dash\" and \"period\"."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:916
-#: gnucash/gtkbuilder/dialog-preferences.glade:3177
+#: gnucash/gtkbuilder/dialog-preferences.glade:3261
 msgid "Ch_oose"
 msgstr "vench"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:936
-#: gnucash/gtkbuilder/dialog-preferences.glade:3197
+#: gnucash/gtkbuilder/dialog-preferences.glade:3281
 msgid "Loc_ale"
 msgstr "sthol"
 
@@ -15820,24 +15901,62 @@ msgid "Move to Transfer field when memorised transaction auto filled."
 msgstr "Smrutiche vevhar apoap bhorlea uprant Bodli mollant hal"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2581
+msgid "<b>Jump action for multiple splits</b>"
+msgstr ""
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2583
+msgid "Transaction jump action when there are more than two splits."
+msgstr ""
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2593
+msgid "Do _nothing"
+msgstr ""
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2599
+#, fuzzy
+#| msgid "Do not show"
+msgid "Do nothing."
+msgstr "dakhoi naka"
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2612
+msgid "Go to the first split with the _largest value"
+msgstr ""
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2618
+msgid ""
+"Use the first split with the largest value to determine the other account."
+msgstr ""
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2632
+#, fuzzy
+#| msgid "Do not print transactions out of specified dates."
+msgid "Go to the first split with the _smallest value"
+msgstr "Tharainaslelea tarkhank vevhar chhapnaka"
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2638
+msgid ""
+"Use the first split with the smallest value to determine the other account."
+msgstr ""
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2665
 msgid "<b>Reconciling</b>"
 msgstr "<b>zulloitam</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2591
+#: gnucash/gtkbuilder/dialog-preferences.glade:2675
 msgid "Check cleared _transactions"
 msgstr "nivoll kelelem kario"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2597
+#: gnucash/gtkbuilder/dialog-preferences.glade:2681
 msgid "Pre-check cleared transactions when creating a reconcile dialog."
 msgstr ""
 "Jen'na tum zullovpacho sonvad rochta, ten'na adinch nivoll kelelem kario "
 "topas "
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2609
+#: gnucash/gtkbuilder/dialog-preferences.glade:2693
 msgid "Automatic credit card _payment"
 msgstr "Apoap credit cardachem farik korop"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2615
+#: gnucash/gtkbuilder/dialog-preferences.glade:2699
 msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
@@ -15845,11 +15964,11 @@ msgstr ""
 "credit card vidhan zulloilea uprant, vaporpeak credit card farik korpachem "
 "nond korunk suchit kor"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2627
+#: gnucash/gtkbuilder/dialog-preferences.glade:2711
 msgid "Always reconcile to t_oday"
 msgstr "Sodanch aicheak zullloi"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2633
+#: gnucash/gtkbuilder/dialog-preferences.glade:2717
 msgid ""
 "Always open the reconcile dialog using today's date for the statement date, "
 "regardless of previous reconciliations."
@@ -15857,25 +15976,25 @@ msgstr ""
 "Sodanch zullovpacho sonvad ugodd aichi tarikh vaprun vidhana khatir, adlea "
 "zullovnnechem lokxant ghenastana"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2658
+#: gnucash/gtkbuilder/dialog-preferences.glade:2742
 msgid "<b>Graphics</b>"
 msgstr "<b>chitralekh</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2668
+#: gnucash/gtkbuilder/dialog-preferences.glade:2752
 msgid "_Use GnuCash built-in color theme"
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2674
+#: gnucash/gtkbuilder/dialog-preferences.glade:2758
 msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Uncheck "
 "this if you want to use the system color theme instead."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2686
+#: gnucash/gtkbuilder/dialog-preferences.glade:2770
 msgid "Double _mode colors alternate with transactions"
 msgstr "dobrad toreche rong vevharchea ek soddun"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2692
+#: gnucash/gtkbuilder/dialog-preferences.glade:2776
 msgid ""
 "Alternate the primary and secondary colors by transaction instead of by "
 "alternating by row."
@@ -15883,23 +16002,23 @@ msgstr ""
 "prathmik ani dvitiok rong vevharant ek soddun di rangechea ek soddun korche "
 "poros"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2704
+#: gnucash/gtkbuilder/dialog-preferences.glade:2788
 msgid "Draw hori_zontal lines between rows"
 msgstr "addvio volli rangenchea modim chitar"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2710
+#: gnucash/gtkbuilder/dialog-preferences.glade:2794
 msgid "Show horizontal borders on the cells."
 msgstr "khonnant addvio dego dakhol kor"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2722
+#: gnucash/gtkbuilder/dialog-preferences.glade:2806
 msgid "Draw _vertical lines between columns"
 msgstr "ubio volli khonna modim chitar"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2728
+#: gnucash/gtkbuilder/dialog-preferences.glade:2812
 msgid "Show vertical borders on the cells."
 msgstr "Khonnant dego dakhol kor"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2753
+#: gnucash/gtkbuilder/dialog-preferences.glade:2837
 #: gnucash/report/reports/standard/invoice.scm:401
 #: gnucash/report/reports/standard/invoice.scm:406
 #: gnucash/report/reports/standard/invoice.scm:519
@@ -15912,13 +16031,13 @@ msgstr "Khonnant dego dakhol kor"
 msgid "Layout"
 msgstr "<b>Rok'kom</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2765
+#: gnucash/gtkbuilder/dialog-preferences.glade:2849
 #, fuzzy
 #| msgid "Number of _transactions"
 msgid "_Placement of future transactions"
 msgstr "vevharaankdde"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2771
+#: gnucash/gtkbuilder/dialog-preferences.glade:2855
 msgid ""
 "If checked, transactions with a date in the future will be displayed at the "
 "bottom of the register after the blank transaction unless in reverse sort "
@@ -15927,39 +16046,39 @@ msgid ""
 "transactions unless in reverse sort order when it will be at the top."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2811
+#: gnucash/gtkbuilder/dialog-preferences.glade:2895
 msgid "<b>Default Style</b>"
 msgstr "<b>default pod'dot</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2834
+#: gnucash/gtkbuilder/dialog-preferences.glade:2918
 msgid "<b>Other Defaults</b>"
 msgstr "<b>her defaults</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2844
+#: gnucash/gtkbuilder/dialog-preferences.glade:2928
 msgid "_Basic ledger"
 msgstr "mullavo ledger"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2863
+#: gnucash/gtkbuilder/dialog-preferences.glade:2947
 msgid "_Auto-split ledger"
 msgstr "Apoap futall ledger"
 
 #. Translators: This is a menu item in the View menu
-#: gnucash/gtkbuilder/dialog-preferences.glade:2882
+#: gnucash/gtkbuilder/dialog-preferences.glade:2966
 #: gnucash/ui/gnc-plugin-page-register.ui:87
 msgid "Transaction _Journal"
 msgstr "vevhara nemallem"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2904
+#: gnucash/gtkbuilder/dialog-preferences.glade:2988
 msgid "Number of _transactions"
 msgstr "vevharaankdde"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2937
+#: gnucash/gtkbuilder/dialog-preferences.glade:3021
 #, fuzzy
 #| msgid "_Double line mode"
 msgid "_Double line view"
 msgstr "dobrad vollinchi pod'dot"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2943
+#: gnucash/gtkbuilder/dialog-preferences.glade:3027
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
 #, fuzzy
@@ -15968,11 +16087,11 @@ msgid ""
 "transaction."
 msgstr "dor eka vevharacheo don volli dakhoi"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2955
+#: gnucash/gtkbuilder/dialog-preferences.glade:3039
 msgid "Register opens in a new _window"
 msgstr "nondpott'tti novea zonelant ugoddtta"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2961
+#: gnucash/gtkbuilder/dialog-preferences.glade:3045
 msgid ""
 "If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
@@ -15980,11 +16099,11 @@ msgstr ""
 "Topaslear, dor nondpott'tti aplea khas patllichea zonelant voir ugoddpant "
 "ieta.Nivoll aslear, nondpott'tti chalot zonelant ugoddpant ieta"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2973
+#: gnucash/gtkbuilder/dialog-preferences.glade:3057
 msgid "_Only display leaf account names"
 msgstr "Fokot panachea khateachim nanvam dakhol kor"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:2979
+#: gnucash/gtkbuilder/dialog-preferences.glade:3063
 msgid ""
 "If checked, only the names of the leaf accounts are displayed in the "
 "register and in the account selection popup. The default behaviour is to "
@@ -15996,23 +16115,23 @@ msgstr ""
 "korta zantunt hixobachea zhaddache vatticho somavex asa. Ho poriai topasop "
 "mhonnche tum ekmev pananchim nanvam vaporta."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3056
+#: gnucash/gtkbuilder/dialog-preferences.glade:3140
 msgid "Register Defaults"
 msgstr "Defaults nond kor"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3088
+#: gnucash/gtkbuilder/dialog-preferences.glade:3172
 msgid "<b>Default Report Currency</b>"
 msgstr "<b>default Vakeachem cholon</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3111
+#: gnucash/gtkbuilder/dialog-preferences.glade:3195
 msgid "<b>Location</b>"
 msgstr "<b>sthol</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3121
+#: gnucash/gtkbuilder/dialog-preferences.glade:3205
 msgid "Report opens in a new _window"
 msgstr "Vako novea zonelant ugto zata"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3127
+#: gnucash/gtkbuilder/dialog-preferences.glade:3211
 msgid ""
 "If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
@@ -16020,75 +16139,75 @@ msgstr ""
 "Topaslear. dor vako aplea khaxea voirchea panvddeachea zonelant ugoddpant "
 "ieta.Nivoll kelear, vako chalont zonelant ugoddpant ieta"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3155
-#: gnucash/gtkbuilder/dialog-preferences.glade:3235
+#: gnucash/gtkbuilder/dialog-preferences.glade:3239
+#: gnucash/gtkbuilder/dialog-preferences.glade:3319
 #, fuzzy
 msgid "Default zoom level"
 msgstr "<b>default pod'dot</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3270
+#: gnucash/gtkbuilder/dialog-preferences.glade:3354
 msgid "Reports"
 msgstr "vako"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3290
+#: gnucash/gtkbuilder/dialog-preferences.glade:3374
 msgid "<b>Window Geometry</b>"
 msgstr "<b>zonelachem rekhagonnit</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3310
+#: gnucash/gtkbuilder/dialog-preferences.glade:3394
 msgid "_Save window size and position"
 msgstr "Zonelacho akar ani sthiti samball"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3316
+#: gnucash/gtkbuilder/dialog-preferences.glade:3400
 msgid "Save window size and location when it is closed."
 msgstr "Jen'na bond korpant ieta ten'na zonelacho akar ani stholl samball"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3329
+#: gnucash/gtkbuilder/dialog-preferences.glade:3413
 msgid "Bring the most _recent tab to the front"
 msgstr "chodd halinchi vollokh pott'tti fuddem hadd"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3361
+#: gnucash/gtkbuilder/dialog-preferences.glade:3445
 msgid "<b>Tab Position</b>"
 msgstr "<b> Vollokh pott'ttechi sthiti</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3371
+#: gnucash/gtkbuilder/dialog-preferences.glade:3455
 #: gnucash/ui/gnc-main-window.ui:195
 msgid "To_p"
 msgstr "voir (_p)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3390
+#: gnucash/gtkbuilder/dialog-preferences.glade:3474
 #: gnucash/ui/gnc-main-window.ui:201
 msgid "B_ottom"
 msgstr "sokoil"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3409
+#: gnucash/gtkbuilder/dialog-preferences.glade:3493
 #: gnucash/ui/gnc-main-window.ui:207
 msgid "_Left"
 msgstr "Davean"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3428
+#: gnucash/gtkbuilder/dialog-preferences.glade:3512
 #: gnucash/ui/gnc-main-window.ui:213
 msgid "_Right"
 msgstr "uzvean"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3450
+#: gnucash/gtkbuilder/dialog-preferences.glade:3534
 msgid "<b>Summary Bar Position</b>"
 msgstr "<b>saranvx kanddiechi sthiti</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3479
+#: gnucash/gtkbuilder/dialog-preferences.glade:3563
 #: gnucash/gtkbuilder/dialog-print-check.glade:267
 #: gnucash/report/reports/standard/investment-lots.scm:198
 msgid "Bottom"
 msgstr "sokoil"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3511
+#: gnucash/gtkbuilder/dialog-preferences.glade:3595
 msgid "<b>Tabs</b>"
 msgstr "<b>Vollokh pott'ttio</b>"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3521
+#: gnucash/gtkbuilder/dialog-preferences.glade:3605
 msgid "Show close button on _notebook tabs"
 msgstr "nondpustokache vollokh pott'ttent dhamplolo butanv dakhoi"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3527
+#: gnucash/gtkbuilder/dialog-preferences.glade:3611
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
@@ -16096,7 +16215,7 @@ msgstr ""
 "Dor nondpustokant ek bond korpacho butanv dakhoi. Hem \"bond' vollerichea "
 "sarkem kario korta."
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3548
+#: gnucash/gtkbuilder/dialog-preferences.glade:3632
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
@@ -16105,29 +16224,29 @@ msgstr ""
 "ten'na vollokh pott'tek modim katrop astelem jem dirg vortulant bodol "
 "korpant ietlem"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3568
+#: gnucash/gtkbuilder/dialog-preferences.glade:3652
 msgid "characters"
 msgstr "okxoram"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3587
+#: gnucash/gtkbuilder/dialog-preferences.glade:3671
 #, fuzzy
 msgid "_Width"
 msgstr "rundai: (_W)"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3598
+#: gnucash/gtkbuilder/dialog-preferences.glade:3682
 msgid "Open new tabs _adjacent to current tab"
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3604
+#: gnucash/gtkbuilder/dialog-preferences.glade:3688
 msgid "Opens new tab adjacent to current tab instead of at the end."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3643
+#: gnucash/gtkbuilder/dialog-preferences.glade:3727
 msgid "Windows"
 msgstr "zonelam"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3711
-#: gnucash/gtkbuilder/dialog-preferences.glade:3734
+#: gnucash/gtkbuilder/dialog-preferences.glade:3795
+#: gnucash/gtkbuilder/dialog-preferences.glade:3818
 #, fuzzy
 msgid "Online Quotes"
 msgstr "online utare ghe"
@@ -16866,27 +16985,27 @@ msgstr "aspot "
 msgid "_Liability/Equity"
 msgstr "rinn/bhanddvoll"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:472
+#: gnucash/gtkbuilder/dialog-tax-info.glade:458
 msgid "<b>Account Tax Information</b>"
 msgstr "<b>khatea korachi mhaiti</b>"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:483
+#: gnucash/gtkbuilder/dialog-tax-info.glade:469
 msgid "Tax _Related"
 msgstr "kora sombondit (_R)"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:515
+#: gnucash/gtkbuilder/dialog-tax-info.glade:501
 msgid "<b>_TXF Categories</b>"
 msgstr "<b>TXF vorgonna</b> (_T)"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:618
+#: gnucash/gtkbuilder/dialog-tax-info.glade:604
 msgid "<b>Payer Name Source</b>"
 msgstr "<b>farik korpeachea nanvanchem mull"
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:629
+#: gnucash/gtkbuilder/dialog-tax-info.glade:615
 msgid "C_urrent Account"
 msgstr "chalont khatem: "
 
-#: gnucash/gtkbuilder/dialog-tax-info.glade:679
+#: gnucash/gtkbuilder/dialog-tax-info.glade:665
 msgid "<b>Copy Number</b>"
 msgstr "<b>ankddo noko lkor</b>"
 
@@ -17712,131 +17831,131 @@ msgid "_Frozen"
 msgstr "gotthlelem"
 
 #. Filter By Dialog, below tabs
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:533
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:548
 msgid "Sa_ve Filter"
 msgstr "Gallnni samball"
 
 #. Duplicate Transaction Dialog
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:566
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:581
 msgid "Duplicate Transaction"
 msgstr "vevhar nokol kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:665
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:680
 #, fuzzy
 msgid "_Number"
 msgstr "ankddo: (_N)"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:693
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:708
 #, fuzzy
 msgid "_Transaction Number"
 msgstr "Vevhar ankddo"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:723
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:738
 #, fuzzy
 #| msgid "Delete the current entry"
 msgid "Keep Linked Document Entry"
 msgstr "Chalont nondnni dosoi"
 
 #. Sort register by Dialog
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:770
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:785
 msgid "Sort register by…"
 msgstr "nondnni pustok hache thavn vorgikoronn kor…"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:833
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:848
 msgid "_Standard Order"
 msgstr "promannit pod'dot"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:837
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:852
 msgid "Keep normal account order."
 msgstr "Samania khatem kromant dovor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:866
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:881
 msgid "Sort by date."
 msgstr "Tarkhe pormonnem vorgonn kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:881
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:896
 #: gnucash/ui/gnc-plugin-page-invoice.ui:96
 msgid "Date of _Entry"
 msgstr "Nondnnichi tarikh"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:885
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:900
 msgid "Sort by the date of entry."
 msgstr "Tarkhechea nondnne pormonnem vorgikoronn kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:900
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:915
 msgid "S_tatement Date"
 msgstr "Nivedonachi tarikh"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:904
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:919
 #, fuzzy
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr "Nivedonachea tarkhe pormonnem vorgikoronn kor (zulloilele nog nimanne)"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:919
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:934
 msgid "Num_ber"
 msgstr "ankddo"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:923
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:938
 msgid "Sort by number."
 msgstr "Ankddeam pormonnem vorgikoronn kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:938
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:953
 msgid "Amo_unt"
 msgstr "rok'kom"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:942
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:957
 msgid "Sort by amount."
 msgstr "Rok'kome pormonnnem vorgikoronn kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:961
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:976
 msgid "Sort by memo."
 msgstr "Nivedona pormonnem vorgikoronn kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:976
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:991
 #: gnucash/ui/gnc-plugin-page-invoice.ui:114
 msgid "Descri_ption"
 msgstr "Vornnon"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:980
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:995
 msgid "Sort by description."
 msgstr "Vornnona pormonnem vorgikoronn kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:995
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1010
 #: gnucash/ui/gnc-embedded-register-window.ui:88
 msgid "_Action"
 msgstr "Kria"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:999
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1014
 msgid "Sort by action field."
 msgstr "Kariachea molla pormonnem vorgikoronn kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1018
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1033
 msgid "Sort by notes field."
 msgstr "Nondnnechea mollam pormonnem vorgikoronn kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1049
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1064
 msgid "Sa_ve Sort Order"
 msgstr "Vorgikoronnacho krom samball"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1053
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1068
 msgid "Save the sort order for this register."
 msgstr "Hea hnondpott'tti khatir vorgikoronnacho krom samball"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1069
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1084
 #, fuzzy
 msgid "_Reverse Order"
 msgstr "Urfatto krom"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1073
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1088
 msgid "Sort in descending order."
 msgstr "Denvtea kroman vorgikoronn kor"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1109
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1124
 msgid "Void Transaction"
 msgstr "khali vevhar"
 
-#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1173
+#: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1188
 #, fuzzy
 msgid "Reason for voiding transaction"
 msgstr "vevhar khali korpak karonn dakhoi"
@@ -18798,7 +18917,7 @@ msgid "Unspecified"
 msgstr "tharainaslelem"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:478
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4272
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4288
 msgid "Bank"
 msgstr "Benk"
 
@@ -19423,7 +19542,7 @@ msgstr ""
 "Tujean porto vochum ieta ani venchop topasum ieta 'Portun' klik korun "
 "vo'Rod'd' klik korun niriat kaddun uddovnk.\n"
 
-#: gnucash/import-export/csv-exp/assistant-csv-export.c:760
+#: gnucash/import-export/csv-exp/assistant-csv-export.c:759
 msgid ""
 "There was a problem with the export, this could be due to lack of space, "
 "permissions or unable to access folder. Check the trace file for further "
@@ -19435,14 +19554,14 @@ msgstr ""
 "khatir\n"
 "Tuka ghoddiek kompivtorachi chuk xokio korunk poddot.\n"
 
-#: gnucash/import-export/csv-exp/assistant-csv-export.c:764
+#: gnucash/import-export/csv-exp/assistant-csv-export.c:763
 msgid "File exported successfully!\n"
 msgstr "Fail iesiesponni niriat korpant aili\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
 #: gnucash/import-export/import-main-matcher.cpp:1893
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.cpp:1611 libgnucash/engine/Split.cpp:1628
+#: libgnucash/engine/Split.cpp:1612 libgnucash/engine/Split.cpp:1629
 msgid "-- Split Transaction --"
 msgstr "-- vevhar futall kor --"
 
@@ -19707,7 +19826,7 @@ msgstr ""
 "korunk"
 
 #. Translators: {1} will be replaced with a filename
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2211
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2216
 #, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "'%s'failintlean vevhar aiat korpant aileat."
@@ -20680,7 +20799,7 @@ msgstr "Bhanddvolacho faido (mottvo)"
 #: gnucash/report/reports/standard/balance-sheet.scm:468
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1051
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:685
-#: libgnucash/app-utils/gnc-ui-util.cpp:637 libgnucash/engine/Account.cpp:4282
+#: libgnucash/app-utils/gnc-ui-util.cpp:637 libgnucash/engine/Account.cpp:4298
 msgid "Equity"
 msgstr "Bhag bhanddvoll"
 
@@ -20888,28 +21007,28 @@ msgstr "khateam modli bodli zulloitam"
 msgid "Converting"
 msgstr "rupantor kortam"
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:486
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:491
 #, fuzzy
 msgid "Discarding duplicate prices"
 msgstr "_Vikrechea sotrachem protirup"
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:516
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:521
 #, fuzzy
 #| msgid "Add a new price."
 msgid "Adding prices"
 msgstr "novem mol zodd"
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:589
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:594
 msgid "Missing transaction date."
 msgstr "vevhara tarikh xenddlea"
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:741
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:746
 #, fuzzy, scheme-format
 #| msgid "Missing transaction date."
 msgid "Missing QIF investment action for transaction dated ~a."
 msgstr "vevhara tarikh xenddlea"
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:1431
 #, fuzzy
 msgid "Invalid transaction date."
 msgstr "vevhar rikamo na"
@@ -21121,7 +21240,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:532
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1092
 #: gnucash/register/ledger-core/split-register.c:2566
-#: libgnucash/engine/Account.cpp:156 libgnucash/engine/Account.cpp:170
+#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:172
 msgid "Charge"
 msgstr "Mol"
 
@@ -21417,8 +21536,8 @@ msgstr "Pavti"
 #: gnucash/register/ledger-core/split-register.c:2619
 #: gnucash/register/ledger-core/split-register.c:2630
 #: gnucash/register/ledger-core/split-register.c:2662
-#: libgnucash/engine/Account.cpp:151 libgnucash/engine/Account.cpp:172
-#: libgnucash/engine/Account.cpp:180 libgnucash/engine/Account.cpp:181
+#: libgnucash/engine/Account.cpp:153 libgnucash/engine/Account.cpp:174
+#: libgnucash/engine/Account.cpp:182 libgnucash/engine/Account.cpp:183
 msgid "Increase"
 msgstr "Choddoi"
 
@@ -21427,8 +21546,8 @@ msgstr "Choddoi"
 #: gnucash/register/ledger-core/split-register.c:2620
 #: gnucash/register/ledger-core/split-register.c:2631
 #: gnucash/register/ledger-core/split-register.c:2663
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:160
-#: libgnucash/engine/Account.cpp:161 libgnucash/engine/Account.cpp:171
+#: libgnucash/engine/Account.cpp:154 libgnucash/engine/Account.cpp:162
+#: libgnucash/engine/Account.cpp:163 libgnucash/engine/Account.cpp:173
 msgid "Decrease"
 msgstr "Denvoi"
 
@@ -21455,7 +21574,7 @@ msgid "Fee"
 msgstr "Xulk"
 
 #: gnucash/register/ledger-core/split-register.c:2625
-#: libgnucash/engine/Account.cpp:177
+#: libgnucash/engine/Account.cpp:179
 msgid "Rebate"
 msgstr "Sutt"
 
@@ -21509,39 +21628,39 @@ msgstr "sompurnn her khateancho futall zagear ghal"
 msgid "_Rebalance"
 msgstr "Osomtolit "
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1346
-#: gnucash/register/ledger-core/split-register-control.cpp:1359
+#: gnucash/register/ledger-core/split-register-control.cpp:1347
+#: gnucash/register/ledger-core/split-register-control.cpp:1360
 msgid "This register does not support editing exchange rates."
 msgstr "Hi nondpott'tti adolbodolchea dorank patthimbo dina"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1385
+#: gnucash/register/ledger-core/split-register-control.cpp:1386
 msgid "You need to select a split in order to modify its exchange rate."
 msgstr "Vattavachi dor bodlunk tuvem ek futall venchunk zai"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1400
-#: gnucash/register/ledger-core/split-register-control.cpp:1475
+#: gnucash/register/ledger-core/split-register-control.cpp:1401
+#: gnucash/register/ledger-core/split-register-control.cpp:1476
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
 msgstr "Adol bodolcheo doro bodol korunk tuka vevhar vistarit korunk goroz"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1412
+#: gnucash/register/ledger-core/split-register-control.cpp:1413
 msgid "The entered account could not be found."
 msgstr "bhorlolem khatem mellunk na."
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1447
-#: gnucash/register/ledger-core/split-register-control.cpp:1460
+#: gnucash/register/ledger-core/split-register-control.cpp:1448
+#: gnucash/register/ledger-core/split-register-control.cpp:1461
 msgid "The two currencies involved equal each other."
 msgstr "don cholonacho somavex ekamekak soman asat"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1512
+#: gnucash/register/ledger-core/split-register-control.cpp:1513
 msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr "futalleachi rok'kom xunio aslear, vattvachi dorachi goroz na"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1561
+#: gnucash/register/ledger-core/split-register-control.cpp:1562
 msgid "Save the changed transaction?"
 msgstr "Bodol'lolo vehar samballum?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1563
+#: gnucash/register/ledger-core/split-register-control.cpp:1564
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
@@ -21551,19 +21670,19 @@ msgstr ""
 "bodolpam nond korunk zai, bodolpam kaddun uddovnk zai, vo bodolelea vevrant "
 "porot vochunk zai?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1576
+#: gnucash/register/ledger-core/split-register-control.cpp:1577
 msgid "_Discard Changes"
 msgstr "bodlavnnio addun uddoi"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1578
+#: gnucash/register/ledger-core/split-register-control.cpp:1579
 msgid "_Record Changes"
 msgstr "bodlavnnio nond kor (_R)"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1866
+#: gnucash/register/ledger-core/split-register-control.cpp:1867
 msgid "Mark split as unreconciled?"
 msgstr "Futall zullovnk na mhonn khunnavum?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1868
+#: gnucash/register/ledger-core/split-register-control.cpp:1869
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
 "make future reconciliation difficult! Continue with this change?"
@@ -21571,7 +21690,7 @@ msgstr ""
 "Tum ek zulloileli futall zullovnk na mhonn khunnavpacho asa. Hem korpant "
 "fuddlem zullovp avgodd kortolo!Ho bodol chalu dovrum?"
 
-#: gnucash/register/ledger-core/split-register-control.cpp:1885
+#: gnucash/register/ledger-core/split-register-control.cpp:1886
 msgid "_Unreconcile"
 msgstr "Zulloi naka"
 
@@ -21920,7 +22039,7 @@ msgstr "volleri"
 msgid "Template file \"~a\" can not be read"
 msgstr "prorup fail \"~a\" vachunk zaina"
 
-#: gnucash/report/html-chart.scm:473
+#: gnucash/report/html-chart.scm:476
 msgid "Load"
 msgstr ""
 
@@ -24379,12 +24498,12 @@ msgid "Total For "
 msgstr "haka zomo "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1044
-#: libgnucash/engine/Account.cpp:4274
+#: libgnucash/engine/Account.cpp:4290
 msgid "Asset"
 msgstr "Aspot"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1047
-#: libgnucash/engine/Account.cpp:4276
+#: libgnucash/engine/Account.cpp:4292
 msgid "Liability"
 msgstr "Dennim"
 
@@ -24414,7 +24533,7 @@ msgstr "%s thavn %s"
 #: gnucash/report/reports/standard/customer-summary.scm:286
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: libgnucash/engine/Account.cpp:157 libgnucash/engine/Account.cpp:4281
+#: libgnucash/engine/Account.cpp:159 libgnucash/engine/Account.cpp:4297
 #: libgnucash/engine/gncInvoice.c:1099
 msgid "Expense"
 msgstr "khorch"
@@ -25689,7 +25808,7 @@ msgid ""
 msgstr "Vepari khateanchea xirlokent ek voll dakhovpi aspav korcho vo na"
 
 #: gnucash/report/reports/standard/income-statement.scm:477
-#: libgnucash/engine/Account.cpp:4286 libgnucash/engine/Scrub.cpp:532
+#: libgnucash/engine/Account.cpp:4302 libgnucash/engine/Scrub.cpp:532
 msgid "Trading"
 msgstr "Vepar"
 
@@ -27418,12 +27537,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/reconcile-report.scm:85
-#: libgnucash/engine/Account.cpp:147
+#: libgnucash/engine/Account.cpp:149
 msgid "Funds In"
 msgstr "Bhitor ievpi nidhi"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:92
-#: libgnucash/engine/Account.cpp:167
+#: libgnucash/engine/Account.cpp:169
 msgid "Funds Out"
 msgstr "Bhair vochpi nidhi"
 
@@ -31496,23 +31615,23 @@ msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Fail porot ugddunk zavnk na"
 msgstr[1] "Fail porot ugddunk zavnk na"
 
-#: libgnucash/engine/Account.cpp:148
+#: libgnucash/engine/Account.cpp:150
 msgid "Deposit"
 msgstr "tthev"
 
-#: libgnucash/engine/Account.cpp:149
+#: libgnucash/engine/Account.cpp:151
 msgid "Receive"
 msgstr "ghe"
 
-#: libgnucash/engine/Account.cpp:168
+#: libgnucash/engine/Account.cpp:170
 msgid "Withdrawal"
 msgstr "Duddu kaddop"
 
-#: libgnucash/engine/Account.cpp:169
+#: libgnucash/engine/Account.cpp:171
 msgid "Spend"
 msgstr "khorch kor"
 
-#: libgnucash/engine/Account.cpp:247
+#: libgnucash/engine/Account.cpp:249
 #, c-format
 msgid ""
 "The separator character \"%s\" is used in one or more account names.\n"
@@ -31531,40 +31650,40 @@ msgstr ""
 "Sokoil ovoid khateachi nanvam sampoddttelim\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4275
+#: libgnucash/engine/Account.cpp:4291
 msgid "Credit Card"
 msgstr "Credit Card"
 
-#: libgnucash/engine/Account.cpp:4277
+#: libgnucash/engine/Account.cpp:4293
 msgid "Stock"
 msgstr "santtho"
 
-#: libgnucash/engine/Account.cpp:4278
+#: libgnucash/engine/Account.cpp:4294
 msgid "Mutual Fund"
 msgstr "mutual fund"
 
-#: libgnucash/engine/Account.cpp:4283
+#: libgnucash/engine/Account.cpp:4299
 msgid "A/Receivable"
 msgstr "A/Mellpachem"
 
-#: libgnucash/engine/Account.cpp:4284
+#: libgnucash/engine/Account.cpp:4300
 msgid "A/Payable"
 msgstr "A/Farik korpachem"
 
-#: libgnucash/engine/Account.cpp:4285
+#: libgnucash/engine/Account.cpp:4301
 msgid "Root"
 msgstr "Mull"
 
-#: libgnucash/engine/Account.cpp:4725
+#: libgnucash/engine/Account.cpp:4741
 msgid "Orphaned Gains"
 msgstr "onath faide"
 
-#: libgnucash/engine/Account.cpp:4739 libgnucash/engine/cap-gains.cpp:804
+#: libgnucash/engine/Account.cpp:4755 libgnucash/engine/cap-gains.cpp:804
 #: libgnucash/engine/cap-gains.cpp:809 libgnucash/engine/cap-gains.cpp:810
 msgid "Realized Gain/Loss"
 msgstr "labhlelo faido/luskonn"
 
-#: libgnucash/engine/Account.cpp:4741
+#: libgnucash/engine/Account.cpp:4757
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -32539,7 +32658,7 @@ msgstr ""
 msgid "Looking for imbalances in transaction date %s: %u of %zu"
 msgstr ""
 
-#: libgnucash/engine/Split.cpp:1644
+#: libgnucash/engine/Split.cpp:1645
 #, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"

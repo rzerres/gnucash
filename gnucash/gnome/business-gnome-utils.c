@@ -35,21 +35,23 @@
 #include "gnc-component-manager.h"
 #include "gnc-gtk-utils.h"
 
+#include "gncCoOwner.h"
 #include "gncCustomer.h"
-#include "gncJob.h"
-#include "gncVendor.h"
-#include "gncOwner.h"
 #include "gncInvoice.h"
+#include "gncJob.h"
+#include "gncOwner.h"
+#include "gncVendor.h"
 
 #include "gnc-general-search.h"
 #include "qof.h"
 #include "qofbook.h"
 #include "business-gnome-utils.h"
+#include "dialog-coowner.h"
 #include "dialog-customer.h"
-#include "dialog-job.h"
-#include "dialog-vendor.h"
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
+#include "dialog-job.h"
+#include "dialog-vendor.h"
 
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
@@ -207,12 +209,28 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     case GNC_OWNER_UNDEFINED:
         return NULL;
 
+    case GNC_OWNER_COOWNER:
+        if (type == GNCSEARCH_TYPE_SELECT)
+            search_cb = gnc_coowner_search_select;
+        else
+            search_cb = gnc_coowner_search_edit;
+        type_name = GNC_COOWNER_MODULE_NAME;
+        break;
+
     case GNC_OWNER_CUSTOMER:
         if (type == GNCSEARCH_TYPE_SELECT)
             search_cb = gnc_customer_search_select;
         else
             search_cb = gnc_customer_search_edit;
         type_name = GNC_CUSTOMER_MODULE_NAME;
+        break;
+
+    case GNC_OWNER_EMPLOYEE:
+        if (type == GNCSEARCH_TYPE_SELECT)
+            search_cb = gnc_employee_search_select;
+        else
+            search_cb = gnc_employee_search_edit;
+        type_name = GNC_EMPLOYEE_MODULE_NAME;
         break;
 
     case GNC_OWNER_JOB:
@@ -231,34 +249,32 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
         type_name = GNC_VENDOR_MODULE_NAME;
         break;
 
-    case GNC_OWNER_EMPLOYEE:
-        if (type == GNCSEARCH_TYPE_SELECT)
-            search_cb = gnc_employee_search_select;
-        else
-            search_cb = gnc_employee_search_edit;
-        type_name = GNC_EMPLOYEE_MODULE_NAME;
-        break;
-
     default:
         g_warning ("Unknown type");
         return NULL;
     }
 
-    edit = gnc_general_search_new (type_name, text, text_editable, search_cb, book, book);
+    edit = gnc_general_search_new (
+        type_name, text, text_editable, search_cb, book, book);
     if (!edit)
         return NULL;
 
     gnc_general_search_set_selected (GNC_GENERAL_SEARCH (edit),
-                                     owner->owner.undefined);
+        owner->owner.undefined);
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
     if (label)
-        gtk_label_set_text (GTK_LABEL (label), _(qof_object_get_type_label (type_name)));
+        gtk_label_set_text (
+            GTK_LABEL (label), _(qof_object_get_type_label (type_name)));
 
     return edit;
 }
 
-GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
-                                     QofBook *book, GncOwner *owner)
+GtkWidget
+*gnc_owner_select_create (
+    GtkWidget *label,
+    GtkWidget *hbox,
+    QofBook *book,
+    GncOwner *owner)
 {
     g_return_val_if_fail (hbox != NULL, NULL);
     g_return_val_if_fail (book != NULL, NULL);
@@ -277,7 +293,8 @@ GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
     return gnc_owner_new (label, hbox, book, owner, GNCSEARCH_TYPE_EDIT);
 }
 
-void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner)
+void
+gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner)
 {
     g_return_if_fail (widget != NULL);
     g_return_if_fail (owner != NULL);
@@ -320,8 +337,11 @@ typedef struct _invoice_select_info
     gboolean have_owner;
 } GncISI;
 
-static GNCSearchWindow *
-gnc_invoice_select_search_cb (GtkWindow *parent, gpointer start, gpointer isip)
+static GNCSearchWindow
+*gnc_invoice_select_search_cb (
+    GtkWindow *parent,
+    gpointer start,
+    gpointer isip)
 {
     GncISI *isi = isip;
 
@@ -347,11 +367,14 @@ gnc_invoice_select_search_set_label(GncISI* isi)
     /* Translators:  See comments in dialog-invoice.c:gnc_invoice_search() */
     switch (owner_type)
     {
-    case GNC_OWNER_VENDOR:
-        label = _("Bill");
+    case GNC_OWNER_COOWNER:
+        label = _("Settlement");
         break;
     case GNC_OWNER_EMPLOYEE:
         label = _("Voucher");
+        break;
+    case GNC_OWNER_VENDOR:
+        label = _("Bill");
         break;
     default:
         label = _("Invoice");
@@ -361,10 +384,13 @@ gnc_invoice_select_search_set_label(GncISI* isi)
     gtk_label_set_text(GTK_LABEL(isi->label), label);
 }
 
-GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
-                                       const GncOwner *owner,
-                                       GncInvoice *invoice,
-                                       GtkWidget *label)
+GtkWidget
+*gnc_invoice_select_create (
+    GtkWidget *hbox,
+    QofBook *book,
+    const GncOwner *owner,
+    GncInvoice *invoice,
+    GtkWidget *label)
 {
     GtkWidget *edit;
     GncISI *isi;
@@ -389,8 +415,13 @@ GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
     isi->book = book;
     isi->label = label;
 
-    edit = gnc_general_search_new (GNC_INVOICE_MODULE_NAME, _("Select…"),
-                                   TRUE, gnc_invoice_select_search_cb, isi, isi->book);
+    edit = gnc_general_search_new (
+        GNC_INVOICE_MODULE_NAME,
+        _("Select..."),
+        TRUE,
+        gnc_invoice_select_search_cb,
+        isi,
+        isi->book);
     if (!edit)
     {
         g_free(isi);
@@ -407,14 +438,16 @@ GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
     return edit;
 }
 
-GncInvoice * gnc_invoice_get_invoice (GtkWidget *widget)
+GncInvoice
+*gnc_invoice_get_invoice (GtkWidget *widget)
 {
     g_return_val_if_fail (widget != NULL, NULL);
 
     return gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
 }
 
-void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice)
+void
+gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice)
 {
     g_return_if_fail (widget != NULL);
     g_return_if_fail (invoice != NULL);
@@ -422,7 +455,8 @@ void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice)
     gnc_general_search_set_selected (GNC_GENERAL_SEARCH (widget), invoice);
 }
 
-void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner)
+void
+gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner)
 {
     GncISI *isi;
 
@@ -444,8 +478,11 @@ void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner)
 }
 
 Account *
-gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
-                               GList *acct_types, GList *acct_commodities)
+gnc_account_select_combo_fill (
+    GtkWidget *combo,
+    QofBook *book,
+    GList *acct_types,
+    GList *acct_commodities)
 {
     GtkListStore *store;
     GtkTreeIter iter;
@@ -481,9 +518,10 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
            restriction */
         if (acct_commodities)
         {
-            if ( g_list_find_custom( acct_commodities,
-                                     GINT_TO_POINTER(xaccAccountGetCommodity(account)),
-                                     gnc_commodity_compare_void) == NULL )
+            if ( g_list_find_custom(
+                acct_commodities,
+                GINT_TO_POINTER(xaccAccountGetCommodity(account)),
+                gnc_commodity_compare_void) == NULL )
             {
                 continue;
             }
@@ -524,12 +562,14 @@ gnc_account_select_combo_get_active (GtkWidget *combo)
     if (!book)
         return NULL;
 
-    text = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(combo)))));
+    text = gtk_entry_get_text(
+        GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(combo)))));
 
     if (!text || g_strcmp0 (text, "") == 0)
         return NULL;
 
-    return gnc_account_lookup_by_full_name (gnc_book_get_root_account (book), text);
+    return gnc_account_lookup_by_full_name (
+        gnc_book_get_root_account (book), text);
 }
 
 /***********************************************************************
@@ -552,7 +592,10 @@ typedef struct
 } ListStoreData;
 
 static void
-gnc_simple_combo_add_item (GtkListStore *liststore, const char *label, gpointer this_item)
+gnc_simple_combo_add_item (
+    GtkListStore *liststore,
+    const char *label,
+    gpointer this_item)
 {
     GtkTreeIter iter;
 
@@ -602,12 +645,14 @@ gnc_simple_combo_destroy_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_simple_combo_make (GtkComboBox *cbox, QofBook *book,
-                       gboolean none_ok, QofIdType type_name,
-                       GList * (*get_list)(QofBook*),
-                       GenericLookup_t get_name,
-                       GenericEqual_t is_equal,
-                       gpointer initial_choice)
+gnc_simple_combo_make (
+    GtkComboBox *cbox,
+    QofBook *book,
+    gboolean none_ok, QofIdType type_name,
+    GList * (*get_list)(QofBook*),
+    GenericLookup_t get_name,
+    GenericEqual_t is_equal,
+    gpointer initial_choice)
 {
     ListStoreData *lsd;
 
@@ -631,17 +676,21 @@ gnc_simple_combo_make (GtkComboBox *cbox, QofBook *book,
         g_object_set_data (G_OBJECT (cbox), "liststore-data", lsd);
 
         lsd->component_id =
-            gnc_register_gui_component ("gnc-simple-combo-refresh-hook",
-                                        gnc_simple_combo_refresh_handler,
-                                        NULL, lsd);
+            gnc_register_gui_component (
+                "gnc-simple-combo-refresh-hook",
+                gnc_simple_combo_refresh_handler,
+                NULL, lsd);
 
         if (type_name)
-            gnc_gui_component_watch_entity_type (lsd->component_id,
-                                                 type_name,
-                                                 QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+            gnc_gui_component_watch_entity_type (
+                lsd->component_id,
+                type_name,
+                QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-        g_signal_connect (G_OBJECT (cbox), "destroy",
-                          G_CALLBACK (gnc_simple_combo_destroy_cb), lsd);
+        g_signal_connect (
+            G_OBJECT (cbox),
+            "destroy",
+            G_CALLBACK (gnc_simple_combo_destroy_cb), lsd);
     }
 
     gnc_simple_combo_generate_liststore (lsd);
@@ -659,29 +708,62 @@ gnc_simple_combo_make (GtkComboBox *cbox, QofBook *book,
  * created.
  */
 void
-gnc_billterms_combo (GtkComboBox *cbox, QofBook *book,
-                     gboolean none_ok, GncBillTerm *initial_choice)
+gnc_billterms_combo (
+    GtkComboBox *cbox,
+    QofBook *book,
+    gboolean none_ok,
+    GncBillTerm *initial_choice)
 {
     if (!cbox || !book) return;
 
-    gnc_simple_combo_make (cbox, book, none_ok, GNC_BILLTERM_MODULE_NAME,
-                           gncBillTermGetTerms,
-                           (GenericLookup_t)gncBillTermGetName,
-                           (GenericEqual_t)gncBillTermIsFamily,
-                           (gpointer)initial_choice);
+    gnc_simple_combo_make (
+        cbox,
+        book,
+        none_ok,
+        GNC_BILLTERM_MODULE_NAME,
+        gncBillTermGetTerms,
+        (GenericLookup_t)gncBillTermGetName,
+        (GenericEqual_t)gncBillTermIsFamily,
+        (gpointer)initial_choice);
 }
 
 void
-gnc_taxtables_combo (GtkComboBox *cbox, QofBook *book,
-                     gboolean none_ok, GncTaxTable *initial_choice)
+gnc_distriblist_combo (
+    GtkComboBox *cbox,
+    QofBook *book,
+    gboolean none_ok,
+    GncDistributionList *initial_choice)
 {
     if (!cbox || !book) return;
 
-    gnc_simple_combo_make (cbox, book, none_ok, GNC_TAXTABLE_MODULE_NAME,
-                           gncTaxTableGetTables,
-                           (GenericLookup_t)gncTaxTableGetName,
-                           NULL,
-                           (gpointer)initial_choice);
+    gnc_simple_combo_make (
+        cbox,
+        book,
+        none_ok,
+        GNC_DISTRIBLIST_MODULE_NAME,
+        gncDistribListGetLists,
+        (GenericLookup_t)gncDistribListGetName,
+        (GenericEqual_t)gncDistribListIsFamily,
+        (gpointer)initial_choice);
+}
+void
+gnc_taxtables_combo (
+    GtkComboBox *cbox,
+    QofBook *book,
+    gboolean none_ok,
+    GncTaxTable *initial_choice)
+{
+    if (!cbox || !book) return;
+
+    gnc_simple_combo_make (
+        cbox,
+        book,
+        none_ok,
+        GNC_TAXTABLE_MODULE_NAME,
+        gncTaxTableGetTables,
+        (GenericLookup_t)gncTaxTableGetName,
+        NULL,
+        (gpointer)initial_choice);
 }
 
 void
@@ -691,18 +773,36 @@ gnc_taxincluded_combo (GtkComboBox *cbox, GncTaxIncluded initial_choice)
 
     if (!cbox) return;
 
-    gnc_simple_combo_make (cbox, NULL, FALSE, NULL, NULL, NULL, NULL,
-                           GINT_TO_POINTER(initial_choice));
+    gnc_simple_combo_make (
+        cbox,
+        NULL,
+        FALSE,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        GINT_TO_POINTER(initial_choice));
+
     liststore = GTK_LIST_STORE (gtk_combo_box_get_model (cbox));
 
-    gnc_simple_combo_add_item (liststore, _("Yes"),
-                               GINT_TO_POINTER (GNC_TAXINCLUDED_YES));
-    gnc_simple_combo_add_item (liststore, _("No"),
-                               GINT_TO_POINTER (GNC_TAXINCLUDED_NO));
-    gnc_simple_combo_add_item (liststore, _("Use Global"),
-                               GINT_TO_POINTER (GNC_TAXINCLUDED_USEGLOBAL));
+    gnc_simple_combo_add_item (
+        liststore,
+        _("Yes"),
+        GINT_TO_POINTER (GNC_TAXINCLUDED_YES));
 
-    gnc_simple_combo_set_value (cbox, GINT_TO_POINTER(initial_choice));
+    gnc_simple_combo_add_item (
+        liststore,
+        _("No"),
+        GINT_TO_POINTER (GNC_TAXINCLUDED_NO));
+
+    gnc_simple_combo_add_item (
+        liststore,
+        _("Use Global"),
+        GINT_TO_POINTER (GNC_TAXINCLUDED_USEGLOBAL));
+
+    gnc_simple_combo_set_value (
+        cbox,
+        GINT_TO_POINTER(initial_choice));
 }
 
 /* Convenience functions for the above simple combo box types.  */
@@ -732,7 +832,8 @@ gnc_simple_combo_set_value (GtkComboBox *cbox, gpointer data)
     GtkTreeIter iter;
     GtkTreeModel *model;
     gboolean valid_iter;
-    ListStoreData *lsd = g_object_get_data (G_OBJECT (cbox), "liststore-data");
+    ListStoreData *lsd = g_object_get_data (
+        G_OBJECT (cbox), "liststore-data");
 
     if (!cbox) return;
 

@@ -20,7 +20,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \ *******************************************************************/
 
-#include <boost/process/environment.hpp>
+#include <boost/process/v1/environment.hpp>
 #include <config.h>
 #include <qoflog.h>
 
@@ -36,10 +36,27 @@
 #endif
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/version.hpp>
+#if BOOST_VERSION < 108600
+#include <boost/process.hpp>
 #ifdef BOOST_WINDOWS_API
 #include <boost/process/windows.hpp>
 #endif
-#include <boost/process.hpp>
+#else
+#include <boost/process/v1/async.hpp>
+#include <boost/process/v1/child.hpp>
+#include <boost/process/v1/env.hpp>
+#include <boost/process/v1/environment.hpp>
+#include <boost/process/v1/error.hpp>
+#include <boost/process/v1/group.hpp>
+#include <boost/process/v1/io.hpp>
+#include <boost/process/v1/pipe.hpp>
+#include <boost/process/v1/search_path.hpp>
+#include <boost/process/v1/start_dir.hpp>
+#ifdef BOOST_WINDOWS_API
+#include <boost/process/v1/windows.hpp>
+#endif
+#endif
 #include <boost/regex.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -68,7 +85,11 @@ static const char* yh_api_env = "FINANCEAPI_API_KEY";
 static const char* yh_api_key = "yhfinance-api-key";
 
 namespace bl = boost::locale;
+#if BOOST_VERSION < 108800
 namespace bp = boost::process;
+#else
+namespace bp = boost::process::v1;
+#endif
 namespace bfs = boost::filesystem;
 namespace bpt = boost::property_tree;
 namespace bio = boost::iostreams;

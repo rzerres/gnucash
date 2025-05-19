@@ -29,7 +29,11 @@
 #include <cstdint>
 #include <Account.h>
 #include <Split.h>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
+
 
 static const int64_t DENOM = 100; //< Denominator is always 100 for simplicity.
 

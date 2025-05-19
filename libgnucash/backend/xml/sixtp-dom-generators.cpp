@@ -21,9 +21,6 @@
  *                                                                  *
  ********************************************************************/
 #include <glib.h>
-
-#define __EXTENSIONS__
-
 #include <config.h>
 
 #include <gnc-date.h>

@@ -1,7 +1,11 @@
 #ifndef GMOCK_TRANSACTION_H
 #define GMOCK_TRANSACTION_H
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gmock/gmock.h>
+#pragma GCC diagnostic pop
+
 
 #include <Transaction.h>
 #include <TransactionP.hpp>

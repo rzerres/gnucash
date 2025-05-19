@@ -3,6 +3,60 @@
 
   <menu id="BusinessPlaceholder0">
     <submenu>
+      <attribute name="label" translatable="yes">Co-_Owner</attribute>
+      <attribute name="action">gnc-plugin-business-actions.Co-OwnerMenuAction</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Co-Owners Overview</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CoOwnerOverviewPageAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open a Co-Owner overview page</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_New Co-Owner…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CoOwnerNewCoOwnerOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Co-Owner dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Find Co-Owner…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CoOwnerFindCoOwnerOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Co-Owner dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">New _Invoice…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CoOwnerNewInvoiceOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Invoice dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find In_voice…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CoOwnerFindInvoiceOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Invoice dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">New _Job…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CoOwnerNewJobOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the New Job dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find Jo_b…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CoOwnerFindJobOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Job dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find _Settlement…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CoOwnerFindSettlementOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Find Settlement dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Process Payment…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.CoOwnerProcessPaymentAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Process Payment dialog</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Invoices _Due Reminder</attribute>
+        <attribute name="action">gnc-plugin-business-actions.InvoicesDueReminderOpenAction</attribute>
+        <attribute name="tooltip" translatable="yes">Open the Invoices Due Reminder dialog</attribute>
+      </item>
+    </submenu>
+    <submenu>
       <attribute name="label" translatable="yes">_Customer</attribute>
       <attribute name="action">gnc-plugin-business-actions.CustomerMenuAction</attribute>
       <item>
@@ -152,6 +206,11 @@
       <attribute name="action">gnc-plugin-business-actions.BillingTermsOpenAction</attribute>
       <attribute name="tooltip" translatable="yes">View and edit the list of Billing Terms</attribute>
     </item>
+    <item>
+      <attribute name="label" translatable="yes">_Distribution List Editor</attribute>
+      <attribute name="action">gnc-plugin-business-actions.DistributionListsOpenAction</attribute>
+      <attribute name="tooltip" translatable="yes">View and edit the list of Distribution Lists</attribute>
+    </item>
   </menu>
 
   <menu id="ExtensionsPlaceholder0">
@@ -168,6 +227,16 @@
           <attribute name="label" translatable="yes">Initialize Test Data</attribute>
           <attribute name="action">gnc-plugin-business-actions.BusinessTestInitDataAction</attribute>
           <attribute name="tooltip" translatable="yes">Initialize Test Data</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Initialize CoOwner Test Data</attribute>
+          <attribute name="action">gnc-plugin-business-actions.BusinessTestCoOwnerInitDataAction</attribute>
+          <attribute name="tooltip" translatable="yes">Initialize CoOwner specific Test Data</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Initialize Customer Test Data</attribute>
+          <attribute name="action">gnc-plugin-business-actions.BusinessTestCustomerInitDataAction</attribute>
+          <attribute name="tooltip" translatable="yes">Initialize Customer specific Test Data</attribute>
         </item>
       </section>
     </submenu>

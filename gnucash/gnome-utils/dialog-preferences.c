@@ -75,6 +75,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include <gnc-uri-utils.h>
 #include <gnc-session.h>
 #include "gnc-component-manager.h"
 #include "dialog-preferences.h"
@@ -887,7 +888,7 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
 
     if (uri && *uri) // default entry
     {
-        gchar *path_head = g_filename_from_uri (uri, NULL, NULL);
+        gchar *path_head = gnc_uri_get_path (uri);
 
         // test for current folder present and set chooser to it
         if (g_file_test (path_head, G_FILE_TEST_IS_DIR))

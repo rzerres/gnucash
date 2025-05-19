@@ -1,3 +1,4 @@
+
 /********************************************************************
  * Gtest-gnc-int128.cpp -- unit tests for the GncInt128 class       *
  * Copyright (C) 2014 John Ralls <jralls@ceridwen.us>               *
@@ -21,7 +22,11 @@
  *                                                                  *
  *******************************************************************/
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcpp"
 #include <gtest/gtest.h>
+#pragma GCC diagnostic pop
+
 #include <string>
 #include "../gnc-timezone.hpp"
 

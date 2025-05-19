@@ -612,6 +612,7 @@
                                   (list "Bank1")
                                   (list "Bank2")
                                   (list "Bank3")
+                                  (list "Bank5")
                                   (list "Bank4"))
                             (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))))
            (accounts (env-create-account-structure-alist env structure))
@@ -619,6 +620,7 @@
            (bank2 (assoc-ref accounts "Bank2"))
            (bank3 (assoc-ref accounts "Bank3"))
            (bank4 (assoc-ref accounts "Bank4"))
+           (bank5 (assoc-ref accounts "Bank5"))
            (income (assoc-ref accounts "Income"))
            (dates (gnc:make-date-list (gnc-dmy2time64 01 01 1970)
                                       (gnc-dmy2time64 01 04 1970)
@@ -691,6 +693,15 @@
       (test-equal "1 txn in early slot"
         '(#f 18 18 18)
         (gnc:account-accumulate-at-dates bank4 dates))
+
+      ;; create 3 transactions but modify posted dates to exact time64 numbers
+      (xaccTransSetDatePostedSecs (env-transfer env 1 1 2000 income bank5 2) 200)
+      (xaccTransSetDatePostedSecs (env-transfer env 1 1 2000 income bank5 3) 300)
+      (xaccTransSetDatePostedSecs (env-transfer env 1 1 2000 income bank5 5) 400)
+
+      (test-equal "transactions at date boundaries"
+                  '(#f 2 5 10 10)
+                  (gnc:account-accumulate-at-dates bank5 (list 100 200 300 400 500)))
 
       ;; Tests split->date sorting. note the 3 txns created below are
       ;; initially sorted by posted_date ie txn2 < txn3 <

@@ -1733,37 +1733,28 @@ gnc_numeric_to_scm(gnc_numeric arg)
         scm_divide (scm_from_int64 (arg.num), scm_from_int64 (arg.denom));
 }
 
-static SCM
-gnc_generic_to_scm(const void *cx, const gchar *type_str)
+static swig_type_info*
+get_swig_type (const gchar *type_str)
 {
-    swig_type_info * stype = nullptr;
-    void *x = (void*) cx;
-
-    if (!x) return SCM_BOOL_F;
-    stype = SWIG_TypeQuery(type_str);
-
-    if (!stype)
-    {
+    auto type = SWIG_TypeQuery (type_str);
+    if (!type)
         PERR("Unknown SWIG Type: %s ", type_str);
-        return SCM_BOOL_F;
-    }
+    return type;
+}
+
+static SCM
+gnc_generic_to_scm (const void *cx, swig_type_info* stype)
+{
+    void *x = (void*) cx;
+    if (!x || !stype) return SCM_BOOL_F;
 
     return SWIG_NewPointerObj(x, stype, 0);
 }
 
 static void *
-gnc_scm_to_generic(SCM scm, const gchar *type_str)
+gnc_scm_to_generic (SCM scm, swig_type_info* stype)
 {
-    swig_type_info * stype = nullptr;
-
-    stype = SWIG_TypeQuery(type_str);
-    if (!stype)
-    {
-        PERR("Unknown SWIG Type: %s ", type_str);
-        return nullptr;
-    }
-
-    if (!SWIG_IsPointerOfType(scm, stype))
+    if (!stype || !SWIG_IsPointerOfType(scm, stype))
         return nullptr;
 
     return SWIG_MustGetPtr(scm, stype, 1, 0);
@@ -1772,30 +1763,29 @@ gnc_scm_to_generic(SCM scm, const gchar *type_str)
 gnc_commodity *
 gnc_scm_to_commodity(SCM scm)
 {
-    return static_cast<gnc_commodity*>(gnc_scm_to_generic(scm, "_p_gnc_commodity"));
+    static auto stype = get_swig_type ("_p_gnc_commodity");
+    return GNC_COMMODITY (gnc_scm_to_generic (scm, stype));
 }
 
 SCM
 gnc_commodity_to_scm (const gnc_commodity *commodity)
 {
-    return gnc_generic_to_scm(commodity, "_p_gnc_commodity");
+    static auto stype = get_swig_type ("_p_gnc_commodity");
+    return gnc_generic_to_scm (commodity, stype);
 }
 
 SCM
 gnc_book_to_scm (const QofBook *book)
 {
-    return gnc_generic_to_scm(book, "_p_QofBook");
+    static auto stype = get_swig_type ("_p_QofBook");
+    return gnc_generic_to_scm (book, stype);
 }
 
-static swig_type_info *
-get_acct_type ()
+SCM
+gnc_split_to_scm (const Split *split)
 {
-    static swig_type_info * account_type = nullptr;
-
-    if (!account_type)
-        account_type = SWIG_TypeQuery("_p_Account");
-
-    return account_type;
+    static auto stype = get_swig_type ("_p_Split");
+    return gnc_generic_to_scm (split, stype);
 }
 
 GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
@@ -1803,7 +1793,7 @@ GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
     GncAccountValue *res;
     Account *acc = nullptr;
     gnc_numeric value;
-    swig_type_info * account_type = get_acct_type();
+    static auto account_type = get_swig_type ("_p_Account");
     SCM val;
 
     /* Get the account */
@@ -1826,7 +1816,7 @@ GncAccountValue * gnc_scm_to_account_value_ptr (SCM valuearg)
 
 SCM gnc_account_value_ptr_to_scm (GncAccountValue *av)
 {
-    swig_type_info * account_type = get_acct_type();
+    static auto account_type = get_swig_type ("_p_Account");
     gnc_commodity * com;
     gnc_numeric val;
 
@@ -1864,9 +1854,9 @@ scm_hook_cb (gpointer data, GncScmDangler *scm)
         scm_call_0 (scm->proc);
     else
     {
+        static auto stype = get_swig_type ("_p_QofSession");
         // XXX: FIXME: We really should make sure this is a session!!! */
-        scm_call_1 (scm->proc,
-            SWIG_NewPointerObj(data, SWIG_TypeQuery("_p_QofSession"), 0));
+        scm_call_1 (scm->proc, SWIG_NewPointerObj(data, stype, 0));
     }
 
     LEAVE("");

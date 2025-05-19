@@ -58,6 +58,9 @@
         <col id="0" translatable="yes">APR (Compounded Quarterly)</col>
       </row>
       <row>
+        <col id="0" translatable="yes">APR (Compounded Semi-annually)</col>
+      </row>
+      <row>
         <col id="0" translatable="yes">APR (Compounded Annually)</col>
       </row>
     </data>
