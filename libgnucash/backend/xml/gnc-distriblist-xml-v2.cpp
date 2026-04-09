@@ -198,19 +198,6 @@ set_parent_child (
     return TRUE;
 }
 
-static gboolean
-set_string (
-    xmlNodePtr node,
-    GncDistributionList* distriblist,
-    void (*func) (GncDistributionList*, const char*))
-{
-    char *txt = dom_tree_to_text (node);
-    g_return_val_if_fail (txt, FALSE);
-    func (distriblist, txt);
-    g_free (txt);
-    return TRUE;
-}
-
 // static gboolean
 // set_numeric (
 //     xmlNodePtr node,
@@ -563,7 +550,7 @@ distriblist_desc_handler (xmlNodePtr node, gpointer distriblist_pdata)
 {
     struct distriblist_pdata *pdata =
         static_cast<decltype (pdata)> (distriblist_pdata);
-    return set_string (node, pdata->distriblist, gncDistribListSetDescription);
+    return apply_xmlnode_text (gncDistribListSetDescription, pdata->distriblist, node);
 }
 
 static gboolean
@@ -697,7 +684,7 @@ distriblist_name_handler (xmlNodePtr node, gpointer distriblist_pdata)
 {
     struct distriblist_pdata* pdata =
         static_cast<decltype (pdata)> (distriblist_pdata);
-    return set_string (node, pdata->distriblist, gncDistribListSetName);
+    return apply_xmlnode_text (gncDistribListSetName, pdata->distriblist, node);
 }
 
 static gboolean
@@ -949,8 +936,7 @@ distriblist_owner_typename_handler (xmlNodePtr node, gpointer distriblist_pdata)
 {
     struct distriblist_pdata *pdata =
         static_cast<decltype (pdata)> (distriblist_pdata);
-    return set_string (
-        node, pdata->distriblist, gncDistribListSetOwnerTypeName);
+    return apply_xmlnode_text (gncDistribListSetOwnerTypeName, pdata->distriblist, node);
 }
 
 static gboolean
@@ -958,8 +944,7 @@ percentage_labelsettlement_handler (xmlNodePtr node, gpointer distriblist_pdata)
 {
     struct distriblist_pdata *pdata =
         static_cast<decltype (pdata)> (distriblist_pdata);
-    return set_string (
-        node, pdata->distriblist, gncDistribListSetPercentageLabelSettlement);
+    return apply_xmlnode_text (gncDistribListSetPercentageLabelSettlement, pdata->distriblist, node);
 }
 
 static gboolean
@@ -976,8 +961,7 @@ shares_labelsettlement_handler (xmlNodePtr node, gpointer distriblist_pdata)
 {
     struct distriblist_pdata *pdata =
         static_cast<decltype (pdata)> (distriblist_pdata);
-    return set_string (
-        node, pdata->distriblist, gncDistribListSetSharesLabelSettlement);
+    return apply_xmlnode_text (gncDistribListSetSharesLabelSettlement, pdata->distriblist, node);
 }
 
 static gboolean
