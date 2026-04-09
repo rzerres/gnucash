@@ -144,7 +144,7 @@ address_mobile_handler (xmlNodePtr node, gpointer addr_pdata)
 {
     struct address_pdata* pdata = static_cast<decltype (pdata)> (addr_pdata);
 
-    return set_string (node, pdata->address, gncAddressSetMobile);
+    return apply_xmlnode_text (gncAddressSetMobile, pdata->address, node);
 }
 
 static gboolean
