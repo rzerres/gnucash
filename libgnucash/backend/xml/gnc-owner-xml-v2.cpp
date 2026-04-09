@@ -134,11 +134,11 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
     {
     case GNC_OWNER_COOWNER:
     {
-        GncCoOwner* coowner = gncCoOwnerLookup (pdata->book, guid);
+        GncCoOwner* coowner = gncCoOwnerLookup (pdata->book, &*guid);
         if (!coowner)
         {
             coowner = gncCoOwnerCreate (pdata->book);
-            gncCoOwnerSetGUID (coowner, guid);
+            gncCoOwnerSetGUID (coowner, &*guid);
         }
         gncOwnerInitCoOwner (pdata->owner, coowner);
         break;
@@ -156,11 +156,11 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
     }
     case GNC_OWNER_EMPLOYEE:
     {
-        GncEmployee* employee = gncEmployeeLookup (pdata->book, guid);
+        GncEmployee* employee = gncEmployeeLookup (pdata->book, &*guid);
         if (!employee)
         {
             employee = gncEmployeeCreate (pdata->book);
-            gncEmployeeSetGUID (employee, guid);
+            gncEmployeeSetGUID (employee, &*guid);
         }
         gncOwnerInitEmployee (pdata->owner, employee);
         break;
@@ -185,17 +185,6 @@ owner_id_handler (xmlNodePtr node, gpointer owner_pdata)
             gncVendorSetGUID (vendor, &*guid);
         }
         gncOwnerInitVendor (pdata->owner, vendor);
-        break;
-    }
-    case GNC_OWNER_EMPLOYEE:
-    {
-        GncEmployee* employee = gncEmployeeLookup (pdata->book, &*guid);
-        if (!employee)
-        {
-            employee = gncEmployeeCreate (pdata->book);
-            gncEmployeeSetGUID (employee, &*guid);
-        }
-        gncOwnerInitEmployee (pdata->owner, employee);
         break;
     }
     default:
