@@ -339,7 +339,6 @@ static gboolean
 coowner_slots_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
-
     return dom_tree_create_instance_slots (node, QOF_INSTANCE (pdata->coowner));
 }
 
@@ -347,20 +346,13 @@ static gboolean
 coowner_taxincluded_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
+    auto set_tax_included = [](GncCoOwner* coowner, const char *str)
+    {
     GncTaxIncluded type;
-    char *str;
-    gboolean ret;
-
-    str = dom_tree_to_text (node);
-    g_return_val_if_fail (str, FALSE);
-
-    ret = gncTaxIncludedStringToType (str, &type);
-    g_free (str);
-
-    if (ret)
-        gncCoOwnerSetTaxIncluded (pdata->coowner, type);
-
-    return ret;
+        if (gncTaxIncludedStringToType (str, &type))
+            gncCustomerSetTaxIncluded (cust, type);
+    };
+    return apply_xmlnode_text (set_tax_included, pdata->coowner, node);
 }
 
 static gboolean
@@ -371,7 +363,7 @@ coowner_taxtable_handler (xmlNodePtr node, gpointer coowner_pdata)
 
     auto guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
-    taxtable = gncTaxTableLookup (pdata->book, guid);
+    taxtable = gncTaxTableLookup (pdata->book, &*guid);
     if (!taxtable)
     {
         taxtable = gncTaxTableCreate (pdata->book);
@@ -383,7 +375,6 @@ coowner_taxtable_handler (xmlNodePtr node, gpointer coowner_pdata)
         gncTaxTableDecRef (taxtable);
 
     gncCoOwnerSetTaxTable (pdata->coowner, taxtable);
-    guid_free (guid);
     return TRUE;
 }
 
@@ -391,7 +382,6 @@ static gboolean
 coowner_taxtableoverride_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
-
     return set_boolean (node, pdata->coowner, gncCoOwnerSetTaxTableOverride);
 }
 
@@ -406,7 +396,6 @@ static gboolean
 coowner_tenant_addr_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata* pdata = static_cast<decltype (pdata)> (coowner_pdata);
-
     return gnc_dom_tree_to_address (node, gncCoOwnerGetTenantAddr (pdata->coowner));
 }
 
@@ -414,7 +403,6 @@ static gboolean
 coowner_tenant_id_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
-
     return apply_xmlnode_text (gncCoOwnerSetTenantID, pdata->coowner, node);
 }
 
@@ -422,7 +410,6 @@ static gboolean
 coowner_tenant_name_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
-
     return apply_xmlnode_text (gncCoOwnerSetTenantName, pdata->coowner, node);
 }
 
@@ -430,7 +417,6 @@ static gboolean
 coowner_tenant_notes_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
-
     return apply_xmlnode_text (gncCoOwnerSetTenantNotes, pdata->coowner, node);
 }
 
@@ -438,12 +424,11 @@ static gboolean
 coowner_terms_handler (xmlNodePtr node, gpointer coowner_pdata)
 {
     struct coowner_pdata *pdata = static_cast<decltype (pdata)> (coowner_pdata);
-    GncGUID* guid;
     GncBillTerm *term;
 
-    guid = dom_tree_to_guid (node);
+    auto guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
-    term = gnc_billterm_xml_find_or_create (pdata->book, guid);
+    term = gnc_billterm_xml_find_or_create (pdata->book, &*guid);
     g_assert (term);
     guid_free (guid);
     gncCoOwnerSetTerms (pdata->coowner, term);
