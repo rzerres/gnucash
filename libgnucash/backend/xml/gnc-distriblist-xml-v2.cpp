@@ -180,20 +180,18 @@ set_parent_child (
     struct distriblist_pdata *pdata,
     void (*func) (GncDistributionList*, GncDistributionList*))
 {
-    GncGUID *guid;
     GncDistributionList *distriblist;
 
-    guid = dom_tree_to_guid (node);
+    auto guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
-    distriblist = gncDistribListLookup (pdata->book, guid);
+    distriblist = gncDistribListLookup (pdata->book, &*guid);
     if (!distriblist)
     {
         distriblist = gncDistribListCreate (pdata->book);
         gncDistribListBeginEdit (distriblist);
-        gncDistribListSetGUID (distriblist, guid);
+        gncDistribListSetGUID (distriblist, &*guid);
         gncDistribListCommitEdit (distriblist);
     }
-    guid_free (guid);
     g_return_val_if_fail (distriblist, FALSE);
     func (pdata->distriblist, distriblist);
 
@@ -654,12 +652,11 @@ distriblist_guid_handler (xmlNodePtr node, gpointer distriblist_pdata)
 {
     struct distriblist_pdata* pdata =
         static_cast<decltype (pdata)> (distriblist_pdata);
-    GncGUID* guid;
     GncDistributionList* distriblist;
 
-    guid = dom_tree_to_guid (node);
+    auto guid = dom_tree_to_guid (node);
     g_return_val_if_fail (guid, FALSE);
-    distriblist = gncDistribListLookup (pdata->book, guid);
+    distriblist = gncDistribListLookup (pdata->book, &*guid);
     if (distriblist)
     {
         DEBUG ("Assigned distribution list: %p", distriblist);
@@ -669,10 +666,8 @@ distriblist_guid_handler (xmlNodePtr node, gpointer distriblist_pdata)
     }
     else
     {
-        gncDistribListSetGUID (pdata->distriblist, guid);
+        gncDistribListSetGUID (pdata->distriblist, &*guid);
     }
-
-    guid_free (guid);
 
     return TRUE;
 }
