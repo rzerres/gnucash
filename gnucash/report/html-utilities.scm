@@ -113,8 +113,8 @@
 (define (guid-ref idstr type guid)
   (gnc-build-url type (string-append idstr guid) ""))
 
-(define (gnc:coowner-anchor-text coowner)
-  (guid-ref "coowner=" URL-TYPE-COOWNER (gncCoOwnerReturnGUID coowner)))
+;;(define (gnc:coowner-anchor-text coowner)
+;;  (guid-ref "coowner=" URL-TYPE-COOWNER (gncCoOwnerReturnGUID coowner)))
 
 (define (gnc:customer-anchor-text customer)
   (guid-ref "customer=" URL-TYPE-CUSTOMER (gncCustomerReturnGUID customer)))
@@ -134,8 +134,8 @@
 (define (gnc:owner-anchor-text owner)
   (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
     (cond
-      ((eqv? type GNC-OWNER-COOWNER)
-       (gnc:coowner-anchor-text (gncOwnerGetCoOwner owner)))
+      ;;((eqv? type GNC-OWNER-COOWNER)
+      ;; (gnc:coowner-anchor-text (gncOwnerGetCoOwner owner)))
 
       ((eqv? type GNC-OWNER-CUSTOMER)
        (gnc:customer-anchor-text (gncOwnerGetCustomer owner)))
@@ -158,7 +158,7 @@
     (gnc-build-url
      URL-TYPE-OWNERREPORT
      (string-append
-      (cond ((eqv? type GNC-OWNER-COOWNER) "owner=o:")
+      (cond ;;((eqv? type GNC-OWNER-COOWNER) "owner=o:")
             ((eqv? type GNC-OWNER-CUSTOMER) "owner=c:")
             ((eqv? type GNC-OWNER-EMPLOYEE) "owner=e:")
             ((eqv? type GNC-OWNER-VENDOR) "owner=v:")
