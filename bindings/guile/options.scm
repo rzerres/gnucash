@@ -283,7 +283,7 @@
 (define-public (gnc:make-owner-option section name key docstring getter validator owner-type)
   (issue-deprecation-warning "gnc:make-owner-option is deprecated. Make and register the option in one command with gnc-register-owner-option.")
   (let* ((ui-type (cond
-                  ((eqv? owner-type GNC-OWNER-COOWNER) (GncOptionUIType-COOWNER))
+                  ;;((eqv? owner-type GNC-OWNER-COOWNER) (GncOptionUIType-COOWNER))
                   ((eqv? owner-type GNC-OWNER-CUSTOMER) (GncOptionUIType-CUSTOMER))
                   ((eqv? owner-type GNC-OWNER-EMPLOYEE) (GncOptionUIType-EMPLOYEE))
                   ((eqv? owner-type GNC-OWNER-JOB) (GncOptionUIType-JOB))
@@ -293,7 +293,7 @@
          (guid (gncOwnerReturnGUID (getter)))
          (book (gnc-get-current-book))
          (defval (cond
-                  ((eqv? owner-type GNC-OWNER-COOWNER) (gncCoOwnerLookupFlip guid book))
+                  ;;((eqv? owner-type GNC-OWNER-COOWNER) (gncCoOwnerLookupFlip guid book))
                   ((eqv? owner-type GNC-OWNER-CUSTOMER) (gncCustomerLookupFlip guid book))
                   ((eqv? owner-type GNC-OWNER-EMPLOYEE) (gncEmployeeLookupFlip guid book))
                   ((eqv? owner-type GNC-OWNER-VENDOR) (gncVendorLookupFlip guid book))
