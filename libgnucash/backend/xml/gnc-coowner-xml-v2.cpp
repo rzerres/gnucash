@@ -350,7 +350,7 @@ coowner_taxincluded_handler (xmlNodePtr node, gpointer coowner_pdata)
     {
     GncTaxIncluded type;
         if (gncTaxIncludedStringToType (str, &type))
-            gncCustomerSetTaxIncluded (cust, type);
+            gncCoOwnerSetTaxIncluded (coowner, type);
     };
     return apply_xmlnode_text (set_tax_included, pdata->coowner, node);
 }
@@ -368,7 +368,7 @@ coowner_taxtable_handler (xmlNodePtr node, gpointer coowner_pdata)
     {
         taxtable = gncTaxTableCreate (pdata->book);
         gncTaxTableBeginEdit (taxtable);
-        gncTaxTableSetGUID (taxtable, guid);
+        gncTaxTableSetGUID (taxtable, &*guid);
         gncTaxTableCommitEdit (taxtable);
     }
     else
@@ -430,7 +430,6 @@ coowner_terms_handler (xmlNodePtr node, gpointer coowner_pdata)
     g_return_val_if_fail (guid, FALSE);
     term = gnc_billterm_xml_find_or_create (pdata->book, &*guid);
     g_assert (term);
-    guid_free (guid);
     gncCoOwnerSetTerms (pdata->coowner, term);
 
     return TRUE;
