@@ -60,15 +60,16 @@ typedef enum
 {
     GNC_INVOICE_UNDEFINED ,
     GNC_INVOICE_COOWNER_SETTLEMENT ,  /* Settlement */
+    GNC_INVOICE_COOWNER_INVOICE ,     /* Invoice */
     GNC_INVOICE_CUST_INVOICE ,        /* Invoice */
     GNC_INVOICE_EMPL_INVOICE ,        /* Voucher */
     GNC_INVOICE_VEND_INVOICE ,        /* Bill */
     GNC_INVOICE_COOWNER_CREDIT_NOTE , /* Settlement Note for a coowner */
     GNC_INVOICE_CUST_CREDIT_NOTE ,    /* Credit Note for a customer */
     GNC_INVOICE_EMPL_CREDIT_NOTE ,    /* Credit Note from an employee,
-                                         not sure this makes sense,
-                                         but all code is symmetrical
-                                         so I've added it to prevent unexpected errors */
+					 not sure this makes sense,
+					 but all code is symmetrical
+					 so I've added it to prevent unexpected errors */
     GNC_INVOICE_VEND_CREDIT_NOTE ,    /* Credit Note from a vendor */
     GNC_INVOICE_NUM_TYPES
 } GncInvoiceType;
@@ -219,9 +220,9 @@ GHashTable *gncInvoiceGetForeignCurrencies (const GncInvoice *invoice);
  */
 Transaction *
 gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
-                         time64 posted_date, time64 due_date,
-                         const char *memo, gboolean accumulatesplits,
-                         gboolean autopay);
+			 time64 posted_date, time64 due_date,
+			 const char *memo, gboolean accumulatesplits,
+			 gboolean autopay);
 
 /**
  * Unpost this invoice.  This will destroy the posted transaction and
@@ -259,9 +260,9 @@ gncInvoiceAutoApplyPayments (GncInvoice *invoice);
  */
 void
 gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
-                        Account *xfer_acc, gnc_numeric amount,
-                        gnc_numeric exch, time64 date,
-                        const char *memo, const char *num);
+			Account *xfer_acc, gnc_numeric amount,
+			gnc_numeric exch, time64 date,
+			const char *memo, const char *num);
 
 
 /** Given a transaction, find and return the Invoice */

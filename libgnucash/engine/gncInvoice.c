@@ -1189,6 +1189,7 @@ const char
     {
     case GNC_INVOICE_COOWNER_SETTLEMENT:
 	return _("Settlement");
+    case GNC_INVOICE_COOWNER_INVOICE:
     case GNC_INVOICE_CUST_INVOICE:
 	return _("Invoice");
     case GNC_INVOICE_VEND_INVOICE:
